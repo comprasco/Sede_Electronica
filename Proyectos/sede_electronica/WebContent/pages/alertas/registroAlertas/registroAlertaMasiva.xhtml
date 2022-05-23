@@ -1,0 +1,843 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/includes/wizard.xhtml">
+	<ui:param name="siguienteLabel"
+		value="#{txt_registrar_alerta_masiva['wizard.boton.siguiente']}" />
+	<ui:param name="atrasLabel"
+		value="#{txt_registrar_alerta_masiva['wizard.boton.atras']}" />
+	<ui:define name="title-wizard">
+		<title>#{txt_registrar_alerta_masiva['Titulo']}</title>
+	</ui:define>
+	<ui:define name="head-wizard">
+		<h:outputScript library="js" name="archivo.js" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+		<h:outputStylesheet library="css" name="snr-se-solicitudMasivas.css" />
+	</ui:define>
+	<ui:define name="banner">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_registrar_alerta_masiva['banner']}" />
+			<ui:param name="imagen" value="img-solicitudCertificados" />
+			<ui:param name="subtitulo"
+				value="#{txt_registrar_alerta_masiva['banner.subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/alertas/registroAlertas/registroAlertaMasiva.jsf" />
+		</ui:include>
+	</ui:define>
+	<f:metadata>
+		<f:viewParam name="as_id"
+			value="#{beanRegistroAlertasMasivas.is_codigoUruidCarritoId}" />
+		<f:event type="preRenderView"
+			listener="#{beanRegistroAlertasMasivas.valorParametro}" />
+	</f:metadata>
+	<!-- estos parametros son para enviar una validacion sobre cada formulario al wizard -->
+	<ui:param name="target" value="${beanRegistroAlertasMasivas}" />
+	<ui:param name="metodo" value="validarSiguiente" />
+	<ui:define name="primerPaso">
+		<ui:decorate
+			template="/pages/includes/wizardPestanas/conoceMatricula.xhtml">
+			<ui:param name="bean" value="${beanRegistroAlertasMasivas}" />
+			<ui:param name="funcion" value="ib_conoceMatricula" />
+			<ui:param name="vista" value="RegistroAlertasMasivas" />
+			<ui:param name="panelRender"
+				value="wizard:form#{vista}:panelTipoCertificados" />
+		</ui:decorate>
+	</ui:define>
+	<ui:define name="segundoPaso">
+		<p:tab id="datos">
+			<f:facet name="title">
+				<span class="icono icono-buscar" />
+				<p:outputLabel class="tituloWizard"
+					value="#{txt_certificados['wizard.tab.datos']}" />
+			</f:facet>
+			<ui:param name="validarListaTransaccion"
+				value="#{beanRegistroAlertasMasivas.getIillsm_listaListasSalidaMatriculaDto().size() > 0}" />
+			<p:panel id="panelCargaArchivo">
+				<div class="row">
+					<div class="col-xs-12 col-sm-8">
+						<div class="row">
+							<div class="col-xs-12">
+								<h:outputLabel
+									value="#{txt_registrar_alerta_masiva['label.validar.cargue']}" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-5">
+								<h:outputText id="spanNo"
+									value="#{txt_registrar_alerta_masiva['label.validar.rango']}"
+									class="#{!beanRegistroAlertasMasivas.getIb_archivoMatricula() ?  'textoRojo' : 'textoGris' }" />
+							</div>
+							<div class="col-xs-2">
+								<p:inputSwitch
+									value="#{beanRegistroAlertasMasivas.ib_archivoMatricula}">
+									<f:ajax render="spanNo spanSi wizard:matriculasPanel" />
+								</p:inputSwitch>
+							</div>
+							<div class="col-xs-5">
+								<h:outputText id="spanSi"
+									value="#{txt_registrar_alerta_masiva['label.validar.archivo']}"
+									class="#{beanRegistroAlertasMasivas.getIb_archivoMatricula() ?  'textoRojo' : 'textoGris' }" />
+							</div>
+						</div>
+						<p:panel id="matriculasPanel" style="padding:0 !important">
+							<ui:fragment
+								rendered="#{!beanRegistroAlertasMasivas.getIb_archivoMatricula()}">
+								<div class="row">
+									<div class="col-xs-12 col-sm-8">
+										<p:outputLabel styleClass="label-form"
+											id="labelOficinaRegistro" for="oficinaRegistro"
+											value="#{txt_certificados['wizardCertificado.datos.oficinaRegistro']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<p:selectOneMenu id="oficinaRegistro" filter="true"
+											widgetVar="oficinaRegistro" filterMatchMode="contains"
+											required="true" converter="selectOneMenuConverter"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											filterPlaceholder="#{txt_certificados['wizardCertificado.datos.placeholder.oficinaRegistro']}"
+											value="#{beanRegistroAlertasMasivas.icr_circuloRegistralSeleccionadoDto}">
+											<f:selectItem
+												itemLabel="#{txt_certificados['wizardCertificado.datos.seleccionar']}"
+												itemValue="" />
+											<f:selectItems
+												value="#{beanRegistroAlertasMasivas.ilcr_listaCirculoRegistralDto}"
+												var="circuloRegistral"
+												itemLabel="#{circuloRegistral.is_nombre} - (#{circuloRegistral.is_id})"
+												itemValue="#{circuloRegistral}" />
+											<p:ajax update="numeroOficinaRegistro" />
+										</p:selectOneMenu>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelOficinaRegistro"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_certificados['wizardCertificado.datos.tooltip.oficinaRegistro']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="oficinaRegistro" />
+										</span>
+									</div>
+									<div class="col-xs-12 col-sm-4">
+										<p:outputLabel id="labelNumeroOficinaRegistro"
+											for="numeroOficinaRegistro"
+											styleClass="label-form tresPuntos"
+											value="#{txt_certificados['wizardCertificado.datos.numeroOficinaRegistro']}" />
+										<div class="ui-inputgroup">
+											<p:inputText id="numeroOficinaRegistro" readonly="true"
+												styleClass="block"
+												value="#{beanRegistroAlertasMasivas.icr_circuloRegistralSeleccionadoDto.is_id}" />
+										</div>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelNumeroOficinaRegistro"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_certificados['wizardCertificado.datos.numeroOficinaRegistro']}" />
+											</div>
+										</p:tooltip>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<p:outputLabel id="labelAlertaMasivaDesde"
+											styleClass="label-form" for="alertaMasivaDesde"
+											value="#{txt_registrar_alerta_masiva['label.desde']}" />
+										<div class="ui-inputgroup">
+											<p:inputText id="alertaMasivaDesde" autocomplete="off"
+												styleClass="text-input border-completo"
+												placeholder="#{txt_registrar_alerta_masiva['placeholder.desde']}"
+												maxlength="10" size="10" required="true"
+												value="#{beanRegistroAlertasMasivas.is_desdeMatricula}">
+												<p:ajax event="change"
+													onstart="mostrarLimpiar('wizard:alertaMasivaDesde', 'spanAlertaMasivaDesde');" />
+												<p:keyFilter regEx="/[0-9]/i" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelAlertaMasivaDesde"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_registrar_alerta_masiva['tooltip.desde']}" />
+												</div>
+											</p:tooltip>
+											<span id="spanAlertaMasivaDesde"
+												class="ui-inputgroup-addon ocultar"> <p:commandLink>
+													<p:graphicImage styleClass="img-x-size"
+														name="/img/x-roja.png" />
+													<p:ajax event="click"
+														onstart="limpiarCampo('wizard:alertaMasivaDesde', 'spanAlertaMasivaDesde');" />
+												</p:commandLink>
+											</span>
+										</div>
+										<span class="help-block"> <p:message
+												for="alertaMasivaDesde" />
+										</span>
+									</div>
+									<div class="col-xs-6">
+										<p:outputLabel id="labelAlertaMasivaHasta"
+											styleClass="label-form" for="alertaMasivaHasta"
+											value="#{txt_registrar_alerta_masiva['label.hasta']}" />
+										<div class="ui-inputgroup">
+											<p:inputText id="alertaMasivaHasta" autocomplete="off"
+												styleClass="text-input border-completo"
+												placeholder="#{txt_registrar_alerta_masiva['placeholder.hasta']}"
+												maxlength="10" size="10" required="true"
+												value="#{beanRegistroAlertasMasivas.is_hastaMatricula}">
+												<p:ajax event="change"
+													onstart="mostrarLimpiar('wizard:alertaMasivaHasta', 'spanAlertaMasivaHasta');" />
+												<p:keyFilter regEx="/[0-9]/i" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelAlertaMasivaHasta"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_registrar_alerta_masiva['tooltip.hasta']}" />
+												</div>
+											</p:tooltip>
+											<span id="spanAlertaMasivaHasta"
+												class="ui-inputgroup-addon ocultar"> <p:commandLink>
+													<p:graphicImage styleClass="img-x-size"
+														name="/img/x-roja.png" />
+													<p:ajax event="click"
+														onstart="limpiarCampo('wizard:alertaMasivaHasta', 'spanAlertaMasivaHasta');" />
+												</p:commandLink>
+											</span>
+										</div>
+									</div>
+								</div>
+							</ui:fragment>
+							<ui:fragment
+								rendered="#{beanRegistroAlertasMasivas.getIb_archivoMatricula()}">
+								<div class="row vcenter">
+									<div class="col-xs-2">
+										<p:commandButton id="infoContrasenaNatural"
+											icon="icon-contrasena"
+											styleClass="icon-input btn-gradiente icono_boton"
+											onclick="PF('modalArchivoEjemplo').show()" />
+									</div>
+									<div class="col-xs-10">
+										<p:outputLabel id="labelCargarArchivos"
+											styleClass="label-form"
+											value="#{txt_registrar_alerta_masiva['archivo.label']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<p:fileUpload styleClass="cargaArchivo"
+											fileUploadListener="#{beanRegistroAlertasMasivas.cargarArchivo}"
+											mode="advanced" auto="false" allowTypes="/(\.|\/)(txt)$/"
+											invalidSizeMessage="#{beanArchivo.validarTamanoArchivoTXTError()}"
+											invalidFileMessage="#{txt_registrar_alerta_masiva['archivo.error.extension']}"
+											fileLimitMessage="#{txt_registrar_alerta_masiva['archivo.error.archivo']}"
+											label="#{txt_persona['label.ExaminarArchivo']}"
+											uploadLabel="#{txt_persona['label.Cargar']}"
+											cancelLabel="#{txt_persona['label.Cancelar']}"
+											sizeLimit="#{beanArchivo.validarTamanoArchivoTXT()}"
+											fileLimit="1" required="true"
+											update="@this wizard:descargarTransaccion">
+											<p:outputLabel styleClass="label-form tresPuntos"
+												rendered="#{beanRegistroAlertasMasivas.getItm_transaccionMasivaDto().getIs_archivoCargado() != null}"
+												value="#{beanRegistroAlertasMasivas.getItm_transaccionMasivaDto().getIs_archivoCargado()} - #{beanRegistroAlertasMasivas.getItm_transaccionMasivaDto().getIlm_listaMatriculaDto().size()} matriculas" />
+										</p:fileUpload>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCargarArchivos"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_registrar_alerta_masiva['archivo.tooltip']}" />
+											</div>
+										</p:tooltip>
+									</div>
+								</div>
+							</ui:fragment>
+							<br />
+							<div class="row text-center">
+								<div class="col-xs-12">
+									<p:commandLink id="linkModificarDatos"
+										oncomplete="PF('modalRedirigirModificar').show();">
+										<p:outputLabel
+											value="#{txt_registrar_alerta_masiva['label.modificar.datos']} "
+											styleClass="text-select-boolean" />
+									</p:commandLink>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+									<p:commandButton
+										value="#{txt_registrar_alerta_masiva['boton']}"
+										styleClass="btn-rojo btn-gradiente">
+										<p:ajax
+											listener="#{beanRegistroAlertasMasivas.validarRegistroAlerta}"
+											onstart="PF('blockUI-Loading').show();"
+											onsuccess="PF('blockUI-Loading').hide();"
+											update="wizard:formModalValidacionAlerta" />
+									</p:commandButton>
+								</div>
+							</div>
+						</p:panel>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:dataTable var="rangoTarifasAlertas"
+									value="#{beanRegistroAlertasMasivas.ilrta_listaRangoTarifasAlertasDto}"
+									responsive="true" reflow="true" styleClass="tablaCertificados"
+									emptyMessage="#{txt_registrar_alerta_masiva['tablaRangoAlertas.vacia']}"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									paginator="true" rows="4" paginatorPosition="bottom"
+									rowsPerPageTemplate="10">
+									<p:column
+										headerText="#{txt_registrar_alerta_masiva['columnRangoAlertas.alertasInscritas']}">
+										<h:outputText value="#{rangoTarifasAlertas.is_rango}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_registrar_alerta_masiva['columnRangoAlertas.tarifa']}">
+										<h:outputText value="#{rangoTarifasAlertas.is_valorTarifa}" />
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+						<p:separator />
+						<div class="row">
+							<div class="col-xs-12">
+								<p:dataList id="registroAlertasMasivasConsultados"
+									value="#{beanRegistroAlertasMasivas.getItm_transaccionMasivaDto().getImilsm_mapaNumeroListasSalidaMatriculaDto().entrySet()}"
+									paginator="true" var="registroAlertaMasiva" type="ordered"
+									emptyMessage="#{txt_registrar_alerta['wizardAlertaIndividual.datos.tabla.vacio']}"
+									paginatorPosition="bottom" rows="4" styleClass="paginated"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}">
+									<f:facet name="header">
+										<p:outputLabel
+											value="#{txt_registrar_alerta['wizardAlertaIndividual.datos.tabla.titulo']}" />
+										<br />
+									</f:facet>
+									<div class="row certificadoItem">
+										<div class="col-xs-10 maxTexto">
+											<p:outputLabel
+												value="#{registroAlertaMasiva.getValue().size()}" />
+											<p:outputLabel
+												value="#{txt_registrar_alerta['alertasConsultadas.titulo']}" />
+										</div>
+										<div class="col-xs-2 text-center">
+											<p:commandLink
+												title="#{txt_registrar_alerta['wizardAlertaIndividual.datos.tabla.boton']}"
+												class="descartarCertificado"
+												styleClass="fa fa-times-circle circuloCertificado"
+												update="wizard:registroAlertasMasivasConsultados">
+												<f:ajax
+													listener="#{beanRegistroAlertasMasivas.descartarAlerta(registroAlertaMasiva.getKey())}"
+													render="wizard:registroAlertasMasivasConsultados">
+												</f:ajax>
+											</p:commandLink>
+										</div>
+									</div>
+									<div class="row direccionItem">
+										<div class="col-xs-8 maxTexto">
+											<h:outputText
+												value="#{txt_registrar_alerta['alertasConsultadas.data']}" />
+										</div>
+									</div>
+								</p:dataList>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+		</p:tab>
+	</ui:define>
+	<ui:define name="tercerPaso">
+		<ui:decorate
+			template="/pages/includes/wizardPestanas/resumenSolicitud.xhtml">
+			<ui:param name="vista" value="RegistrarAlertas" />
+			<ui:param name="titulo"
+				value="#{txt_registrar_alerta_masiva['wizardMasivos.datos.tabla.titulo']}" />
+			<ui:param name="tipoDocumento"
+				value="#{beanRegistroAlertasMasivas.getItm_transaccionMasivaDto().getIp_personaDto().getItd_tipoDocumentoDto().getIs_nombre()}" />
+			<ui:param name="numeroDocumento"
+				value="#{beanRegistroAlertasMasivas.getItm_transaccionMasivaDto().getIp_personaDto().getIs_numeroDocumento()}" />
+			<ui:param name="accionSolicitar"
+				value="modalConfirmacionGenerarLiquidacion" />
+			<ui:param name="beanSolicitar" value="#{beanRegistroAlertasMasivas}" />
+			<ui:param name="mostrarFormaEnvio" value="false" />
+			<ui:define name="contenidoResumen">
+				<div class="row">
+					<div class="vcenter">
+						<div class="col-xs-12">
+							<ui:decorate
+								template="/pages/includes/resumenes/certificados/resumenCertificadosMasivos.xhtml">
+								<ui:param name="id" value="Maximo" />
+								<ui:param name="transaccion"
+									value="#{beanRegistroAlertasMasivas.getItm_transaccionMasivaDto()}" />
+							</ui:decorate>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 resumen_transaccion_valor_pagado">
+							<h:outputText class="label-form"
+								value="#{txt_certificados['wizardCertificado.resumen.valorTotal']} " />
+							<h:outputText class="colorVerde"
+								value="#{beanRegistroAlertasMasivas.getItm_transaccionMasivaDto().getIbd_valorTotal()}">
+								<f:convertNumber type="currency" currencySymbol="$"
+									maxFractionDigits="0" />
+							</h:outputText>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="botonResumen">
+				<div class="row">
+					<div class="col-sm-4 col-sm-offset-4">
+						<p:commandLink class="btn-rojo redireccion"
+							value="#{txt_certificados['wizardCertificados.resumen.solicitar']}"
+							onclick="PF('modalConfirmacionGenerarLiquidacion').show()">
+						</p:commandLink>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+	<ui:define name="modalWizard">
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalRedirigirModificar" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_registrar_alerta_masiva['archivo.modal.titulo']}" />
+			<ui:param name="formulario" value="formModalRedirigirModificar" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12">
+					<h:outputText
+						value="#{txt_registrar_alerta_masiva['modal.modificar.contenido']}" />
+					<br />
+					<h:outputText
+						value="#{txt_registrar_alerta_masiva['modal.modificar.contenido.paso1']}" />
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-1 space-row">
+						<p:commandButton
+							value="#{txt_registrar_alerta_masiva['modal.individual.volver']}"
+							class="btn-rojo btn-gradiente"
+							oncomplete="PF('modalRedirigirModificar').hide()">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-4 col-md-offset-2">
+						<p:commandButton
+							value="#{txt_registrar_alerta_masiva['modal.individual.boton']}"
+							class="btn-rojo btn-gradiente"
+							action="/pages/personas/perfilUsuario.jsf?faces-redirect=true">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Matriculas archivo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="descargarTransaccion" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="formulario" value="formModalDescargarTransaccion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_registrar_alerta_masiva['archivo.modal.contenido']} #{beanRegistroAlertasMasivas.getItm_transaccionMasivaDto().getIlm_listaMatriculaDto().size()}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<p:commandButton
+					value="#{txt_registrar_alerta_masiva['boton.entendido']}"
+					class="btn-rojo btn-gradiente" oncomplete="PF('#{modalId}').hide()">
+				</p:commandButton>
+			</ui:define>
+		</ui:decorate>
+		<!-- Matriculas archivo FIN -->
+		<!-- Minimo matricula -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="minimoMatricula" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_registrar_alerta_masiva['modal.individual']}" />
+			<ui:param name="formulario" value="formModalMaximoMatricula" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{beanRegistroAlertasMasivas.minimoMatriculas()}" />
+						<br />
+						<h:outputText
+							value="#{txt_registrar_alerta_masiva['modal.individual.2']}" />
+						<br />
+						<h:outputText
+							value="#{txt_registrar_alerta_masiva['modal.individual.3']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-3 col-md-offset-2 space-row">
+						<p:commandButton class="btn-gris"
+							oncomplete="PF('minimoMatricula').hide()"
+							value="#{txt_registrar_alerta_masiva['modal.individual.volver']}">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-3 col-md-offset-2">
+						<p:link class="btn-rojo redireccion"
+							outcome="${beanRegistroAlertasMasivas.is_redireccionIndividual}"
+							value="#{txt_registrar_alerta_masiva['modal.individual.boton']}">
+						</p:link>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Minimo matricula FIN -->
+		<!-- Transaccion encontrada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="transaccionEncontrada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalTransaccionEncontrada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.transaccion.retormar']}" />
+					</div>
+				</div>
+				<br />
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-md-6 space-row">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt_registrar_alerta['modal.confirmar.boton.cancelar']}">
+							<p:ajax
+								listener="#{beanRegistroAlertasMasivas.cancelarTransaccion(true)}" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-6">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_registrar_alerta['wizard.seleccion.modal.aceptar']}">
+							<f:ajax
+								listener="#{beanRegistroAlertasMasivas.cancelarTransaccion(false)}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Transaccion encontrada -->
+		<!-- Validacion transaccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalValidacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalValidacionAlerta" />
+			<ui:define name="body-modal">
+				<p:importEnum
+					type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTiposMIME"
+					var="EnumTiposMIME" />
+				<p:panel id="modalValidacionContenido">
+					<div class="row text-left">
+						<div class="col-xs-12">
+							<h:outputText
+								value="#{txt_registrar_alerta_masiva['modal.validacion.contenido']} #{beanRegistroAlertasMasivas.ii_matriculasValidadas}" />
+						</div>
+						<br /> <br />
+						<p:repeat id="registroAlertasMasivasConsultados"
+							styleClass="no-border"
+							value="#{beanRegistroAlertasMasivas.imss_mapaResultadoValidacion.entrySet()}"
+							var="registroAlertaMasiva">
+							<div class="col-xs-12">
+								<h:outputText value="#{registroAlertaMasiva.getValue()} " />
+								<h:outputText value=" #{registroAlertaMasiva.getKey()}" />
+							</div>
+						</p:repeat>
+						<br /> <br />
+						<h:outputText
+							value="#{txt_registrar_alerta_masiva['modal.validacion.archivo.primer']}" />
+						<input type="button" id="boton-txt"
+							onclick="botonDescargaArchivo('#{beanRegistroAlertasMasivas.is_archivoDecodificado}','#{EnumTiposMIME.CSV.getIs_tipoMime()}','archivo.csv');"
+							value="#{txt_registrar_alerta_masiva['boton.descargardocumento']}" />
+						<h:outputText
+							value="#{txt_registrar_alerta_masiva['modal.validacion.archivo.tercero']}" />
+					</div>
+				</p:panel>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-md-6 space-row">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt_registrar_alerta_masiva['modal.validacion.boton.cancelar']}"
+							oncomplete="PF('modalValidacion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-md-6">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_registrar_alerta_masiva['archivo.modal.boton']}"
+							oncomplete="PF('modalValidacion').hide();">
+							<f:ajax
+								listener="#{beanRegistroAlertasMasivas.adiccionarTransaccion}"
+								render="wizard:registroAlertasMasivasConsultados" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Validacion transaccion -->
+		<!-- Modal de redirección matricula -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalCertificado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.redireccion']}" />
+			<ui:param name="formulario" value="formModalRedireccionMatricula" />
+			<ui:param name="accionBotonBean"
+				value="${beanRegistroAlertasMasivas}" />
+			<ui:param name="accionBotonMetodo" value="buscarMatricula" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.advertencia']}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.primeraParte']} " />
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.aceptar']}"
+							class="label-form" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal  de redirección matricula-->
+		<!-- Solicitud generada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="solicitudGenerada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalSolicitudGenerada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizardCertificado.pago.modal']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-4">
+						<h:outputLink class="btn-rojo redireccion"
+							value="${beanRegistroAlertasMasivas.is_redireccionResumenPago}${beanRegistroAlertasMasivas.iit_integracionTemporalDto.getIs_nir()}">
+							<span class="icon-btn">#{txt_registrar_alerta['modal.confirmar.boton.entendido']}</span>
+						</h:outputLink>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Solicitud generada FIN -->
+		<!-- Tarifas nuevas alertas -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalTarifa" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalTarifa" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_registrar_alerta['modal.cantidadAlertas']}" />
+						<h:outputText
+							value="#{beanRegistroAlertasMasivas.is_cantidadMatriculas}" />
+						<h:outputText value=" #{txt_registrar_alerta['modal.inscritas']}" />
+						<br /> <br />
+						<h:outputText
+							value="#{txt_registrar_alerta['modal.nuevasInscritas']} " />
+						<h:outputText
+							value="#{beanRegistroAlertasMasivas.getItm_transaccionMasivaDto().getIlsm_listaSalidaMatriculaDto().size()}" />
+						<br />
+						<h:outputText value="#{txt_registrar_alerta['modal.valorTotal']}" />
+						<h:outputText value="#{beanRegistroAlertasMasivas.is_valorTotal}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-1 space-row">
+						<p:commandButton class="btn-gris redireccion"
+							value="#{txt['boton.Cancelar.Upper']}"
+							oncomplete="PF('modalTarifa').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-4 col-md-offset-2">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							oncomplete="PF('modalTarifa').hide();">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Tarifas nuevas alertas -->
+		<!-- Modal Confirmacion genera liquidacio -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalConfirmacionGenerarLiquidacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmacion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['generarLIquidacion.confirmar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-1 space-row">
+						<p:commandButton class="btn-gris redireccion"
+							value="#{txt['boton.Cancelar.Upper']}"
+							oncomplete="PF('modalConfirmacionGenerarLiquidacion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-4 col-md-offset-2">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							oncomplete="PF('modalConfirmacionGenerarLiquidacion').hide();">
+							<p:ajax
+								listener="#{beanRegistroAlertasMasivas.guardarTransaccion}"
+								update="wizard:formModalSolicitudGenerada" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal Confirmacion genera liquidacio FIN -->
+		<!-- Modal de ejemplo archivo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalArchivoEjemplo" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="formulario" value="formModalEjemplo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizardMasivos.modal.ejemplo.paso1']} " />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:graphicImage value="#{resource['img/masivo/CrearArchivo.png']}"
+							alt="#{txt_certificados['wizardMasivos.modal.ejemplo.paso1']}"
+							title="#{txt_certificados['wizardMasivos.modal.ejemplo.paso1']}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_registrar_alerta_masiva['wizardMasivos.modal.ejemplo.paso2']}" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:graphicImage value="#{resource['img/masivo/PasoAlertas.png']}"
+							alt="#{txt_certificados['wizardMasivos.modal.ejemplo.paso2']}"
+							title="#{txt_certificados['wizardMasivos.modal.ejemplo.paso2']}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizardMasivos.modal.ejemplo.paso3']}" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:graphicImage value="#{resource['img/masivo/PasoCargue.png']}"
+							alt="#{txt_certificados['wizardMasivos.modal.ejemplo.paso3']}"
+							title="#{txt_certificados['wizardMasivos.modal.ejemplo.paso3']}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizardMasivos.modal.ejemplo.paso4']}" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:graphicImage value="#{resource['img/masivo/PasoCargue2.png']}"
+							alt="#{txt_certificados['wizardMasivos.modal.ejemplo.paso4']}"
+							title="#{txt_certificados['wizardMasivos.modal.ejemplo.paso4']}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizardMasivos.modal.ejemplo.paso5']}" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:graphicImage value="#{resource['img/masivo/BotonCargar.png']}"
+							alt="#{txt_certificados['wizardMasivos.modal.ejemplo.paso5']}"
+							title="#{txt_certificados['wizardMasivos.modal.ejemplo.paso5']}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_registrar_alerta_masiva['wizardMasivos.modal.ejemplo.paso6']}" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:graphicImage value="#{resource['img/masivo/verificar.png']}"
+							alt="#{txt_certificados['wizardMasivos.modal.ejemplo.paso6']}"
+							title="#{txt_certificados['wizardMasivos.modal.ejemplo.paso6']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3 center-component">
+						<p:commandButton
+							value="#{txt_certificados['wizard.seleccion.modal.aceptar']}"
+							class="btn-rojo btn-gradiente"
+							oncomplete="PF('#{modalId}').hide()">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal de ejemplo archivo -->
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+
+   <fontFamily name="Open Sans">
+       <normal><![CDATA[fonts/OpenSans-Bold.ttf]]></normal>
+       <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+   </fontFamily>
+
+
+   <fontFamily name="Open Sans">
+       <normal><![CDATA[fonts/OpenSans-BoldItalic.ttf]]></normal>
+       <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+   </fontFamily>
+
+
+   <fontFamily name="Open Sans">
+       <normal><![CDATA[fonts/OpenSans-Italic.ttf]]></normal>
+       <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+   </fontFamily>
+
+
+   <fontFamily name="Open Sans Light">
+       <normal><![CDATA[fonts/OpenSans-Light.ttf]]></normal>
+       <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+   </fontFamily>
+
+
+   <fontFamily name="Open Sans Light">
+       <normal><![CDATA[fonts/OpenSans-LightItalic.ttf]]></normal>
+       <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+   </fontFamily>
+
+
+</fontFamilies>

@@ -1,0 +1,117 @@
+.bold {
+	font-weight: 700;
+}
+
+button.ui-state-default.tab-gris {
+	background-color: #F9F9F9 !important;
+	color: #4C4C4C !important;
+}
+
+button.ui-state-default.tab-gradiente {
+	background-image: linear-gradient(#EB1F28, #461A13) !important;
+	color: #FFFFFF !important;
+}
+
+.ui-button-icon-only .ui-icon {
+	top: 28% !important;
+	margin-top: -10px !important;
+	left: 16% !important;
+	margin-left: 0px !important;
+}
+
+.textoRojo {
+	font-weight: bold;
+	color: #EB1F28;
+}
+
+.textoGris {
+	font-weight: bold;
+	color: #AEAEAE;
+}
+
+.centrar {
+	text-align: center;
+}
+
+.ajustar {
+	padding: 3%;
+}
+
+.tamanoFiltro {
+	width: 200px !important;
+}
+
+.centrar5 {
+	text-align: center;
+	width: 50px !important;
+}
+
+.centrar10 {
+	text-align: center;
+	vertical-align: middle;
+}
+
+.centrar20 {
+	text-align: center;
+	width: 20%;
+}
+
+.centrar25 {
+	text-align: center;
+	vertical-align: middle;
+	width: 260px !important;
+}
+
+.centrar30 {
+	text-align: center;
+	vertical-align: middle;
+	width: 30%;
+}
+
+.centrar40 {
+	text-align: center;
+	vertical-align: middle;
+	width: 40%;
+}
+
+.colorLapiz {
+	color: inherit !important;
+	font-size: 22px !important;
+}
+
+.tituloListaAsociados {
+	font-size: 18px !important;
+	font-weight: 600;
+}
+
+.paddingNumeroCuentaCupo {
+	padding-bottom: 12px;
+}
+
+.anchoCuentaCupoColumna {
+	text-align: center;
+	align: center;
+	width: 14%;
+}
+
+#dlgConfirmativo>div.ui-dialog-titlebar.ui-widget-header>a {
+	display: none;
+}
+
+#dlgConfirmativoModificacion>div.ui-dialog-titlebar.ui-widget-header>a {
+	display: none;
+}
+
+#modalAsociar>div.ui-dialog-titlebar.ui-widget-header>a {
+	display: none;
+}
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
+	blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn,
+	em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var,
+	b, u, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table,
+	caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas,
+	details, embed, figure, figcaption, footer, header, hgroup, menu, nav,
+	output, section, summary, time, mark, audio, video {
+	vertical-align: middle !important;
+}

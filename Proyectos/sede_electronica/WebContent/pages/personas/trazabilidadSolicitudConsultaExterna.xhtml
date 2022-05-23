@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-simple.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-seguimientoSolicitudes.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_seguimiento['titulo.ConsultaTrazabilidad']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_seguimiento['banner.TituloseguimientoSolicitudes']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo"
+				value="#{txt_seguimiento['banner.SubtituloDetalleSolicitudes']}" />
+			<ui:param name="urlVista"
+				value="/pages/personas/trazabilidadSolicitudConsultaExterna.jsf" />
+		</ui:include>
+		<h:form id="formDetalle">
+			<p:panel>
+			<br/>
+				<div class="row panel-seguimiento">
+					<div class="ui-g-12 ui-lg-6">
+						<p:outputLabel styleClass="label-form"
+							value="#{txt_seguimiento['label.NIR']}" />
+						<br />
+						<p:inputText
+							value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.is_nir}"
+							readonly="true" />
+					</div>
+					<div class="ui-g-12 ui-lg-6">
+						<p:outputLabel value="#{txt_seguimiento['label.NumeroTurno']}"
+							styleClass="label-form" />
+						<br />
+						<p:inputText
+							value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.is_numeroTurno}"
+							readonly="true" />
+					</div>
+				</div>
+				<br />
+				<div class="row panel-seguimiento">
+					<div class="col-xs-12">
+						<p:panel id="panelInformacionDocumento"
+							header="#{txt_seguimiento['header.InformacionDocumento']}"
+							styleClass="panel-header">
+							<div class="row panel-seguimiento">
+								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+									<p:outputLabel styleClass="label-form" for="tipo"
+										value="#{txt_seguimiento['label.Tipo']}" />
+									<div class="ui-inputgroup text-read-only">
+										<h:outputText id="tipo"
+											value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.is_tipo}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="tipo" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel value="#{txt_seguimiento['label.Tipo']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+									<p:outputLabel styleClass="label-form" for="numeroDocumento"
+										value="#{txt_seguimiento['label.Documento']}" />
+									<div class="ui-inputgroup text-read-only">
+										<h:outputText id="numeroDocumento"
+											value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.is_numeroDocumento}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="numeroDocumento"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel value="#{txt_seguimiento['label.Documento']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+									<p:outputLabel styleClass="label-form" for="fechaDocumento"
+										value="#{txt_seguimiento['label.FechaDocumento']}" />
+									<div class="ui-inputgroup text-read-only">
+										<h:outputText id="fechaDocumento"
+											value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.is_fechaDocumento}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="fechaDocumento"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_seguimiento['label.FechaDocumento']}" />
+										</div>
+									</p:tooltip>
+								</div>
+							</div>
+							<div class="row panel-seguimiento">
+								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+									<p:outputLabel styleClass="label-form" for="oficinaOrigen"
+										value="#{txt_seguimiento['label.OficinaOrigen']}" />
+									<div class="ui-inputgroup text-read-only">
+										<h:outputText id="oficinaOrigen"
+											value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.is_oficinaRegistro}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="oficinaOrigen" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_seguimiento['label.OficinaOrigen']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+									<p:outputLabel styleClass="label-form" for="tipoOficina"
+										value="#{txt_seguimiento['label.TipoOficina']}" />
+									<div class="ui-inputgroup text-read-only">
+										<h:outputText id="tipoOficina"
+											value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.is_oficinaRegistro}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="tipoOficina" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_seguimiento['label.TipoOficina']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+									<p:outputLabel styleClass="label-form" for="pais"
+										value="#{txt_seguimiento['label.Pais']}" />
+									<div class="ui-inputgroup text-read-only">
+										<h:outputText id="pais"
+											value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.is_pais}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="pais" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel value="#{txt_seguimiento['label.Pais']}" />
+										</div>
+									</p:tooltip>
+								</div>
+							</div>
+							<div class="row panel-seguimiento">
+								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+									<p:outputLabel styleClass="label-form" for="departamento"
+										value="#{txt_seguimiento['label.Departamento']}" />
+									<div class="ui-inputgroup text-read-only">
+										<h:outputText id="departamento"
+											value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.is_departamento}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="departamento" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_seguimiento['label.Departamento']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+									<p:outputLabel styleClass="label-form" for="municipio"
+										value="#{txt_seguimiento['label.Municipio']}" />
+									<div class="ui-inputgroup text-read-only">
+										<h:outputText id="municipio"
+											value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.is_municipio}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="municipio" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel value="#{txt_seguimiento['label.Municipio']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+									<p:outputLabel styleClass="label-form" for="tipoEntidad"
+										value="#{txt_seguimiento['label.TipoEntidad']}" />
+									<div class="ui-inputgroup text-read-only">
+										<h:outputText id="tipoEntidad"
+											value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.is_tipoEntidad}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="tipoEntidad" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_seguimiento['label.TipoEntidad']}" />
+										</div>
+									</p:tooltip>
+								</div>
+							</div>
+						</p:panel>
+					</div>
+					<div class="col-xs-12 align-center">
+						<p:panel id="panelMatriculas"
+							header="#{txt_seguimiento['header.Matriculas']}"
+							styleClass="panel-header">
+							<div class="row panel-seguimiento">
+								<p:dataTable styleClass="table-center" id="dataTableMatriculas"
+									rows="10" var="lss_matricula" paginator="true"
+									paginatorPosition="bottom" reflow="true"
+									value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.ilssrm_listaSeguimientoSolicitudesRespuestaMatriculasDto}"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}">
+									<f:facet name="header">
+										<h:outputText value="#{txt_seguimiento['tabla.Matriculas']}" />
+									</f:facet>
+									<p:column
+										headerText="#{txt_seguimiento['label.CirculoRegistral']}">
+										<h:outputText value="#{lss_matricula.is_circuloRegistral}"></h:outputText>
+									</p:column>
+									<p:column
+										headerText="#{txt_seguimiento['label.NumeroMatricula']}">
+										<h:outputText value="#{lss_matricula.is_matriculaNumero}"></h:outputText>
+									</p:column>
+									<p:column headerText="#{txt_seguimiento['label.Estado']}">
+										<h:outputText value="#{lss_matricula.is_estado}"></h:outputText>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</p:panel>
+					</div>
+					<div class="col-xs-12 align-center">
+						<p:panel id="panelDetalleTrazabilidad"
+							header="#{txt_seguimiento['header.DetalleConsultaTrazabilidad']}"
+							styleClass="panel-header">
+							<p:dataTable styleClass="table-center"
+								id="dataTableDetalleTrazabilidad" rows="10" var="lss_detalle"
+								value="#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.ilssrd_listaSeguimientoSolicitudesRespuestaDetalleDto}"
+								paginator="true" paginatorPosition="bottom" reflow="true"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}">
+								<f:facet name="header">
+									<h:outputText
+										value="#{txt_seguimiento['tabla.DetalleTrazabilidad']}" />
+								</f:facet>
+								<p:column headerText="#{txt_seguimiento['label.NumeroTurno']}">
+									<h:outputText value="#{lss_detalle.is_numeroTurno}"></h:outputText>
+								</p:column>
+								<p:column headerText="#{txt_seguimiento['label.Orip']}">
+									<h:outputText value="#{lss_detalle.is_oficinaRegistro}"></h:outputText>
+								</p:column>
+								<p:column headerText="#{txt_seguimiento['label.Etapa']}">
+									<h:outputText value="#{lss_detalle.is_etapa}"></h:outputText>
+								</p:column>
+								<p:column headerText="#{txt_seguimiento['label.NombreEtapa']}">
+									<h:outputText value="#{lss_detalle.is_nombreEtapa}"></h:outputText>
+								</p:column>
+								<p:column
+									headerText="#{txt_seguimiento['label.EstadoActividad']}">
+									<h:outputText value="#{lss_detalle.is_estadoActividad}"></h:outputText>
+								</p:column>
+								<p:column exportable="false" headerText="#{txt_seguimiento['header.Estado']}">
+									<p:outputPanel id="swichWrapper">
+										<pe:switch id="switch"
+											value="#{lss_detalle.is_estadoActividad}">
+											<pe:defaultCase>
+												<p:graphicImage styleClass="img-x-size" name="" />
+											</pe:defaultCase>
+											<pe:case value="#{beanSeguimientoSolicitudes.is_asignado}">
+												<p:graphicImage styleClass="img-x-size"
+													name="/iconos/verde-small.png" />
+											</pe:case>
+											<pe:case value="#{beanSeguimientoSolicitudes.is_bloqueado}">
+												<p:graphicImage styleClass="img-x-size"
+													name="/iconos/rojo-small.png" />
+											</pe:case>
+											<pe:case value="#{beanSeguimientoSolicitudes.is_terminado}">
+												<p:graphicImage styleClass="img-x-size"
+													name="/iconos/verde-small.png" />
+											</pe:case>
+											<pe:case value="#{beanSeguimientoSolicitudes.is_automatico}">
+												<p:graphicImage styleClass="img-x-size"
+													name="/iconos/amarillo-small.png" />
+											</pe:case>
+											<pe:case value="#{beanSeguimientoSolicitudes.is_pendienteXRepartir}">
+												<p:graphicImage styleClass="img-x-size"
+													name="/iconos/amarillo-small.png" />
+											</pe:case>
+										</pe:switch>
+									</p:outputPanel>
+								</p:column>
+								<p:column
+									headerText="#{txt_seguimiento['label.FechaAsignacion']}">
+									<h:outputText value="#{lss_detalle.is_fechaAsignacion}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+								<p:column headerText="#{txt_seguimiento['label.FechaReparto']}">
+									<h:outputText value="#{lss_detalle.is_fechaReparto}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									headerText="#{txt_seguimiento['label.FechaInicioEtapa']}">
+									<h:outputText value="#{lss_detalle.is_fechaInicioEtapa}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									headerText="#{txt_seguimiento['label.FechaFinalEtapa']}">
+									<h:outputText value="#{lss_detalle.is_fechaFinalEtapa}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+							<br />
+							<p:panel header="#{txt_seguimiento['header.ExportarPDF']}">
+								<p:commandLink id="pdf" ajax="false">
+									<p:graphicImage name="/iconos/pdf.png" />
+									<pe:exporter type="pdf"
+										target="dataTableMatriculas, dataTableDetalleTrazabilidad"
+										skipComponents="org.primefaces.component.outputpanel.OutputPanel"
+										fileName="#{txt_seguimiento['archivo.NombreArchivoDescarga']}-#{beanSeguimientoSolicitudes.issr_seguimientoSolicitudesRespuestaDto.is_numeroTurno}"
+										facetFontSize="9"
+										preProcessor="#{beanSeguimientoSolicitudes.preProcessPDF}"
+										datasetPadding="2" />
+								</p:commandLink>
+								<br />
+							</p:panel>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+									<p:commandButton icon="icon-flecha-gris" iconPos="right"
+										immediate="true" styleClass="icon-btn btn-gris"
+										value="#{txt_seguimiento['boton.Volver']}"
+										action="/pages/personas/seguimientoSolicitudesExterna.jsf?faces-redirect=true"
+										process="@this" />
+								</div>
+							</div>
+						</p:panel>
+					</div>
+				</div>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

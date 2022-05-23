@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_seguimiento['titulo.SeguimientoSolicitudes']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css"
+			name="snr-se-seguimientoSolicitudes.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_seguimiento['banner.TituloseguimientoSolicitudes']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo"
+				value="#{txt_seguimiento['banner.SubtituloseguimientoSolicitudes']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/seguimientoSolicitudes.jsf" />
+		</ui:include>
+		<div class="container-fluid-special">
+			<div id="section" class="espacio-abajo">
+				<h:form id="seguimientoSolicitudes">
+					<p:panel styleClass="panel-content no-border">
+						<div class="row">
+							<div class="col-xs-12 text-center">
+								<p:outputLabel styleClass="label-form"
+									value="#{txt_seguimiento['label.titulo']}" />
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel styleClass="label-form"
+									value="#{txt_seguimiento['label.subtitulo.uno']}" />
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelNumeroTurno" styleClass="label-form"
+									for="numeroTurno"
+									value="#{txt_seguimiento['label.NumeroTurno']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="numeroTurno" styleClass="mask-AlphaNumGuion"
+										maxlength="30"
+										placeholder="#{txt_seguimiento['placeholder.NumeroTurno']}"
+										value="#{beanSeguimientoSolicitudes.is_numeroTurno}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelNumeroTurno"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_seguimiento['tooltip.NumeroTurno']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="numeroTurno" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelNir" styleClass="label-form" for="nir"
+									value="#{txt_seguimiento['label.NIR']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="nir" styleClass="mask-AlphaNum" maxlength="20"
+										placeholder="#{txt_seguimiento['placeholder.NIR']}"
+										value="#{beanSeguimientoSolicitudes.is_nir}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelNir" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel value="#{txt_seguimiento['tooltip.NIR']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="nir" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4 col-sm-offset-7">
+								<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+									type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+									value="#{txt_seguimiento['boton.Consultar']}" ajax="false"
+									actionListener="#{beanSeguimientoSolicitudes.validacionNIRTurno}"
+									update="consultaProceso,consultaProceso2" />
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel styleClass="label-form"
+									value="#{txt_seguimiento['label.subtitulo.dos']}" />
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel styleClass="label-form" id="labelOficinaRegistro"
+									for="oficinaRegistro"
+									value="#{txt_seguimiento['label.oficinaRegistro']}" />
+								<p:selectOneMenu id="oficinaRegistro" filter="true"
+									widgetVar="oficinaRegistro" filterMatchMode="contains"
+									required="false" converter="selectOneMenuConverter"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									filterPlaceholder="#{txt_seguimiento['placeholder.oficinaRegistro']}"
+									value="#{beanSeguimientoSolicitudes.icr_circuloRegistralDto}">
+									<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+										itemValue="" />
+									<f:selectItems
+										value="#{beanSeguimientoSolicitudes.ilcr_listaCirculoRegistralDto}"
+										var="circuloRegistral"
+										itemLabel="#{circuloRegistral.is_nombre} - (#{circuloRegistral.is_id})"
+										itemValue="#{circuloRegistral}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelOficinaRegistro"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_seguimiento['tooltip.oficinaRegistro']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="oficinaRegistro" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelNumeroTurnoNoc" styleClass="label-form"
+									for="numeroTurnoNoc"
+									value="#{txt_seguimiento['label.NumeroTurno']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="numeroTurnoNoc"
+										styleClass="mask-AlphaNumGuion" maxlength="30"
+										placeholder="#{txt_seguimiento['placeholder.NumeroTurno']}"
+										value="#{beanSeguimientoSolicitudes.is_numeroTurnoNoc}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelNumeroTurnoNoc"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_seguimiento['tooltip.NumeroTurno']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="numeroTurnoNoc" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4 col-sm-offset-1 space-row">
+								<p:commandButton icon="icon-flecha-gris" iconPos="right"
+									styleClass="icon-btn btn-gris "
+									value="#{txt_seguimiento['boton.cancelar']}"
+									action="/pages/personas/inicio.jsf?faces-redirect=true" />
+							</div>
+							<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+								<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+									type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+									value="#{txt_seguimiento['boton.Consultar']}" ajax="false"
+									actionListener="#{beanSeguimientoSolicitudes.validacionNIRTurnoNoc}"
+									update="consultaProceso,consultaProceso2" />
+							</div>
+						</div>
+						<br />
+						<br />
+						<p:panel id="consultaProceso2"
+							rendered="#{beanSeguimientoSolicitudes.ib_mostrar != null and !beanSeguimientoSolicitudes.ib_mostrar}">
+							<div class="row panel-seguimiento">
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<p:outputLabel styleClass="label-form"
+										value="#{txt_seguimiento['label.Departamento']}" />
+									<br />
+									<p:inputText
+										value="#{beanSeguimientoSolicitudes.itsttrnc_tipoSalidaTrazabilidadTramiteRegistralNodoCentralWsDto.is_nomDepartamento} (#{beanSeguimientoSolicitudes.itsttrnc_tipoSalidaTrazabilidadTramiteRegistralNodoCentralWsDto.is_codDepartamento})"
+										readonly="true" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<p:outputLabel value="#{txt_seguimiento['label.Municipio']}"
+										styleClass="label-form" />
+									<br />
+									<p:inputText
+										value="#{beanSeguimientoSolicitudes.itsttrnc_tipoSalidaTrazabilidadTramiteRegistralNodoCentralWsDto.is_nomMunicipio} (#{beanSeguimientoSolicitudes.itsttrnc_tipoSalidaTrazabilidadTramiteRegistralNodoCentralWsDto.is_codMunicipio})"
+										readonly="true" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<p:outputLabel
+										value="#{txt_seguimiento['label.OficinaOrigen']}"
+										styleClass="label-form" />
+									<br />
+									<p:inputText
+										value="#{beanSeguimientoSolicitudes.itsttrnc_tipoSalidaTrazabilidadTramiteRegistralNodoCentralWsDto.is_oficinaOrigen}"
+										readonly="true" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<p:outputLabel
+										value="#{txt_seguimiento['label.fechaRadicacion']}"
+										styleClass="label-form" />
+									<br />
+									<p:inputText
+										value="#{beanSeguimientoSolicitudes.itsttrnc_tipoSalidaTrazabilidadTramiteRegistralNodoCentralWsDto.is_fechaRadicacion}"
+										readonly="true" />
+								</div>
+							</div>
+							<div class="row panel-seguimiento">
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<p:outputLabel styleClass="label-form"
+										value="#{txt_seguimiento['label.fechaInstrumento']}" />
+									<br />
+									<p:inputText
+										value="#{beanSeguimientoSolicitudes.itsttrnc_tipoSalidaTrazabilidadTramiteRegistralNodoCentralWsDto.is_fechaInstrumento}"
+										readonly="true" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<p:outputLabel
+										value="#{txt_seguimiento['label.numeroInstrumento']}"
+										styleClass="label-form" />
+									<br />
+									<p:inputText
+										value="#{beanSeguimientoSolicitudes.itsttrnc_tipoSalidaTrazabilidadTramiteRegistralNodoCentralWsDto.is_numeroInstrumento}"
+										readonly="true" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<p:outputLabel
+										value="#{txt_seguimiento['label.nomTipoDocumento']}"
+										styleClass="label-form" />
+									<br />
+									<p:inputText
+										value="#{beanSeguimientoSolicitudes.itsttrnc_tipoSalidaTrazabilidadTramiteRegistralNodoCentralWsDto.is_nomTipoDocumentoPublico}"
+										readonly="true" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<p:outputLabel value="#{txt_seguimiento['label.numConsulta']}"
+										styleClass="label-form" />
+									<br />
+									<p:inputText
+										value="#{beanSeguimientoSolicitudes.itsttrnc_tipoSalidaTrazabilidadTramiteRegistralNodoCentralWsDto.is_numeroConsulta}"
+										readonly="true" />
+								</div>
+							</div>
+							<br />
+							<div class="row panel-seguimiento">
+								<p:dataTable var="lss_consulta" styleClass="table-center"
+									id="listaConsultaNOC"
+									value="#{beanSeguimientoSolicitudes.itsttrnc_tipoSalidaTrazabilidadTramiteRegistralNodoCentralWsDto.iltet_estadosTramiteWsDto}"
+									widgetVar="solicitudesTable" reflow="true"
+									emptyMessage="#{txt_seguimiento['mensaje.MensajeVacio']}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									stickyHeader="false">
+									<f:facet name="header">
+										<h:outputText
+											value="#{txt_seguimiento['label.estadosTramite']}" />
+									</f:facet>
+									<p:column headerText="#{txt_seguimiento['label.codEstado']}">
+										<h:outputText value="#{lss_consulta.is_codigoEstado}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_seguimiento['label.fechaInicioEtapa']}">
+										<h:outputText value="#{lss_consulta.is_fechaInicioEtapa}" />
+									</p:column>
+									<p:column headerText="#{txt_seguimiento['label.pasoEstado']}">
+										<h:outputText value="#{lss_consulta.ib_pasoPorEstado}" />
+									</p:column>
+								</p:dataTable>
+							</div>
+						</p:panel>
+						<p:panel id="consultaProceso"
+							rendered="#{beanSeguimientoSolicitudes.ib_mostrar != null and beanSeguimientoSolicitudes.ib_mostrar}">
+							<div class="row panel-seguimiento">
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<p:outputLabel styleClass="label-form"
+										value="#{txt_seguimiento['label.NIR']}" />
+									<br />
+									<p:inputText
+										value="#{beanSeguimientoSolicitudes.iss_seguimientoSolicitudesDto.is_nir}"
+										readonly="true" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<p:outputLabel
+										value="#{txt_seguimiento['label.FaseActualNIR']}"
+										styleClass="label-form" />
+									<br />
+									<p:inputText
+										value="#{beanSeguimientoSolicitudes.iss_seguimientoSolicitudesDto.is_faseActualNIR}"
+										readonly="true" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<p:outputLabel value="#{txt_seguimiento['label.NirVinculado']}"
+										styleClass="label-form" />
+									<br />
+									<p:inputText
+										value="#{beanSeguimientoSolicitudes.iss_seguimientoSolicitudesDto.is_nirVinculado}"
+										readonly="true" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<p:outputLabel
+										value="#{txt_seguimiento['label.TramiteVinculado']}"
+										styleClass="label-form" />
+									<br />
+									<p:inputText
+										value="#{beanSeguimientoSolicitudes.iss_seguimientoSolicitudesDto.is_tramiteVinculado}"
+										readonly="true" />
+								</div>
+							</div>
+							<br />
+							<div class="row panel-seguimiento">
+								<p:dataTable var="lss_consulta" styleClass="table-center"
+									id="listaConsulta"
+									value="#{beanSeguimientoSolicitudes.iss_seguimientoSolicitudesDto.ilssr_listaSeguimientoSolicitudesRespuestaDto}"
+									widgetVar="solicitudesTable" reflow="true"
+									emptyMessage="#{txt_seguimiento['mensaje.MensajeVacio']}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									stickyHeader="false">
+									<p:column headerText="#{txt_seguimiento['label.NIR']}">
+										<h:outputText value="#{lss_consulta.is_nir}" />
+									</p:column>
+									<p:column headerText="#{txt_seguimiento['label.NumeroTurno']}">
+										<p:commandLink
+											actionListener="#{beanSeguimientoSolicitudes.consultarTrazabilidad(lss_consulta)}"
+											action="trazabilidadSolicitudConsulta.jsf?faces-redirect=true">
+											<h:outputText value="#{lss_consulta.is_numeroTurno}"></h:outputText>
+										</p:commandLink>
+									</p:column>
+									<p:column
+										headerText="#{txt_seguimiento['label.DecisionCalificacion']}">
+										<h:outputText value="#{lss_consulta.is_decisionCalificacion}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_seguimiento['label.FaseActualTurno']}">
+										<h:outputText value="#{lss_consulta.is_faseActualTurno}" />
+									</p:column>
+									<p:column headerText="#{txt_seguimiento['label.ProcesoTurno']}">
+										<h:outputText value="#{lss_consulta.is_procesoTurno}" />
+									</p:column>
+								</p:dataTable>
+							</div>
+						</p:panel>
+					</p:panel>
+				</h:form>
+			</div>
+		</div>
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();
+			});
+		</script>
+		<!-- Script que ejecuta el Keyfilter-->
+	</ui:define>
+</ui:composition>

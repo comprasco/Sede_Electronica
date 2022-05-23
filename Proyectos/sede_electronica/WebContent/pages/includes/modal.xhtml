@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<p:dialog id="#{modalId}" header="#{tituloModal}"
+		widgetVar="#{modalId}" resizable="false" draggable="false"
+		fitViewport="true" appendTo="@(body)" responsive="true" modal="true"
+		minWidth="300" minHeight="300" position="center" dynamic="true"
+		styleClass="box-solid box-danger modalCentro #{clasesEstilo}">
+		<h:form id="#{formulario}" enctype="multipart/form-data">
+			<div class="modalContent center-component">
+				<ui:insert name="body-modal">
+					<h:outputText styleClass="titulo" value="#{contenidoModal}" />
+				</ui:insert>
+			</div>
+			<div>
+				<p:separator />
+				<ui:insert name="accion-modal">
+					<div class="row">
+						<div class="col-xs-10 col-xs-offset-1 col-sm-5 space-row">
+							<p:commandButton
+								value="#{txt_certificados['wizard.seleccion.modal.cancelar']}"
+								class="btn-gris" oncomplete="PF('#{modalId}').hide()">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
+							<p:commandButton
+								value="#{txt_certificados['wizard.seleccion.modal.aceptar']}"
+								class="btn-rojo btn-gradiente"
+								oncomplete="PF('#{modalId}').hide()">
+								<f:ajax listener="#{accionBotonBean[accionBotonMetodo]}"
+									update="#{update}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</ui:insert>
+			</div>
+		</h:form>
+	</p:dialog>
+</ui:composition>

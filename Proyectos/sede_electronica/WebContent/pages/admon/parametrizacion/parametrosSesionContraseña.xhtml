@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta name="HandheldFriendly" content="true" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="viewport" content="width=device-width" />
+	<h:outputStylesheet library="css" name="snr-se.css" />
+	<h:outputStylesheet library="css" name="snr-se-login.css" />
+	<h:outputScript library="js" name="snr-se.js" />
+	<title>SEDE ELECTRONICA</title>
+</h:head>
+
+<h:body>
+	<div id="header">
+		<div class="container-fluid">
+			<ui:include src="/pages/includes/header.xhtml" />
+		</div>
+	</div>
+
+	<div id="section">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<p:panel id="inicioSesion" styleClass="panel-login no-border">
+						<div class="row centrar-img">
+							<div class="col-sm-12">
+								<span class="text-title">PÁGINA EN CONTRUCCIÓN</span> <span
+									class="text-subtitle">SEDE ELECTRONICA SNR</span>
+								<p:graphicImage styleClass="img-size" name="/img/rectangule.png" />
+							</div>
+						</div>
+
+						<h2>Esta pagina está en construcción, pronto estará
+							disponible...</h2>
+
+						<div style="clear: both;"></div>
+
+						<p:messages id="messages" showDetail="true" closable="true">
+							<p:autoUpdate />
+						</p:messages>
+					</p:panel>
+				</div>
+			</div>
+		</div>
+	</div>
+</h:body>
+</html>

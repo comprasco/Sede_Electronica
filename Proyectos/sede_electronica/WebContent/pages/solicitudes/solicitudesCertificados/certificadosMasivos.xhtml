@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/includes/wizard.xhtml">
+	<ui:param name="siguienteLabel"
+		value="#{txt['wizard.boton.siguiente']}" />
+	<ui:param name="atrasLabel" value="#{txt['wizard.boton.atras']}" />
+	<ui:define name="title-wizard">
+		<title>#{txt_certificados['titulo.certificados']}</title>
+	</ui:define>
+	<ui:define name="head-wizard">
+		<h:outputScript library="js" name="archivo.js" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+		<h:outputStylesheet library="css" name="snr-se-solicitudMasivas.css" />
+	</ui:define>
+	<ui:define name="banner">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_certificados['banner']}" />
+			<ui:param name="imagen" value="img-solicitudCertificados" />
+			<ui:param name="subtitulo"
+				value="#{txt_certificados['banner.subtitulo.certificadosMasivos']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/solicitudesCertificados/certificadosMasivos.jsf" />
+		</ui:include>
+	</ui:define>
+	<f:metadata>
+		<f:viewParam name="as_id"
+			value="#{beanCertificadoMasivo.is_codigoUruidCarritoId}" />
+		<f:viewParam name="as_codigoSubServicio"
+			value="#{beanCertificadoMasivo.is_codigoSubServicioId}" />
+		<f:event type="preRenderView"
+			listener="#{beanCertificadoMasivo.valorParametro}" />
+	</f:metadata>
+	<ui:param name="target" value="${beanCertificadoMasivo}" />
+	<ui:param name="metodo" value="validarSiguiente" />
+	<ui:define name="primerPaso">
+		<ui:decorate
+			template="/pages/includes/wizardPestanas/conoceMatricula.xhtml">
+			<ui:param name="bean" value="${beanCertificadoMasivo}" />
+			<ui:param name="funcion" value="ib_conoceMatricula" />
+			<ui:param name="vista" value="SolicitudCertificadosMasivos" />
+			<ui:param name="panelRender"
+				value="wizard:form#{vista}:panelTipoCertificados" />
+			<ui:define name="panelPersonalizado">
+				<p:panel id="panelTipoCertificados" styleClass="no-border"
+					visible="#{beanCertificadoMasivo.ib_conoceMatricula}">
+					<p:separator />
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel for="accordionPanel" styleClass="label-form"
+								value="#{txt_certificados['wizard.seleccion.tipoCertificado.titulo']}" />
+							<p:accordionPanel id="accordionPanel" dynamic="true">
+								<p:tab
+									title="#{txt_certificados['wizard.seleccion.certificado.inmediato.titulo']}"
+									styleClass="tab-personalizado tab-gradiente">
+									<div class="row">
+										<div class="col-xs-12">
+											<p:selectOneButton id="tipoCertificadoSelect1"
+												styleClass="oneButton sinPadding" layout="responsive"
+												columns="1" converter="selectOneMenuConverter"
+												value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().idc_detalleCatalogoDto}">
+												<p:ajax
+													update="wizard:form#{vista}:descripcionTipoCertificado" />
+												<f:selectItems
+													value="#{beanCertificadoMasivo.ildc_listaDetalleCatalogoInmediatosDto}"
+													var="tipoCertificado"
+													itemLabel="#{tipoCertificado.ic_catalogoDto.is_nombre}"
+													itemValue="#{tipoCertificado}" />
+											</p:selectOneButton>
+										</div>
+									</div>
+								</p:tab>
+							</p:accordionPanel>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel for="descripcionTipoCertificado"
+										styleClass="label-form"
+										value="#{txt_certificados['wizard.seleccion.descripcion.titulo']}" />
+								</div>
+								<div class="col-xs-12 text-justify">
+									<h:outputText id="descripcionTipoCertificado" escape="false"
+										value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().getIdc_detalleCatalogoDto().getIs_codigoDescripcion()}" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:panel>
+			</ui:define>
+		</ui:decorate>
+		<!-- estos parametros son para enviar una validacion sobre cada formulario al wizard -->
+	</ui:define>
+	<ui:define name="segundoPaso">
+		<p:tab id="datos">
+			<f:facet name="title">
+				<span class="icono icono-buscar" />
+				<p:outputLabel class="tituloWizard"
+					value="#{txt_certificados['wizard.tab.datos']}" />
+			</f:facet>
+			<p:panel id="panelCargaArchivo">
+				<ui:param name="validarListaTransaccion"
+					value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().getIlsm_listaSalidaMatriculaDto().size() > 0}"></ui:param>
+				<div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" for="tipoCertificado"
+								value="#{txt_certificados['wizardCertificado.datos.tipoCertificado']}" />
+							<div class="tipo-input-medium">
+								<p:outputLabel id="tipoCertificado"
+									value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().getIdc_detalleCatalogoDto().getIc_catalogoDto().getIs_nombre()}" />
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelOficinaRegistro"
+								for="modoEnvioCertificado"
+								value="#{txt_certificados['wizardMasivo.datos.correoElectronico']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:inputText readonly="true" id="modoEnvioCertificado"
+								autocomplete="off"
+								placeholder="#{txt['placeholder.FormatoCorreo']}" maxlength="50"
+								value="#{beanCertificadoMasivo.is_correoEnvio}">
+								<f:validator validatorId="ValidarCorreoFormato" />
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('wizard:modoEnvioCertificado', 'spanCorreoEnvio');" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelOficinaRegistro"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_certificados['wizardMasivo.datos.tooltip.correoElectronico']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="modoEnvioCertificado" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<p:separator />
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel styleClass="label-form" id="labelSubtituloDatos"
+								value="#{txt_certificados['wizardMasivos.datos.titulo']}" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel styleClass="label-form" id="labelTituloDatos"
+								value="#{beanCertificadoMasivo.subtitulo()}" />
+						</div>
+					</div>
+					<br />
+					<p:separator />
+					<p:panel id="panelCargueArchivo">
+						<div class="row">
+							<div class="col-xs-12 col-md-7 space-row">
+								<div class="row vcenter vcentermovil">
+									<div class="col-xs-2 col-xs-offset-4 col-sm-2 col-sm-offset-0">
+										<p:commandButton id="infoContrasenaNatural"
+											icon="icon-contrasena"
+											styleClass="icon-input btn-gradiente icono_boton espacio-boton"
+											onclick="PF('modalArchivoEjemplo').show()" />
+									</div>
+									<div class="col-xs-12 col-sm-10 text-center">
+										<p:outputLabel id="labelCargarArchivos"
+											styleClass="label-form"
+											value="#{txt_certificados['wizardMasivos.datos.archivo']}">
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										</p:outputLabel>
+										<p:fileUpload styleClass="cargaArchivo"
+											fileUploadListener="#{beanCertificadoMasivo.cargarArchivo}"
+											mode="advanced" auto="false" allowTypes="/(\.|\/)(txt)$/"
+											invalidSizeMessage="#{beanArchivo.validarTamanoArchivoTXTError()}"
+											invalidFileMessage="#{txt_certificados['wizardMasivos.archivo.error.extension']}"
+											fileLimitMessage="#{txt_certificados['wizardMasivos.archivo.error.archivo']}"
+											label="#{txt_persona['label.ExaminarArchivo']}"
+											uploadLabel="#{txt_persona['label.Cargar']}"
+											cancelLabel="#{txt_persona['label.Cancelar']}"
+											sizeLimit="#{beanArchivo.validarTamanoArchivoTXT()}"
+											fileLimit="1"
+											update=":wizard:contenidoBtn :wizard:formModalDescargarTransaccion @this :wizard:panelCargueArchivo">
+											<p:outputLabel styleClass="label-form tresPuntos"
+												value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().getIs_archivoCargado()}" />
+											<p:outputPanel id="contenidoResumen">
+												<ui:decorate
+													template="/pages/includes/resumenes/certificados/resumenCertificadosMasivos.xhtml">
+													<ui:param name="id" value="Minimo" />
+													<ui:param name="transaccion"
+														value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto()}" />
+												</ui:decorate>
+											</p:outputPanel>
+										</p:fileUpload>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCargarArchivos"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_certificados['wizardMasivos.datos.archivo.tooltip']}" />
+											</div>
+										</p:tooltip>
+									</div>
+								</div>
+							</div>
+							<br class="btn-validar-matricula-smart" />
+							<p:outputPanel styleClass="btn-validar-matricula-smart">
+								<div class="col-xs-12">
+									<h:form id="contenidoBtnSmart">
+										<p:commandButton id="btnValidarSmart"
+											styleClass="btn-rojo btn-gradiente"
+											value="#{txt_certificados['wizardMasivos.datos.tabla.validar']}"
+											rendered="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().ib_archivoCargadoByte != null?true:false}">
+											<p:ajax
+												listener="#{beanCertificadoMasivo.validarTransaccion}"
+												onstart="PF('blockUI-Loading').show();"
+												onsuccess="PF('blockUI-Loading').hide();"
+												update="wizard:formModalValidacionAlerta:panelValidacionArchivo" />
+										</p:commandButton>
+									</h:form>
+								</div>
+							</p:outputPanel>
+							<div class="col-xs-12 col-md-5">
+								<div class="row">
+									<div class="col-xs-12">
+										<p:panel id="solicitudesConsultadas"
+											class="solicitudesMasivas">
+											<f:facet name="header">
+												<p:outputLabel
+													value="#{txt_certificados['certificadosConsultados.resumen']}" />
+											</f:facet>
+											<p:outputLabel rendered="#{!(validarListaTransaccion)}"
+												value="#{txt_registrar_alerta_masiva['alertasConsultadas.vacio']}" />
+											<ui:fragment rendered="#{validarListaTransaccion}">
+												<div class="row certificadoItem">
+													<div class="col-xs-10 maxTexto">
+														<p:outputLabel
+															value="#{txt_certificados['certificadosConsultadas.datos']}" />
+													</div>
+													<div class="col-xs-2 text-center">
+														<p:commandLink
+															title="#{txt_certificados['wizardCertificado.datos.tabla.boton']}"
+															class="descartarCertificado"
+															styleClass="fa fa-times-circle imagenTamano"
+															update="wizard:solicitudesConsultadas">
+															<f:ajax
+																listener="#{beanCertificadoMasivo.descartarCertificado(beanCertificadoMasivo.getItm_transaccionMasivaDto())}"
+																render="wizard:solicitudesConsultadas">
+															</f:ajax>
+														</p:commandLink>
+													</div>
+												</div>
+												<div class="row direccionItem">
+													<div class="col-xs-8 maxTexto">
+														<h:outputText
+															value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().getIlsm_listaSalidaMatriculaDto().size()} " />
+														<h:outputText
+															value="#{txt_certificados['certificadosConsultadas.dato']} " />
+													</div>
+													<div class="col-xs-4 text-right maxTexto colorVerde precio">
+														<h:outputText
+															value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().getIbd_valorTotal()}"
+															styleClass="resultado-verde">
+															<f:convertNumber type="currency" currencySymbol="$"
+																maxFractionDigits="0" />
+														</h:outputText>
+													</div>
+												</div>
+											</ui:fragment>
+										</p:panel>
+									</div>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-md-6 col-md-offset-3">
+								<h:form id="contenidoBtn" styleClass="btn-validar-matricula">
+									<p:commandButton id="btnValidar"
+										styleClass="btn-rojo btn-gradiente"
+										value="#{txt_certificados['wizardMasivos.datos.tabla.validar']}"
+										rendered="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().ib_archivoCargadoByte != null?true:false}">
+										<p:ajax listener="#{beanCertificadoMasivo.validarTransaccion}"
+											onstart="PF('blockUI-Loading').show();"
+											onsuccess="PF('blockUI-Loading').hide();"
+											update="wizard:formModalValidacionAlerta:panelValidacionArchivo" />
+									</p:commandButton>
+								</h:form>
+							</div>
+						</div>
+					</p:panel>
+				</div>
+			</p:panel>
+		</p:tab>
+	</ui:define>
+	<ui:define name="tercerPaso">
+		<ui:decorate
+			template="/pages/includes/wizardPestanas/resumenSolicitud.xhtml">
+			<ui:param name="vista" value="SolicitudCertificados" />
+			<ui:param name="titulo"
+				value="#{txt_certificados['wizardMasivos.datos.tabla.titulo']}" />
+			<ui:param name="tipoDocumento"
+				value="#{beanCertificadoMasivo.itm_transaccionMasivaDto.getIp_personaDto().getItd_tipoDocumentoDto().getIs_nombre()}" />
+			<ui:param name="numeroDocumento"
+				value="#{beanCertificadoMasivo.itm_transaccionMasivaDto.getIp_personaDto().getIs_numeroDocumento()}" />
+			<ui:param name="correoEnvio"
+				value="#{beanCertificadoMasivo.is_correoEnvio}" />
+			<ui:param name="accionSolicitar"
+				value="guardarTransaccionCertificado" />
+			<ui:param name="beanSolicitar" value="#{beanCertificadoMasivo}" />
+			<ui:param name="mostrarFormaEnvio" value="true" />
+			<ui:param name="formaEnvio"
+				value="#{txt_certificados['wizardCertificado.resumen.correoEnvio']}" />
+			<ui:define name="contenidoResumen">
+				<div class="row">
+					<div class="vcenter">
+						<div class="col-xs-12">
+							<ui:decorate
+								template="/pages/includes/resumenes/certificados/resumenCertificadosMasivos.xhtml">
+								<ui:param name="id" value="Maximo" />
+								<ui:param name="transaccion"
+									value="#{beanCertificadoMasivo.itm_transaccionMasivaDto}" />
+							</ui:decorate>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 resumen_transaccion_valor_pagado">
+							<h:outputText class="label-form"
+								value="#{txt_certificados['wizardCertificado.resumen.valorTotal']} " />
+							<h:outputText
+								value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().getIbd_valorTotal()}"
+								styleClass="resultado-verde">
+								<f:convertNumber type="currency" currencySymbol="$"
+									maxFractionDigits="0" />
+							</h:outputText>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+	<ui:define name="modalWizard">
+		<!-- Transaccion encontrada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="transaccionEncontrada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalTransaccionEncontrada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.transaccion.retormar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-md-6 space-row">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt_certificados['wizard.seleccion.modal.cancelar']}">
+							<p:ajax
+								listener="#{beanCertificadoMasivo.cancelarTransaccion(true)}" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-6">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_certificados['wizard.seleccion.modal.aceptar']}">
+							<f:ajax
+								listener="#{beanCertificadoMasivo.cancelarTransaccion(false)}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Transaccion encontrada -->
+		<!-- Archivo generado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="descargarTransaccion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalDescargarTransaccion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizardMasivos.modal.archivoCargado.contenido']} #{beanCertificadoMasivo.getItm_transaccionMasivaDto().getIlm_listaMatriculaDto().size()}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton value="#{txt_certificados['boton.entendido']}"
+							class="btn-rojo btn-gradiente"
+							oncomplete="PF('#{modalId}').hide()">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Archivo generado -->
+		<!-- Modal de redirección matricula -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalCertificado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.redireccion']}" />
+			<ui:param name="formulario" value="formModalRedireccionMatricula" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.advertencia']}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.primeraParte']} " />
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.redirigir']}"
+							class="label-form" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-10 col-xs-offset-1 col-sm-5 space-row">
+						<p:commandButton value="#{txt_certificados['boton.volver']}"
+							class="btn-gris" oncomplete="PF('#{modalId}').hide()">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
+						<p:commandButton value="#{txt_certificados['boton.redirigir']}"
+							class="btn-rojo btn-gradiente"
+							oncomplete="PF('#{modalId}').hide()">
+							<f:ajax listener="#{beanCertificadoMasivo.buscarMatricula}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal  de redirección matricula-->
+		<!-- Modal de ejemplo archivo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalArchivoEjemplo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalEjemplo" />
+			<ui:param name="accionBotonBean" value="${beanCertificadoMasivo}" />
+			<ui:param name="accionBotonMetodo" value="buscarMatricula" />
+			<ui:define name="body-modal">
+				<div class="row ">
+					<div class="maximoModal">
+						<div class="col-xs-12 modalInfoMasivo">
+							<div class="row">
+								<div class="col-xs-12">
+									<h:outputText
+										value="#{txt_certificados['wizardMasivos.modal.ejemplo.paso1']} " />
+								</div>
+								<div class="col-xs-12">
+									<p:graphicImage
+										value="#{resource['img/masivo/CrearArchivo.png']}"
+										alt="#{txt_certificados['wizardMasivos.modal.ejemplo.paso1']}"
+										title="#{txt_certificados['wizardMasivos.modal.ejemplo.paso1']}" />
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<h:outputText
+										value="#{txt_certificados['wizardMasivos.modal.ejemplo.paso2']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:graphicImage
+										value="#{resource['img/masivo/PasoCertificados.png']}"
+										alt="#{txt_certificados['wizardMasivos.modal.ejemplo.paso2']}"
+										title="#{txt_certificados['wizardMasivos.modal.ejemplo.paso2']}" />
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<h:outputText
+										value="#{txt_certificados['wizardMasivos.modal.ejemplo.paso3']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:graphicImage
+										value="#{resource['img/masivo/PasoCargue.png']}"
+										alt="#{txt_certificados['wizardMasivos.modal.ejemplo.paso3']}"
+										title="#{txt_certificados['wizardMasivos.modal.ejemplo.paso3']}" />
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<h:outputText
+										value="#{txt_certificados['wizardMasivos.modal.ejemplo.paso4']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:graphicImage styleClass="tamanoImg"
+										value="#{resource['img/masivo/PasoCargue2.png']}"
+										alt="#{txt_certificados['wizardMasivos.modal.ejemplo.paso4']}"
+										title="#{txt_certificados['wizardMasivos.modal.ejemplo.paso4']}" />
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<h:outputText
+										value="#{txt_certificados['wizardMasivos.modal.ejemplo.paso5']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:graphicImage styleClass="tamanoImg"
+										value="#{resource['img/masivo/BotonCargar.png']}"
+										alt="#{txt_certificados['wizardMasivos.modal.ejemplo.paso5']}"
+										title="#{txt_certificados['wizardMasivos.modal.ejemplo.paso5']}" />
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<h:outputText
+										value="#{txt_certificados['wizardMasivos.modal.ejemplo.paso6']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:graphicImage styleClass="tamanoImg"
+										value="#{resource['img/masivo/BotonCargar.png']}"
+										alt="#{txt_certificados['wizardMasivos.modal.ejemplo.paso6']}"
+										title="#{txt_certificados['wizardMasivos.modal.ejemplo.paso6']}" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3 center-component">
+						<p:commandButton value="#{txt_certificados['boton.entendido']}"
+							class="btn-rojo btn-gradiente"
+							oncomplete="PF('#{modalId}').hide()">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal de ejemplo archivo -->
+		<!-- Solicitud generada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="solicitudGenerada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalSolicitudGenerada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizardCertificado.pago.modal']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<p:importEnum
+					type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumParametrosURL"
+					var="EnumParametrosURL" />
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-4">
+						<p:link class="btn-rojo redireccion"
+							value="#{txt_certificados['boton.entendido']}"
+							outcome="#{beanCertificadoMasivo.is_redireccionResumenPago}#{beanCertificadoMasivo.iit_integracionTemporalDto.is_nir}#{EnumParametrosURL.REFERENCIA_PAGO.is_nombreParametro}#{beanCertificadoMasivo.iit_integracionTemporalDto.is_referenciaPago}">
+						</p:link>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Solicitud generada -->
+		<!-- Maximo Matricula -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="minimoMatricula" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.redireccion']}" />
+			<ui:param name="formulario" value="formModalMaximoMatricula" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{beanCertificadoMasivo.minimoMatriculas()}" />
+						<br />
+						<h:outputText
+							value="#{txt_certificados['wizard.datos.modal.individual.2']}" />
+						<br />
+						<h:outputText
+							value="#{txt_certificados['wizard.datos.modal.individual.3']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-1">
+						<p:commandButton value="#{txt_certificados['boton.volver']}"
+							class="btn-gris" oncomplete="PF('minimoMatricula').hide()">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-4 col-md-offset-2">
+						<p:link class="btn-rojo redireccion"
+							outcome="${beanCertificadoMasivo.is_redireccionIndividual}"
+							value="#{txt_certificados['boton.redirigir']}">
+						</p:link>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Maximo Matricula -->
+		<!-- Validacion transaccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalValidacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalValidacionAlerta" />
+			<ui:define name="body-modal">
+				<p:importEnum
+					type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTiposMIME"
+					var="EnumTiposMIME" />
+				<p:panel id="panelValidacionArchivo">
+					<div class="row padding-top">
+						<div class="col-xs-12 padding-top">
+							<h:outputText
+								value="#{txt_certificados['modal.validacion.contenido']}" />
+							<h:outputText class="label-form"
+								value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().ilm_listaMatriculaDto.size()}" />
+						</div>
+						<br /> <br />
+						<div class="col-xs-12">
+							<h:outputText
+								value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().getIlsm_listaSalidaMatriculaDto().size()} " />
+							<h:outputText
+								value=" #{txt_certificados['modal.validacion.contenido.primer']}" />
+						</div>
+						<br />
+						<div class="col-xs-12">
+							<p:outputLabel
+								value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().getIrm_respuestaMasivosDto().ii_cantidadMatriculasNoTitular}" />
+							<h:outputText
+								value=" #{txt_certificados['modal.validacion.contenido.segundo']}" />
+						</div>
+						<br />
+						<div class="col-xs-12">
+							<p:outputLabel
+								value="#{beanCertificadoMasivo.getItm_transaccionMasivaDto().getIrm_respuestaMasivosDto().ii_cantidadMatriculasNoExistenSistema} " />
+							<h:outputText
+								value=" #{txt_certificados['modal.validacion.contenido.tercero']}" />
+						</div>
+					</div>
+
+					<div class="row padding-top">
+						<div class="col-md-6 center-component">
+							<p:outputLabel styleClass="label-form center-component"
+								value="#{txt_certificados['button.descargar.label.exitosas']}" />
+
+						</div>
+						<div class="col-md-6 col-md-offset-0">
+							<p:outputLabel styleClass="label-form center-component"
+								value="#{txt_certificados['button.descargar.label.no.exitosas']}" />
+						</div>
+					</div>
+
+					<div class="row padding-top">
+						<div class="col-md-6  center-component">
+							<h:commandButton type="button" id="boton-txt-exitosas"
+								styleClass="center-component"
+								onclick="botonDescargaArchivo('#{beanCertificadoMasivo.is_archivoDecodificado}','#{EnumTiposMIME.CSV.getIs_tipoMime()}','#{beanCertificadoMasivo.is_nombreArchivoResumen}');"
+								value="#{txt_certificados['button.descargar.txt.migrados']}" />
+							<br /> <br />
+						</div>
+						<div class="col-md-6 col-md-offset-0 center-component">
+							<h:commandButton type="button" id="boton-txt-no-exitosas"
+								styleClass="center-component"
+								onclick="botonDescargaArchivo('#{beanCertificadoMasivo.is_archivoDecodificadoNuevo}','#{EnumTiposMIME.CSV.getIs_tipoMime()}','#{beanCertificadoMasivo.is_nombreArchivoNoMigrados}');"
+								value="#{txt_certificados['button.descargar.txt.no.migrados']}"
+								disabled="#{beanCertificadoMasivo.is_archivoDecodificadoNuevo eq null}" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<h:outputText styleClass="label-form"
+								value="#{txt_certificados['wizardCertificado.datos.modal.pregunta']}" />
+						</div>
+					</div>
+				</p:panel>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-md-6">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt_registrar_alerta_masiva['modal.validacion.boton.cancelar']}"
+							oncomplete="PF('modalValidacion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-md-6">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_certificados['wizard.seleccion.modal.aceptar']}"
+							oncomplete="PF('modalValidacion').hide();"
+							update="wizard:solicitudesConsultadas"
+							action="#{beanCertificadoMasivo.adiccionarTransaccion}">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Validacion transaccion -->
+		<!-- Modal Confirmacion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalConfirmacionGenerarLiquidacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmacion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['generarLIquidacion.confirmar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-6 space-row">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							oncomplete="PF('modalConfirmacionGenerarLiquidacion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							oncomplete="PF('modalConfirmacionGenerarLiquidacion').hide();">
+							<p:ajax
+								listener="#{beanCertificadoMasivo.guardarTransaccionCertificado}"
+								update="wizard:formModalSolicitudGenerada" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal Confirmacion FIN -->
+	</ui:define>
+</ui:composition>

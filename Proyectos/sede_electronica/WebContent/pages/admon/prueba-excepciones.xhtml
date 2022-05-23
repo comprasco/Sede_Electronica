@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>Prueba Excepciones</title>
+	</ui:define>
+	<ui:define name="body">
+		<h:form id="form-img-persona">
+			<div class="container-fluid">
+				<div id="contenedor-img">
+					<div class="row">
+						<div
+							class="col-xs-12 col-sm-12 col-md-12 col-lg-12 height-text-first">
+							<p:outputLabel styleClass="text-first"
+								value="#{txt_persona['nuevoUsuarioUpper']}" />
+						</div>
+						<p:outputPanel id="panelUsuarioNatural">
+							<div
+								class="col-xs-12 col-sm-12 col-md-12 col-lg-12 height-text-second">
+								<p:outputLabel styleClass="text-second"
+									value="#{txt_persona['personaNaturalUpper']}" />
+							</div>
+						</p:outputPanel>
+						<div
+							class="col-xs-12 col-sm-12 col-md-12 col-lg-12 height-img-rectangule">
+							<p:graphicImage styleClass="img-header-interno"
+								name="/img/rectangule.png" />
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<p:outputLabel styleClass="text-snr"
+								value="#{txt_persona['tituloSNR']}" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid-special">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+						<div class="contenedor-link-login">
+							<p:commandLink
+								action="/pages/personas/inicioSesion/ciudadanos.jsf?faces-redirect=true"
+								styleClass="text-link">
+								<p:graphicImage styleClass="btn-atras" name="/img/btn-atras.png" />VOLVER A INICIO DE SESION
+							</p:commandLink>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<hr class="hr-inicial" />
+				</div>
+			</div>
+		</h:form>
+		<div class="container-fluid">
+			<div class="row">
+				<div id="section">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+						<p:commandButton id="btn-excpTec" icon="icon-flecha-gris"
+							iconPos="right" styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_exception['btn.excepcionDatos']}" immediate="true"
+							action="#{beanPrueba.lanzarExcepcionDatos}" process="@this" />
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div id="section">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+						<p:commandButton id="btn-excpNeg" icon="icon-flecha-gris"
+							iconPos="right" styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_exception['btn.excepcionTecnica']}" immediate="true"
+							action="#{beanPrueba.lanzarExcepcionTecnica}" process="@this" />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div id="section">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+						<p:commandButton id="btn-success" icon="icon-flecha-gris"
+							iconPos="right" styleClass="icon-btn pull-right btn-gris"
+							value="Mensaje Informativo Verde (full)" immediate="true"
+							action="#{beanPrueba.lanzarMensajeCompletado}" process="@this" />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div id="section">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+						<p:commandButton id="btn-informativo" icon="icon-flecha-gris"
+							iconPos="right" styleClass="icon-btn pull-right btn-gris"
+							value="Mensaje Informativo Azul" immediate="true"
+							action="#{beanPrueba.lanzarMensajeInformativo}" process="@this" />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div id="section">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+						<p:commandButton id="btn-excpDat" icon="icon-flecha-gris"
+							iconPos="right" styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_exception['btn.excepcionNegocio']}" immediate="true"
+							action="#{beanPrueba.lanzarExcepcionNegocio}" process="@this" />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div id="section">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+						<p:commandButton id="btn-excpModal" icon="icon-flecha-gris"
+							iconPos="right" styleClass="icon-btn pull-right btn-gris"
+							value="Modal sencillo" immediate="true"
+							action="#{beanPrueba.lanzarModalSencillo}" process="@this"
+							update="@(div[id$=excepcionGridBase])" />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div id="section">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+						<p:commandButton id="btn-excpModa-doble" icon="icon-flecha-gris"
+							iconPos="right" styleClass="icon-btn pull-right btn-gris"
+							value="Modal doble opcion" immediate="true"
+							action="#{beanPrueba.lanzarModalDoble}" process="@this"
+							update="@(div[id$=excepcionGridBase])" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css"
+			name="snr-se-modificarContrasena.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_persona['ModificarContrasena']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="subtitulo"
+				value="#{txt_persona['ModificarContrasena.Upper']}" />
+			<ui:param name="imagen" value="img-cambiarContrasena" />
+			<ui:param name="urlVista"
+				value="/pages/personas/modificarContrasenaUsuario.jsf" />
+		</ui:include>
+		<div class="container-fluid">
+			<div class="row">
+				<div id="section">
+					<h:form id="formModificarContrasena">
+						<p:panel styleClass="panel-content no-border ancho-panel">
+							<div class="row">
+								<div
+									class="col-xs-12 col-sm-offset-4 col-sm-4 col-md-4 col-lg-4">
+									<p:outputLabel id="labelContrasenaActual"
+										styleClass="label-form" for="contrasenaActual"
+										value="#{txt_persona['label.ContrasenaActual']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<div class="ui-inputgroup">
+										<p:password id="contrasenaActual"
+											styleClass="text-input border-completo"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											maxlength="20" required="true"
+											value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_contrasenaActual}">
+											<p:ajax event="change"
+												onstart="mostrarLimpiar('formModificarContrasena:contrasenaActual', 'spanContrasenaActual');" />
+										</p:password>
+										<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+											for="labelContrasenaActual" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_persona['tooltip.ContrasenaActual']}" />
+											</div>
+										</p:tooltip>
+										<span id="spanContrasenaActual"
+											class="ui-inputgroup-addon ocultar"> <p:commandLink
+												styleClass="text-contrasena-link"
+												value="#{txt['label.VerContrasena']}">
+												<p:ajax event="click"
+													onstart="verContrasena('formModificarContrasena:contrasenaActual');" />
+											</p:commandLink>
+										</span>
+									</div>
+									<span class="help-block"> <p:message
+											for="contrasenaActual" />
+									</span>
+								</div>
+							</div>
+							<p:separator styleClass="separador" />
+							<div class="row ui-g">
+								<div
+									class="col-xs-12 col-md-offset-2 col-sm-6 col-md-4 col-lg-4">
+									<p:outputLabel id="labelNuevaContrasena"
+										styleClass="label-form" for="nuevaContrasena"
+										value="#{txt_persona['label.ContrasenaNueva']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<div class="ui-inputgroup">
+										<p:password id="nuevaContrasena"
+											styleClass="text-input border-completo" maxlength="20"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											required="true"
+											value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_contrasena}">
+											<p:ajax event="change" oncomplete="PF('tooltipMsg').show();"
+												onstart="mostrarLimpiar('formModificarContrasena:nuevaContrasena', 'spanNuevaContrasena');" />
+											<p:ajax event="focus" onstart="PF('tooltipMsg').show();" />
+										</p:password>
+										<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+											for="labelNuevaContrasena" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_persona['tooltip.ContrasenaNueva']}" />
+											</div>
+										</p:tooltip>
+										<span id="spanNuevaContrasena"
+											class="ui-inputgroup-addon ocultar"> <p:commandLink
+												styleClass="text-contrasena-link"
+												value="#{txt['label.VerContrasena']}">
+												<p:ajax event="click"
+													onstart="verContrasena('formModificarContrasena:nuevaContrasena');" />
+											</p:commandLink>
+										</span>
+										<p:commandButton id="infoNuevaContrasena"
+											icon="icon-contrasena" styleClass="icon-input btn-gradiente icono_boton" />
+										<pe:tooltip widgetVar="tooltipMsg" id="tooltipIndica"
+											showEvent="mouseover" myPosition="top, right"
+											hideEvent="mouseout" atPosition="bottom center"
+											styleClass="tooltip-contrasena" for="infoNuevaContrasena">
+											<div id="content-tooltip-msg">
+												<p:outputLabel
+													value="#{beanValidacionContrasena.is_msgValidacion}" />
+											</div>
+										</pe:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="nuevaContrasena" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+									<p:outputLabel id="labelConfirmarNuevaContrasena"
+										styleClass="label-form" for="confirmarNuevaContrasena"
+										value="#{txt_persona['label.VerificarContrasenaNueva']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<div class="ui-inputgroup">
+										<p:password id="confirmarNuevaContrasena"
+											styleClass="text-input border-completo" maxlength="20"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											required="true"
+											value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_contrasenaConfirmacion}">
+											<p:ajax event="change"
+												onstart="mostrarLimpiar('formModificarContrasena:confirmarNuevaContrasena', 'spanConfirmarNuevaContrasena');" />
+										</p:password>
+										<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+											for="labelConfirmarNuevaContrasena" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_persona['tooltip.VerificarContrasenaNueva']}" />
+											</div>
+										</p:tooltip>
+										<span id="spanConfirmarNuevaContrasena"
+											class="ui-inputgroup-addon ocultar"> <p:commandLink
+												styleClass="text-contrasena-link"
+												value="#{txt['label.VerContrasena']}">
+												<p:ajax event="click"
+													onstart="verContrasena('formModificarContrasena:confirmarNuevaContrasena')" />
+											</p:commandLink>
+										</span>
+									</div>
+									<span class="help-block"> <p:message
+											for="confirmarNuevaContrasena" />
+									</span>
+								</div>
+							</div>
+						</p:panel>
+						<br />
+						<br />
+						<div class="container-fluid-btn">
+							<div class="row">
+								<div class="col-xs-4 col-xs-offset-2">
+									<p:commandButton id="btn-atras" icon="icon-flecha-gris"
+										iconPos="right" styleClass="icon-btn pull-right btn-gris"
+										value="#{txt['boton.Cancelar.Upper']}" immediate="true"
+										action="/pages/personas/inicio.jsf?faces-redirect=true"
+										process="@this" />
+								</div>
+								<div class="col-xs-4">
+									<p:commandButton id="btn-finalizar" icon="icon-flecha-blanca"
+										iconPos="right"
+										styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+										value="#{txt_persona['boton.GuardarCambios.Upper']}"
+										type="submit"
+										action="#{beanPersonaModificar.modificarContrasena}"
+										update="@form :formOperacion:msgOperacion"
+										onclick="ocultarTooltips();" />
+								</div>
+							</div>
+						</div>
+					</h:form>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid-special">
+			<p:dialog id="dialog-operacion" header="#{txt['titulo.modal.informacion']}"
+				widgetVar="dlgOperacion" resizable="false" draggable="false"
+				appendTo="@(body)" responsive="true" width="310" modal="true"
+				positionType="fixed" styleClass="box-solid box-danger texto-izquierda" height="160"
+				position="center,center">
+				<h:form id="formOperacion">
+					<div class="scroll-validacion">
+						<p:panelGrid id="operacionGrid" columns="1" cellpadding="3"
+							layout="grid" styleClass="no-border container-fluid-scroll-empty centrarTextoClave">
+							<div class="row">
+								<h:outputText id="msgOperacion"
+									value="#{beanPersonaModificar.is_msgOperacion}" />
+							</div>
+						</p:panelGrid>
+					</div>
+					<div class="row">
+						<div
+							class="col-xs-12 col-sm-12 col-md-12 col-lg-12 center-component">
+							<p:commandButton id="btn-aceptar" icon="icon-flecha-blanca"
+								iconPos="right"
+								styleClass="icon-btn btn-rojo-dialog btn-gradiente"
+								value="#{txt_persona['boton.Aceptar']}" type="submit"
+								action="/pages/personas/inicio.jsf?faces-redirect=true"
+								process="@form" />
+						</div>
+					</div>
+				</h:form>
+			</p:dialog>
+		</div>
+		<f:event type="preRenderView"
+			listener="#{beanValidacionContrasena.inicio}" />
+		<script>
+			$(document).ready(function() {
+				limpiarPath();
+			});
+		</script>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-parametros-html.css" />
+		<h:outputStylesheet library="css" name="snr-se.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="archivo.js" />
+	</ui:define>
+	<!-- Apartado Titulo -->
+	<ui:define name="title">
+		<title>#{txt_correo['correo.titulo.plantilla']}</title>
+	</ui:define>
+
+	<ui:define name="body">
+		<!-- Apartado Banner -->
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_correo['correo.titulo.banner']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo" value="#{txt_correo['correo.subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/parametrizacion/correo/administracionCorreos.jsf" />
+		</ui:include>
+
+		<!-- Apartado Body Elements -->
+		<div class="container-fluid">
+			<h:form id="formPlantillaCorreo">
+				<p:panel
+					styleClass="panel-content no-border ancho-panel align-center">
+					<div class="row">
+						<div class="col-xs-offset-2 col-xs-8">
+							<p:outputLabel id="labelListaPlantillas" styleClass="label-form"
+								for="listaPlantillas"
+								value="#{txt_correo['correo.plantilla.correo']}" />
+
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+
+							<p:selectOneMenu id="listaPlantillas" filter="true"
+								required="true" converter="selectOneMenuConverter"
+								value="#{BeanAdministracionPlantillasCorreo.ipp_parametrizacionPlantillaDto}">
+
+								<p:ajax process="@this"
+									listener="#{BeanAdministracionPlantillasCorreo.actualizarListaParametros}"
+									update="formPlantillaCorreo:tablaParametros formPlantillaCorreo:editorContenido" />
+
+								<f:selectItems
+									value="#{BeanAdministracionPlantillasCorreo.ilpp_parametrizacionesPlantillaLista}"
+									var="plantilla" itemValue="#{plantilla}"
+									itemLabel="#{plantilla.is_nombre}" />
+
+
+							</p:selectOneMenu>
+
+							<p:tooltip styleClass="tooltipGeneral" for="labelListaPlantillas"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_correo['correo.lista.plantillas.disponibles']}" />
+								</div>
+							</p:tooltip>
+
+							<span class="help-block"> <p:message for="listaPlantillas" /></span>
+
+						</div>
+
+					</div>
+
+					<p:separator />
+					<div class="row">
+
+						<div class="col-xs-12" style="padding-top: 25px">
+							<p:outputLabel id="labelParametros" styleClass="label-form"
+								for="tablaParametros"
+								value="#{txt_correo['correo.parametros.estaticos']}" />
+							<!-- Lista de paraemtros obligatorios -->
+							<p:dataTable border="1" id="tablaParametros"
+								value="#{BeanAdministracionPlantillasCorreo.imss_parametrosPlantilla.entrySet()}"
+								var="map">
+
+								<p:column headerText="#{txt_correo['correo.nombre.parametro']}"
+									styleClass="documento-medio">
+									<h:outputText value="#{map.key}" />
+								</p:column>
+
+								<p:column headerText="#{txt_correo['correo.valor.defecto']}"
+									styleClass="documento-medio">
+									<h:outputText value="#{map.value}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+
+					<p:separator />
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- Text area para edicion del documento HTML -->
+							<p:outputLabel id="labelEditorTexto" styleClass="label-form"
+								for="editorContenido"
+								value="#{txt_correo['correo.plantilla.html']}" />
+							<h:inputTextarea id="editorContenido" widgetVar="editorWidget"
+								style="height: 400px;overflow-y: scroll; display:block; width: -webkit-fill-available; white-space: pre;"
+								value="#{BeanAdministracionPlantillasCorreo.is_editor}"
+								height="600">
+								<p:ajax event="change" update="formPlantillaCorreo" />
+							</h:inputTextarea>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-offset-3 col-xs-6 align-center">
+							<h:outputText style="font-weight: bold;"
+								value="#{txt_correo['correo.informativo']}" />
+						</div>
+					</div>
+
+					<p:separator />
+
+					<div class="row" style="padding-top: 10px;">
+
+						<div class="col-xs-offset-3 col-xs-3">
+							<!-- Boton para restablecer valores iniciales -->
+							<p:commandButton
+								value="#{txt_flujoSolicitudesPago['boton.volver']}"
+								class="btn-gris" process="@this"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</div>
+
+						<div class="col-xs-3">
+							<p:commandButton id="actualizar"
+								value="#{txt_correo['correo.boton.actualizar']}"
+								styleClass="btn-gradiente btn-rojo" process="@this"
+								oncomplete="PF('modalEditarParametro').show();">
+							</p:commandButton>
+						</div>
+
+					</div>
+				</p:panel>
+			</h:form>
+
+		</div>
+
+		<!-- Modals Informativos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalEditarParametro" />
+			<ui:param name="formulario" value="formEditarParametro" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:param name="tituloModal"
+				value="#{txt_correo['correo.modal.titulo.confirmacion']}" />
+			<ui:define name="body-modal">
+				<div class="Row">
+					<div class="col-xs-12 align-center textAdmin">
+						<h:outputText value="#{txt_correo['correo.modal.confirmacion']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-xs-offset-2 align-center pad">
+						<p:commandButton id="cancelarModal"
+							value="#{txt_usuariosAdmin['usuario.admin.cancelar']}"
+							styleClass="btn-gradiente btn-rojo"
+							oncomplete="PF('modalEditarParametro').hide();" process="@this">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-sm-4 align-center pad">
+						<p:commandButton id="editar"
+							value="#{txt_usuariosAdmin['usuario.admin.aceptar']}"
+							styleClass="btn-gradiente btn-rojo"
+							action="#{BeanAdministracionPlantillasCorreo.actualizarPlantilla}">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

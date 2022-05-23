@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-administracion.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_usuariosAdmin['usuario.admin.titulo.consultar']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_usuariosAdmin['usuario.admin.titulo.consultar.banner']}" />
+			<ui:param name="imagen" value="img-parametrizacion" />
+			<ui:param name="subtitulo"
+				value="#{txt_usuariosAdmin['usuario.admin.titulo.consultar']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/usuarios/consultarUsuariosInternos.jsf" />
+		</ui:include>
+		<div class="row">
+			<div class="col-xs-12 align-center consultarUsuarioPad">
+				<h:outputText styleClass="titulo tituloText"
+					value="#{txt_usuariosAdmin['usuario.admin.titulo.consultar']}" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-8 align-center"></div>
+			<div class="col-xs-4 align-center consultarPad">
+				<p:commandButton id="agregarUsuario"
+					value="#{txt_usuariosAdmin['usuario.admin.btn.agregarUsuario']}"
+					styleClass="btn-gradiente btn-rojo"
+					actionListener="#{beanUsuariosAdministradores.crearUsuario}">
+				</p:commandButton>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 align-center">
+				<h:form id="formMostrar">
+					<p:dataTable 
+					var="usuariosAdmin"
+						value="#{beanUsuariosAdministradores.ildmu_modelosUsuariosAdmin}"
+						styleClass="centrar" paginator="true" rows="10"
+						widgetVar="usuariosTable"
+						paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+						currentPageReportTemplate="{currentPage} / {totalPages}"
+						lazy="true"
+						emptyMessage="#{txt_usuariosAdmin['usuario.admin.no.encontrado']}">>
+						<p:column
+							headerText="#{txt_usuariosAdmin['usuario.admin.nombreUsuario']}"
+							filterBy="#{usuariosAdmin.is_usuario}" filterMatchMode="contains">
+							<h:outputText value="#{usuariosAdmin.is_usuario}" />
+						</p:column>
+						<p:column headerText="#{txt_usuariosAdmin['usuario.admin.rol']}"
+							filterBy="#{usuariosAdmin.is_rolLegible}"
+							filterMatchMode="contains">
+							<f:facet name="filter">
+								<p:selectOneMenu onchange="PF('usuariosTable').filter()" styleClass="tamano">
+									<f:selectItem
+										itemLabel="#{txt_usuariosAdmin['usuario.admin.sinFiltro']}"
+										itemValue="#{null}" noSelectionOption="true" />
+									<f:selectItems value="#{beanUsuariosAdministradores.ilr_roles}"
+										var="rol" itemLabel="#{rol.is_nombreLargo}"
+										itemValue="#{rol.is_nombreLargo}" />
+								</p:selectOneMenu>
+							</f:facet>
+
+							<h:outputText value="#{usuariosAdmin.is_rolLegible}" />
+						</p:column>
+						<p:column
+							headerText="#{txt_usuariosAdmin['usuario.admin.estado']}">
+							<h:outputText
+								value="#{usuariosAdmin.is_activo eq 'S' ?txt_usuariosAdmin['usuario.admin.estado.activo']:txt_usuariosAdmin['usuario.admin.estado.desactivado']}" />
+						</p:column>
+						<p:column headerText="Editar" filterMatchMode="contains">
+							<p:commandLink styleClass="#{'fa fa-pencil'} colorLapiz" 
+								id="editarBoton" ajax="false"
+								action="#{beanUsuariosAdministradores.editarUsuario(usuariosAdmin.is_usuario)}">
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

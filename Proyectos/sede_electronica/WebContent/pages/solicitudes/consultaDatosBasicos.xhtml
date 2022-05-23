@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_datosBasicos['titulo']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_datosBasicos['titulo']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo" value="#{txt_datosBasicos['titulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/seguimientoSolicitudes.jsf" />
+		</ui:include>
+		<h:form id="seguimientoSolicitudes">
+			<p:panel>
+				<div class="text-center">
+					<p:outputLabel styleClass="label-form"
+						value="#{txt_datosBasicos['vista.datosBasicosMatricula']}"></p:outputLabel>
+				</div>
+				<div class="text-center">
+					<br />
+					<p:outputPanel>
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel styleClass="label-form" id="labelDepartamento"
+									for="departamento"
+									value="#{txt_datosBasicos['label.departamento']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="departamento" filter="true"
+									filterMatchMode="contains" 
+									converter="selectOneMenuConverter"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									value="${beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.id_departamentoDto}">
+									<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+										itemValue="" />
+									<p:ajax
+										listener="#{beanConsultaDatosBasicos.cargarListaMunicipiosPorDepartamentoPredio}"
+										process="@this" update="municipio"
+										onstart="PF('blockUI-Loading').show();"
+										onsuccess="PF('blockUI-Loading').hide();" />
+									<f:selectItems
+										value="#{beanConsultaDatosBasicos.ild_listaDepartamentoPredio}"
+										var="departamento" itemLabel="#{departamento.is_nombre}"
+										itemValue="#{departamento}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelDepartamento"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_datosBasicos['tooltip.Departamento']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="departamento" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel styleClass="label-form" id="labelMunicipio"
+									for="municipio" value="#{txt_datosBasicos['label.municipio']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="municipio" filter="true"
+									filterMatchMode="contains" 
+									converter="selectOneMenuConverter"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									value="${beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.im_municipioDto}">
+									<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+										itemValue="" />
+									<f:selectItems
+										value="#{beanConsultaDatosBasicos.ilm_listaMunicipioPredioDto}"
+										var="municipio" itemLabel="#{municipio.is_nombre}"
+										itemValue="#{municipio}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelMunicipio" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_datosBasicos['tooltip.Municipio']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="municipio" />
+								</span>
+							</div>
+						</div>
+						<p:outputPanel id="valorCriterio">
+							<div class="row">
+								<div class="col-xs-12 col-sm-6">
+									<p:outputLabel styleClass="label-form"
+										id="labelCriterioBusqueda" for="criterioBusqueda"
+										value="#{txt_datosBasicos['label.criterio']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:selectOneMenu id="criterioBusqueda" filter="true"
+										filterMatchMode="contains" required="true"
+										converter="selectOneMenuConverter"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										value="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.ic_catalogoCriterioDatosBasicos}">
+										<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanConsultaDatosBasicos.ilc_listaCatalogoCriterioBusqueda}"
+											var="tipoIdentificacionPredio"
+											itemLabel="#{tipoIdentificacionPredio.is_descripcion}"
+											itemValue="#{tipoIdentificacionPredio}" />
+										<p:ajax update="@parent"
+											onstart="PF('blockUI-Loading').show();"
+											onsuccess="PF('blockUI-Loading').hide(); cargarKeyfilters();"
+											listener="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.setIs_valor('')}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelCriterioBusqueda"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_datosBasicos['tooltip.criterioBusqueda']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="criterioBusqueda" />
+									</span>
+								</div>
+								<p:importEnum
+									type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTipoDatosBasicoMatricula"
+									var="enumCriterioBusqueda" />
+								<div class="col-xs-12 col-sm-6">
+									<p:outputLabel id="labelValor" styleClass="label-form"
+										for="valor" value="#{txt_datosBasicos['label.valorCriterio']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<ui:fragment
+										rendered="#{!(beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.ic_catalogoCriterioDatosBasicos.is_codigoValor eq enumCriterioBusqueda.DIRECCION.is_codigo or 
+					beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.ic_catalogoCriterioDatosBasicos.is_codigoValor eq enumCriterioBusqueda.NOMBRES.is_codigo)}">
+										<div class="ui-inputgroup">
+											<p:inputText id="valor"
+												styleClass="#{beanConsultaDatosBasicos.mascara()}"
+												maxlength="#{beanConsultaDatosBasicos.tamanoCampos()}"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												required="true"
+												placeholder="#{txt_datosBasicos['valor.Criterio']}"
+												value="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.is_valor}">
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelValor" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_datosBasicos['tooltip.valorCriterio']}" />
+												</div>
+											</p:tooltip>
+										</div>
+										<span class="help-block"> <p:message for="valor" />
+										</span>
+									</ui:fragment>
+									<ui:fragment
+										rendered="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.ic_catalogoCriterioDatosBasicos.is_codigoValor eq enumCriterioBusqueda.NOMBRES.is_codigo}">
+										<div class="row">
+											<div class="col-xs-10">
+												<div class="ui-inputgroup">
+													<p:inputText id="nombres" styleClass="mask-AlphaNumGuion"
+														maxlength="30" required="true"
+														requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+														placeholder="#{txt_datosBasicos['valor.Criterio']}"
+														value="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.is_nombreCompleto}">
+														<p:ajax event="click" onsuccess="PF('nombres').show();"
+															oncomplete="PF('blockUI-Loading').hide();"
+															onstart="PF('blockUI-Loading').show();" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral" for="labelValor"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_datosBasicos['tooltip.valorCriterio']}" />
+														</div>
+													</p:tooltip>
+												</div>
+												<span class="help-block"> <p:message for="nombres" />
+												</span>
+											</div>
+											<div class="col-xs-2">
+												<p:commandButton id="modalNombres" icon="fa fa-pencil"
+													styleClass="btn-gradiente icon-grande" proccess="@this"
+													update="formNombres" oncomplete="PF('nombres').show();">
+												</p:commandButton>
+											</div>
+										</div>
+									</ui:fragment>
+									<ui:fragment
+										rendered="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.ic_catalogoCriterioDatosBasicos.is_codigoValor eq enumCriterioBusqueda.DIRECCION.is_codigo}">
+										<div class="row">
+											<div class="col-xs-10">
+												<div class="ui-inputgroup">
+													<p:inputTextarea id="direccion" autoResize="true" rows="1"
+														styleClass="text-input border-completo mask-AlphaNumGuion"
+														required="true"
+														requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+														placeholder="#{txt_datosBasicos['valor.Criterio']}"
+														value="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.iddb_direccionDatosBasicosDto.is_direccionCompleta}">
+														<p:ajax event="click"
+															onsuccess="PF('direccionEditar').show();"
+															oncomplete="PF('blockUI-Loading').hide();"
+															onstart="PF('blockUI-Loading').show();" />
+													</p:inputTextarea>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral" for="labelValor"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_datosBasicos['tooltip.valorCriterio']}" />
+														</div>
+													</p:tooltip>
+												</div>
+												<span class="help-block"> <p:message for="direccion" />
+												</span>
+											</div>
+											<div class="col-xs-2">
+												<p:commandButton id="modalDireccion" icon="icon-direccion"
+													styleClass="btn-gradiente icon-input icono_boton" proccess="@this"
+													update="formDireccionEditar"
+													onstart="PF('blockUI-Loading').show();"
+													onsuccess="PF('direccionEditar').show();PF('blockUI-Loading').hide();">
+												</p:commandButton>
+											</div>
+										</div>
+									</ui:fragment>
+								</div>
+							</div>
+						</p:outputPanel>
+					</p:outputPanel>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-1 space-row">
+						<p:commandButton process="@this"
+							action="#{beanConsultaDatosBasicos.limpiarDatosConsulta}"
+							styleClass="btn-gris "
+							value="#{txt_datosBasicos['boton.limpiar']}" update="@all"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();" />
+					</div>
+					<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+						<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+							type="submit" process="@all"
+							action="#{beanConsultaDatosBasicos.consultarDatosBasicosMatricula}"
+							styleClass="btn-gradiente icon-btn btn-rojo "
+							value="#{txt_datosBasicos['boton.consulta']}" ajax="false"
+							update="consultaListado" onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();" />
+					</div>
+				</div>
+				<br />
+				<p:outputPanel id="consultaListado"
+					rendered="#{beanConsultaDatosBasicos.ib_mostrar}">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable var="lss_consulta" styleClass="table-center"
+								id="listaConsulta"
+								value="#{beanConsultaDatosBasicos.ilmdb_listaMatriculasDatosBasicosDto}"
+								widgetVar="solicitudesTable" reflow="true"
+								emptyMessage="#{txt_datosBasicos['tabla.vacia']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								stickyHeader="false">
+								<f:facet name="header">
+									<p:outputLabel
+										value="#{txt_datosBasicos['tabla.datosBasicos']}"
+										styleClass="label-form" />
+								</f:facet>
+								<p:column
+									headerText="#{txt_datosBasicos['tabla.estadoMatricula']}">
+									<h:outputText value="#{lss_consulta.ii_estadoMatricula}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_datosBasicos['tabla.numeroMatricula']}">
+									<h:outputText
+										value="#{lss_consulta.is_numMatriculaInmobiliaria}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_datosBasicos['tabla.circuloRegistral']}">
+									<h:outputText
+										value="#{lss_consulta.icr_circuloRegistralDto.is_nombre} - (#{lss_consulta.icr_circuloRegistralDto.is_id})" />
+								</p:column>
+								<p:column
+									headerText="#{txt_datosBasicos['tabla.numeroPredial']}">
+									<h:outputText value="#{lss_consulta.is_numPredial}" />
+								</p:column>
+								<p:column headerText="#{txt_datosBasicos['tabla.estadoNupre']}">
+									<h:outputText value="#{lss_consulta.is_numPredial}" />
+								</p:column>
+								<p:column headerText="#{txt_datosBasicos['tabla.nupre']}">
+									<h:outputText value="#{lss_consulta.is_nupre}" />
+								</p:column>
+								<p:column headerText="#{txt_datosBasicos['tabla.direccion']}">
+									<h:outputText
+										value="#{lss_consulta.id_direccionDto.is_nombrePredio}" />
+								</p:column>
+								<p:column headerText="#{txt_datosBasicos['tabla.departamento']}">
+									<h:outputText
+										value="#{lss_consulta.id_direccionDto.id_departamentoDto.is_nombre} - (#{lss_consulta.id_direccionDto.id_departamentoDto.is_id})" />
+								</p:column>
+								<p:column headerText="#{txt_datosBasicos['tabla.municipio']}">
+									<h:outputText
+										value="#{lss_consulta.id_direccionDto.im_municipioDto.is_nombre} - (#{lss_consulta.id_direccionDto.im_municipioDto.is_id})" />
+								</p:column>
+								<p:column headerText="#{txt_datosBasicos['tabla.tipoPredio']}">
+									<h:outputText value="#{lss_consulta.is_tipoPredio}" />
+								</p:column>
+								<p:column headerText="#{txt_datosBasicos['tabla.propietarios']}">
+									<p:commandLink value="#{txt_datosBasicos['boton.ver']}"
+										styleClass="btn-rojo redireccion">
+										<p:ajax update="formInformacionPropietarios"
+											listener="#{beanConsultaDatosBasicos.setIlp_detallePropietarios(lss_consulta.ilp_listaPropietario)}"
+											onsuccess="PF('informacionPropietarios').show(); PF('blockUI-Loading').hide();"
+											onstart="PF('blockUI-Loading').show();"></p:ajax>
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:panel>
+		</h:form>
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();
+			});
+		</script>
+		<!-- Script que ejecuta el Keyfilter-->
+		<!-- Modal Direccion final -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="direccionEditar" />
+			<ui:param name="tituloModal"
+				value="#{txt_direccion['Modal.direccion.header']}" />
+			<ui:param name="formulario" value="formDireccionEditar" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:define name="body-modal">
+				<!-- 		Datos basicos -->
+				<div class="row text-left">
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel id="labelCirculoRegistral" styleClass="label-form"
+							for="orip" value="#{txt_datosBasicos['modal.orip']}" />
+						<p:selectOneMenu id="orip"
+							value="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.iddb_direccionDatosBasicosDto.is_circuloRegistral}">
+							<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{beanConsultaDatosBasicos.ilcr_listaCirculoRegistralDto}"
+								var="orip" itemLabel="#{orip.is_nombre}"
+								itemValue="#{orip.is_id}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelCirculoRegistral"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_datosBasicos['tooltip.Departamento']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="orip" />
+						</span>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel id="labelMatricula" styleClass="label-form"
+							for="matricula" value="#{txt_datosBasicos['modal.numMatricula']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="matricula" styleClass="mask-AlphaNumGuion"
+								maxlength="10"
+								placeholder="#{txt_datosBasicos['modal.numMatricula']}"
+								value="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.iddb_direccionDatosBasicosDto.is_idMatricula}">
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelMatricula" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_datosBasicos['modal.numMatricula']}" />
+								</div>
+							</p:tooltip>
+						</div>
+						<span class="help-block"> <p:message for="matricula" />
+						</span>
+					</div>
+				</div>
+				<ui:decorate template="/pages/includes/direccion.xhtml">
+					<ui:param name="bean" value="${beanConsultaDatosBasicos}" />
+					<ui:param name="direccionDto"
+						value="${beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.iddb_direccionDatosBasicosDto}" />
+					<ui:param name="mostrarPais" value="false" />
+					<ui:param name="formularioDireccion" value="formDireccionEditar" />
+					<ui:param name="requerido" value="true" />
+				</ui:decorate>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-volver-formularioEditar"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt['boton.volver']}" process="@none"
+							oncomplete="PF('direccionEditar').hide();"
+							update="seguimientoSolicitudes:direccion formDireccionEditar"
+							actionListener="#{beanConsultaDatosBasicos.limpiarModalDireccion}">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-4 col-xs-offset-0">
+						<p:commandButton id="btn-aceptoEditar"
+							styleClass="icon-btn btn-rojo pull-left btn-gradiente"
+							value="#{txt['boton.Guardar.Upper']}"
+							update="seguimientoSolicitudes:direccion formDireccionEditar"
+							oncomplete="if (args &amp;&amp; !args.validationFailed) PF('direccionEditar').hide();"
+							process="@all">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 		Modal nombre -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:param name="modalId" value="nombres"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_datosBasicos['modal.nombres.titulo']}"></ui:param>
+			<ui:param name="formulario" value="formNombres"></ui:param>
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel styleClass="label-form"
+							value="#{txt_datosBasicos['modal.nombres']}" />
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel id="labelPrimerApellido" styleClass="label-form"
+							for="primerApellido"
+							value="#{txt_datosBasicos['modal.primerApell']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:inputText id="primerApellido" styleClass="mask-Alpha"
+								maxlength="15" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								placeholder="#{txt_datosBasicos['modal.primerApell']}"
+								value="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.is_nombres[2]}">
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelPrimerApellido"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_datosBasicos['modal.primerApell']}" />
+								</div>
+							</p:tooltip>
+						</div>
+						<span class="help-block"> <p:message for="primerApellido" />
+						</span>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel id="labelSegundoApellido" styleClass="label-form"
+							for="segundoApellido"
+							value="#{txt_datosBasicos['modal.segundoApell']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="segundoApellido" styleClass="mask-Alpha"
+								maxlength="15"
+								placeholder="#{txt_datosBasicos['modal.segundoApell']}"
+								value="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.is_nombres[3]}">
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelSegundoApellido"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_datosBasicos['modal.segundoApell']}" />
+								</div>
+							</p:tooltip>
+						</div>
+						<span class="help-block"> <p:message for="segundoApellido" />
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel id="labelPrimerNombre" styleClass="label-form"
+							for="primerNombre" value="#{txt_datosBasicos['modal.primerNom']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:inputText id="primerNombre" styleClass="mask-Alpha"
+								maxlength="15" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								placeholder="#{txt_datosBasicos['modal.primerNom']}"
+								value="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.is_nombres[0]}">
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelPrimerNombre"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_datosBasicos['modal.primerNom']}" />
+								</div>
+							</p:tooltip>
+						</div>
+						<span class="help-block"> <p:message for="primerNombre" />
+						</span>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel id="labelSegundoNombre" styleClass="label-form"
+							for="segundoNombre"
+							value="#{txt_datosBasicos['modal.segundoNom']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="segundoNombre" styleClass="mask-Alpha"
+								maxlength="15"
+								placeholder="#{txt_datosBasicos['modal.segundoNom']}"
+								value="#{beanConsultaDatosBasicos.iedb_entradaDatosBasicosDto.is_nombres[1]}">
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelSegundoNombre"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_datosBasicos['modal.segundoNom']}" />
+								</div>
+							</p:tooltip>
+						</div>
+						<span class="help-block"> <p:message for="segundoNombre" />
+						</span>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-volver-formularioEditar"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_persona['boton.volver']}"
+							oncomplete="PF('nombres').hide();" process="@none"
+							actionListener="#{beanConsultaDatosBasicos.limpiarModales}"
+							update="seguimientoSolicitudes:nombres formNombres">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-4 col-xs-offset-0">
+						<p:commandButton id="btn-aceptoEditar"
+							styleClass="icon-btn btn-rojo pull-left btn-gradiente"
+							value="#{txt_persona['boton.guardar']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed) PF('nombres').hide();"
+							process="@all" ignoreAutoUpdate="true"
+							update="formNombres seguimientoSolicitudes:nombres">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal propietarios -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:param name="modalId" value="informacionPropietarios"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}"></ui:param>
+			<ui:param name="formulario" value="formInformacionPropietarios"></ui:param>
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel styleClass="label-form"
+							value="#{txt_datosBasicos['titulo.modal']}" />
+					</div>
+					<br />
+					<div class="col-xs-12">
+						<p:dataTable var="propietarios"
+							value="#{beanConsultaDatosBasicos.ilp_detallePropietarios}"
+							responsive="true" styleClass="centrar-img" rowIndexVar="true"
+							reflow="true"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							currentPageReportTemplate="{currentPage} / {totalPages}"
+							emptyMassage="#{txt_datosBasicos['tabla.vacia']}" paginator="true"
+							rows="10" paginatorPosition="bottom" rowsPerPageTemplate="10">
+							<p:column headerText="#{txt_datosBasicos['tabla.TipoDocumento']}">
+								<p:outputLabel id="tablatipoDocumento"
+									value="#{propietarios.is_tipoDocumentoDto}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="tipoDocumento" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{propietarios.is_tipoDocumentoDto}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_datosBasicos['tabla.NumeroDocumento']}">
+								<p:outputLabel id="tablanumeroDocumento"
+									value="#{propietarios.is_numDocumentoPersona}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="numeroDocumento"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{propietarios.is_numDocumentoPersona}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column headerText="#{txt_datosBasicos['tabla.Nit']}">
+								<p:outputLabel id="nit" value="#{propietarios.is_numNIT}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="nit" position="top">
+									<div class="content-tootip-general">
+										<p:outputLabel value="#{propietarios.is_numNIT}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column headerText="#{txt_datosBasicos['tabla.PrimerNombre']}">
+								<p:outputLabel id="primerNombre"
+									value="#{propietarios.is_primerNombre}" styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="primerNombre" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{propietarios.is_primerNombre}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column headerText="#{txt_datosBasicos['tabla.SegundoNombre']}">
+								<p:outputLabel id="segundoNombre"
+									value="#{propietarios.is_segundoNombre}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="segundoNombre" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{propietarios.is_segundoNombre}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_datosBasicos['tabla.PrimerApellido']}">
+								<p:outputLabel id="primerApellido"
+									value="#{propietarios.is_primerApellido}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="primerApellido"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{propietarios.is_primerApellido}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_datosBasicos['tabla.SegundoApellido']}">
+								<p:outputLabel id="segundoApellido"
+									value="#{propietarios.is_segundoApellido}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="segundoApellido"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{propietarios.is_segundoApellido}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column headerText="#{txt_datosBasicos['tabla.RazonSocial']}">
+								<p:outputLabel id="razonSocial"
+									value="#{propietarios.is_razonSocial}" styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="razonSocial" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{propietarios.is_razonSocial}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_datosBasicos['tabla.PorcentajePaticipacion']}">
+								<p:outputLabel id="porcentajeParticipacion"
+									value="#{propietarios.is_porcentajeParticipacion}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="porcentajeParticipacion"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{propietarios.is_porcentajeParticipacion}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+						<p:commandButton
+							styleClass="btn-gradiente icon-btn btn-rojo "
+							value="#{txt['boton.entendido']}"
+							onclick="PF('informacionPropietarios').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

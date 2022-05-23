@@ -1,0 +1,45 @@
+
+.textoRojo {
+	font-weight: bold;
+	color: #EB1F28;
+}
+
+.textoGris {
+	font-weight: bold;
+	color: #AEAEAE;
+}
+
+.boton-descarga {
+	background-color: transparent !important;
+	font-size: 30px !important;
+	border-color: transparent !important;
+	color: #770707 !important;
+}
+
+.boton-descarga:hover {
+	text-decoration: none !important;
+}
+
+.centrar {
+	text-align: center;
+}
+
+.buscarDoc {
+	width:150px !important;
+}
+
+.tamano {
+	width: 100%;
+}
+
+.downloadAp > span:last-child{
+	display: block;
+	padding-right:35px !important;
+	white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.tamano-ver {
+    width: 40% !important;
+}

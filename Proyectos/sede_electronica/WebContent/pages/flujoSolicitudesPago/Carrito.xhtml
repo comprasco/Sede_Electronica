@@ -1,0 +1,256 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_flujoSolicitudesPago['Titulo']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css"
+			name="snr-se-flujoSolicitudesPago.css" />
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_flujoSolicitudesPago['Banner.titulo']}" />
+			<ui:param name="imagen" value="img-rolesPermisos" />
+			<ui:param name="subtitulo"
+				value="#{txt_flujoSolicitudesPago['Banner.subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/flujoSolicitudesPago/Carrito.jsf" />
+		</ui:include>
+		<h:form id="flujoSolicitudesPago">
+			<p:outputPanel>
+				<p:panel class="panelCarrito" styleClass="panel-content no-border"
+					visible="#{beanCarrito.ii_numeroTransacciones == 0}">
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<h:outputText class="h2"
+								value="#{txt_flujoSolicitudesPago['texto.carrito.vacio']}" />
+						</div>
+					</div>
+				</p:panel>
+				<p:panel visible="#{beanCarrito.ii_numeroTransacciones > 0}"
+					styleClass="panel-content no-border">
+					<div class="row">
+						<div class="col-xs-12 text-left">
+							<i class="fa fa-shopping-cart fa-3x fa-fw" aria-hidden="true"></i>
+							<h:outputText class="h2"
+								value="#{txt_flujoSolicitudesPago['texto.carrito.lleno']}" />
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 text-justify">
+							<h:outputText class="h4"
+								value="#{txt_flujoSolicitudesPago['texto.carrito.informacion.primeraParte']}" />
+							<h:outputText class="h4 label-form"
+								value="#{txt_flujoSolicitudesPago['texto.carrito.informacion.segundaParte']}, " />
+							<h:outputText class="h4"
+								value="#{txt_flujoSolicitudesPago['texto.carrito.informacion.terceraParte']}" />
+							<h:outputText class="h4 label-form"
+								value="#{txt_flujoSolicitudesPago['texto.carrito.informacion.cuartaParte']}." />
+						</div>
+					</div>
+					<br />
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<p:importEnum
+								type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTipoServicio"
+								var="enumTipoServicio"></p:importEnum>
+							<p:dataList id="dataListDatosServicio"
+								widgetVar="dataListDatosServicio"
+								value="#{beanCarrito.imslc_mapaStringListaCarritoTransaccionVigente.entrySet().toArray()}"
+								var="servicio">
+								<p:panel rendered="#{!servicio.getValue().isEmpty()}"
+									visible="#{!servicio.getValue().isEmpty()}"
+									styleClass="no-border">
+									<div class="row panel titulo">
+										<div class="col-xs-12">
+											<h:outputText value="#{servicio.getKey()}" />
+										</div>
+									</div>
+									<br />
+									<div class="row panelContenedor scrollVertical">
+										<div class="col-xs-12">
+											<p:dataList id="dataListDatosTipoServicio"
+												widgetVar="dataListDatosTipoServicio"
+												class="dataListCarrito" value="#{servicio.getValue()}"
+												var="tipoServicio">
+												<div class="row panel subtitulo">
+													<div class="col-xs-12">
+														<h:outputText
+															value="#{tipoServicio.is_nombreSubServicioLegible} - #{tipoServicio.is_modo}" />
+													</div>
+												</div>
+												<div class="row panelDatos">
+													<ui:fragment
+														rendered="#{(tipoServicio.itm_transaccionMasivoDto != null)}">
+														<div class="col-xs-12 col-md-8">
+															<ui:decorate
+																template="/pages/includes/resumenes/certificados/resumenCertificadosMasivos.xhtml">
+																<ui:param name="id" value="Minimo" />
+																<ui:param name="transaccion"
+																	value="#{tipoServicio.itm_transaccionMasivoDto}" />
+															</ui:decorate>
+														</div>
+													</ui:fragment>
+													<ui:fragment
+														rendered="#{(tipoServicio.iti_transaccionIndividualDto != null)}">
+														<ui:fragment
+															rendered="#{enumTipoServicio.CONSULTA.getIs_nombreLegible() eq servicio.getKey()}">
+															<div class="col-xs-12 col-md-8">
+																<ui:decorate
+																	template="/pages/includes/resumenes/certificados/resumenConsulta.xhtml">
+																	<ui:param name="booleanIndividual"
+																		value="#{(tipoServicio.iti_transaccionIndividualDto != null)}" />
+																	<ui:param name="listaConsulta"
+																		value="#{tipoServicio.isc_solicitudConsultasDto.ildesc_listaDatosEntradaSolicitudConsultaDto}" />
+																	<ui:param name="catalogo"
+																		value="#{tipoServicio.isc_solicitudConsultasDto.idc_detalleCatalogoDto.ic_catalogoDto.is_nombre}" />
+																	<ui:param name="valorTotal" value="#{null}" />
+																</ui:decorate>
+															</div>
+														</ui:fragment>
+														<ui:fragment
+															rendered="#{enumTipoServicio.CERTIFICADO.getIs_nombreLegible() eq servicio.getKey() 
+															or enumTipoServicio.ALERTA.getIs_nombreLegible() eq servicio.getKey()
+															or enumTipoServicio.SOLICITUD_CUENTA_CUPO.getIs_nombreLegible() eq servicio.getKey()}">
+															<div class="col-xs-12 col-md-8">
+																<div class="row text-center">
+																	<div class="col-xs-4 textoContainer">
+																		<h:outputText class="tituloTabla"
+																			value="#{txt_flujoSolicitudesPago['titulo.tabla.matricula']}" />
+																	</div>
+																	<div class="col-xs-4 textoContainer">
+																		<h:outputText class="tituloTabla"
+																			value="#{txt_flujoSolicitudesPago['titulo.tabla.direccion']}" />
+																	</div>
+																	<div class="col-xs-4 textoContainer">
+																		<h:outputText class="tituloTabla"
+																			value="#{txt_flujoSolicitudesPago['titulo.tabla.valor']}" />
+																	</div>
+																</div>
+																<p:dataList id="dataListDatosTransaccion"
+																	widgetVar="dataListDatosTransaccion"
+																	value="#{tipoServicio.iti_transaccionIndividualDto.ilsm_listaSalidaMatriculaDto}"
+																	var="transaccion">
+																	<div class="row text-center">
+																		<div class="col-xs-4 textoContainer">
+																			<h:outputText
+																				value="#{transaccion.im_matriculaDto.icr_circuloRegistralMatricula.is_id} - #{transaccion.im_matriculaDto.is_codigoMatricula}" />
+																		</div>
+																		<div class="col-xs-4 textoContainer">
+																			<h:outputText value="#{transaccion.is_direccion}" />
+																		</div>
+																		<div class="col-xs-4 textoContainer">
+																			<h:outputText class="colorVerde"
+																				value="#{transaccion.ibd_valorUnitario}">
+																				<f:convertNumber type="currency" currencySymbol="$"
+																					maxFractionDigits="0" />
+																			</h:outputText>
+																		</div>
+																	</div>
+																</p:dataList>
+															</div>
+														</ui:fragment>
+
+														<ui:fragment
+															rendered="#{enumTipoServicio.COPIA.getIs_nombreLegible() eq servicio.getKey()}">
+															<div class="col-xs-12 col-md-8">
+																<div class="row text-center">
+																	<div class="col-xs-4 textoContainer">
+																		<h:outputText class="tituloTabla"
+																			value="#{txt_flujoSolicitudesPago['titulo.tabla.documento.id']}" />
+																	</div>
+																	<div class="col-xs-4 textoContainer">
+																		<h:outputText class="tituloTabla"
+																			value="#{txt_flujoSolicitudesPago['titulo.tabla.documento.nombre']}" />
+																	</div>
+																	<div class="col-xs-4 textoContainer">
+																		<h:outputText class="tituloTabla"
+																			value="#{txt_flujoSolicitudesPago['titulo.tabla.valor']}" />
+																	</div>
+																</div>
+																<p:dataList id="dataListDatosTransaccionCopias"
+																	widgetVar="dataListDatosTransaccion"
+																	value="#{tipoServicio.itc_transaccionCopiasDto.ilc_listaCopiasDto}"
+																	var="transaccion">
+																	<div class="row text-center">
+																		<div class="col-xs-4 textoContainer">
+																			<h:outputText value="#{transaccion.is_dId}" />
+																		</div>
+																		<div class="col-xs-4 textoContainer">
+																			<h:outputText
+																				value="#{transaccion.is_numeroDocumento}" />
+																		</div>
+																		<div class="col-xs-4 textoContainer">
+																			<h:outputText class="colorVerde"
+																				value="$#{transaccion.ibd_valorCopia}" />
+																		</div>
+																	</div>
+																</p:dataList>
+															</div>
+														</ui:fragment>
+													</ui:fragment>
+													<div class="col-xs-12 col-md-4">
+														<div class="row panelAccion">
+															<div class="col-xs-12 col-sm-6 col-md-12">
+																<p:commandButton class="btn-rojo btn-gradiente"
+																	icon="fa fa-pencil" iconPos="right"
+																	value="#{txt_flujoSolicitudesPago['texto.carrito.informacion.segundaParte']}"
+																	action="#{beanCarrito.redirigirSolicitud(tipoServicio)}">
+																</p:commandButton>
+															</div>
+															<div class="col-xs-12 col-sm-6 col-md-12">
+																<p:commandButton class="btn-gris" icon="fa fa-trash"
+																	iconPos="right"
+																	value="#{txt_flujoSolicitudesPago['texto.carrito.informacion.cuartaParte']}">
+																	<f:ajax
+																		listener="#{beanCarrito.eliminarSolicitud(tipoServicio)}"
+																		render=":flujoSolicitudesPago" />
+																	<p:confirm header="#{txt['titulo.modal.confirmacion']}"
+																		message="#{txt_flujoSolicitudesPago['titulo.modal.confirmativo.borrarPedido']}" />
+																</p:commandButton>
+															</div>
+														</div>
+													</div>
+												</div>
+											</p:dataList>
+										</div>
+									</div>
+								</p:panel>
+							</p:dataList>
+						</div>
+					</div>
+				</p:panel>
+			</p:outputPanel>
+			<p:confirmDialog
+				styleClass="box-solid box-danger text-center cerrarModal"
+				global="true" width="400" showEffect="fade" hideEffect="fade"
+				responsive="true">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton immediate="true"
+							styleClass="ui-confirmdialog-no pull-right btn-gris"
+							value="#{txt_cuentaCupo['boton.Cancelar']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton
+							styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+							value="#{txt_cuentaCupo['boton.Aceptar']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

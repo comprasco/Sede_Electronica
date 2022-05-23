@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+	version="2.2">
+	<application>
+		<locale-config>
+			<default-locale>es</default-locale>
+			<supported-locale>en</supported-locale>
+			<supported-locale>es</supported-locale>
+		</locale-config>
+
+		<resource-bundle>
+			<base-name>resources.messages</base-name>
+			<var>txt</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>resources.messages_minuta_virtual</base-name>
+			<var>txt_minuta</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_login</base-name>
+			<var>txt_login</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_footer</base-name>
+			<var>txt_footer</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_resumen_pasarela</base-name>
+			<var>txt_pasarela</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_persona</base-name>
+			<var>txt_persona</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_catalogos</base-name>
+			<var>txt_catalogo</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.excepciones.excepcion_pasarela</base-name>
+			<var>txt_exp_pasarela</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_parametros</base-name>
+			<var>txt_parametro</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_pazysalvo</base-name>
+			<var>txt_pazysalvo</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_roles_y_permisos</base-name>
+			<var>txt_rolesPermisos</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_mantenimiento_cache</base-name>
+			<var>txt_mantenimientoCache</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_configuracion_seguridad</base-name>
+			<var>txt_configuracionSeguridad</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_activacion</base-name>
+			<var>txt_activacion</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_recuperar_clave</base-name>
+			<var>txt_recuperarClave</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_usuario_admin</base-name>
+			<var>txt_usuariosAdmin</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_usuario_ee</base-name>
+			<var>txt_usuariosAdminEE</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_alcaldia</base-name>
+			<var>txt_alcaldia</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_certificados</base-name>
+			<var>txt_certificados</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_correccion</base-name>
+			<var>txt_correccion</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_correo</base-name>
+			<var>txt_correo</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_administrador</base-name>
+			<var>txt_administrador</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_mantenimiento</base-name>
+			<var>txt_mantenimiento</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_menu</base-name>
+			<var>txt_menu</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_seguimiento_solicitudes</base-name>
+			<var>txt_seguimiento</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_validacion_documentos</base-name>
+			<var>txt_validacion_documentos</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_suspension_temporal</base-name>
+			<var>txt_suspension_temporal</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_desistimiento</base-name>
+			<var>txt_desistimiento</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>resources.messages_prorroga</base-name>
+			<var>txt_prorroga</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_solicitud_consultas</base-name>
+			<var>txt_solicitud_consulta</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_registrar_alerta</base-name>
+			<var>txt_registrar_alerta</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_registrar_alerta_masiva</base-name>
+			<var>txt_registrar_alerta_masiva</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_aprobacion_pj</base-name>
+			<var>txt_aprobacionPJ</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_asociacion_pn_a_pj</base-name>
+			<var>txt_asociacionPNAPJ</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_flujo_solicitudes_pago</base-name>
+			<var>txt_flujoSolicitudesPago</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_certificados_especiales</base-name>
+			<var>txt_certEspecial</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>resources.messages_aprobacion_pj</base-name>
+			<var>txt_aprobacionPJ</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>resources.messages_bandeja_alertas</base-name>
+			<var>txt_bandejaAlertas</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_asociacion_pn_a_ee</base-name>
+			<var>txt_asociacionPNAEE</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.mensajes.mensajes</base-name>
+			<var>txt_mensajes</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.mensajes.mensajes_solicitudes_internas</base-name>
+			<var>txt_mensajes_solicitudes_internas</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_activacion</base-name>
+			<var>txt_activar</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_asociar_usuario</base-name>
+			<var>txt_asociar</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_cuenta_cupo</base-name>
+			<var>txt_cuentaCupo</var>
+		</resource-bundle>
+		
+		<resource-bundle>
+			<base-name>resources.messages_recepcion_documentos</base-name>
+			<var>txt_recepcionDocumento</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_repositorio_poderes</base-name>
+			<var>txt_repositorioPoderes</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_alerta_tierras</base-name>
+			<var>txt_alertaTierras</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_copias</base-name>
+			<var>txt_copias</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>resources.messages_estado_juridico</base-name>
+			<var>txt_estadoJuridico</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_datos_basicos</base-name>
+			<var>txt_datosBasicos</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_direccion</base-name>
+			<var>txt_direccion</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_convenios_ee</base-name>
+			<var>txt_conveniosEE</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_consulta_drr</base-name>
+			<var>txt_consulta_drr</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_historial_notificaciones</base-name>
+			<var>txt_historialNotificaciones</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_traslado_matricula</base-name>
+			<var>txt_traslado_matricula</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_interposicion_recursos</base-name>
+			<var>txt_interposicion_recursos</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_solicitudes_internas_poderes</base-name>
+			<var>txt_solicitudes_poderes</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_archivos</base-name>
+			<var>txt_archivos</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_devoluciones</base-name>
+			<var>txt_devoluciones</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>resources.messages_registral</base-name>
+			<var>txt_registral</var>
+		</resource-bundle>
+
+		<!-- excepciones -->
+		<resource-bundle>
+			<base-name>resources.excepciones.excepcion</base-name>
+			<var>txt_exception</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>resources.excepciones.excepcion_persona</base-name>
+			<var>txt_exception_persona</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>resources.excepciones.excepcion_recuperar_contrasena</base-name>
+			<var>txt_excepcion_recuperar_contrasena</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>resources.excepciones.excepcion_consulta_drr</base-name>
+			<var>txt_excepcion_consulta_drr</var>
+		</resource-bundle>
+
+		<!-- imagenes -->
+		<resource-bundle>
+			<base-name>resources.img.img_general</base-name>
+			<var>img_general</var>
+		</resource-bundle>
+
+	</application>
+
+	<validator>
+		<validator-id>validarRequeridoCheckBox</validator-id>
+		<validator-class>co.gov.supernotariado.bachue.sedeelectronica.common.utils.ValidarRequeridoCheckBox</validator-class>
+	</validator>
+</faces-config>

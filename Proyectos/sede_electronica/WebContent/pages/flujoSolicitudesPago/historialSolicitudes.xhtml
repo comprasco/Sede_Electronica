@@ -1,0 +1,422 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_flujoSolicitudesPago['titulo.pedido']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="archivo.js" />
+	</ui:define>
+	<ui:define name="body">
+		<p:importEnum
+			type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTiposMIME"
+			var="EnumTiposMIME" />
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_flujoSolicitudesPago['banner.historial.titulo']}" />
+			<ui:param name="imagen" value="img-rolesPermisos" />
+			<ui:param name="subtitulo"
+				value="#{txt_flujoSolicitudesPago['banner.historial.subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/flujoSolicitudesPago/historialSolicitudes.jsf" />
+		</ui:include>
+		<br />
+		<div class="row space-row">
+			<div class="col-xs-12 text-center">
+				<p:outputLabel class="label-form"
+					value="#{txt_flujoSolicitudesPago['historialPedidos.titulo']}" />
+			</div>
+		</div>
+		<p:panel id="panelHistorialSolicitudes"
+			styleClass="no-border">
+			<!--  FILTROS -->
+			<ui:param name="esNulo"
+				value="#{beanHistorialSolicitudes.ib_vista == null}" />
+			<p:outputPanel id="filtros" rendered="#{esNulo}">
+				<h:form id="formularioHistorialSolicitudes">
+					<div class="row space-row">
+						<div class="col-xs-12 text-center">
+							<h:outputText
+								value="#{txt_flujoSolicitudesPago['historialPedidos.nota1']} #{beanHistorialSolicitudes.getIi_numeroDiasMaximos()} #{txt_flujoSolicitudesPago['historialPedidos.nota1.2']}" />
+						</div>
+					</div>
+					<div class="row space-row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelTipoServicio" styleClass="label-form"
+								for="tipoServicioSelect"
+								value="#{txt_flujoSolicitudesPago['historialPedidos.tipoSolicitud']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="tipoServicioSelect"
+								widgetVar="tipoServicioSelect"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								required="true"
+								value="#{beanHistorialSolicitudes.ihse_historialSolicitudesEntradaDto.is_servicio}">
+								<f:selectItem itemValue=""
+									itemLabel="#{txt['label.SeleccioneComboBox']}" />
+								<f:selectItems
+									value="#{beanHistorialSolicitudes.ilets_listaTipoServicio}"
+									var="tipoServicio"
+									itemLabel="#{tipoServicio.getIs_nombreLegible()}"
+									itemValue="#{tipoServicio.getIs_codigo()}" />
+							</p:selectOneMenu>
+							<p:tooltip styleClass="tooltipGeneral" for="labelTipoServicio"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_flujoSolicitudesPago['historialPedidos.tipoSolicitud.tooltip']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="tipoServicioSelect" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelNir" styleClass="label-form" for="nir"
+								value="#{txt_flujoSolicitudesPago['historialPedidos.nir']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="nir" autocomplete="off" maxlength="20"
+									placeholder="#{txt_seguimiento['placeholder.NIR']}"
+									value="#{beanHistorialSolicitudes.ihse_historialSolicitudesEntradaDto.is_nir}">
+								</p:inputText>
+								<p:tooltip styleClass="tooltipGeneral" for="labelNir"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_flujoSolicitudesPago['historialPedidos.nir.tooltip']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="nir" />
+							</span>
+						</div>
+					</div>
+					<div class="row space-row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelFechaInicial" styleClass="label-form"
+								for="fechaInicial"
+								value="#{txt_flujoSolicitudesPago['historialPedidos.fechaInicial']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:calendar id="fechaInicial" readonlyInput="true"
+								binding="#{fechaInicial}" pattern="dd/MM/yyyy" maxlength="10"
+								locale="es" yearRange="1900:2200" navigator="true"
+								placeholder="#{txt['placeholder.FormatoFecha']}"
+								styleClass="text-input-calendar" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								maxdate="#{beanHistorialSolicitudes.fechaMaxima()}"
+								showOn="button"
+								value="#{beanHistorialSolicitudes.ihse_historialSolicitudesEntradaDto.id_fechaDesde}">
+								<p:ajax event="dateSelect" update="fechaFinal"
+									onstart="PF('blockUI-Loading').show();"
+									onsuccess="PF('blockUI-Loading').hide();" />
+							</p:calendar>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelFechaInicial"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_flujoSolicitudesPago['historialPedidos.fechaInicial.tooltip']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="fechaInicial" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelFechaFinal" styleClass="label-form"
+								for="fechaFinal"
+								value="#{txt_flujoSolicitudesPago['historialPedidos.fechaFinal']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:calendar id="fechaFinal" readonlyInput="true"
+								pattern="dd/MM/yyyy" maxlength="10" locale="es"
+								yearRange="1900:2200" navigator="true"
+								mindate="#{beanHistorialSolicitudes.ihse_historialSolicitudesEntradaDto.id_fechaDesde}"
+								maxdate="#{beanHistorialSolicitudes.fechaMaxima()}"
+								placeholder="#{txt['placeholder.FormatoFecha']}"
+								disabled="#{beanHistorialSolicitudes.ihse_historialSolicitudesEntradaDto.id_fechaDesde == null}"
+								styleClass="text-input-calendar" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								showOn="button"
+								value="#{beanHistorialSolicitudes.ihse_historialSolicitudesEntradaDto.id_fechaHasta}" />
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelFechaFinal" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_flujoSolicitudesPago['historialPedidos.fechaFinal.tooltip']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="fechaFinal" />
+							</span>
+						</div>
+					</div>
+					<div class="row space-row">
+						<div
+							class="col-sm-offset-3 col-md-offset-4 col-xs-12 col-sm-6 col-md-4 col-sm-offset-4">
+							<p:commandButton
+								value="#{txt_flujoSolicitudesPago['historialPedidos.boton.consultar']}"
+								type="submit" styleClass="btn-rojo btn-gradiente">
+								<p:ajax process="formularioHistorialSolicitudes"
+									listener="#{beanHistorialSolicitudes.buscarSolicitudes()}"
+									update="panelHistorialSolicitudes"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</h:form>
+			</p:outputPanel>
+
+			<!-- LISTA RESULTADOS SOLICITUDES -->
+			<p:outputPanel id="listaResultados"
+				rendered="#{!esNulo and beanHistorialSolicitudes.ib_vista}">
+				<div class="row space-row">
+					<div class="col-xs-12 text-center">
+						<h:outputText
+							value="#{txt_flujoSolicitudesPago['historialPedidos.nota2']}" />
+					</div>
+				</div>
+				<div class="row space-row">
+					<div class="col-xs-12">
+						<h:form>
+							<div class="scroll-politicas">
+								<p:importEnum
+									type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumValores"
+									var="EnumValores" />
+								<p:dataTable styleClass="centrar-img tabla-fija"
+									value="#{beanHistorialSolicitudes.ilhss_listaHistorialSolicitudesDto}"
+									var="resultadoHistorial" stickyHeader="false" reflow="true"
+									widgetVar="historialNir"
+									emptyMessage="#{txt_flujoSolicitudesPago['historialPedidos.tabla.vacia']}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									filteredValue="#{beanHistorialSolicitudes.ilhss_filtroHistorialSolicitudesSalidaDto}"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}">
+									<f:facet name="header">
+										<p:outputPanel>
+											<p:spacer height="5" />
+											<p:inputText id="globalFilter" styleClass="filtroDataTable"
+												onkeyup="PF('historialNir').filter()"
+												placeholder="#{txt_minuta['tabla.filtro.placeholder']}"
+												maxlength="25" />
+										</p:outputPanel>
+									</f:facet>
+									<p:column filterBy="#{resultadoHistorial.is_nir}"
+										filterStyle="display:none" styleClass="tamano-columna-adm"
+										headerText="#{txt_flujoSolicitudesPago['historialPedidos.nir']}"
+										filterMatchMode="contains">
+										<h:outputText styleClass="label-form" value="#{resultadoHistorial.is_nir}"
+											rendered="#{resultadoHistorial.is_nir eq EnumValores.NO_APLICA.getIs_valor()}" />
+										<p:commandLink styleClass="label-form text-link"
+											value="#{resultadoHistorial.is_nir}" id="nir"
+											rendered="#{resultadoHistorial.is_nir ne EnumValores.NO_APLICA.getIs_valor()}">
+											<p:ajax
+												listener="#{beanHistorialSolicitudes.consultarDetalleSolicitud(resultadoHistorial)}"
+												update="panelHistorialSolicitudes"
+												onstart="PF('blockUI-Loading').show();"
+												oncomplete="PF('blockUI-Loading').hide();" />
+										</p:commandLink>
+										<p:tooltip for="nir" value="#{resultadoHistorial.is_nir}"
+											position="bottom" />
+									</p:column>
+
+									<p:column filterBy="#{resultadoHistorial.is_referenciaPago}"
+										filterStyle="display:none"
+										headerText="#{txt_flujoSolicitudesPago['historialPedidos.refPago']}"
+										filterMatchMode="contains">
+										<h:outputText styleClass="label-form" value="#{EnumValores.NO_APLICA.getIs_valor()}"
+											rendered="#{empty resultadoHistorial.is_referenciaPago}" />
+										<p:commandLink styleClass="label-form text-link"
+											rendered="#{not empty resultadoHistorial.is_referenciaPago}"
+											value="#{resultadoHistorial.is_referenciaPago}" id="refPago">
+											<p:ajax
+												listener="#{beanHistorialSolicitudes.consultarDetalleSolicitud(resultadoHistorial)}"
+												update="panelHistorialSolicitudes"
+												onstart="PF('blockUI-Loading').show();"
+												oncomplete="PF('blockUI-Loading').hide();" />
+										</p:commandLink>
+										<p:tooltip for="refPago"
+											value="#{resultadoHistorial.is_referenciaPago}"
+											position="bottom" />
+									</p:column>
+
+									<p:column
+										headerText="#{txt_flujoSolicitudesPago['historialPedidos.tabla.tipoServicio']}">
+										<h:outputText value="#{resultadoHistorial.is_servicio}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_flujoSolicitudesPago['historialPedidos.tabla.tipoSubServicio']}">
+										<h:outputText value="#{resultadoHistorial.is_subServicio}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_flujoSolicitudesPago['historialPedidos.tabla.fechaExpedicion']}">
+										<h:outputText value="#{resultadoHistorial.id_fechaServicio}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</p:column>
+									<p:column
+										headerText="#{txt_flujoSolicitudesPago['historialPedidos.tabla.recibo']}">
+										<h:form>
+											<p:commandButton styleClass="btn-gradiente btn-rojo"
+												value="#{txt_flujoSolicitudesPago['historialPedidos.boton.descargar']} "
+												onstart="PF('blockUI-Loading').show();"
+												onsuccess="PF('blockUI-Loading').hide();"
+												disabled="#{!empty resultadoHistorial.is_reciboConvertido}"
+												actionListener="#{beanHistorialSolicitudes.consultarReciboCaja(resultadoHistorial)}" />
+										</h:form>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</h:form>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:separator />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-4">
+						<p:commandButton
+							value="#{txt_flujoSolicitudesPago['historialPedidos.boton.regresar']}"
+							styleClass="btn-gradiente btn-rojo">
+							<p:ajax listener="#{beanHistorialSolicitudes.regresar}"
+								update="panelHistorialSolicitudes" />
+						</p:commandButton>
+					</div>
+				</div>
+			</p:outputPanel>
+
+			<!-- DETALLE LISTA SOLICITUD -->
+			<p:outputPanel id="listaDetalle"
+				rendered="#{!esNulo and !beanHistorialSolicitudes.ib_vista}">
+				<div class="row space-row text-center">
+					<div class="col-xs-3">
+						<div class="row space-row">
+							<div class="col-xs-12">
+								<p:outputLabel styleClass="label-form" for="nirDetalle"
+									value="#{txt_flujoSolicitudesPago['historialPedidos.nir']}" />
+							</div>
+							<div class="col-xs-12">
+								<h:outputText id="nirDetalle"
+									value="#{beanHistorialSolicitudes.ihss_historialSolicitudSeleccionadoDto.is_nir}" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-3">
+						<div class="row space-row">
+							<div class="col-xs-12">
+								<p:outputLabel styleClass="label-form" for="refPagoDetalle"
+									value="#{txt_flujoSolicitudesPago['historialPedidos.refPago']}" />
+							</div>
+							<div class="col-xs-12">
+								<h:outputText id="refPagoDetalle"
+									value="#{beanHistorialSolicitudes.ihss_historialSolicitudSeleccionadoDto.is_referenciaPago}" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-3">
+						<div class="row space-row">
+							<div class="col-xs-12">
+								<p:outputLabel styleClass="label-form" for="tipoServicioDetalle"
+									value="#{txt_flujoSolicitudesPago['historialPedidos.tabla.tipoServicio']}" />
+							</div>
+							<div class="col-xs-12">
+								<h:outputText id="tipoServicioDetalle"
+									value="#{beanHistorialSolicitudes.ihss_historialSolicitudSeleccionadoDto.is_servicio}" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-3">
+						<div class="row space-row">
+							<div class="col-xs-12">
+								<p:outputLabel styleClass="label-form"
+									for="tipoSubServicioDetalle"
+									value="#{txt_flujoSolicitudesPago['historialPedidos.tabla.tipoSubServicio']}" />
+							</div>
+							<div class="col-xs-12">
+								<h:outputText id="tipoSubServicioDetalle"
+									value="#{beanHistorialSolicitudes.ihss_historialSolicitudSeleccionadoDto.is_subServicio}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row space-row">
+					<div class="col-xs-12">
+						<h:form>
+							<p:dataTable styleClass="centrar-img"
+								value="#{beanHistorialSolicitudes.ihss_historialSolicitudSeleccionadoDto.getIlths_turnoHistorialSolicitudesDto()}"
+								var="resultadoTurno" stickyHeader="false" reflow="true"
+								widgetVar="historialTurno"
+								emptyMessage="#{txt_flujoSolicitudesPago['historialPedidos.tabla.vacia']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								filteredValue="#{beanHistorialSolicitudes.ilths_filtroTurnoHistorialSolicitudesDto}"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}">
+								<f:facet name="header">
+									<p:outputPanel>
+										<p:spacer height="5" />
+										<p:inputText id="globalFilter" styleClass="filtroDataTable"
+											onkeyup="PF('historialTurno').filter()"
+											placeholder="#{txt_minuta['tabla.filtro.placeholder']}"
+											maxlength="100" />
+									</p:outputPanel>
+								</f:facet>
+								<p:column filterBy="#{resultadoTurno.is_turno}"
+									filterStyle="display:none" headerText="Turno"
+									filterMatchMode="contains">
+									<h:outputText value="#{resultadoTurno.is_turno}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_flujoSolicitudesPago['historialPedidos.tabla.fechaExpedicion']}">
+									<h:outputText value="#{resultadoTurno.id_fechaTurno}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									headerText="#{txt_flujoSolicitudesPago['historialPedidos.tabla.documento']}">
+									<p:outputPanel
+										rendered="#{!resultadoTurno.isIb_archivoDisponible()}">
+										<h:outputText id="documento"
+											value="#{txt_flujoSolicitudesPago['historialPedidos.tabla.documento.descripcion']}" />
+										<p:tooltip styleClass="tooltipGeneral" for="documento"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_flujoSolicitudesPago['historialPedidos.tabla.documento.tooltip']}" />
+											</div>
+										</p:tooltip>
+									</p:outputPanel>
+									<p:outputPanel
+										rendered="#{resultadoTurno.isIb_archivoDisponible()}">
+										<p:commandButton icon="fa fa-download" iconPos="right"
+											styleClass="btn-gradiente icon-btn btn-rojo"
+											value="#{txt_flujoSolicitudesPago['historialPedidos.boton.descargar']}"
+											onclick="botonDescargaArchivo('#{resultadoTurno.getIs_archivoConvertido()}','#{EnumTiposMIME.PDF.getIs_tipoMime()}','#{resultadoTurno.getIs_nombreArchivo()}')" />
+									</p:outputPanel>
+								</p:column>
+							</p:dataTable>
+						</h:form>
+					</div>
+				</div>
+				<div class="row space-row">
+					<div class="col-xs-12">
+						<p:separator />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-4">
+						<p:commandButton
+							value="#{txt_flujoSolicitudesPago['historialPedidos.boton.regresar']}"
+							styleClass="btn-gris">
+							<p:ajax listener="#{beanHistorialSolicitudes.regresar}"
+								update="panelHistorialSolicitudes" />
+						</p:commandButton>
+					</div>
+				</div>
+			</p:outputPanel>
+		</p:panel>
+	</ui:define>
+</ui:composition>

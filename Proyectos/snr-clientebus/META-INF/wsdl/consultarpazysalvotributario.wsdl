@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions targetNamespace="https://www.supernotariado.gov.co/services/bachue/ee/consultapazysalvotributario/v1" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="https://www.supernotariado.gov.co/schemas/bachue/ee/consultapazysalvotributario/consultarpazysalvotributario/v1" xmlns:WL5G3N2="https://www.supernotariado.gov.co/services/bachue/ee/consultapazysalvotributario/v1" xmlns:WL5G3N3="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <WL5G3N0:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bachue="https://www.supernotariado.gov.co/services/bachue/ee/consultapazysalvotributario/v1" xmlns:bachue1="https://www.supernotariado.gov.co/schemas/bachue/ee/consultapazysalvotributario/consultarpazysalvotributario/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/consultapazysalvotributario/consultarpazysalvotributario/v1" schemaLocation="http://52.170.212.47:7016/services/ee/consultarpazysalvotributario/v1?SCHEMA%2FExpuestosExternamente%2FConsultaPazySalvoTributario%2FResources%2FSchemas%2FEE_CPST_ConsultarPazySalvoTributario"/>
+    </schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="ConsultarPazySalvoTributario_Request">
+    <WL5G3N0:part element="WL5G3N1:entradaConsultarPazySalvoTributario" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarPazySalvoTributario_Response">
+    <WL5G3N0:part element="WL5G3N1:salidaConsultarPazySalvoTributario" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="SBB_EE_ConsultaPazySalvoTributario">
+    <WL5G3N0:operation name="ConsultarPazySalvoTributario">
+      <WL5G3N0:input message="WL5G3N2:ConsultarPazySalvoTributario_Request"/>
+      <WL5G3N0:output message="WL5G3N2:ConsultarPazySalvoTributario_Response"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="SBB_EE_ConsultaPazySalvoTributarioSOAP12Binding" type="WL5G3N2:SBB_EE_ConsultaPazySalvoTributario">
+    <WL5G3N3:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="ConsultarPazySalvoTributario">
+      <WL5G3N3:operation soapAction="https://www.supernotariado.gov.co/services/bachue/cb/consultapazysalvotributario/v1/ConsultarPazySalvoTributario" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N3:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N3:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="SBB_EE_ConsultaPazySalvoTributarioSOAP12BindingQSService">
+    <WL5G3N0:documentation>OSB Service</WL5G3N0:documentation>
+    <WL5G3N0:port binding="WL5G3N2:SBB_EE_ConsultaPazySalvoTributarioSOAP12Binding" name="SBB_EE_ConsultaPazySalvoTributarioSOAP12BindingQSPort">
+      <WL5G3N3:address location="http://10.0.0.27:7016/services/ee/consultarpazysalvotributario/v1"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

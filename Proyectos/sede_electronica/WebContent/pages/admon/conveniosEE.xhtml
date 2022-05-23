@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-conveniosEE.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_conveniosEE['Convenios']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_conveniosEE['Convenios.Titulo']}" />
+			<ui:param name="imagen" value="img-rolesPermisos" />
+			<ui:param name="subtitulo"
+				value="#{txt_conveniosEE['Convenios.Subtitulo']}" />
+			<ui:param name="urlVista" value="/pages/admon/conveniosEE.jsf" />
+		</ui:include>
+		<div class="row">
+			<div class="col-xs-12">
+				<h:form id="formConveniosEE">
+					<br />
+					<p:panel id="panelConveniosEE">
+						<p:outputPanel id="panelConvenios">
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-11 text-center">
+									<h:outputText styleClass="titulo bold" id="tituloConveniosEE"
+										value="#{txt_conveniosEE['Convenios.Titulo.Bold']}" />
+								</div>
+								<br />
+								<div class="col-xs-12 col-sm-11 text-center">
+									<h:outputText styleClass="titulo" id="bienvenidaConveniosEE"
+										value="#{txt_conveniosEE['Convenios.Bienvenida']}" />
+								</div>
+							</div>
+							<br />
+							<br />
+							<p:dataTable id="dataTableConvenioEE"
+								value="#{beanConveniosEntidadEspecial.ilcee_conveniosEntidadEspecialDto}"
+								var="convenios" responsive="true"
+								widgetVar="dataTableConveniosEE" reflow="true"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								emptyMessage="#{txt_conveniosEE['Tabla.Vacia']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								rowIndexVar="rowIndex" rowsPerPageTemplate="10">
+								<p:column filterBy="#{convenios.is_descripcionConvenio}"
+									headerText="#{txt_conveniosEE['Tabla.Encabezado.Convenio']}"
+									styleClass="centrar">
+									<h:outputText styleClass="centrar ajustar"
+										value="#{convenios.is_descripcionConvenio}" />
+								</p:column>
+								<p:column filterBy="#{convenios.is_codigoConvenio}"
+									headerText="#{txt_conveniosEE['Tabla.Encabezado.Codigo']}"
+									styleClass="centrar">
+									<h:outputText styleClass="centrar ajustar"
+										value="#{convenios.is_codigoConvenio}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_conveniosEE['Tabla.Encabezado.Seleccione']}"
+									styleClass="centrar5">
+									<p:commandButton id="irConvenio"
+										styleClass="btn-rojo btn-gradiente fa fa-angle-double-right btn-CargueDcmt"
+										title=" ">
+										<p:ajax onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('blockUI-Loading').hide();PF('dlgConfirmativo').show();" />
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+							<br />
+						</p:outputPanel>
+						<br />
+						<br />
+					</p:panel>
+					<br />
+					<br />
+				</h:form>
+			</div>
+			<div class="row">
+				<p:separator />
+				<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+					<p:commandButton icon="icon-flecha-gris" iconPos="right"
+						styleClass="icon-btn btn-gris " type="submit"
+						value="#{txt_conveniosEE['btn.volver']}"
+						action="/pages/personas/inicio.jsf?faces-redirect=true">
+						<p:ajax onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide(); Error();" />
+					</p:commandButton>
+				</div>
+			</div>
+		</div>
+		<!-- Modal confirmativo -->
+		<p:dialog styleClass="box-solid box-danger"
+			header="#{txt_conveniosEE['titulo.modal.confirmativo']}"
+			id="dlgConfirmativo" widgetVar="dlgConfirmativo" modal="true"
+			max-height="150" width="500">
+			<div class="row">
+				<div class="col-xs-12">
+					<h:outputText value="#{txt_conveniosEE['Mensaje.Confirmacion']}" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-xs-5 col-xs-offset-1">
+					<p:commandButton styleClass="icon-btn pull-right btn-gris"
+						value="#{txt_conveniosEE['btn.cancelar']}"
+						oncomplete="PF('dlgConfirmativo').hide()">
+					</p:commandButton>
+				</div>
+				<div class="col-xs-5 col-xs-offset-0">
+					<p:commandButton oncomplete="PF('dlgConfirmativo').hide()"
+						styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+						value="#{txt_conveniosEE['btn.aceptar']}">
+					</p:commandButton>
+				</div>
+			</div>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

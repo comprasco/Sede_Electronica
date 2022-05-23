@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<div class="row">
+		<div class="col-xs-12 contenidoModal scrollVertical">
+			<div class="row">
+				<div class="col-xs-12">
+					<ui:fragment rendered="#{booleanIndividual}">
+						<p:dataTable var="consulta" styleClass="text-center"
+							id="tablaConfirmacionDatosConsultas" rowIndexVar="rowIndex"
+							widgetVar="tablaConfirmacionDatosConsultas"
+							value="#{listaConsulta}">
+							<p:column
+								headerText="#{txt_solicitud_consulta['header.tipo.consulta']}">
+								<h:outputText value="#{catalogo}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_solicitud_consulta['label.numeroDocumento']}">
+								<h:outputText value="#{consulta.is_numeroDocumento}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_solicitud_consulta['label.valorUnitario']}">
+								<h:outputText value="#{consulta.ibd_valorUnitario}"
+									styleClass="colorVerde">
+									<f:convertNumber type="currency" currencySymbol="$"
+										maxFractionDigits="0" />
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</ui:fragment>
+					<ui:fragment rendered="#{!booleanIndividual}">
+						<h:outputText value="#{txt_solicitud_consulta['resumen.masivo']}" />
+						<h:outputText id="resumenMasivosConsultas" styleClass="colorGris"
+							value=" #{listaConsulta.size()} " />
+						<h:outputText
+							value="#{txt_solicitud_consulta['resumen.masivo.parte2']}" />
+					</ui:fragment>
+				</div>
+			</div>
+		</div>
+	</div>
+	<ui:fragment rendered="#{valorTotal ne null}">
+	<div class="row">
+		<div class="col-xs-12 resumen_transaccion_valor_pagado">
+			<h:outputText class="label-form"
+				value="#{txt_solicitud_consulta['resumen.valorTotal']} " />
+			<h:outputText class="colorVerde" value="#{valorTotal}">
+				<f:convertNumber type="currency" currencySymbol="$"
+					maxFractionDigits="0" />
+			</h:outputText>
+		</div>
+	</div>
+	</ui:fragment>
+</ui:composition>

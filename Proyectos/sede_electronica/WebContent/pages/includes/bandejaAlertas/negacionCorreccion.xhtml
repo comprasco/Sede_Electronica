@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<p:panel id="panelNegacionCorreccion" styleClass="no-border">
+		<div class="row text-center">
+			<h3 class="label-form">#{txt_bandejaAlertas['column.header.negacion.correccion']}</h3>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-6">
+				<p:outputLabel styleClass="label-form" id="idAlertaNegacion"
+					value="#{txt_bandejaAlertas['label.texto.idalerta']}" />
+				<p:inputText id="txtIdAlertaNegacion" readonly="true"
+					value="#{beanBandejaAlertas.itba_tablaBandejaAlertasDto.ii_idAlerta}" />
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<p:outputLabel styleClass="label-form" id="idUsuarioNegacion"
+					value="#{txt_bandejaAlertas['label.texto.idusuario']}" />
+				<p:inputText id="txtIdUsuarioNegacion" readonly="true"
+					value="#{beanBandejaAlertas.ius_usuarioSesionDto.is_numeroDocumento}" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p:outputLabel styleClass="label-form" id="textoNegacion"
+					value="#{txt_bandejaAlertas['label.texto.negacion']}" />
+				<p:inputTextarea required="true" rows="5" autoResize="true"
+					id="txtTextoNegacion" maxlength="1000"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+					value="#{beanBandejaAlertas.is_textoNegacion}" />
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="txtTextoNegacion" position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel
+							value="#{txt_bandejaAlertas['label.texto.negacion']}" />
+					</div>
+				</p:tooltip>
+				<span class="help-block"> <p:message for="txtTextoNegacion" />
+				</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-4 col-sm-offset-1">
+				<p:commandButton styleClass="btn-gris" process="@this"
+					value="#{txt_bandejaAlertas['tabla.boton.regresar']}"
+					onstart="PF('blockUI-Loading').show();"
+					oncomplete="PF('blockUI-Loading').hide();"
+					action="#{beanBandejaAlertas.redireccionBandeja()}">
+					<p:confirm header="#{txt['titulo.modal.confirmacion']}"
+						message="#{txt_bandejaAlertas['modal.confirmacion.regresar']}" />
+				</p:commandButton>
+
+			</div>
+			<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+				<p:commandButton styleClass="btn-gradiente btn-rojo" process="@form"
+					update="@form" onstart="PF('blockUI-Loading').show();"
+					oncomplete=" PF('blockUI-Loading').hide();"
+					value="#{txt_bandejaAlertas['boton.NegarCorreccion']}"
+					action="#{beanBandejaAlertas.abrirModal}">
+				</p:commandButton>
+			</div>
+		</div>
+	</p:panel>
+
+	<p:confirmDialog styleClass="box-solid box-danger text-center cerrarModal"
+		global="true" width="400" showEffect="fade" hideEffect="fade"
+		responsive="true">
+		<div class="row">
+			<div class="col-xs-5 col-xs-offset-1">
+				<p:commandButton immediate="true"
+					styleClass="ui-confirmdialog-no pull-right btn-gris"
+					value="#{txt['boton.Cancelar.Upper']}">
+				</p:commandButton>
+			</div>
+			<div class="col-xs-5 col-xs-offset-0">
+				<p:commandButton
+					styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+					value="#{txt['boton.Aceptar.Upper']}">
+				</p:commandButton>
+			</div>
+		</div>
+	</p:confirmDialog>
+	<!-- Modal Confirmacion -->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="modalConfirmacion" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+		<ui:param name="tituloModal"
+			value="#{txt['titulo.modal.confirmacion']}" />
+		<ui:param name="formulario" value="formModalConfirmar" />
+		<ui:define name="body-modal">
+			<p:outputLabel
+				value="#{txt_bandejaAlertas['modal.confirmacion.negacion']}" />
+		</ui:define>
+		<ui:define name="accion-modal">
+			<div class="col-xs-12 col-sm-5 col-sm-offset-1">
+				<p:commandButton styleClass="btn-gris" process="@this"
+					value="#{txt['boton.Cancelar.Upper']}"
+					onstart="PF('blockUI-Loading').show();"
+					oncomplete="PF('blockUI-Loading').hide(); PF('modalConfirmacion').hide();">
+				</p:commandButton>
+			</div>
+			<div class="col-xs-12 col-sm-5">
+				<p:commandButton styleClass="btn-gradiente btn-rojo"
+					value="#{txt['boton.Aceptar.Upper']}">
+					<p:ajax onstart="PF('blockUI-Loading').show();"
+						oncomplete="PF('blockUI-Loading').hide(); PF('modalConfirmacion').hide();"
+						listener="#{beanBandejaAlertas.negacionAlerta()}"></p:ajax>
+				</p:commandButton>
+			</div>
+		</ui:define>
+	</ui:decorate>
+</ui:composition>

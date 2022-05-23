@@ -1,0 +1,1163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/includes/wizard.xhtml">
+	<ui:param name="siguienteLabel"
+		value="#{txt['wizard.boton.siguiente']}" />
+	<ui:param name="atrasLabel" value="#{txt['wizard.boton.atras']}" />
+	<ui:define name="title-wizard">
+		<title>#{txt_solicitud_consulta['titulo.solicitudConsultas']}</title>
+	</ui:define>
+	<ui:define name="head-wizard">
+		<h:outputScript library="js" name="archivo.js" />
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+		<h:outputStylesheet library="css" name="snr-se-solicitudConsultas.css" />
+		<h:outputStylesheet library="css" name="snr-se-pagos.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css" name="snr-se-solicitudMasivas.css" />
+	</ui:define>
+	<ui:define name="banner">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_solicitud_consulta['banner']}" />
+			<ui:param name="imagen" value="img-solicitudConsultas" />
+			<ui:param name="subtitulo"
+				value="#{txt_solicitud_consulta['banner.subtitulo.solicitudConsultas']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/solicitudConsultas/solicitarConsultas.jsf" />
+		</ui:include>
+	</ui:define>
+	<f:metadata>
+		<f:viewParam name="as_id"
+			value="#{beanSolicitudConsulta.is_codigoUruidCarritoId}" />
+		<f:viewParam name="as_codigoSubServicio"
+			value="#{beanSolicitudConsulta.is_codigoSubServicioId}" />
+		<f:event type="preRenderView"
+			listener="#{beanSolicitudConsulta.valorParametro}" />
+	</f:metadata>
+	<!-- estos parametros son para enviar una validacion sobre cada formulario al wizard -->
+	<ui:param name="target" value="${beanSolicitudConsulta}" />
+	<ui:param name="metodo" value="validarSiguiente" />
+	<ui:define name="primerPaso">
+		<p:importEnum
+			type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumSubServicios"
+			var="EnumSubServicios" />
+		<p:tab id="seleccion">
+			<f:facet name="title">
+				<span class="icono icono-llave" />
+				<p:outputLabel class="tituloWizard"
+					value="#{txt_solicitud_consulta['wizardsolicitudConsultas.tab.uno']}" />
+			</f:facet>
+			<p:outputPanel id="panelSeleccion">
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<p:outputLabel styleClass="label-form tresPuntos"
+							for="tipoConsultas"
+							value="#{txt_solicitud_consulta['wizardsolicitudConsultas.seleccion.tipoConsulta']}" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 text-center">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel for="tipoConsultas"
+									styleClass="label-form tresPuntos"
+									value="#{txt_solicitud_consulta['wizardsolicitudConsultas.seleccion.seleccionTipoConsulta']}" />
+							</div>
+							<div class="col-xs-12">
+								<p:selectOneButton id="tipoConsultas" styleClass="oneButton"
+									layout="responsive" columns="1"
+									converter="selectOneMenuConverter"
+									value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.idc_detalleCatalogoDto}">
+									<p:ajax update="wizard:descripcionTipoConsulta" />
+									<f:selectItems
+										value="#{beanSolicitudConsulta.ildc_listaDetalleCatalogoDto}"
+										var="tipoConsulta"
+										itemLabel="#{tipoConsulta.ic_catalogoDto.is_nombre}"
+										itemValue="#{tipoConsulta}" />
+								</p:selectOneButton>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12 text-center">
+								<p:outputLabel for="descripcionTipoConsulta"
+									styleClass="label-form tresPuntos"
+									value="#{txt_solicitud_consulta['wizardsolicitudConsultas.seleccion.descripcionConsulta']}" />
+							</div>
+							<div class="col-xs-12">
+								<h:outputText id="descripcionTipoConsulta"
+									value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.getIdc_detalleCatalogoDto().getIs_codigoDescripcion()}"
+									escape="false" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:outputPanel>
+		</p:tab>
+	</ui:define>
+	<ui:define name="segundoPaso">
+		<p:tab id="datos">
+			<f:facet name="title">
+				<span class="icono icono-buscar" />
+				<p:outputLabel class="tituloWizard"
+					value="#{txt_solicitud_consulta['wizardsolicitudConsultas.tab.dos']}" />
+			</f:facet>
+			<p:panel id="renderizarVista">
+				<div class="row">
+					<div class="col-xs-12 col-sm-8">
+						<p:outputLabel styleClass="label-form tresPuntos"
+							for="tipoCertificado"
+							value="#{txt_solicitud_consulta['wizardsolicitudConsultas.seleccion.tipoConsulta']}" />
+						<div class="tipo-input-medium">
+							<p:outputLabel id="tipoCertificado"
+								value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.idc_detalleCatalogoDto.ic_catalogoDto.is_nombre}" />
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel id="labelModoEnvioCertificado"
+							styleClass="label-form tresPuntos" for="modoEnvioCertificado"
+							value="#{txt_certificados['wizardCertificado.datos.modoEnvio']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:inputText onkeypress="if (event.keyCode == 13){return false;}"
+								id="modoEnvioCertificado" autocomplete="off"
+								placeholder="#{txt['placeholder.FormatoCorreo']}" maxlength="50"
+								required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.is_correoEnvio}">
+								<f:validator validatorId="ValidarCorreoFormato" />
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('wizard:modoEnvioCertificado', 'spanCorreoEnvio');" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="modoEnvioCertificado"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_persona['tooltip.CorreoElectronico']}" />
+								</div>
+							</p:tooltip>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelModoEnvioCertificado"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_solicitud_consulta['datos.tooltip.modoEnvio']}" />
+								</div>
+							</p:tooltip>
+							<span id="spanCorreoEnvio" class="ui-inputgroup-addon ocultar">
+								<p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('wizard:modoEnvioCertificado', 'spanCorreoEnvio');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block" id="prueba"> <p:message
+								for="modoEnvioCertificado" />
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<br />
+						<p:separator />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-md-7">
+						<p:outputPanel id="contenedorDatos">
+							<!-- Solicitud Individual -->
+							<p:outputPanel rendered="#{beanSolicitudConsulta.ib_individual}">
+								<ui:fragment
+									rendered="#{beanSolicitudConsulta.ls_errores.size() > 0}">
+									<!-- fragmentoErrores -->
+									<div class="row space-row">
+										<div class="col-xs-12">
+											<h:outputLabel
+												value="#{txt_solicitud_consulta['individual.campos.requeridos']}" />
+											<ul>
+												<ui:repeat var="error"
+													value="#{beanSolicitudConsulta.ls_errores}">
+													<li>#{error}</li>
+												</ui:repeat>
+											</ul>
+										</div>
+									</div>
+								</ui:fragment>
+								<div class="row space-row">
+									<div
+										class="col-xs-12 tituloPanel gradiente text-center space-row">
+										<h:outputText
+											value="#{txt_solicitud_consulta['wizardsolicitudConsultas.datos.individual.titulo.criterios']}" />
+									</div>
+								</div>
+								<p:outputPanel id="tipoPersona"
+									rendered="#{beanSolicitudConsulta.isc_solicitudConsultasDto.ils_criterioBusquedaIdentificacion[0] == 1 || beanSolicitudConsulta.isc_solicitudConsultasDto.ils_criterioBusquedaIdentificacion[1] == 1}">
+									<div class="row">
+										<div class="col-xs-12">
+											<h:outputText styleClass="bold"
+												value="#{txt_solicitud_consulta['wizardsolicitudConsultas.datos.individual.mensaje']} " />
+											<h:outputText
+												value="#{txt_solicitud_consulta['wizardsolicitudConsultas.datos.individual.mensaje1']}" />
+										</div>
+									</div>
+
+									<div class="row space-row">
+										<!-- CriterioBusqeuda Identificacion -->
+										<div class="col-xs-12 text-center">
+											<h:outputText styleClass="bold subtituloCondiciones"
+												value="#{txt_solicitud_consulta['wizardsolicitudConsultas.datos.individual.titulo.identificacion']}" />
+										</div>
+										<div class="col-xs-12 col-md-4">
+											<div class="row">
+												<div class="col-xs-9">
+													<p:outputLabel id="labelTipoPersona"
+														styleClass="label-form tresPuntos" for="tipoPersonaSelect"
+														value="#{txt_solicitud_consulta['label.TipoPersona']}" />
+												</div>
+												<div class="col-xs-2">
+													<p:outputLabel styleClass="required-field">*</p:outputLabel>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-12">
+													<p:selectOneMenu id="tipoPersonaSelect"
+														widgetVar="tipoPersonaSelect"
+														requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+														value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_tipoPersona}">
+														<f:selectItem itemValue=""
+															itemLabel="#{txt['label.SeleccioneComboBox']}" />
+														<f:selectItems
+															value="#{beanSolicitudConsulta.ilc_listaTipoPersonas}"
+															var="tipoPersona"
+															itemLabel="#{tipoPersona.getIs_codigoValor() == 'N' ? txt_login['label.TipoPersonaNatural'] : txt_login['label.TipoPersonaJuridica']}"
+															itemValue="#{tipoPersona.getIs_codigoValor()}" />
+														<p:ajax update="@form"
+															onstart="PF('blockUI-Loading').show();"
+															onsuccess="PF('blockUI-Loading').hide();"
+															listener="#{beanSolicitudConsulta.actualizarListaTipoDocumentos}" />
+													</p:selectOneMenu>
+													<p:tooltip styleClass="tooltipGeneral"
+														for="labelTipoPersona" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_login['tooltip.TipoPersona']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="tipoPersonaSelect" />
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-md-4">
+											<div class="row">
+												<div class="col-xs-9">
+													<p:outputLabel id="labelTipoDocumentoUsuario"
+														styleClass="label-form tresPuntos"
+														for="tipoDocumentoUsuarioSelect"
+														value="#{txt_login['label.TipoDocumentoUsuario']}" />
+												</div>
+												<div class="col-xs-2">
+													<p:outputLabel styleClass="required-field">*</p:outputLabel>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-12">
+													<p:selectOneMenu id="tipoDocumentoUsuarioSelect"
+														widgetVar="tipoDocumentoUsuarioSelect"
+														requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+														value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_tipoDocumento}">
+														<f:selectItem itemValue=""
+															itemLabel="#{txt['label.SeleccioneComboBox']}" />
+														<f:selectItems
+															value="#{beanSolicitudConsulta.iltd_tiposDocumento}"
+															var="tipoDocumento"
+															itemValue="#{tipoDocumento.getIs_id()}"
+															itemLabel="#{tipoDocumento.getIs_nombre()}" />
+													</p:selectOneMenu>
+													<p:tooltip styleClass="tooltipGeneral"
+														for="labelTipoDocumentoUsuario" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_login['tooltip.TipoDocumentoUsuario']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="tipoDocumentoUsuarioSelect" />
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-md-4">
+											<div class="row">
+												<div class="col-xs-9">
+													<p:outputLabel id="labelNumeroDocLogin"
+														styleClass="label-form tresPuntos" for="numeroDocumento"
+														value="#{txt_solicitud_consulta['label.numeroDocumento']}" />
+												</div>
+												<div class="col-xs-2">
+													<p:outputLabel styleClass="required-field">*</p:outputLabel>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-12">
+													<div class="ui-inputgroup">
+														<p:inputText id="numeroDocumento" autocomplete="off"
+															styleClass="text-input border-completo" maxlength="20"
+															placeholder="#{txt_login['placeholder.NumeroDocumento']}"
+															requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+															value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_numeroDocumento}">
+															<p:keyFilter regEx="/[0-9]/i" />
+															<p:ajax event="change"
+																onstart="mostrarLimpiar('wizard:numeroDocumento', 'spanNumeroDocumento');" />
+														</p:inputText>
+														<span id="spanNumeroDocumento"
+															class="ui-inputgroup-addon ocultar"> <p:commandLink>
+																<p:graphicImage styleClass="img-x-size"
+																	name="/img/x-roja.png" />
+																<p:ajax event="click"
+																	onstart="limpiarCampo('wizard:numeroDocumento', 'spanNumeroDocumento');" />
+															</p:commandLink>
+														</span>
+														<p:tooltip showEvent="mouseover"
+															styleClass="tooltipGeneral" for="labelNumeroDocLogin"
+															position="top">
+															<div class="content-tooltip-general">
+																<p:outputLabel
+																	value="#{!beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_tipoPersona.equals('N') and !beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_tipoPersona.isEmpty() ? txt_login['label.numeroDocumentoOrg'] : txt_login['label.NumeroDocumentoUsuario']}" />
+															</div>
+														</p:tooltip>
+													</div>
+													<span class="help-block"> <p:message
+															for="numeroDocumento" />
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<p:outputPanel
+											rendered="#{!beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_tipoPersona.equals('J')}">
+											<div class="col-xs-12 col-sm-3">
+												<div class="row">
+													<div class="col-xs-9">
+														<p:outputLabel id="labelPrimerNombre"
+															styleClass="label-form tresPuntos" for="primerNombre"
+															value="#{txt_persona['label.PrimerNombre']}" />
+													</div>
+													<div class="col-xs-2">
+														<p:outputLabel styleClass="required-field">*</p:outputLabel>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12">
+														<div class="ui-inputgroup">
+															<p:inputText id="primerNombre" autocomplete="off"
+																styleClass="text-input border-completo"
+																requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+																maxlength="50"
+																placeholder="#{txt_persona['placeholder.PrimerNombre']}"
+																value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_primerNombre}">
+																<p:keyFilter regEx="/[a-zñ\s]/i" />
+																<p:ajax event="change"
+																	onstart="mostrarLimpiar('wizard:primerNombre', 'spanPrimerNombre');" />
+															</p:inputText>
+															<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																styleClass="tooltipGeneral" for="labelPrimerNombre"
+																position="top">
+																<div class="content-tooltip-general">
+																	<p:outputLabel
+																		value="#{txt_persona['tooltip.PrimerNombre']}" />
+																</div>
+															</p:tooltip>
+															<span id="spanPrimerNombre"
+																class="ui-inputgroup-addon ocultar"> <p:commandLink>
+																	<p:graphicImage styleClass="img-x-size"
+																		name="/img/x-roja.png" />
+																	<p:ajax event="click"
+																		onstart="limpiarCampo('wizard:primerNombre', 'spanPrimerNombre');" />
+																</p:commandLink>
+															</span>
+														</div>
+														<span class="help-block"> <p:message
+																for="primerNombre" />
+														</span>
+													</div>
+												</div>
+											</div>
+											<div class="col-xs-12 col-sm-3">
+												<p:outputLabel id="labelSegundoNombre"
+													styleClass="label-form tresPuntos" for="segundoNombre"
+													value="#{txt_persona['label.SegundoNombre']}" />
+												<div class="ui-inputgroup">
+													<p:inputText id="segundoNombre" autocomplete="off"
+														styleClass="text-input border-completo" maxlength="50"
+														placeholder="#{txt_persona['placeholder.SegundoNombre']}"
+														value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_segundoNombre}">
+														<p:keyFilter regEx="/[a-zñ\s]/i" />
+														<p:ajax event="change"
+															onstart="mostrarLimpiar('wizard:segundoNombre', 'spanSegundoNombre');" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral" for="labelSegundoNombre"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_persona['tooltip.SegundoNombre']}" />
+														</div>
+													</p:tooltip>
+													<span id="spanSegundoNombre"
+														class="ui-inputgroup-addon ocultar"> <p:commandLink>
+															<p:graphicImage styleClass="img-x-size"
+																name="/img/x-roja.png" />
+															<p:ajax event="click"
+																onstart="limpiarCampo('wizard:segundoNombre', 'spanSegundoNombre');" />
+														</p:commandLink>
+													</span>
+												</div>
+											</div>
+											<div class="col-xs-12 col-sm-3">
+												<div class="row">
+													<div class="col-xs-9">
+														<p:outputLabel id="labelPrimerApellido"
+															styleClass="label-form tresPuntos" for="primerApellido"
+															value="#{txt_persona['label.PrimerApellido']}" />
+													</div>
+													<div class="col-xs-2">
+														<p:outputLabel styleClass="required-field">*</p:outputLabel>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12">
+														<div class="ui-inputgroup">
+															<p:inputText id="primerApellido" autocomplete="off"
+																styleClass="text-input border-completo"
+																requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+																maxlength="50"
+																placeholder="#{txt_persona['placeholder.PrimerApellido']}"
+																value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_primerApellido}">
+																<p:keyFilter regEx="/[a-zñ\s]/i" />
+																<p:ajax event="change"
+																	onstart="mostrarLimpiar('wizard:primerApellido', 'spanPrimerApellido');" />
+															</p:inputText>
+															<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																styleClass="tooltipGeneral" for="labelPrimerApellido"
+																position="top">
+																<div class="content-tooltip-general">
+																	<p:outputLabel
+																		value="#{txt_persona['tooltip.PrimerApellido']}" />
+																</div>
+															</p:tooltip>
+															<span id="spanPrimerApellido"
+																class="ui-inputgroup-addon ocultar"> <p:commandLink>
+																	<p:graphicImage styleClass="img-x-size"
+																		name="/img/x-roja.png" />
+																	<p:ajax event="click"
+																		onstart="limpiarCampo('wizard:primerApellido', 'spanPrimerApellido');" />
+																</p:commandLink>
+															</span>
+														</div>
+														<span class="help-block"> <p:message
+																for="primerApellido" />
+														</span>
+													</div>
+												</div>
+											</div>
+											<div class="col-xs-12 col-sm-3">
+												<p:outputLabel id="labelSegundoApellido"
+													styleClass="label-form tresPuntos" for="segundoApellido"
+													value="#{txt_persona['label.SegundoApellido']}" />
+												<div class="ui-inputgroup">
+													<p:inputText id="segundoApellido" autocomplete="off"
+														styleClass="text-input border-completo" maxlength="50"
+														placeholder="#{txt_persona['placeholder.SegundoApellido']}"
+														value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_segundoApellido}">
+														<p:keyFilter regEx="/[a-zñ\s]/i" />
+														<p:ajax event="change"
+															onstart="mostrarLimpiar('wizard:segundoApellido', 'spanSegundoApellido');" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral" for="labelSegundoApellido"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_persona['tooltip.SegundoApellido']}" />
+														</div>
+													</p:tooltip>
+													<span id="spanSegundoApellido"
+														class="ui-inputgroup-addon ocultar"> <p:commandLink>
+															<p:graphicImage styleClass="img-x-size"
+																name="/img/x-roja.png" />
+															<p:ajax event="click"
+																onstart="limpiarCampo('wizard:segundoApellido', 'spanSegundoApellido');" />
+														</p:commandLink>
+													</span>
+												</div>
+											</div>
+										</p:outputPanel>
+										<p:outputPanel
+											rendered="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_tipoPersona.equals('J')}">
+											<div class="col-xs-12">
+												<p:outputLabel id="labelRazonSocial"
+													styleClass="label-form tresPuntos" for="razonSocial"
+													value="#{txt_persona['label.RazonSocial']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+												<div class="ui-inputgroup">
+													<p:inputText id="razonSocial" autocomplete="off"
+														styleClass="text-input border-completo" maxlength="50"
+														requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+														placeholder="#{txt_persona['placeholder.RazonSocial']}"
+														value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_razonSocial}">
+														<p:keyFilter regEx="/[0-9a-z\s]/i" />
+														<p:ajax event="change"
+															onstart="mostrarLimpiar('wizard:razonSocial', 'spanRazonSocial');" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral" for="labelRazonSocial"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_persona['tooltip.RazonSocial']}" />
+														</div>
+													</p:tooltip>
+													<span id="spanRazonSocial"
+														class="ui-inputgroup-addon ocultar"> <p:commandLink>
+															<p:graphicImage styleClass="img-x-size"
+																name="/img/x-roja.png" />
+															<p:ajax event="click"
+																onstart="limpiarCampo('wizard:razonSocial', 'spanRazonSocial');" />
+														</p:commandLink>
+													</span>
+												</div>
+												<span class="help-block"> <p:message
+														for="razonSocial" />
+												</span>
+											</div>
+										</p:outputPanel>
+									</div>
+								</p:outputPanel>
+								<ui:fragment
+									rendered="#{beanSolicitudConsulta.isc_solicitudConsultasDto.ils_criterioBusquedaIdentificacion[0] == 2 || beanSolicitudConsulta.isc_solicitudConsultasDto.ils_criterioBusquedaIdentificacion[1] == 2}">
+									<p:separator styleClass="separador" />
+									<div class="row">
+										<div class="col-xs-12 text-center">
+											<h:outputText styleClass="bold subtituloCondiciones"
+												value="#{txt_solicitud_consulta['wizardsolicitudConsultas.datos.individual.titulo.tipoActo']}" />
+										</div>
+										<div class="col-xs-12 col-sm-6">
+											<p:outputLabel id="labelNombreTipoActo" for="nombreTipoActo"
+												styleClass="label-form tresPuntos"
+												value="#{txt_solicitud_consulta['individual.acto.titulo']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											<p:selectOneMenu id="nombreTipoActo" filter="true"
+												styleClass="checkBoxTipoActo" widgetVar="tipoActo"
+												filterMatchMode="contains"
+												converter="selectOneMenuConverter"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												filterPlaceholder="#{txt_solicitud_consulta['individual.acto.filtro']}"
+												value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.ita_tipoActo}">
+												<f:selectItem
+													itemLabel="#{txt_certificados['wizardCertificado.datos.seleccionar']}"
+													itemValue="" />
+												<f:selectItems
+													value="#{beanSolicitudConsulta.iltp_listaTipoActoDto}"
+													var="tipoActo"
+													itemLabel="#{tipoActo.is_nombre} - (#{tipoActo.is_id})"
+													itemValue="#{tipoActo}" />
+												<p:ajax update="tipoActo" />
+											</p:selectOneMenu>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelNombreTipoActo"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_certificados['wizardCertificado.datos.tooltip.oficinaRegistro']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="nombreTipoActo" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-sm-6">
+											<p:outputLabel styleClass="label-form tresPuntos"
+												id="labelTipoActo" for="tipoActo"
+												value="#{txt_solicitud_consulta['individual.acto.id']}" />
+
+											<div class="ui-inputgroup">
+												<p:inputText id="tipoActo" readonly="true"
+													styleClass="block"
+													value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.ita_tipoActo.is_id}" />
+											</div>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelTipoActo"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_solicitud_consulta['individual.acto.titulo']}" />
+												</div>
+											</p:tooltip>
+										</div>
+									</div>
+								</ui:fragment>
+								<div class="row">
+									<div class="col-xs-12">
+										<br />
+									</div>
+								</div>
+								<div class="row space-row">
+									<div
+										class="col-xs-12 tituloPanel gradiente text-center space-row">
+										<h:outputText
+											value="#{txt_solicitud_consulta['wizardsolicitudConsultas.datos.individual.titulo.condiciones']}" />
+									</div>
+									<div class="col-xs-12">
+										<h:outputText
+											value="#{txt_solicitud_consulta['datos.creterios.descripcion']}" />
+									</div>
+								</div>
+
+								<div class="row space-row">
+									<div class="col-xs-12 col-sm-3">
+										<p:outputLabel id="labelConsultaNacional"
+											for="consultaNacional" styleClass="label-form tresPuntos"
+											value="#{txt_solicitud_consulta['individual.consulta.nacional']}" />
+										<p:outputLabel styleClass="required-field"
+											rendered="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.ib_consultaNacional}">*</p:outputLabel>
+										<div class="ui-inputgroup">
+											<p:selectBooleanCheckbox id="consultaNacional"
+												value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.ib_consultaNacional}">
+											</p:selectBooleanCheckbox>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelConsultaNacional"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_solicitud_consulta['individual.nacional']}" />
+												</div>
+											</p:tooltip>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-6">
+										<p:outputLabel styleClass="label-form tresPuntos"
+											id="labelOficinaRegistro" for="oficinaRegistro"
+											value="#{txt_certificados['wizardCertificado.datos.oficinaRegistro']}" />
+										<p:outputLabel styleClass="required-field"
+											rendered="#{!beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.ib_consultaNacional}">*</p:outputLabel>
+										<p:selectOneMenu id="oficinaRegistro" filter="true"
+											widgetVar="oficinaRegistro" filterMatchMode="contains"
+											converter="selectOneMenuConverter"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											filterPlaceholder="#{txt_certificados['wizardCertificado.datos.placeholder.oficinaRegistro']}"
+											value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.icr_orip}">
+											<f:selectItem
+												itemLabel="#{txt_certificados['wizardCertificado.datos.seleccionar']}"
+												itemValue="" />
+											<f:selectItems
+												value="#{beanSolicitudConsulta.ilcr_listaCirculoRegistralDto}"
+												var="circuloRegistral"
+												itemLabel="#{circuloRegistral.is_nombre} - (#{circuloRegistral.is_id})"
+												itemValue="#{circuloRegistral}" />
+											<p:ajax update="numeroOficinaRegistro" />
+										</p:selectOneMenu>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelOficinaRegistro"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_certificados['wizardCertificado.datos.tooltip.oficinaRegistro']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="oficinaRegistro" />
+										</span>
+									</div>
+									<div class="col-xs-12 col-sm-3">
+										<p:outputLabel id="labelNumeroOficinaRegistro"
+											for="numeroOficinaRegistro"
+											styleClass="label-form tresPuntos"
+											value="#{txt_certificados['wizardCertificado.datos.numeroOficinaRegistro']}" />
+										<div class="ui-inputgroup">
+											<p:inputText id="numeroOficinaRegistro" readonly="true"
+												styleClass="block"
+												value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.icr_orip.is_id}" />
+										</div>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelNumeroOficinaRegistro"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_certificados['wizardCertificado.datos.numeroOficinaRegistro']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<div class="col-xs-12">
+										<p:outputLabel id="labelSolicitante" for="solicitante"
+											styleClass="label-form tresPuntos"
+											value="#{txt_solicitud_consulta['individual.solicitante.titulo']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<div class="ui-inputgroup">
+											<p:selectOneMenu id="solicitante"
+												styleClass="checkBoxTipoActo"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												filterPlaceholder="#{txt_certificados['wizardCertificado.datos.placeholder.oficinaRegistro']}"
+												value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.is_solicitante}">
+												<f:selectItem
+													itemLabel="#{txt_certificados['wizardCertificado.datos.seleccionar']}"
+													itemValue="" />
+												<f:selectItem
+													itemLabel="#{txt_solicitud_consulta['wizardsolicitudConsultas.datos.individual.condiciones.interesado']}"
+													itemValue="#{txt_solicitud_consulta['wizardsolicitudConsultas.datos.individual.condiciones.interesado']}" />
+												<f:selectItem
+													itemLabel="#{txt_solicitud_consulta['wizardsolicitudConsultas.datos.individual.condiciones.tercero']}"
+													itemValue="#{txt_solicitud_consulta['wizardsolicitudConsultas.datos.individual.condiciones.tercero']}" />
+											</p:selectOneMenu>
+										</div>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelSolicitante"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_certificados['wizardCertificado.datos.numeroOficinaRegistro']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message for="solicitante" />
+										</span>
+									</div>
+								</div>
+
+							</p:outputPanel>
+							<p:outputPanel rendered="#{!beanSolicitudConsulta.ib_individual}">
+								<div class="row">
+									<div class="col-xs-2">
+										<br /> <br />
+										<p:commandButton id="boton-txt"
+											rendered="#{!beanSolicitudConsulta.ib_respuesta}"
+											styleClass="icon-input btn-gradiente icono_boton"
+											icon="icon-contrasena"
+											onclick="botonDescargaArchivo('#{beanSolicitudConsulta.iab_archivoBdDto.is_contenido}','#{EnumTiposMIME.XLSX.getIs_tipoMime()}','#{beanSolicitudConsulta.iab_archivoBdDto.is_nombre}#{beanSolicitudConsulta.iab_archivoBdDto.is_extension}');" />
+									</div>
+									<div class="col-xs-10">
+										<ui:fragment rendered="#{!beanSolicitudConsulta.ib_respuesta}">
+											<p:fileUpload styleClass="cargaArchivo"
+												fileUploadListener="#{beanSolicitudConsulta.cargarArchivo}"
+												mode="advanced" auto="false" allowTypes="/(\.|\/)(xlsx)$/"
+												invalidSizeMessage="#{beanArchivo.validarTamanoArchivoTXTError()}"
+												invalidFileMessage="#{txt_solicitud_consulta['archivo.error.extension']}"
+												fileLimitMessage="#{txt_solicitud_consulta['archivo.error.archivo']}"
+												label="#{txt_persona['label.ExaminarArchivo']}"
+												uploadLabel="#{txt_persona['label.Cargar']}"
+												cancelLabel="#{txt_persona['label.Cancelar']}"
+												sizeLimit="#{beanArchivo.validarTamanoArchivoTXT()}"
+												fileLimit="1" update="@this wizard:nombreArchivo">
+												<p:outputLabel id="nombreArchivo"
+													value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.getIa_archivoCarga().getIs_nombreArchivo()}"></p:outputLabel>
+											</p:fileUpload>
+										</ui:fragment>
+										<ui:fragment rendered="#{beanSolicitudConsulta.ib_respuesta}">
+											<p:outputLabel
+												value="#{txt_solicitud_consulta['archivo.resumen.cargado']}" />
+											<p:outputLabel
+												value=" #{beanSolicitudConsulta.isc_solicitudConsultasDto.ildesc_listaDatosEntradaSolicitudConsultaDto.size()}"></p:outputLabel>
+											<br />
+											<p:outputLabel
+												value="#{txt_solicitud_consulta['archivo.resumen.exitoso']}" />
+											<p:outputLabel value=" #{beanSolicitudConsulta.ii_exitoso}"></p:outputLabel>
+											<br />
+											<p:outputLabel
+												value="#{txt_solicitud_consulta['archivo.resumen.dallido']}" />
+											<p:outputLabel value=" #{beanSolicitudConsulta.ii_fallidos}"></p:outputLabel>
+											<br />
+											<p:outputLabel
+												value="#{txt_solicitud_consulta['archivo.resumen.no.encontrados']}" />
+											<p:outputLabel
+												value=" #{beanSolicitudConsulta.ii_noEncontrada}"></p:outputLabel>
+											<br />
+											<input type="button" id="boton-txt"
+												onclick="botonDescargaArchivo('#{beanSolicitudConsulta.isc_solicitudConsultasDto.ia_archivoDescarga.is_archivo}','#{EnumTiposMIME.XLSX.getIs_tipoMime()}','#{beanSolicitudConsulta.isc_solicitudConsultasDto.ia_archivoDescarga.is_nombreArchivo}');"
+												value="#{txt_solicitud_consulta['archivo.resumen.boton.descargar']}" />
+										</ui:fragment>
+									</div>
+								</div>
+							</p:outputPanel>
+							<p:separator styleClass="separador" />
+							<div class="row">
+								<div class="col-xs-12 col-md-6 col-md-offset-3">
+									<p:commandButton
+										rendered="#{!beanSolicitudConsulta.ib_respuesta}"
+										styleClass="btn-gradiente icon-btn btn-rojo"
+										value="#{txt_solicitud_consulta['archivo.validar.boton']}">
+										<p:ajax
+											listener="#{beanSolicitudConsulta.validarConsultaTarifa}"
+											process="@form" update="wizard:contenedorDatos"
+											onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('blockUI-Loading').hide();" />
+									</p:commandButton>
+								</div>
+								<p:outputPanel rendered="#{beanSolicitudConsulta.ib_respuesta}">
+									<ui:fragment
+										rendered="#{!beanSolicitudConsulta.isc_solicitudConsultasDto.ib_pasoResumen}">
+										<ui:fragment rendered="#{beanSolicitudConsulta.ib_individual}">
+											<div id="valorTotal" class="col-xs-12 text-center">
+												<p:outputLabel
+													value="#{txt_solicitud_consulta['resumen.valorTotal']} " />
+												<p:outputLabel styleClass="colorVerde"
+													value="#{beanSolicitudConsulta.idesc_datosEntradaSolicitudConsultaDto.ibd_valorUnitario}">
+													<f:convertNumber type="currency" currencySymbol="$"
+														maxFractionDigits="0" />
+												</p:outputLabel>
+											</div>
+										</ui:fragment>
+										<div class="col-xs-6">
+											<p:commandButton
+												actionListener="#{beanSolicitudConsulta.limpiarDatosMasivos}"
+												styleClass="btn-gris" update="wizard:contenedorDatos"
+												value="#{txt_solicitud_consulta['resumen.boton.limpiar']}" />
+										</div>
+										<div class="col-xs-6">
+											<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+												value="#{txt_solicitud_consulta['resumen.boton.adicionar']}"
+												actionListener="#{beanSolicitudConsulta.guardarTransaccionCarrito}"
+												update="wizard:renderizarVista wizard:solicitudesConsultados">
+												<f:setPropertyActionListener
+													target="#{beanSolicitudConsulta.isc_solicitudConsultasDto.ib_pasoResumen}"
+													value="true" />
+											</p:commandButton>
+										</div>
+									</ui:fragment>
+									<ui:fragment
+										rendered="#{beanSolicitudConsulta.isc_solicitudConsultasDto.ib_pasoResumen}">
+										<p:outputLabel
+											value="#{txt_solicitud_consulta['resumen.siguientepaso']}"></p:outputLabel>
+									</ui:fragment>
+								</p:outputPanel>
+							</div>
+						</p:outputPanel>
+					</div>
+					<div class="col-xs-12 col-md-5">
+						<p:panel id="solicitudesConsultadas" class="solicitudesMasivas">
+							<p:outputPanel
+								rendered="#{beanSolicitudConsulta.getIb_individual()}"
+								class="solicitudesMasivas">
+								<p:dataList id="solicitudesConsultados"
+									value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.ildesc_listaDatosEntradaSolicitudConsultaDto}"
+									paginator="true" var="certificado" type="ordered"
+									emptyMessage="#{txt_certificados['wizardCertificado.datos.tabla.vacio']}"
+									paginatorPosition="bottom" rows="4" styleClass="paginated"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}">
+									<f:facet name="header">
+										<p:outputLabel
+											value="#{txt_certificados['wizardCertificado.datos.tabla.titulo']}" />
+										<br />
+										<p:outputLabel
+											value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.ildesc_listaDatosEntradaSolicitudConsultaDto.size()} #{txt_certificados['wizardCertificado.datos.tabla.titulo.cantidad']}" />
+
+									</f:facet>
+									<div class="row consultaItem">
+										<p:outputLabel
+											value="#{certificado.is_tipoDocumento} #{certificado.is_numeroDocumento}" />
+										<p:outputLabel styleClass="colorVerde"
+											value="#{certificado.ibd_valorUnitario}">
+											<f:convertNumber type="currency" currencySymbol="$"
+												maxFractionDigits="0" />
+										</p:outputLabel>
+										<p:commandLink
+											title="#{txt_certificados['wizardCertificado.datos.tabla.boton']}"
+											class="descartarCertificado"
+											styleClass="fa fa-times-circle imagenTamano"
+											update="wizard:solicitudesConsultadas">
+											<f:ajax
+												listener="#{beanSolicitudConsulta.descartarConsulta(certificado)}"
+												render="wizard:solicitudesConsultadas">
+											</f:ajax>
+										</p:commandLink>
+									</div>
+								</p:dataList>
+							</p:outputPanel>
+							<p:outputPanel
+								rendered="#{!beanSolicitudConsulta.getIb_individual()}">
+								<p:panel class="panelEliminarEstilos">
+									<f:facet name="header">
+										<p:outputLabel
+											value="#{txt_solicitud_consulta['resumen.datos.tabla']}" />
+									</f:facet>
+									<ui:param name="validarListaTransaccion"
+										value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.ildesc_listaDatosEntradaSolicitudConsultaDto.size() > 0}"></ui:param>
+									<p:outputLabel
+										rendered="#{!(validarListaTransaccion and beanSolicitudConsulta.isc_solicitudConsultasDto.ib_pasoResumen)}"
+										value="#{txt_solicitud_consulta['resumen.datatable.vacio']}" />
+									<ui:fragment
+										rendered="#{validarListaTransaccion and beanSolicitudConsulta.isc_solicitudConsultasDto.ib_pasoResumen}">
+										<div class="row certificadoItem">
+											<div class="col-xs-10 maxTexto">
+												<p:outputLabel
+													value="#{txt_solicitud_consulta['resumen.datos.tabla.contenido']}" />
+											</div>
+											<div class="col-xs-2 text-center">
+												<p:commandLink
+													title="#{txt_solicitud_consulta['resumen.datos.tabla.boton']}"
+													class="descartarCertificado"
+													styleClass="fa fa-times-circle imagenTamano"
+													update="wizard:renderizarVista wizard:solicitudesConsultadas">
+													<f:ajax
+														listener="#{beanSolicitudConsulta.limpiarDatosMasivos()}"
+														render="wizard:solicitudesConsultadas">
+													</f:ajax>
+												</p:commandLink>
+											</div>
+										</div>
+										<div class="row direccionItem">
+											<div class="col-xs-8 maxTexto">
+												<h:outputText
+													value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.ildesc_listaDatosEntradaSolicitudConsultaDto.size()} " />
+												<h:outputText
+													value="#{txt_solicitud_consulta['resumen.datos.tabla.consulta']} " />
+											</div>
+											<div class="col-xs-4 text-right maxTexto colorVerde">
+												<h:outputText
+													value="$#{beanSolicitudConsulta.isc_solicitudConsultasDto.getIbd_valorTotal()}">
+													<f:convertNumber type="currency" currencySymbol="$"
+														maxFractionDigits="0" />
+												</h:outputText>
+											</div>
+										</div>
+									</ui:fragment>
+								</p:panel>
+							</p:outputPanel>
+						</p:panel>
+					</div>
+				</div>
+			</p:panel>
+		</p:tab>
+	</ui:define>
+	<ui:define name="tercerPaso">
+		<ui:decorate
+			template="/pages/includes/wizardPestanas/resumenSolicitud.xhtml">
+			<ui:param name="vista" value="SolicitudCertificados" />
+			<ui:param name="titulo"
+				value="#{beanSolicitudConsulta.ib_individual ? txt_solicitud_consulta['resumen.individual.titulo'] : txt_solicitud_consulta['resumen.masivo.titulo']}" />
+			<ui:param name="tipoDocumento"
+				value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.getIp_personaDto().getItd_tipoDocumentoDto().getIs_nombre()}" />
+			<ui:param name="numeroDocumento"
+				value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.getIp_personaDto().getIs_numeroDocumento()}" />
+			<ui:param name="beanSolicitar" value="#{beanSolicitudConsulta}" />
+			<ui:param name="mostrarFormaEnvio" value="false" />
+			<ui:param name="formaEnvio"
+				value="#{txt_solicitud_consulta['wizardCertificado.resumen.oripEnvio']}" />
+			<ui:define name="contenidoResumen">
+				<ui:decorate
+					template="/pages/includes/resumenes/certificados/resumenConsulta.xhtml">
+					<ui:param name="booleanIndividual"
+						value="#{beanSolicitudConsulta.ib_individual}" />
+					<ui:param name="listaConsulta"
+						value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.ildesc_listaDatosEntradaSolicitudConsultaDto}" />
+					<ui:param name="catalogo"
+						value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.idc_detalleCatalogoDto.ic_catalogoDto.is_nombre}" />
+					<ui:param name="valorTotal"
+						value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.getIbd_valorTotal()}" />
+				</ui:decorate>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+	<ui:define name="modalWizardExterno">
+		<!-- Modal Confirmacion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalConfirmacionGenerarLiquidacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmacion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_solicitud_consulta['modal.generarLIquidacion.confirmar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-5 col-md-offset-1 space-row">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							oncomplete="PF('modalConfirmacionGenerarLiquidacion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-5 col-md-offset-0">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							oncomplete="PF('modalConfirmacionGenerarLiquidacion').hide();"
+							update="formModalSolicitudGenerada">
+							<p:ajax listener="#{beanSolicitudConsulta.generarLiquidacion}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Solicitud generada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="solicitudGenerada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalSolicitudGenerada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_solicitud_consulta['modal.redireccion.contenido']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-4">
+						<p:link class="btn-rojo redireccion"
+							value="#{txt['boton.entendido']}"
+							outcome="#{beanSolicitudConsulta.is_redireccionResumenPago}#{beanSolicitudConsulta.iit_integracionTemporalDto.is_nir}">
+						</p:link>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Solicitud generada -->
+		<!-- Transaccion encontrada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="transaccionEncontrada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalTransaccionEncontrada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.transaccion.retormar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-md-6 space-row">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt_solicitud_consulta['boton.modal.cancelar']}">
+							<p:ajax
+								listener="#{beanSolicitudConsulta.cancelarTransaccion(true)}" />
+						</p:commandButton>
+					</div>
+					<div class="col-md-6">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_solicitud_consulta['boton.modal.aceptar']}">
+							<f:ajax
+								listener="#{beanSolicitudConsulta.cancelarTransaccion(false)}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Transaccion encontrada -->
+		<!-- Modal para Confirmar seleccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalSeleccion" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalSeleccion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:define name="body-modal">
+				<p:importEnum
+					type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumModoTipoServicio"
+					var="EnumModoTipoServicio" />
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel styleClass="label-form tresPuntos"
+							value="#{txt_solicitud_consulta['modalSeleccion.tipoModo']}" />
+					</div>
+					<div class="col-xs-12">
+						<ui:param name="isIndicePropietario"
+							value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.getIdc_detalleCatalogoDto().getIs_codigoSubServicio().equals(EnumSubServicios.CONSULTA_INDICE_TITULARES_DERECHO.getIs_codigo())}" />
+						<ui:param name="isIndiceTitulares"
+							value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.getIdc_detalleCatalogoDto().getIs_codigoSubServicio().equals(EnumSubServicios.CONSULTA_INDICE_PROPIETARIO.getIs_codigo())}" />
+						<p:selectOneButton id="tipoCriterioBusqueda" required="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							styleClass="oneButton" layout="responsive" columns="2"
+							value="#{beanSolicitudConsulta.ib_individual}">
+							<f:selectItem
+								itemLabel="#{EnumModoTipoServicio.INDIVIDUAL.getIs_codigo()}"
+								itemValue="#{true}" />
+							<f:selectItem
+								itemDisabled="#{!(isIndicePropietario || isIndiceTitulares)}"
+								itemLabel="#{EnumModoTipoServicio.MASIVO.getIs_codigo()}"
+								itemValue="#{false}" />
+						</p:selectOneButton>
+						<span class="help-block" id="prueba"> <p:message
+								for="tipoCriterioBusqueda" />
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel styleClass="label-form tresPuntos"
+							value="#{txt_solicitud_consulta['modalSeleccion.criterioBusqueda']}" />
+					</div>
+					<div class="col-xs-12 notaU">
+						<h:outputText
+							value="#{txt_solicitud_consulta['modalSeleccion.nota']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:selectManyButton id="tipoCriterioBusqueda1" required="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							styleClass="oneButton" layout="responsive" columns="2"
+							value="#{beanSolicitudConsulta.isc_solicitudConsultasDto.ils_criterioBusquedaIdentificacion}">
+							<f:selectItem
+								itemLabel="#{txt_solicitud_consulta['modalSeleccion.criterioBusqueda.identificacion']}"
+								itemValue="1" />
+							<f:selectItem
+								itemDisabled="#{!beanSolicitudConsulta.isc_solicitudConsultasDto.getIdc_detalleCatalogoDto().getIs_codigoSubServicio().equals(EnumSubServicios.CONSULTA_OTROS_DERECHOS.getIs_codigo())}"
+								itemLabel="#{txt_solicitud_consulta['modalSeleccion.criterioBusqueda.naturalezaJuridica']}"
+								itemValue="2" />
+						</p:selectManyButton>
+						<span class="help-block" id="prueba"> <p:message
+								for="tipoCriterioBusqueda1" />
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_solicitud_consulta['modalSeleccion.tipoModo.descripcion']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton
+							value="#{txt_solicitud_consulta['boton.modal.cancelar']}"
+							class="btn-gris"
+							actionListener="#{beanSolicitudConsulta.limpiarDatosSeleccion}"
+							update="wizard:panelSeleccion"
+							oncomplete="PF('#{modalId}').hide()" />
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton
+							value="#{txt_solicitud_consulta['boton.modal.aceptar']}"
+							type="submit" process="formModalSeleccion"
+							update="formModalSeleccion" class="btn-rojo btn-gradiente"
+							oncomplete="if(args.validationFailed){PF('#{modalId}').jq.effect('shake', {times: 3}, 100);}else{PF('#{modalId}').hide();PF('wizardGenerico').next();}" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

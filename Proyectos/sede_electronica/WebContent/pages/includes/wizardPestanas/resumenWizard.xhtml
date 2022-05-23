@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<p:tab id="resumen#{vista}">
+		<f:facet name="title">
+			<span class="icono icono-resumen" />
+			<p:outputLabel class="tituloWizard"
+				value="#{txt_correccion['tab.resumen']}" />
+		</f:facet>
+		<p:panel>
+			<div class="container-fluid-special">
+				<div id="transaccion_wrapper">
+					<div class="resumen_transaccion_head">
+						<ui:insert name="titulo">
+							<h3 class="transaccion_correo_text">#{txt_correccion['tab.resumen.subtitulo']}</h3>
+							<h3 class="transaccion_correo">#{correo}</h3>
+						</ui:insert>
+					</div>
+					<div class="turno_radicado_container">
+						<ui:insert name="subtitulo">
+							<div class="turno_radicado_box radicado_box_left">
+								<h2 class="turno_radicado_title">#{txt_correccion['tab.resumen.turno']}</h2>
+								<h2>#{radicado}</h2>
+							</div>
+							<div class="turno_radicado_box">
+								<h2 class="turno_radicado_title">#{txt_correccion['tab.resumen.radicado']}</h2>
+								<h2>#{turno}</h2>
+							</div>
+						</ui:insert>
+					</div>
+					<div class="resumen_transaccion_data_cont">
+						<p:dataList value="#{mapaResumen}" var="dataResumen">
+							<h2 class="resumen_transaccion_data_title">#{dataResumen.getKey()}</h2>
+							<p:dataList value="#{dataResumen.getValue()}" var="dataResumen2">
+								#{dataResumen2}
+							</p:dataList>
+						</p:dataList>
+					</div>
+					<div class="transaccion_finalizar_container">
+						<h:outputLink href="#" class="transaccion_finalizar_btn">
+							<span class="icon-btn">#{txt_correccion['tab.resumen.finalizar']}</span>
+						</h:outputLink>
+					</div>
+				</div>
+			</div>
+		</p:panel>
+	</p:tab>
+</ui:composition>

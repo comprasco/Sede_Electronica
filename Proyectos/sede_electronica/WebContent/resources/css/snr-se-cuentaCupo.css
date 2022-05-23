@@ -1,0 +1,315 @@
+.bold {
+	font-weight: 700;
+}
+
+.ui-button-icon-only .ui-icon {
+	top: 28% !important;
+	margin-top: -10px !important;
+	left: 8% !important;
+	margin-left: 0px !important;
+}
+
+.ui-inputgroup {
+	display: block;
+}
+
+.tamano-titulo {
+	font-size: 20px !important;
+}
+
+.info-cursiva {
+	font-style: oblique;
+}
+
+.tamano-subtitulo {
+	font-size: 16px !important;
+	color: #000000;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.pad-text {
+	padding-top: 2%;
+}
+
+.textoRojo {
+	font-weight: bold;
+	color: #EB1F28;
+}
+
+.no-borde-panel {
+    border: none;
+}
+
+.tamano-firma {
+	width: 100%;
+	color: #000000 !important;
+	background-color: #000000 !important;
+}
+
+.title{
+	display:flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.fa-5x {
+    font-size: 8em;
+}
+
+.panel-documentos {
+    margin: 0px auto;
+    width: 95%;
+    padding-top: 30px !important;
+}
+
+.ui-confirm-dialog-message {
+    display: inline-block;
+    margin-top: 1px;
+}
+
+.adjuntar-documentos {
+    margin-right: -9%;
+    margin-left: -6%;
+    text-align: center;
+}
+
+.centrar20 {
+	text-align: center;
+	width: 20% !important;
+}
+
+.centrarEnviado {
+	text-align: center;
+	width: 134px !important;
+}
+
+.centrar35 {
+	text-align: center;
+	width: 337px !important;
+}
+
+.centrar45 {
+	text-align: left;
+	width: 160px !important;
+}
+
+.boton-descarga {
+	background-color: transparent !important;
+	font-size: 30px !important;
+	border-color: transparent !important;
+	color: #770707 !important;
+}
+
+.boton-descarga:hover {
+	text-decoration: none !important;
+}
+
+.ui-dialog .ui-dialog-content {
+    position: relative;
+    border: 0;
+    padding: .5em 1em;
+    background: 0;
+    overflow: inherit;
+    zoom: 1;
+}
+
+div.ui-fileupload-content {
+    display: block !important;
+    flex-direction: column-reverse;
+    align-items: stretch;
+    justify-content: center;
+}
+
+#modalRecargaPendiente > div > a[aria-label="Close"]{
+	display: none !important;
+}
+
+#modalConfirmarAnular > div > a[aria-label="Close"]{
+	display: none !important;
+}
+
+.info-solicitud {
+    text-align: left;
+    padding-left: 24%;
+    display: block !important;
+}
+
+.documento-medio {
+	vertical-align: middle;
+}
+
+.botonSubir {
+    width: 100% !important;
+}
+
+#cuentaCupoAprobada > div.ui-dialog-titlebar.ui-widget-header > a{
+	display: none;
+}
+
+#creacionCuentaCupoEnTramite > div.ui-dialog-titlebar.ui-widget-header > a{
+	display: none;
+}
+
+#cuentaCupoNoExiste > div.ui-dialog-titlebar.ui-widget-header > a{
+	display: none;
+}
+
+#transaccionEncontradaCuentaCupo > div.ui-dialog-titlebar.ui-widget-header > a{
+	display: none;
+}
+
+#cuentaCupoAprobada > div.ui-dialog-titlebar.ui-widget-header > a{
+	display: none;
+}
+
+.tablaMonto{
+	width: 100%;
+}
+
+.inputTabla{
+	margin-left: -10px;	
+}
+
+.saldo{
+	color: #572228 !important;
+    font-size: 14px !important;
+}
+
+/* Modificar Cuenta cupo */
+
+.tabla-valores {
+	border: 1px solid #EFEFEF !important;
+    width: 100%;
+    color: #EFEFEF!important;
+    background-image: linear-gradient(#EB1F28, #461A13) !important;
+}
+
+.tabla-valores-pdf {
+	border: 1px solid #EFEFEF !important;
+    width: 100%;
+}
+
+.espacio {
+    color: #ffffff!important;
+}
+
+.imagenes {
+	width: 80%;
+	vertical-align: middle;
+}
+
+.imagenes1 {
+	width: 60%;
+}
+
+.imagenes2 {
+	width: 50%;
+	vertical-align: middle;
+}
+
+.img-right{
+    text-align: right;
+    padding-right: 5%;
+    width: 45%;
+    font-size: 80%;
+}
+
+.img-left{
+    text-align: left;
+    padding-left: 5%;
+}
+
+.pad-top {
+    padding-top: 3%;
+}
+
+.pad-top1 {
+    padding-top: 2%;
+}
+
+.pad-left {
+	padding-left: 3%
+}
+.pad-right {
+	padding-right: 3%
+}
+.w-100{
+	width: 100%;
+}
+th{
+	color:black;
+	font-weight: bold
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding:4px 6px;
+}
+
+.no-borde {
+   border: none !important;
+   color: #572228 !important;
+   font-size: 14px !important;
+}
+
+.tamano-motivo-solicitud {
+	width: 96% !important;
+}
+
+.borde-no {
+	border: none !important;
+}
+
+.monto-solicitado {
+	display: flex;
+	align-items: center;
+}
+
+body .ui-slider .ui-slider-handle {
+    background-color: #EB1F28 !important;
+    border-color: #EB1F28 !important;
+    color: #fff;
+    outline: none;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    transform: scale(.8);
+}
+
+body .ui-widget-content .ui-state-default, body .ui-widget-header .ui-state-default {
+    border-color: white;
+    background-color: white;
+}
+.ui-button-icon-only {
+    width: 0.4em;
+}
+div.ui-fileupload .ui-fileupload-row button.ui-fileupload-cancel span.ui-icon-close:before {
+    color: white !important;
+}
+
+.tamanoTablaMov {
+    width: 100%;
+    text-align: center;
+}
+
+body .ui-widget-content .ui-state-default, body .ui-widget-header .ui-state-default {
+    border-color: white;
+    background-color: white;
+}
+.ui-button-icon-only {
+    width: 0.4em;
+}
+div.ui-fileupload .ui-fileupload-row button.ui-fileupload-cancel span.ui-icon-close:before {
+    color: white !important;
+}
+
+@media only screen and (min-width: 300px) {
+	.tamanoImgCuentaCupo {
+		width: 280px;
+	}
+}

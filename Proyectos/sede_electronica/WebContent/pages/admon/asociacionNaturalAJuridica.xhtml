@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-asociacionNaturalAJuridica.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_asociacionPNAPJ['AsociacionNaturalAJuridica']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_asociacionPNAPJ['AsociacionNaturalAJuridica.Titulo']}" />
+			<ui:param name="imagen" value="img-rolesPermisos" />
+			<ui:param name="subtitulo"
+				value="#{txt_asociacionPNAPJ['AsociacionNaturalAJuridica.Subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/asociacionNaturalAJuridica.jsf" />
+		</ui:include>
+		<div class="row">
+			<div class="col-xs-12">
+				<h:form id="formAsociarUsuarios">
+					<br />
+					<p:panel id="panelPNAPJ">
+						<p:outputPanel id="panelConsultaAsociados"
+							rendered="#{!beanAsociacionNaturalAJuridica.ib_renderVista}">
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-11 text-center">
+									<h:outputText styleClass="tituloListaAsociados"
+										id="asociacionPJ"
+										value="#{txt_asociacionPNAPJ['AsociacionNaturalAJuridica.Titulo.Bold']}" />
+								</div>
+							</div>
+							<br />
+							<br />
+							<div class="row">
+								<div
+									class="col-xs-12 col-sm-11 text-center paddingNumeroCuentaCupo" />
+								<div
+									class="col-xs-12 col-sm-11 text-center paddingNumeroCuentaCupo">
+									<h:outputText styleClass="tituloListaAsociados"
+										id="tituloNumCuentaCupo"
+										value="#{txt_asociacionPNAPJ['titulo.numero.cuenta.cupo']}" />
+									<h:outputText styleClass="tituloListaAsociados"
+										id="numeroCuentaCupo"
+										value="#{beanAsociacionNaturalAJuridica.itscicc_tipoSalidaConsutarIdCuentaCupoWsDto.is_id}" />
+								</div>
+							</div>
+							<div class="scroll-politicas">
+								<p:dataTable id="dataTableAsociadosPJ"
+									value="#{beanAsociacionNaturalAJuridica.ilaupj_listaAsociacionUsuarioPersonaJuridica}"
+									var="asociacion" widgetVar="dataTableAsociadosPJ"
+									rowIndexVar="true" styleClass="tabla-fija"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									emptyMessage="#{txt_asociacionPNAPJ['Tabla.Vacia']}"
+									paginator="true" rows="5" paginatorPosition="bottom"
+									rowsPerPageTemplate="5" reflow="true"
+									filteredValue="#{beanAsociacionNaturalAJuridica.ilaupj_listaAsociacionUsuarioPersonaJuridicaFiltro}">
+									<f:facet name="header">
+										<p:outputPanel>
+											<h:outputText
+												value="#{txt_asociacionPNAPJ['Buscar.Documento']}"
+												styleClass="centrar" />
+											<p:inputText id="globalFilter"
+												onkeyup="PF('dataTableAsociadosPJ').filter()"
+												footerText="contains" filterMatchMode="contains"
+												styleClass="tamanoFiltro"
+												placeholder="#{txt_asociacionPNAPJ['Placeholder.Buscar.Documento']}" />
+										</p:outputPanel>
+									</f:facet>
+									<p:column
+										headerText="#{txt_asociacionPNAPJ['Tabla.Encabezado.Tipo.Documento']}"
+										styleClass="centrar10">
+										<h:outputText styleClass="centrar ajustar"
+											value="#{asociacion.getIu_usuarioDto().getIp_personaDto().getItd_tipoDocumentoDto().getIs_id()}" />
+									</p:column>
+									<p:column
+										filterBy="#{asociacion.getIu_usuarioDto().getIp_personaDto().getIs_numeroDocumento()}"
+										filterStyle="display:none"
+										headerText="#{txt_asociacionPNAPJ['Tabla.Encabezado.Numero.Documento']}"
+										styleClass="centrar10">
+										<h:outputText styleClass="centrar ajustar"
+											value="#{asociacion.getIu_usuarioDto().getIp_personaDto().getIs_numeroDocumento()}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_asociacionPNAPJ['Tabla.Encabezado.Nombre']}"
+										styleClass="anchoCuentaCupoColumna">
+										<h:outputText
+											value="#{asociacion.getIu_usuarioDto().getIp_personaDto().getIpn_personaNaturalDto().getIs_primerNombre()} #{asociacion.getIu_usuarioDto().getIp_personaDto().getIpn_personaNaturalDto().getIs_segundoNombre()} #{asociacion.getIu_usuarioDto().getIp_personaDto().getIpn_personaNaturalDto().getIs_primerApellido()} #{asociacion.getIu_usuarioDto().getIp_personaDto().getIpn_personaNaturalDto().getIs_segundoApellido()}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_asociacionPNAPJ['Tabla.Encabezado.Correo.Corporativo']}"
+										styleClass="centrar25">
+										<h:outputText styleClass="centrar ajustar"
+											value="#{asociacion.getIs_correoElectronicoCorporativo()}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_asociacionPNAPJ['Tabla.Encabezado.Celular.Corporativo']}"
+										styleClass="centrar10">
+										<h:outputText styleClass="centrar ajustar"
+											value="#{asociacion.getIs_celularCorporativo()}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_asociacionPNAPJ['Tabla.Encabezado.Estado.Cuenta.Cupo']}"
+										styleClass="anchoCuentaCupoColumna"
+										filterBy="#{asociacion.ib_estadoCuentaCupo}"
+										filterMatchMode="contains">
+
+										<p:importEnum
+											type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumAdministracionPersonaNatural"
+											var="EnumAdministracionPersonaNatural" />
+
+										<f:facet name="filter">
+											<p:selectOneMenu
+												onchange="PF('dataTableAsociadosPJ').filter()"
+												styleClass="tamano">
+												<f:selectItem
+													itemLabel="#{txt_usuariosAdmin['usuario.admin.sinFiltro']}"
+													itemValue="#{null}" noSelectionOption="true" />
+												<f:selectItems
+													value="#{beanAsociacionNaturalAJuridica.ilb_estadosAsociados}"
+													var="estado"
+													itemLabel="#{estado?EnumAdministracionPersonaNatural.ASOCIADO.is_descripcion:EnumAdministracionPersonaNatural.DESASOCIADO.is_descripcion}"
+													itemValue="#{estado}" />
+											</p:selectOneMenu>
+										</f:facet>
+
+										<ui:fragment>
+											<div class="row">
+												<div class="col-xs-12">
+													<h:outputText id="spanNoCuCu"
+														value="#{txt_asociacionPNAPJ['opcion.desasociar']}"
+														class="#{!asociacion.ib_estadoCuentaCupo ?  'textoRojo' : 'textoGris' }" />
+													<p:inputSwitch value="#{asociacion.ib_estadoCuentaCupo}"
+														disabled="#{beanAsociacionNaturalAJuridica.ib_cuentaCupo}"
+														valueChangeListener="#{beanAsociacionNaturalAJuridica.generarModalAsociacionCuentaCupo(asociacion)}">
+														<p:ajax update="dlgConfirmativoCuCu"
+															listener="#{beanAsociacionNaturalAJuridica.setIaupj_asociacionUsuarioPersonaJuridicaBooleanoDto(asociacion)}"
+															render="formAsociarUsuarios:dataTableAsociadosPJ:0:spanNoCuCu formAsociarUsuarios:dataTableAsociadosPJ:0:spanSiCuCu" />
+													</p:inputSwitch>
+													<h:outputText id="spanSiCuCu"
+														value="#{txt_asociacionPNAPJ['opcion.asociar']}"
+														class="#{asociacion.ib_estadoCuentaCupo ?  'textoRojo' : 'textoGris' }" />
+												</div>
+											</div>
+										</ui:fragment>
+									</p:column>
+									<p:column
+										headerText="#{txt_asociacionPNAPJ['Tabla.Encabezado.Estado.Asociacion']}"
+										styleClass="centrar10">
+										<ui:fragment>
+											<div class="row">
+												<div class="col-xs-12">
+													<h:outputText id="spanNo"
+														value="#{txt_asociacionPNAPJ['opcion.desasociar']}"
+														class="#{!asociacion.ib_estadoAsociacion ?  'textoRojo' : 'textoGris' }" />
+													<p:inputSwitch value="#{asociacion.ib_estadoAsociacion}"
+														onchange="PF('dlgConfirmativo').show()">
+														<p:ajax
+															listener="#{beanAsociacionNaturalAJuridica.setIaupj_asociacionUsuarioPersonaJuridicaBooleanoDto(asociacion)}"
+															render="formAsociarUsuarios:dataTableAsociadosPJ:0:spanNo formAsociarUsuarios:dataTableAsociadosPJ:0:spanSi" />
+													</p:inputSwitch>
+													<h:outputText id="spanSi"
+														value="#{txt_asociacionPNAPJ['opcion.asociar']}"
+														class="#{asociacion.ib_estadoAsociacion ?  'textoRojo' : 'textoGris' }" />
+												</div>
+											</div>
+										</ui:fragment>
+									</p:column>
+									<p:column
+										headerText="#{txt_asociacionPNAPJ['Tabla.Encabezado.Editar.usuario']}"
+										styleClass="centrar5">
+										<p:commandLink styleClass="fa fa-pencil colorLapiz"
+											update="formModificacion"
+											actionListener="#{beanAsociacionNaturalAJuridica.editarAsociacion(asociacion)}"
+											oncomplete="PF('dlgModificacion').show();">
+										</p:commandLink>
+									</p:column>
+								</p:dataTable>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-5 col-xs-offset-1">
+									<p:commandButton id="btn-atras"
+										styleClass="icon-btn pull-right btn-gris"
+										value="#{txt_asociacionPNAPJ['btn.volver']}" immediate="true"
+										action="/pages/personas/inicio.jsf?faces-redirect=true"
+										process="@this" />
+								</div>
+								<div class="col-xs-5 col-xs-offset-0">
+									<p:commandButton id="crearAsociacion"
+										styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+										action="/pages/admon/asociarUsuarios.jsf?faces-redirect=true"
+										value="#{txt_asociacionPNAPJ['btn.nueva.asociacion']}" />
+								</div>
+							</div>
+						</p:outputPanel>
+						<br />
+						<br />
+					</p:panel>
+					<br />
+					<br />
+				</h:form>
+			</div>
+		</div>
+		<!-- Modal confirmativo Asociacion PN a PJ-->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgConfirmativo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModaldlgConfirmativo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<h:outputText value="#{txt_asociacionPNAPJ['modal.confirmativo']}" />
+					</div>
+				</div>
+			</ui:define>
+			<br />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_asociacionPNAPJ['btn.cancelar']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('dlgConfirmativo').hide(); PF('blockUI-Loading').hide();"
+							action="#{beanAsociacionNaturalAJuridica.consultarAsociados()}"
+							update="formAsociarUsuarios:dataTableAsociadosPJ">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton
+							oncomplete="PF('dlgConfirmativo').hide(); PF('blockUI-Loading').hide();"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_asociacionPNAPJ['btn.aceptar']}"
+							onstart="PF('blockUI-Loading').show();"
+							action="#{beanAsociacionNaturalAJuridica.cambiarEstadoAsociacion()}"
+							update="formAsociarUsuarios:dataTableAsociadosPJ">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal confirmativo Asociacion Cuenta Cupo-->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgConfirmativoCuCu" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModaldlgConfirmativoCuCu" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<h:outputText
+							value="#{beanAsociacionNaturalAJuridica.is_mensajeModalAsociacionCuentaCupo}" />
+					</div>
+				</div>
+			</ui:define>
+			<br />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_asociacionPNAPJ['btn.cancelar']}"
+							oncomplete="PF('dlgConfirmativoCuCu').hide()"
+							action="#{beanAsociacionNaturalAJuridica.consultarAsociados()}"
+							update="formAsociarUsuarios:dataTableAsociadosPJ">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton oncomplete="PF('dlgConfirmativoCuCu').hide()"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_asociacionPNAPJ['btn.aceptar']}"
+							action="#{beanAsociacionNaturalAJuridica.cambiarEstadoCuentaCupo()}"
+							update="formAsociarUsuarios:dataTableAsociadosPJ">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal confirmativo modificacion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgConfirmativoModificacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModaldlgConfirmativoModificacion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<h:outputText
+							value="#{txt_asociacionPNAPJ['modal.confirmativo.modificacion']}" />
+					</div>
+				</div>
+			</ui:define>
+			<br />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_asociacionPNAPJ['btn.cancelar']}"
+							oncomplete="PF('dlgConfirmativoModificacion').hide()">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton
+							oncomplete="PF('dlgConfirmativoModificacion').hide(); PF('dlgModificacion').hide()"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_asociacionPNAPJ['btn.aceptar']}" type="submit"
+							action="#{beanAsociacionNaturalAJuridica.modificarDatosUsuario}"
+							update="formModificacion formAsociarUsuarios:dataTableAsociadosPJ">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de modificacion -->
+		<p:dialog styleClass="box-solid box-danger cerrarModal"
+			header="#{txt_asociacionPNAPJ['titulo.modal.modificacion']}"
+			id="dlgModificacion" widgetVar="dlgModificacion" modal="true"
+			max-height="300" width="700" resizable="false">
+			<h:form id="formModificacion">
+				<div class="row space-row">
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel id="lbCorreo" styleClass="label-form" for="correo"
+							value="#{txt_asociacionPNAPJ['label.correo.corporativo']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:inputText id="correo" autocomplete="off"
+								styleClass="text-input border-completo"
+								placeholder="#{txt['placeholder.FormatoCorreo']}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								maxlength="50" required="true"
+								value="#{beanAsociacionNaturalAJuridica.is_correoElectronicoCorporativo}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('formModificacion:correo', 'spanCorreo');" />
+								<f:validator validatorId="ValidarCorreoFormato" />
+							</p:inputText>
+							<span id="spanCorreo" class="ui-inputgroup-addon ocultar">
+								<p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('formModificacion:correo', 'spanCorreo');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message for="correo" />
+						</span>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel id="lbCelular" styleClass="label-form"
+							for="celular"
+							value="#{txt_asociacionPNAPJ['label.Celular.corporativo']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:inputMask id="celular" autocomplete="off"
+								placeholder="#{txt_persona['placeholder.NumeroCelular']}"
+								styleClass="text-input border-completo"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								mask="999 999 99 99" required="true"
+								value="#{beanAsociacionNaturalAJuridica.is_celularCorporativo}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('formModificacion:celular', 'spanNumeroCelularCor');" />
+							</p:inputMask>
+							<span id="spanNumeroCelularCor"
+								class="ui-inputgroup-addon ocultar"> <p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('formModificacion:celular', 'spanNumeroCelularCor');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message for="celular" />
+						</span>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_asociacionPNAPJ['btn.volver']}"
+							oncomplete="PF('dlgModificacion').hide();">
+
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_asociacionPNAPJ['btn.guardar']}"
+							oncomplete="PF('dlgConfirmativoModificacion').show();">
+						</p:commandButton>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

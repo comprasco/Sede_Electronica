@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_flujoSolicitudesPago['historial.titulo.resumen']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-resumen.css" />
+	</ui:define>
+	<ui:define name="body">
+		<f:metadata>
+			<f:viewParam name="nir" value="#{beanIntegracion.is_nir}" />
+			<f:viewParam name="respuesta" value="#{beanIntegracion.is_respuesta}" />
+			<f:event type="preRenderView"
+				listener="#{beanIntegracion.valorParametro}" />
+		</f:metadata>
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_flujoSolicitudesPago['historial.banner.resumen.titulo']}" />
+			<ui:param name="imagen" value="img-rolesPermisos" />
+			<ui:param name="subtitulo"
+				value="#{txt_flujoSolicitudesPago['historial.banner.resumen.subtitulo']}" />
+		</ui:include>
+		<div id="transaccion_wrapper">
+			<div class="resumen_transaccion_head">
+				<h1 class="transaccion_title">#{txt_flujoSolicitudesPago['historial.resumen.header.titulo']}</h1>
+				<h1 class="transaccion_title">#{txt_flujoSolicitudesPago['historial.resumen.header.subtitulo']}</h1>
+				<h4 class="transaccion_correo_text">#{txt_flujoSolicitudesPago['historial.resumen.header.envio']}</h4>
+				<h4 class="transaccion_correo"></h4>
+			</div>
+			<div class="resumen_transaccion_data_cont">
+				<div class="row text-center">
+					<div class="col-xs-12 col-sm-6">
+						<h2 class="resumen_transaccion_data_title">#{txt_flujoSolicitudesPago['historial.resumen.usuario']}</h2>
+						<h:outputText id="textNombre"
+							value="#{beanIntegracion.iit_integracionTemporalDto.iu_usuarioDto.ip_personaDto.ipj_personaJuridicaDto.is_razonSocial}" />
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<h2 class="resumen_transaccion_data_title">#{txt_flujoSolicitudesPago['historial.resumen.referencia']}</h2>
+						<h:outputText id="textRefPago"
+							value="#{beanIntegracion.iit_integracionTemporalDto.is_referenciaPago}" />
+					</div>
+				</div>
+				<div class="row text-center">
+					<div class="col-xs-12 col-sm-6">
+						<h2 class="resumen_transaccion_data_title">#{txt_flujoSolicitudesPago['historial.resumen.descripcion']}</h2>
+						<h3 class="upperCase">#{beanIntegracion.iit_integracionTemporalDto.itp_tipoProcesoDto.is_nombre}</h3>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<h2 class="resumen_transaccion_data_title">#{txt_flujoSolicitudesPago['historial.resumen.fecha']}</h2>
+						<h:outputText id="textFecha"
+							value="#{beanIntegracion.iit_integracionTemporalDto.id_fechaCreacion}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</div>
+				</div>
+				<div class="row text-center">
+					<div class="col-xs-12">
+						<h2 class="resumen_transaccion_data_title">#{txt_flujoSolicitudesPago['historial.resumen.pago']}</h2>
+						<h:outputText class="colorVerde"
+							value="#{beanIntegracion.iit_integracionTemporalDto.ibd_valorTotalServicio}">
+							<f:convertNumber type="currency" currencySymbol="$"
+								maxFractionDigits="0" />
+						</h:outputText>
+					</div>
+				</div>
+			</div>
+			<div class="transaccion_finalizar_container">
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-4">
+						<p:commandButton
+							value="#{txt_flujoSolicitudesPago['resumen.despues.pagar']}"
+							styleClass="btn-rojo btn-gradiente"
+							oncomplete="PF('finalizar').show();" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="finalizar" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalPasarelaPago" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_flujoSolicitudesPago['pagado.modal.contenido']}" />
+						<br />
+						<h:outputText
+							value="#{txt_flujoSolicitudesPago['pagado.modal.contenido2']}" />
+						<br /> <span class="fa fa-history"></span> <br />
+						<h:outputText
+							value="#{txt_flujoSolicitudesPago['pagado.modal.contenido3']}" />
+						<br />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-4">
+						<p:commandButton class="btn-rojo btn-gradiente redireccion"
+							action="/pages/flujoSolicitudesPago/historialSolicitudes.jsf?faces-redirect=true"
+							value="#{txt_certificados['wizard.seleccion.modal.aceptar']}">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

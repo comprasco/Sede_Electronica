@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/template-simple.xhtml">
+	<ui:define name="title">
+		<ui:insert name="title-inicioSesion" />
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-login.css" />
+		<ui:insert name="head-inicioSesion" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="body">
+		<h:form>
+			<p:growl id="growl-base" showDetail="true" life="6000" sticky="false"
+				severity="info, fatal, warn">
+				<p:autoUpdate />
+			</p:growl>
+		</h:form>
+		<div class="background #{imagen}">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12">
+						<ui:insert name="templateSesion-body-header" />
+					</div>
+					<div class="col-xs-12">
+						<p:panel id="panelLogin" styleClass="panel-login no-border">
+							<br />
+							<div class="row">
+								<div class="col-xs-6 text-right">
+									<h:form>
+										<p:graphicImage name="/img/sp.png" />
+										<h:commandLink
+											action="#{lenguajeSelector.cambiarLenguaje('es')}"
+											value=" #{txt['idioma.Espanol']}" />
+									</h:form>
+								</div>
+								<div class="col-xs-6">
+									<h:form>
+										<p:graphicImage name="/img/us.png" />
+										<h:commandLink
+											action="#{lenguajeSelector.cambiarLenguaje('en')}"
+											value=" #{txt['idioma.Ingles']}" />
+									</h:form>
+								</div>
+							</div>
+							<br />
+							<div class="row centrar-img">
+								<div class="col-sm-12">
+									<span class="text-title">#{txt_login['Login.Upper']}</span> <span
+										class="text-subtitle">#{txt['SedeElectronicaSNR']}</span>
+									<p:graphicImage name="/img/rectangule.png" />
+								</div>
+								<div class="col-sm-12">
+									<br />
+									<h:outputLabel class="text-subtitle text-color"
+										value="#{beanLogin.is_mensaje}" />
+								</div>
+							</div>
+							<br />
+							<ui:insert name="templateSesion-body" />
+						</p:panel>
+					</div>
+					<div class="col-xs-12">
+						<ui:insert name="templateSesion-body-footer" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+		$(document).ready(function() {cargarKeyfilters();});
+		</script>
+		<!-- Script que ejecuta el Keyfilter-->
+	</ui:define>
+	<ui:define name="preRender">
+		<f:event type="preRenderView" listener="#{beanLogin.init}" />
+	</ui:define>
+</ui:composition>

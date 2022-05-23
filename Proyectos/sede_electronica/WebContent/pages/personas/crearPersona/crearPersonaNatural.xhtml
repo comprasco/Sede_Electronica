@@ -1,0 +1,541 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<div class="row ui-g">
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelNumeroDocumento" styleClass="label-form"
+				for="numeroDocumentoNatural"
+				value="#{txt_persona['label.NumeroDocumento']}" />
+			<p:outputLabel styleClass="required-field">*</p:outputLabel>
+			<div class="ui-inputgroup">
+				<ui:fragment rendered="#{beanPersona.ib_tipoDocumento}">
+					<p:inputText id="numeroDocumentoNatural" autocomplete="off"
+						styleClass="text-input border-completo mask-Numeric"
+						maxlength="20"
+						requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+						placeholder="#{txt_persona['placeholder.NumeroDocumento']}"
+						required="true"
+						value="#{beanPersona.ipc_personaCompletaDto.ipd_personaDto.is_numeroDocumento}">
+						<p:ajax event="change"
+							onstart="mostrarLimpiar('formCrearPersona:numeroDocumentoNatural', 'spanNumeroDocumentoNat');" />
+					</p:inputText>
+					<span id="spanNumeroDocumentoNat"
+						class="ui-inputgroup-addon ocultar"> <p:commandLink>
+							<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+							<p:ajax event="click"
+								onstart="limpiarCampo('formCrearPersona:numeroDocumentoNatural', 'spanNumeroDocumentoNat');" />
+						</p:commandLink>
+					</span>
+					<span class="help-block"> <p:message
+							for="numeroDocumentoNatural" />
+					</span>
+				</ui:fragment>
+				<ui:fragment rendered="#{!beanPersona.ib_tipoDocumento}">
+					<p:inputText id="numeroDocumentoNaturalD" autocomplete="off"
+						styleClass="text-input border-completo mask-AlphaNum"
+						maxlength="20"
+						requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+						placeholder="#{txt_persona['placeholder.NumeroDocumento']}"
+						required="true"
+						value="#{beanPersona.ipc_personaCompletaDto.ipd_personaDto.is_numeroDocumento}">
+						<p:ajax event="change"
+							onstart="mostrarLimpiar('formCrearPersona:numeroDocumentoNaturalD', 'spanNumeroDocumentoNatD');" />
+					</p:inputText>
+					<span id="spanNumeroDocumentoNatD"
+						class="ui-inputgroup-addon ocultar"> <p:commandLink>
+							<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+							<p:ajax event="click"
+								onstart="limpiarCampo('formCrearPersona:numeroDocumentoNaturalD', 'spanNumeroDocumentoNatD');" />
+						</p:commandLink>
+					</span>
+					<span class="help-block"> <p:message
+							for="numeroDocumentoNaturalD" />
+					</span>
+				</ui:fragment>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelNumeroDocumento"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_persona['tooltip.NumeroDocumento']}" />
+					</div>
+				</p:tooltip>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelPrimerNombreNat" styleClass="label-form"
+				for="primerNombreNatural"
+				value="#{txt_persona['label.PrimerNombre']}" />
+			<p:outputLabel styleClass="required-field">*</p:outputLabel>
+			<div class="ui-inputgroup">
+				<p:inputText id="primerNombreNatural" autocomplete="off"
+					styleClass="text-input border-completo"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}" maxlength="15"
+					placeholder="#{txt_persona['placeholder.PrimerNombre']}"
+					required="true"
+					value="#{beanPersona.ipc_personaCompletaDto.ipnd_personaNaturalDto.is_primerNombre}">
+					<p:keyFilter regEx="/[a-zñ\s]/i" />
+					<p:ajax event="change"
+						onstart="mostrarLimpiar('formCrearPersona:primerNombreNatural', 'spanPrimerNombreNat');" />
+				</p:inputText>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelPrimerNombreNat"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_persona['tooltip.PrimerNombre']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanPrimerNombreNat" class="ui-inputgroup-addon ocultar">
+					<p:commandLink>
+						<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+						<p:ajax event="click"
+							onstart="limpiarCampo('formCrearPersona:primerNombreNatural', 'spanPrimerNombreNat');" />
+					</p:commandLink>
+				</span>
+			</div>
+			<span class="help-block"> <p:message for="primerNombreNatural" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelSegundoNombreNat" styleClass="label-form"
+				for="segundoNombreNatural"
+				value="#{txt_persona['label.SegundoNombre']}" />
+			<div class="ui-inputgroup">
+				<p:inputText id="segundoNombreNatural" autocomplete="off"
+					styleClass="text-input border-completo" maxlength="15"
+					placeholder="#{txt_persona['placeholder.SegundoNombre']}"
+					value="#{beanPersona.ipc_personaCompletaDto.ipnd_personaNaturalDto.is_segundoNombre}">
+					<p:keyFilter regEx="/[a-zñ\s]/i" />
+					<p:ajax event="change"
+						onstart="mostrarLimpiar('formCrearPersona:segundoNombreNatural', 'spanSegundoNombreNat');" />
+				</p:inputText>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelSegundoNombreNat"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_persona['tooltip.SegundoNombre']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanSegundoNombreNat" class="ui-inputgroup-addon ocultar">
+					<p:commandLink>
+						<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+						<p:ajax event="click"
+							onstart="limpiarCampo('formCrearPersona:segundoNombreNatural', 'spanSegundoNombreNat');" />
+					</p:commandLink>
+				</span>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelPrimerApellidoNat" styleClass="label-form"
+				for="primerApellidoNatural"
+				value="#{txt_persona['label.PrimerApellido']}" />
+			<p:outputLabel styleClass="required-field">*</p:outputLabel>
+			<div class="ui-inputgroup">
+				<p:inputText id="primerApellidoNatural" autocomplete="off"
+					styleClass="text-input border-completo"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}" maxlength="15"
+					placeholder="#{txt_persona['placeholder.PrimerApellido']}"
+					required="true"
+					value="#{beanPersona.ipc_personaCompletaDto.ipnd_personaNaturalDto.is_primerApellido}">
+					<p:keyFilter regEx="/[a-zñ\s]/i" />
+					<p:ajax event="change"
+						onstart="mostrarLimpiar('formCrearPersona:primerApellidoNatural', 'spanPrimerApellidoNat');" />
+				</p:inputText>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelPrimerApellidoNat"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_persona['tooltip.PrimerApellido']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanPrimerApellidoNat" class="ui-inputgroup-addon ocultar">
+					<p:commandLink>
+						<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+						<p:ajax event="click"
+							onstart="limpiarCampo('formCrearPersona:primerApellidoNatural', 'spanPrimerApellidoNat');" />
+					</p:commandLink>
+				</span>
+			</div>
+			<span class="help-block"> <p:message
+					for="primerApellidoNatural" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelSegundoApellidoNat" styleClass="label-form"
+				for="segundoApellidoNatural"
+				value="#{txt_persona['label.SegundoApellido']}" />
+			<div class="ui-inputgroup">
+				<p:inputText id="segundoApellidoNatural" autocomplete="off"
+					styleClass="text-input border-completo" maxlength="15"
+					placeholder="#{txt_persona['placeholder.SegundoApellido']}"
+					value="#{beanPersona.ipc_personaCompletaDto.ipnd_personaNaturalDto.is_segundoApellido}">
+					<p:keyFilter regEx="/[a-zñ\s]/i" />
+					<p:ajax event="change"
+						onstart="mostrarLimpiar('formCrearPersona:segundoApellidoNatural', 'spanSegundoApellidoNat');" />
+				</p:inputText>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelSegundoApellidoNat"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_persona['tooltip.SegundoApellido']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanSegundoApellidoNat"
+					class="ui-inputgroup-addon ocultar"> <p:commandLink>
+						<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+						<p:ajax event="click"
+							onstart="limpiarCampo('formCrearPersona:segundoApellidoNatural', 'spanSegundoApellidoNat');" />
+					</p:commandLink>
+				</span>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelFechaNacimNat" styleClass="label-form"
+				for="fechaNacimientoNatural"
+				value="#{txt_persona['label.FechaNacimiento']}" />
+			<p:outputLabel styleClass="required-field">*</p:outputLabel>
+			<p:calendar id="fechaNacimientoNatural" readonlyInput="true"
+				binding="#{fechaNacimientoNatural}" pattern="dd/MM/yyyy"
+				maxlength="10" locale="es" yearRange="1900:2200" navigator="true"
+				placeholder="#{txt['placeholder.FormatoFecha']}"
+				styleClass="text-input-calendar" required="true"
+				requiredMessage="#{txt['mensaje.CampoObligatorio']}" showOn="button"
+				value="#{beanPersona.ipc_personaCompletaDto.ipnd_personaNaturalDto.id_fechaNacimiento}" />
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelFechaNacimNat" position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel value="#{txt_persona['tooltip.FechaNacimiento']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message
+					for="fechaNacimientoNatural" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelFechaExpedicion" styleClass="label-form"
+				for="fechaExpedicionNatural"
+				value="#{txt_persona['label.FechaExpedicionDocumento']}" />
+			<p:outputLabel styleClass="required-field">*</p:outputLabel>
+			<p:calendar id="fechaExpedicionNatural" pattern="dd/MM/yyyy"
+				readonlyInput="true" maxlength="10" locale="es"
+				yearRange="1900:2200" navigator="true"
+				placeholder="#{txt['placeholder.FormatoFecha']}"
+				styleClass="text-input-calendar" required="true"
+				requiredMessage="#{txt['mensaje.CampoObligatorio']}" showOn="button"
+				value="#{beanPersona.ipc_personaCompletaDto.ipnd_personaNaturalDto.id_fechaExpedicion}">
+				<f:validator validatorId="ValidarFechasRango" />
+				<f:attribute name="fechaNacimientoNatural"
+					value="#{fechaNacimientoNatural}" />
+			</p:calendar>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelFechaExpedicion"
+				position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel
+						value="#{txt_persona['tooltip.FechaExpedicionDocumento']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message
+					for="fechaExpedicionNatural" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelCorreoNat" styleClass="label-form"
+				for="correoNatural"
+				value="#{txt_persona['label.CorreoElectronico']}" />
+			<p:outputLabel styleClass="required-field">*</p:outputLabel>
+			<div class="ui-inputgroup">
+				<p:inputText id="correoNatural" autocomplete="off"
+					styleClass="text-input border-completo mask-Correo"
+					placeholder="#{txt['placeholder.FormatoCorreo']}"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}" maxlength="50"
+					required="true"
+					value="#{beanPersona.ipc_personaCompletaDto.iud_usuarioDto.is_correoElectronico}">
+					<p:ajax event="change"
+						onstart="mostrarLimpiar('formCrearPersona:correoNatural', 'spanCorreoNat');" />
+					<f:validator validatorId="ValidarCorreoFormato" />
+				</p:inputText>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelCorreoNat" position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_persona['tooltip.CorreoElectronico']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanCorreoNat" class="ui-inputgroup-addon ocultar">
+					<p:commandLink>
+						<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+						<p:ajax event="click"
+							onstart="limpiarCampo('formCrearPersona:correoNatural', 'spanCorreoNat');" />
+					</p:commandLink>
+				</span>
+			</div>
+			<span class="help-block"> <p:message for="correoNatural" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelConfirmarCorreoNat" styleClass="label-form"
+				for="confirmarCorreoNatural"
+				value="#{txt_persona['label.ConfirmarCorreo']}" />
+			<p:outputLabel styleClass="required-field">*</p:outputLabel>
+			<div class="ui-inputgroup">
+				<p:inputText id="confirmarCorreoNatural" autocomplete="off"
+					styleClass="text-input border-completo mask-Correo"
+					placeholder="#{txt['placeholder.FormatoCorreo']}"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}" maxlength="50"
+					required="true"
+					value="#{beanPersona.ipc_personaCompletaDto.iud_usuarioDto.is_correoElectronicoValidar}">
+					<p:ajax event="change"
+						onstart="mostrarLimpiar('formCrearPersona:confirmarCorreoNatural', 'spanConfirmarCorreoNatural');" />
+					<f:validator validatorId="ValidarCorreoFormato" />
+				</p:inputText>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelConfirmarCorreoNat"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_persona['tooltip.ConfirmarCorreo']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanConfirmarCorreoNatural"
+					class="ui-inputgroup-addon ocultar"> <p:commandLink>
+						<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+						<p:ajax event="click"
+							onstart="limpiarCampo('formCrearPersona:confirmarCorreoNatural', 'spanConfirmarCorreoNatural');" />
+					</p:commandLink>
+				</span>
+			</div>
+			<span class="help-block"> <p:message
+					for="confirmarCorreoNatural" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelNumeroCelNat" styleClass="label-form"
+				for="numeroCelularNatural"
+				value="#{txt_persona['label.NumeroCelular']}" />
+			<p:outputLabel styleClass="required-field">*</p:outputLabel>
+			<div class="ui-inputgroup">
+				<p:inputMask id="numeroCelularNatural" autocomplete="off"
+					placeholder="#{txt_persona['placeholder.NumeroCelular']}"
+					styleClass="text-input border-completo"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+					mask="999 999 99 99" required="true"
+					value="#{beanPersona.ipc_personaCompletaDto.iud_usuarioDto.is_celular}">
+					<p:ajax event="change"
+						onstart="mostrarLimpiar('formCrearPersona:numeroCelularNatural', 'spanNumeroCelularNat');" />
+				</p:inputMask>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelNumeroCelNat" position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_persona['tooltip.NumeroCelular']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanNumeroCelularNat" class="ui-inputgroup-addon ocultar">
+					<p:commandLink>
+						<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+						<p:ajax event="click"
+							onstart="limpiarCampo('formCrearPersona:numeroCelularNatural', 'spanNumeroCelularNat');" />
+					</p:commandLink>
+				</span>
+			</div>
+			<span class="help-block"> <p:message
+					for="numeroCelularNatural" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelTelefonoNat" styleClass="label-form"
+				for="telefonoFijoNatural"
+				value="#{txt_persona['label.TelefonoFijo']}" />
+			<div class="ui-inputgroup">
+				<p:inputMask id="telefonoFijoNatural" autocomplete="off"
+					styleClass="text-input border-completo"
+					placeholder="#{txt_persona['placeholder.TelefonoFijo']}"
+					mask="999 9999999"
+					value="#{beanPersona.ipc_personaCompletaDto.ipnd_personaNaturalDto.is_telefono}">
+					<p:ajax event="change"
+						onstart="mostrarLimpiar('formCrearPersona:telefonoFijoNatural', 'spanTelefonoFijoNat');" />
+				</p:inputMask>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelTelefonoNat" position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_persona['tooltip.TelefonoFijo']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanTelefonoFijoNat" class="ui-inputgroup-addon ocultar">
+					<p:commandLink>
+						<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+						<p:ajax event="click"
+							onstart="limpiarCampo('formCrearPersona:telefonoFijoNatural', 'spanTelefonoFijoNat');" />
+					</p:commandLink>
+				</span>
+			</div>
+			<span class="help-block"> <p:message for="telefonoFijoNatural" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelGeneroNat" styleClass="label-form"
+				for="genero" value="#{txt_persona['label.Genero']}" />
+			<p:outputLabel styleClass="required-field">*</p:outputLabel>
+			<p:selectOneMenu id="genero"
+				requiredMessage="#{txt['mensaje.CampoObligatorio']}" required="true"
+				value="#{beanPersona.ipc_personaCompletaDto.ipnd_personaNaturalDto.ic_catalogoTipoGenero.is_id}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems value="#{beanPersona.cargarCatalogoTipoGenero()}" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelGeneroNat" position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel value="#{txt_persona['tooltip.Genero']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message for="genero" />
+			</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<p:outputPanel id="paneldireccionNatu">
+				<p:outputLabel id="labelDireccionNat" styleClass="label-form"
+					for="direccionResidencia${beanPersona.is_tipoUsuarioNatural}"
+					value="#{txt_persona['label.DireccionResidencia']}" />
+				<p:outputLabel styleClass="required-field">*</p:outputLabel>
+				<div class="ui-inputgroup">
+					<p:inputTextarea autoResize="true" rows="1"
+						styleClass="text-input dir" readonly="true" required="true"
+						requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+						placeholder="#{txt_persona['placeholder.DireccionResidencia']}"
+						id="direccionResidencia${beanPersona.is_tipoUsuarioNatural}"
+						value="#{beanPersona.id_direccionDto.is_direccionCompleta}">
+					</p:inputTextarea>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelDireccionNat" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_persona['tooltip.DireccionResidencia']}" />
+						</div>
+					</p:tooltip>
+					<p:commandButton icon="icon-direccion"
+						styleClass="icon-input btn-gradiente icono_boton"
+						onsuccess="PF('dialog-direccion').show();" process="@this" />
+				</div>
+				<span class="help-block"> <p:message
+						for="direccionResidencia${beanPersona.is_tipoUsuarioNatural}" />
+				</span>
+			</p:outputPanel>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelUsuarioNat" styleClass="label-form"
+				for="usuarioNatural" value="#{txt_persona['label.Usuario']}" />
+			<p:outputLabel styleClass="required-field">*</p:outputLabel>
+			<div class="ui-inputgroup">
+				<p:inputText id="usuarioNatural" autocomplete="off"
+					styleClass="text-input border-completo mask-NombreUsuario"
+					maxlength="20" requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+					placeholder="#{txt_persona['placeholder.Usuario']}" required="true"
+					value="#{beanPersonaNatural.is_usuarioValidar}">
+					<p:ajax event="blur"
+						onstart="mostrarLimpiar('formCrearPersona:usuarioNatural', 'spanUsuarioNat');" />
+				</p:inputText>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelUsuarioNat" position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_persona['tooltip.Nombre.Usuario']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanUsuarioNat"
+					class="ui-inputgroup-addon ocultar no-padding"> <p:commandLink
+						styleClass="text-link-input"
+						value="#{txt_persona['Validar.Usuario']}">
+						<p:ajax event="click"
+							listener="#{beanPersonaNatural.consultarNombreUsuario()}"
+							process="@this" />
+					</p:commandLink>
+				</span>
+			</div>
+			<span class="help-block"> <p:message for="usuarioNatural" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelContrasenaNat" styleClass="label-form"
+				for="contrasenaNatural" value="#{txt_persona['label.Contrasena']}" />
+			<p:outputLabel styleClass="required-field">*</p:outputLabel>
+			<div class="ui-inputgroup">
+				<p:password id="contrasenaNatural"
+					styleClass="text-input border-completo" maxlength="20"
+					placeholder="#{txt_persona['placeholder.Contrasena']}"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+					required="true"
+					value="#{beanPersona.ipc_personaCompletaDto.iud_usuarioDto.is_contrasena}">
+					<p:ajax event="focus" oncomplete="PF('tooltipMsg').show();"
+						onstart="mostrarLimpiar('formCrearPersona:contrasenaNatural', 'spanContrasenaNatural');" />
+				</p:password>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelContrasenaNat" position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_persona['tooltip.Contrasena']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanContrasenaNatural" class="ui-inputgroup-addon ocultar">
+					<p:commandLink styleClass="text-link-input"
+						value="#{txt['label.VerContrasena']}">
+						<p:ajax event="click"
+							onstart="verContrasena('formCrearPersona:contrasenaNatural');" />
+					</p:commandLink>
+				</span>
+				<p:commandButton id="infoContrasenaNatural" icon="icon-contrasena"
+					styleClass="icon-input btn-gradiente icono_boton" />
+				<pe:tooltip widgetVar="tooltipMsg" id="tooltipIndicaNatural"
+					showEvent="focus" myPosition="top, right" hideEvent="unfocus"
+					atPosition="bottom center" styleClass="tooltip-contrasena"
+					for="infoContrasenaNatural">
+					<div id="content-tooltip-msg">
+						<p:outputLabel
+							value="#{beanValidacionContrasena.is_msgValidacion}" />
+					</div>
+				</pe:tooltip>
+			</div>
+			<span class="help-block"> <p:message for="contrasenaNatural" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+			<p:outputLabel id="labelConfirmarContrasenaNat"
+				styleClass="label-form" for="confirmarContrasenaNatural"
+				value="#{txt_persona['label.VerificarContrasena']}" />
+			<p:outputLabel styleClass="required-field">*</p:outputLabel>
+			<div class="ui-inputgroup">
+				<p:password id="confirmarContrasenaNatural"
+					styleClass="text-input border-completo" maxlength="20"
+					placeholder="#{txt_persona['placeholder.VerificarContrasena']}"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+					required="true"
+					value="#{beanPersona.ipc_personaCompletaDto.iud_usuarioDto.is_contrasenaConfirmacion}">
+					<p:ajax event="change"
+						onstart="mostrarLimpiar('formCrearPersona:confirmarContrasenaNatural', 'spanConfirmarContrasenaNat');" />
+				</p:password>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelConfirmarContrasenaNat"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel
+							value="#{txt_persona['tooltip.VerificarContrasena']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanConfirmarContrasenaNat"
+					class="ui-inputgroup-addon ocultar"> <p:commandLink
+						styleClass="text-link-input" value="#{txt['label.VerContrasena']}">
+						<p:ajax event="click"
+							onstart="verContrasena('formCrearPersona:confirmarContrasenaNatural')" />
+					</p:commandLink>
+				</span>
+			</div>
+			<span class="help-block"> <p:message
+					for="confirmarContrasenaNatural" />
+			</span>
+		</div>
+	</div>
+	<br />
+	<br />
+</ui:composition>

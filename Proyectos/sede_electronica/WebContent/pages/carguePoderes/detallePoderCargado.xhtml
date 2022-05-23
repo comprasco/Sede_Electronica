@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-solicitudConsultas.css" />
+		<h:outputStylesheet library="css" name="snr-se-rolesYpermisos.css" />
+		<h:outputStylesheet library="css" name="snr-se-administracion.css" />
+		<h:outputScript library="js" name="archivo.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_repositorioPoderes['RepositorioPoderes']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_repositorioPoderes['titulo.detalle']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_repositorioPoderes['titulo.detalle']}" />
+			<ui:param name="urlVista"
+				value="/pages/carguePoderes/detallePoderCargado.jsf" />
+		</ui:include>
+		<f:metadata>
+			<f:viewParam name="detalle"
+				value="#{beanConsultarPoder.is_detalleId}" />
+			<f:viewParam name="docname" value="#{beanConsultarPoder.is_docname}" />
+			<f:event type="preRenderView"
+				listener="#{beanConsultarPoder.valorParametro}" />
+		</f:metadata>
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<h:outputText styleClass="titulo"
+					value="#{txt_repositorioPoderes['titulo.detalle']}" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<p:outputLabel id="labelNumPoder" for="numPoder"
+					styleClass="label-form tresPuntos"
+					value="#{txt_repositorioPoderes['num.poder']}" />
+				<div class="ui-inputgroup">
+					<p:inputText id="numPoder"
+						styleClass="text-input border-completo caja-completo"
+						readonly="true"
+						placeholder="#{txt_repositorioPoderes['num.poder']}"
+						value="#{beanConsultarPoder.ip_poderDto.is_did}">
+						<p:ajax event="change"
+							onstart="mostrarLimpiar('numPoder', 'spanNumPoder');" />
+					</p:inputText>
+					<span id="spanNumPoder" class="ui-inputgroup-addon ocultar">
+						<p:commandLink>
+							<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+							<p:ajax event="click"
+								onstart="limpiarCampo('numPoder', 'spanNumPoder');" />
+						</p:commandLink>
+					</span>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelNumPoder" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel value="#{txt_repositorioPoderes['num.poder']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<span class="help-block"> <p:message for="numPoder" />
+				</span>
+			</div>
+			<div class="col-sm-6">
+				<p:outputLabel id="labelEstadoPoder" for="estadoPoder"
+					styleClass="label-form tresPuntos"
+					value="#{txt_repositorioPoderes['estado.poder']}" />
+				<div class="ui-inputgroup">
+					<p:inputText id="estadoPoder"
+						styleClass="text-input border-completo caja-completo"
+						readonly="true"
+						placeholder="#{txt_repositorioPoderes['estado.poder']}"
+						value="#{beanConsultarPoder.ip_poderDto.is_estadoPoder}">
+						<p:ajax event="change"
+							onstart="mostrarLimpiar('estadoPoder', 'spanEstadoPoder');" />
+					</p:inputText>
+					<span id="spanEstadoPoder" class="ui-inputgroup-addon ocultar">
+						<p:commandLink>
+							<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+							<p:ajax event="click"
+								onstart="limpiarCampo('estadoPoder', 'spanEstadoPoder');" />
+						</p:commandLink>
+					</span>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelEstadoPoder" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel value="#{txt_repositorioPoderes['estado.poder']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<span class="help-block"> <p:message for="estadoPoder" />
+				</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<p:outputLabel id="labelTipoPoder" for="tipoPoder"
+					styleClass="label-form tresPuntos"
+					value="#{txt_repositorioPoderes['detalle.tipo.poder']}" />
+				<div class="ui-inputgroup">
+					<p:inputText id="tipoPoder"
+						styleClass="text-input border-completo caja-completo"
+						readonly="true"
+						placeholder="#{txt_repositorioPoderes['detalle.tipo.poder']}"
+						value="#{beanConsultarPoder.ip_poderDto.ic_tipoPoder.is_nombre}">
+						<p:ajax event="change"
+							onstart="mostrarLimpiar('tipoPoder', 'spanTipoPoder');" />
+					</p:inputText>
+					<span id="spanTipoPoder" class="ui-inputgroup-addon ocultar">
+						<p:commandLink>
+							<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+							<p:ajax event="click"
+								onstart="limpiarCampo('tipoPoder', 'spanTipoPoder');" />
+						</p:commandLink>
+					</span>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelTipoPoder" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_repositorioPoderes['detalle.tipo.poder']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<span class="help-block"> <p:message for="tipoPoder" />
+				</span>
+			</div>
+			<div class="col-sm-6">
+				<p:outputLabel id="labelNotariaOrigen" for="notariaOrigen"
+					styleClass="label-form tresPuntos"
+					value="#{txt_repositorioPoderes['notaria.origen']}" />
+				<div class="ui-inputgroup">
+					<p:inputText id="notariaOrigen"
+						styleClass="text-input border-completo caja-completo"
+						readonly="true"
+						placeholder="#{txt_repositorioPoderes['notaria.origen']}"
+						value="#{beanConsultarPoder.ip_poderDto.is_idNotariaOrigen}">
+						<p:ajax event="change"
+							onstart="mostrarLimpiar('notariaOrigen', 'spanNotariaOrigen');" />
+					</p:inputText>
+					<span id="spanNotariaOrigen" class="ui-inputgroup-addon ocultar">
+						<p:commandLink>
+							<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+							<p:ajax event="click"
+								onstart="limpiarCampo('notariaOrigen', 'spanNotariaOrigen');" />
+						</p:commandLink>
+					</span>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelNotariaOrigen"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_repositorioPoderes['notaria.origen']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<span class="help-block"> <p:message for="notariaOrigen" />
+				</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<p:outputLabel id="labelDiligenciaReconocimiento"
+					for="diligenciaReconocimiento" styleClass="label-form tresPuntos"
+					value="#{txt_repositorioPoderes['diligencia.reconocimiento']}" />
+				<div class="ui-inputgroup">
+					<p:inputText id="diligenciaReconocimiento"
+						styleClass="text-input border-completo caja-completo"
+						readonly="true"
+						placeholder="#{txt_repositorioPoderes['diligencia.reconocimiento']}"
+						value="#{beanConsultarPoder.ip_poderDto.is_diligenciaReconocimiento}">
+						<p:ajax event="change"
+							onstart="mostrarLimpiar('diligenciaReconocimiento', 'spanDiligenciaReconocimiento');" />
+					</p:inputText>
+					<span id="spanDiligenciaReconocimiento"
+						class="ui-inputgroup-addon ocultar"> <p:commandLink>
+							<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+							<p:ajax event="click"
+								onstart="limpiarCampo('diligenciaReconocimiento', 'spanDiligenciaReconocimiento');" />
+						</p:commandLink>
+					</span>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelDiligenciaReconocimiento"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_repositorioPoderes['diligencia.reconocimiento']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<span class="help-block"> <p:message
+						for="diligenciaReconocimiento" />
+				</span>
+			</div>
+		</div>
+
+		<p:accordionPanel id="accordionPanel" dynamic="true"
+			styleClass="space-row" onTabChange="PF('blockUI-Loading').show();"
+			onTabShow="PF('blockUI-Loading').hide();">
+			<p:tab title="#{txt_repositorioPoderes['tab.basica.poder']}"
+				styleClass="tab-personalizado tab-gradiente">
+				<p:outputPanel>
+					<div class="row">
+						<div class="col-sm-4">
+							<p:outputLabel id="labelTipoDoc" for="tipoDoc"
+								styleClass="label-form tresPuntos"
+								value="#{txt_repositorioPoderes['tipo.doc']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="tipoDoc"
+									styleClass="text-input border-completo" readonly="true"
+									placeholder="#{txt_repositorioPoderes['tipo.doc']}"
+									value="#{beanConsultarPoder.ip_poderDto.is_tipoDocumento}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelTipoDoc" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_repositorioPoderes['tipo.doc']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="tipoDoc" />
+							</span>
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel id="labelVigenciaPoder" for="vigenciaPoder"
+								styleClass="label-form tresPuntos"
+								value="#{txt_repositorioPoderes['vigencia.poder']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="vigenciaPoder"
+									styleClass="text-input border-completo" readonly="true"
+									placeholder="#{txt_repositorioPoderes['vigencia.poder']}"
+									value="#{beanConsultarPoder.ip_poderDto.getId_fechaVencimientoTexto()}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelVigenciaPoder"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['vigencia.poder']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="vigenciaPoder" />
+							</span>
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel id="labelFechaCargaPoder" for="fechaCargaPoder"
+								styleClass="label-form tresPuntos"
+								value="#{txt_repositorioPoderes['fecha.carga.poder']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="fechaCargaPoder"
+									styleClass="text-input border-completo" readonly="true"
+									placeholder="#{txt_repositorioPoderes['fecha.carga.poder']}"
+									value="#{beanConsultarPoder.ip_poderDto.getId_fechaCargueTexto()}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelFechaCargaPoder"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['fecha.carga.poder']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="fechaCargaPoder" />
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4">
+							<p:outputLabel id="labelNumEscritura" for="numEscritura"
+								styleClass="label-form tresPuntos"
+								value="#{txt_repositorioPoderes['num.escritura']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="numEscritura"
+									styleClass="text-input border-completo" readonly="true"
+									placeholder="#{txt_repositorioPoderes['num.escritura']}"
+									value="#{beanConsultarPoder.ip_poderDto.is_numEscritura}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNumEscritura"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['num.escritura']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="numEscritura" />
+							</span>
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel id="labelFechaEscritura" for="fechaEscritura"
+								styleClass="label-form tresPuntos"
+								value="#{txt_repositorioPoderes['fecha.escritura']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="fechaEscritura"
+									styleClass="text-input border-completo" readonly="true"
+									placeholder="#{txt_repositorioPoderes['fecha.escritura']}"
+									value="#{beanConsultarPoder.ip_poderDto.getId_fechaEscrituraTexto()}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelFechaEscritura"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['fecha.escritura']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="fechaEscritura" />
+							</span>
+						</div>
+						<div class="col-sm-4">
+							<div class="row">
+								<p:outputLabel id="labelArchivoPoder" for="archivoPoder"
+									styleClass="label-form tresPuntos"
+									value="#{txt_repositorioPoderes['archivo.poder']}" />
+							</div>
+							<div class="row">
+								<p:commandLink id="archivoPoder"
+									actionListener="#{beanConsultarPoder.descargarPoder(beanConsultarPoder.ip_poderDto.is_did,beanConsultarPoder.ip_poderDto.ia_archivoPoder.is_nombreArchivo)}"
+									onstart="PF('blockUI-Loading').show();"
+									onsuccess="PF('blockUI-Loading').hide();">
+									<p:graphicImage name="/iconos/pdf.png" />
+								</p:commandLink>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelArchivoPoder"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['archivo.poder']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="archivoPoder" />
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel id="labelObservacionesBasico"
+								for="observacionesBasico" styleClass="label-form tresPuntos"
+								value="#{txt_repositorioPoderes['observaciones.basico']}" />
+							<div class="ui-inputgroup">
+								<p:inputTextarea id="observacionesBasico" rows="6"
+									autocomplete="off" cols="100" autoResize="true" readonly="true"
+									styleClass="text-input border-completo tamano" maxlength="4000"
+									placeholder="#{txt_repositorioPoderes['observaciones.basico']}"
+									value="#{beanConsultarPoder.ip_poderDto.getIlop_listaObservacionesPoderDtoTexto()}">
+								</p:inputTextarea>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelObservacionesBasico"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['observaciones.basico']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message
+									for="observacionesBasico" />
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel styleClass="label-form"
+								value="#{txt_repositorioPoderes['tabla.matricula']}" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable var="prediosMatriculas" styleClass="table-center"
+								id="listaPrediosMatriculas"
+								value="#{beanConsultarPoder.ip_poderDto.ilapm_listaPredioConMatriculas}"
+								reflow="true"
+								emptyMessage="#{txt_repositorioPoderes['tabla.matricula.mensaje.vacio']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								stickyHeader="false">
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.matricula.matricula']}">
+									<h:outputText
+										value="#{prediosMatriculas.is_numeroMatriculaInmobiliaria}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.matricula.nupre']}">
+									<h:outputText value="#{prediosMatriculas.is_nupre}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.matricula.departamento']}">
+									<h:outputText
+										value="#{prediosMatriculas.id_departamentoDto.is_nombre}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.matricula.municipio']}">
+									<h:outputText
+										value="#{prediosMatriculas.im_municipioDto.is_nombre}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.matricula.circulo']}">
+									<h:outputText
+										value="#{prediosMatriculas.is_circulo} (#{prediosMatriculas.is_codigoCirculo})" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.matricula.direccion']}">
+									<h:outputText value="#{prediosMatriculas.is_direccion}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel styleClass="label-form"
+								value="#{txt_repositorioPoderes['tabla.sin.matricula']}" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable var="prediosSinMatriculas" styleClass="table-center"
+								id="listaPrediosSinMatriculas"
+								value="#{beanConsultarPoder.ip_poderDto.ilapm_listaPredioSinMatriculas}"
+								reflow="true"
+								emptyMessage="#{txt_repositorioPoderes['tabla.sin.matricula.mensaje.vacio']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								stickyHeader="false">
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.sin.matricula.departamento']}">
+									<h:outputText
+										value="#{prediosSinMatriculas.id_departamentoDto.is_nombre}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.sin.matricula.municipio']}">
+									<h:outputText
+										value="#{prediosSinMatriculas.im_municipioDto.is_nombre}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.sin.matricula.direccion']}">
+									<h:outputText value="#{prediosSinMatriculas.is_direccion}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:tab>
+			<p:tab title="#{txt_repositorioPoderes['tab.poderantes']}"
+				styleClass="tab-personalizado tab-gradiente">
+				<p:outputPanel>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable var="poderdantes" styleClass="table-center"
+								id="listaPoderdantes"
+								value="#{beanConsultarPoder.ip_poderDto.ilapa_listaPoderdantes}"
+								reflow="true"
+								emptyMessage="#{txt_repositorioPoderes['mensaje.vacio']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								stickyHeader="false">
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.poderdantes.nombre']}">
+									<h:outputText value="#{poderdantes.is_nombre}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.poderdantes.tipo.doc']}">
+									<h:outputText value="#{poderdantes.is_tipoDocumento}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.poderdantes.num.doc']}">
+									<h:outputText value="#{poderdantes.is_numeroDocumento}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:tab>
+			<p:tab title="#{txt_repositorioPoderes['tab.apoderados']}"
+				styleClass="tab-personalizado tab-gradiente">
+				<p:outputPanel>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable var="apoderados" styleClass="table-center"
+								id="listaApoderados"
+								value="#{beanConsultarPoder.ip_poderDto.ilapa_listaApoderados}"
+								reflow="true"
+								emptyMessage="#{txt_repositorioPoderes['mensaje.vacio']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								stickyHeader="false">
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.apoderados.nombre']}">
+									<h:outputText value="#{apoderados.is_nombre}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.apoderados.tipo.doc']}">
+									<h:outputText value="#{apoderados.is_tipoDocumento}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['tabla.apoderados.num.doc']}">
+									<h:outputText value="#{apoderados.is_numeroDocumento}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:tab>
+			<p:tab title="#{txt_repositorioPoderes['tab.usos']}"
+				styleClass="tab-personalizado tab-gradiente">
+				<p:outputPanel>
+					<div class="row">
+						<div class="col-sm-10">
+							<p:outputLabel id="labelObservacionesExistentes"
+								for="observacionesExistentes" styleClass="label-form tresPuntos"
+								value="#{txt_repositorioPoderes['observaciones.existente']}" />
+							<div class="ui-inputgroup">
+								<p:inputTextarea id="observacionesExistentes" rows="6"
+									autocomplete="off" cols="100" autoResize="true" readonly="true"
+									styleClass="text-input border-completo tamano"
+									placeholder="#{txt_repositorioPoderes['observaciones.existente']}"
+									value="#{beanConsultarPoder.ip_poderDto.getIlop_listaObservacionesPoderDtoTexto()}">
+								</p:inputTextarea>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelObservacionesExistentes"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['observaciones.existente']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message
+									for="observacionesExistentes" />
+							</span>
+						</div>
+						<div class="col-sm-2">
+							<p:repeat value="#{beanConsultarPoder.ilp_listaPoderDto}"
+								var="archivos">
+								<div class="row">
+									<div class="col-xs-12">
+										<p:commandLink
+											actionListener="#{beanConsultarPoder.descargarPoder(archivos.is_did,archivosis_dDocName)}"
+											onstart="PF('blockUI-Loading').show();"
+											onsuccess="PF('blockUI-Loading').hide();">
+											<p:graphicImage name="/iconos/pdf.png" />
+										</p:commandLink>
+									</div>
+								</div>
+							</p:repeat>
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:tab>
+			<p:tab title="#{txt_repositorioPoderes['tab.notificacion']}"
+				styleClass="tab-personalizado tab-gradiente">
+				<p:outputPanel>
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel id="labelNotificacionesExistentes"
+								for="notificacionesExistentes"
+								styleClass="label-form tresPuntos"
+								value="#{txt_repositorioPoderes['notificaciones.existente']}" />
+							<div class="ui-inputgroup">
+								<p:inputTextarea id="notificacionesExistentes" rows="6"
+									autocomplete="off" cols="100" autoResize="true" readonly="true"
+									styleClass="text-input border-completo tamano" maxlength="4000"
+									placeholder="#{txt_repositorioPoderes['notificaciones.existente']}"
+									value="#{beanConsultarPoder.ip_poderDto.is_notificacionesExistentes}">
+								</p:inputTextarea>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNotificacionesExistentes"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['notificaciones.existente']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message
+									for="notificacionesExistentes" />
+							</span>
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:tab>
+			<p:tab title="#{txt_repositorioPoderes['tab.cargue.poder']}"
+				styleClass="tab-personalizado tab-gradiente">
+				<p:outputPanel>
+					<div class="row">
+						<div class="col-sm-4">
+							<p:outputLabel id="labelCargueTipoPoder" for="cargueTipoPoder"
+								styleClass="label-form tresPuntos"
+								value="#{txt_repositorioPoderes['cargue.tipo.poder']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="cargueTipoPoder"
+									styleClass="text-input border-completo" readonly="true"
+									placeholder="#{txt_repositorioPoderes['cargue.tipo.poder']}"
+									value="#{beanConsultarPoder.ispp_solicitudInternaPoder.is_tipoPoder}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelCargueTipoPoder"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['cargue.tipo.poder']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="cargueTipoPoder" />
+							</span>
+						</div>
+						<div class="col-sm-4">
+							<p:outputLabel id="labelCargueEntidad" for="cargueEntidad"
+								styleClass="label-form tresPuntos"
+								value="#{txt_repositorioPoderes['cargue.entidad']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="cargueEntidad"
+									styleClass="text-input border-completo" readonly="true"
+									placeholder="#{txt_repositorioPoderes['cargue.entidad']}"
+									value="#{beanConsultarPoder.ispp_solicitudInternaPoder.iee_entidadEspecialOrigen.is_nombreEntidadExterna}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelCargueEntidad"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['cargue.entidad']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="cargueEntidad" />
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel id="labelCargueObservaciones"
+								for="cargueObservaciones" styleClass="label-form tresPuntos"
+								value="#{txt_repositorioPoderes['cargue.observaciones']}" />
+							<div class="ui-inputgroup">
+								<p:inputTextarea id="cargueObservaciones" rows="6"
+									autocomplete="off" cols="100" autoResize="true"
+									styleClass="text-input border-completo tamano" maxlength="4000"
+									placeholder="#{txt_repositorioPoderes['cargue.observaciones']}"
+									value="#{beanConsultarPoder.ispp_solicitudInternaPoder.is_observacion}">
+								</p:inputTextarea>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelCargueObservaciones"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['cargue.observaciones']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message
+									for="cargueObservaciones" />
+							</span>
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:tab>
+		</p:accordionPanel>
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<p:commandButton value="#{txt['boton.Cerrar.Upper']}"
+					immediate="true" required="true"
+					action="/pages/carguePoderes/consultarPoderCargado.jsf?faces-redirect=true"
+					process="@this"
+					styleClass="icon-btn pull-right btn-gris sinPadding" />
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

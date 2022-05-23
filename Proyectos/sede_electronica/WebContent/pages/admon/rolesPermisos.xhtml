@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-rolesYpermisos.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_rolesPermisos['Titulo']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_rolesPermisos['Banner.titulo.Upper']}" />
+			<ui:param name="imagen" value="img-rolesPermisos" />
+			<ui:param name="subtitulo"
+				value="#{txt_rolesPermisos['Banner.subtitulo.Upper']}" />
+			<ui:param name="urlVista" value="/pages/admon/rolesPermisos.jsf" />
+		</ui:include>
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalRolPermiso" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:define name="body-modal">
+				<h:outputText styleClass="titulo"
+					value="#{txt_rolesPermisos['Modal.primeraParte']}" />
+				<br />
+				<br />
+				<h:outputText styleClass="titulo"
+					value="#{txt_rolesPermisos['Modal.segundaParte']} " />
+				<h:outputText styleClass="titulo bold"
+					value="#{txt_rolesPermisos['Modal.terceraParte']}" />
+				<h:outputText styleClass="titulo"
+					value=" #{txt_rolesPermisos['Banner.subtitulo.Upper']} " />
+				<h:outputText styleClass="titulo bold"
+					value="#{txt_rolesPermisos['Modal.cuartaParte']}" />
+			</ui:define>
+			<ui:param name="tituloModal"
+				value="#{txt_rolesPermisos['Modal.titulo']}" />
+			<ui:param name="accionBotonBean" value="${beanRolPermiso}" />
+			<ui:param name="accionBotonMetodo" value="guardarCambios" />
+			<ui:param name="formulario" value="formRolPermiso" />
+			<ui:define name="accion-modal">
+				<div class="col-xs-6 center-component">
+					<p:commandButton value="#{txt_rolesPermisos['Modal.cancelar']}"
+						styleClass="btn-gris" oncomplete="PF('#{modalId}').hide()" />
+				</div>
+				<div class="col-xs-6 center-component">
+					<p:commandButton value="#{txt_rolesPermisos['Modal.aceptar']}"
+						class="btn-rojo btn-gradiente"
+						action="#{accionBotonBean[accionBotonMetodo]}"
+						oncomplete="PF('#{modalId}').hide();">
+					</p:commandButton>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<div class="row">
+			<div class="col-xs-12">
+				<h:form id="form">
+					<div class="row my-10">
+						<div class="col-xs-4">
+							<p:commandButton id="rol" rendered="#{beanRol.getCbAdministracionroles()}"
+								value="#{txt_rolesPermisos['Pestana.Rol.Upper']}"
+								styleClass="#{beanRolPermiso.is_rolEstilo}"
+								actionListener="#{beanRolPermiso.cambiarRutaTab}" update="form">
+								<f:attribute name="ruta" value="rolesPermisos/Rol.xhtml" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-4">
+							<p:commandButton id="rolPermiso"
+								value="#{txt_rolesPermisos['Pestana.RolPermiso.Upper']}"
+								styleClass="#{beanRolPermiso.is_rolPermisoEstilo}"
+								actionListener="#{beanRolPermiso.cambiarRutaTab}" update="form">
+								<f:attribute name="ruta" value="rolesPermisos/RolPermiso.xhtml" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-4">
+							<p:commandButton id="permiso" rendered="#{beanPermiso.getCbAdministracionpermiso()}"
+								value="#{txt_rolesPermisos['Pestana.Permiso.Upper']}"
+								styleClass="#{beanRolPermiso.is_permisoEstilo}"
+								actionListener="#{beanRolPermiso.cambiarRutaTab}" update="form">
+								<f:attribute name="ruta" value="rolesPermisos/Permiso.xhtml" />
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="row">
+						<div class="container-fluid">
+							<ui:include src="#{beanRolPermiso.is_vistaRolPermiso}" />
+						</div>
+					</div>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css" name="snr-se-correcciones.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_correccion['titulo']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_correccion['titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_correccion['subtitulo.ingresoSolicitud']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/solicitudesCorrecciones/ingresoSolicitud.jsf" />
+		</ui:include>
+		<p:panel id="panelCorrecciones" styleClass="panel-content no-border">
+			<!-- datos predio -->
+			<p:outputPanel id="datosPredio"
+				rendered="#{beanCorrecciones.ii_renderizarVistas == 0}">
+				<div class="row">
+					<div class="col-xs-12 align-center">
+						<p:outputLabel styleClass="label-form text-center tamano-titulo"
+							value="#{txt_correccion['modal.datos.titulo']}" />
+						<br /> <br />
+					</div>
+				</div>
+				<ui:decorate
+					template="/pages/solicitudes/solicitudesCorrecciones/tabs/datosPredio.xhtml">
+				</ui:decorate>
+				<div class="row">
+					<div
+						class="col-xs-10 col-sm-4 col-xs-offset-1 col-sm-offset-4 space-row">
+						<p:commandButton value="#{txt_correccion['tabs.boton.siguiente']}"
+							styleClass="btn-gradiente btn-rojo" type="submit">
+							<p:ajax listener="#{beanCorrecciones.pasarACargueSoporte}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</p:outputPanel>
+			<!-- Cargue de archivos  -->
+			<p:outputPanel id="cargueSoportes"
+				rendered="#{beanCorrecciones.ii_renderizarVistas == 1}">
+				<div class="row">
+					<div class="col-xs-12 align-center">
+						<p:outputLabel id="labelSoporteCorrecciones"
+							styleClass="label-form text-center tamano-titulo"
+							value="#{txt_correccion['tabs.soporte']}" />
+						<br /> <br />
+					</div>
+				</div>
+				<h:form id="formCargueArchivo">
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelTipoDocumental"
+								for="tipoDocumental"
+								value="#{txt_correccion['label.tipoDocumental']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="tipoDocumental" widgetVar="tipoDocumental"
+								required="true" converter="selectOneMenuConverter"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								value="#{beanCorrecciones.ist_soporteTransaccionDto.icd_catalogoDocumentoDto}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" noSelectionOption="true" />
+								<f:selectItems value="#{beanCorrecciones.ilcd_tipoDocumental}"
+									var="tipoDocumental" itemLabel="#{tipoDocumental.is_nombre}"
+									itemValue="#{tipoDocumental}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTipoDocumental"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_correccion['tooltipo.tipoDocumental']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="tipoDocumental" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelTurno"
+								for="turno" value="#{txt_correccion['label.turno']}" />
+							<p:inputText id="turno" autocomplete="off" maxlength="20"
+								value="#{beanCorrecciones.ist_soporteTransaccionDto.is_turno}"
+								placeholder="#{txt_correccion['placeholder.turno']}">
+								<p:keyFilter regEx="/[0-9\-]/i" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTurno" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_correccion['tooltip.turno']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="turno" />
+							</span>
+						</div>
+					</div>
+					<div class="row space-row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelObservaciones"
+								for="observaciones"
+								value="#{txt_correccion['label.observaciones']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:inputTextarea id="observaciones" counter="mostrarContador"
+								maxlength="1000" autoResize="false"
+								styleclass="mask-AlphaNumChars2"
+								placeholder="#{txt_correccion['placeholder.observaciones']}"
+								counterTemplate="{0} #{txt_administrador['label.Caracteres']}"
+								required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								value="#{beanCorrecciones.ist_soporteTransaccionDto.is_observacion}">
+							</p:inputTextarea>
+							<h:outputText id="mostrarContador" />
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelObservaciones"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_correccion['tooltip.observaciones']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="observaciones" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelArchivo"
+								for="cargaDocumentos" value="#{txt_correccion['label.archivo']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:fileUpload id="cargaDocumentos" styleClass="cargar-archivo"
+								showButtons="false"
+								sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+								allowTypes="/(\.|\/)(pdf|PDF)$/"
+								fileUploadListener="#{beanCorrecciones.cargarArchivo}"
+								auto="true" label="#{txt_persona['label.ExaminarArchivo']}"
+								process="@this" update="textoSalidaArchivo"
+								invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+								invalidFileMessage="#{txt_correccion['Mensaje.archivo.formatoInvalido']}">
+								<div class="col-xs-12 tamano-examinar">
+									<br />
+									<h:outputText id="textoSalidaArchivo" styleClass="text-input"
+										value="#{beanCorrecciones.ist_soporteTransaccionDto.ia_archivoDto.is_nombreArchivo}" />
+								</div>
+							</p:fileUpload>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelArchivo" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_correccion['tooltip.archivo']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="cargaDocumentos" />
+							</span>
+						</div>
+					</div>
+					<div class="row space-row">
+						<div
+							class="col-xs-10 col-sm-4 col-xs-offset-1 col-sm-offset-4 space-row">
+							<p:commandButton value="#{txt_correccion['label.agregar']}"
+								styleClass="btn-gradiente btn-rojo" type="submit"
+								actionListener="#{beanCorrecciones.agregarTipoDocumental}"
+								process="formCargueArchivo" update="cargueSoportes"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();">
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="scroll-politicas">
+						<div class="col-xs-12  align-center">
+							<p:dataTable var="documento" styleClass="centrar tabla-fija"
+								widgetVar="listaDocumentos" id="listaDocumentos" reflow="true"
+								rowIndexVar="index"
+								value="#{beanCorrecciones.itc_transaccionCorreccionDto.ilst_soportesTransaccionCargadosDto}"
+								emptyMessage="#{txt_correccion['tabla.vacia.soporte']}"
+								stickyHeader="false">
+								<p:column headerText="#{txt_correccion['label.tipoDocumental']}">
+									<h:outputText
+										value="#{documento.icd_catalogoDocumentoDto.is_nombre}" />
+								</p:column>
+								<p:column headerText="#{txt_correccion['label.observaciones']}">
+									<h:outputText value="#{documento.is_observacion}" />
+								</p:column>
+								<p:column headerText="#{txt_correccion['label.turno']}">
+									<h:outputText value="#{documento.is_turno}" />
+								</p:column>
+								<p:column headerText="#{txt_correccion['label.nombreArchivo']}">
+									<h:outputText
+										value="#{documento.ia_archivoDto.is_nombreArchivo}" />
+								</p:column>
+								<p:column headerText="#{txt_correccion['tabla.soporte.subir']}">
+									<p:commandLink
+										styleClass="#{documento.ib_desactivarBotonesCarga ? 'fa fa-check colorVerde' : 'fa fa-cloud-upload colorRojo' }"
+										disabled="#{documento.ib_desactivarBotonesCarga}">
+										<p:ajax
+											listener="#{beanCorrecciones.cargarSeleccion(true,index)}"
+											update="formAccionArchivo"
+											onsuccess="PF('accionArchivo').show();" />
+									</p:commandLink>
+
+								</p:column>
+								<p:column
+									headerText="#{txt_correccion['tabla.soporte.eliminar']}"
+									styleClass="text-center">
+									<p:commandLink styleClass="fa fa-trash-o colorRojo"
+										disabled="#{documento.ib_desactivarBotonesCarga}">
+										<p:ajax
+											listener="#{beanCorrecciones.cargarSeleccion(false,index)}"
+											update="formAccionArchivo"
+											onsuccess="PF('accionArchivo').show();" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+							<br /> <br />
+						</div>
+					</div>
+				</h:form>
+				<div class="row">
+					<div
+						class="col-xs-10 col-sm-4 col-xs-offset-1 col-sm-offset-4 space-row">
+						<p:commandButton
+							value="#{txt_correccion['tabs.boton.enviarSolicitud']}"
+							disabled="#{beanCorrecciones.itc_transaccionCorreccionDto.getSize() lt 1}"
+							styleClass="btn-gradiente btn-rojo"
+							onstart="PF('preguntarFinalizacion').show();">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:outputPanel>
+		</p:panel>
+		<!-- Modales -->
+		<!-- 	Recuperar Transaccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="recuperarTransaccion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formRecuperar" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_correccion['modal.recuperar.titulo']}" />
+				<br />
+				<h:outputText value="#{txt_correccion['modal.recuperar.contenido']}" />
+				<br />
+				<h:outputText value="#{txt_correccion['modal.recuperar.pregunta']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-5 col-md-offset-1 space-row">
+						<p:commandButton styleClass="btn-gris text-center"
+							value="#{txt['boton.Cancelar.Upper']}"
+							action="#{beanCorrecciones.descartarTransaccion}"
+							update="panelCorrecciones">
+							<div class="col-xs-12 text-center">
+								<p:confirm header="#{txt['titulo.modal.confirmacion']}"
+									message="#{txt_correccion['modal.recuperar.confirmar.contenido']}"
+									icon="pi pi-exclamation-triangle" />
+							</div>
+						</p:commandButton>
+						<p:confirmDialog
+							styleClass="box-solid box-danger text-center cerrarModal"
+							global="true" width="400" showEffect="fade" hideEffect="fade"
+							responsive="true">
+							<div class="row">
+								<div class="col-xs-12 col-md-5 col-md-offset-1">
+									<p:commandButton value="#{txt['boton.Cancelar.Upper']}"
+										type="button" styleClass="ui-confirmdialog-no btn-gris " />
+								</div>
+								<div class="col-xs-12 col-md-5">
+									<p:commandButton value="#{txt['boton.Aceptar.Upper']}"
+										type="button"
+										styleClass="ui-confirmdialog-yes  btn-rojo btn-gradiente" />
+								</div>
+							</div>
+						</p:confirmDialog>
+					</div>
+					<div class="col-xs-12 col-md-5">
+						<p:commandButton styleClass="btn-rojo btn-gradiente icon-btn"
+							value="#{txt['boton.Aceptar.Upper']}"
+							oncomplete="PF('recuperarTransaccion').hide();">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 	accion archivo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="accionArchivo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_correccion['label.titulo']}" />
+			<ui:param name="formulario" value="formAccionArchivo" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_correccion['label.carga1']}" />
+				<h:outputText
+					value=" #{beanCorrecciones.ib_cargar ? txt_correccion['label.carga.subir'] : txt_correccion['label.carga.eliminar']}" />
+				<h:outputText value=" #{txt_correccion['label.carga2']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							onsuccess="PF('accionArchivo').hide();PF('blockUI-Loading').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							actionListener="#{beanCorrecciones.accionArchivo}"
+							update="cargueSoportes" onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('accionArchivo').hide();PF('blockUI-Loading').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Error envio documentos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="errorEnvioDocumentos" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_correccion['label.tituloInformativo']}" />
+			<ui:param name="formulario" value="formErrorEnvioDocumentos" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_correccion['soporte.no.cargado']}" />
+				<br />
+				<h:outputText value="#{txt_correccion['soporte.no.cargado1']}" />
+				<h:outputText styleClass="fa fa-cloud-upload" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.entendido']}"
+							onsuccess="PF('errorEnvioDocumentos').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- pregunta finalizar solicitud -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="preguntarFinalizacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_correccion['label.titulo']}" />
+			<ui:param name="formulario" value="formPreguntarFinalizacion" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_correccion['label.pregunta']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							onsuccess="PF('preguntarFinalizacion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							actionListener="#{beanCorrecciones.finalizarTransaccion}"
+							onsuccess="PF('preguntarFinalizacion').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 	Finalizar proceso -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="finalizarProceso" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formFinalizarProceso" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_correccion['label.envio1']}" />
+				<h:outputText
+					value="#{beanCorrecciones.itc_transaccionCorreccionDto.is_nir}" />
+				<h:outputText value=" #{txt_correccion['label.envio2']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.entendido']}"
+							action="/pages/personas/inicio.jsf?faces-redirect=true" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modales -->
+	</ui:define>
+</ui:composition>

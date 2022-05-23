@@ -1,0 +1,143 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/pages/includes/templateInicioSesion.xhtml">
+	<ui:define name="title-inicioSesion">
+		<title>#{txt_login['Login']} - #{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:param name="imagen" value="bg-administradores-internos" />
+	<ui:define name="templateSesion-body">
+
+		<div class="row">
+			<div class="col-xs-10 col-xs-offset-1">
+				<div class="msgInfoLogin">
+					<p>#{txt_login['mensaje.LoginAdmin']}</p>
+				</div>
+			</div>
+		</div>
+		<br />
+		<p:importEnum type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumInicioSesion"
+			var="EnumInicioSesion" />
+		<h:form prependId="false" id="formLoginAdmin" method="post"
+			onsubmit="generarSubmitAdmin('#{request.contextPath}',this);"
+			authentication-success-handler-ref="AuthenticationSuccessHandler">
+			<p:focus id="focus" for="ingresar" />
+			<input id="servicio" type="hidden" name="servicio"
+				value="#{EnumInicioSesion.INICIO_SESION_USUARIO_INTERNOS.getIs_nombrePagInicio()}" />
+			<div class="row">
+				<div class="col-xs-10 col-xs-offset-1">
+					<p:outputLabel id="labelNombreUsuarioAdmin" styleClass="label-form"
+						for="username" value="#{txt_login['label.NombreUsuario']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputText id="username" autocomplete="off"
+							styleClass="text-input border-completo mask-NombreUsuario" maxlength="50"
+							placeholder="#{txt_login['placeholder.NombreUsuario']}"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true" name="username"
+							value="#{beanInicioSesionVistas.is_nombreUsuario}">
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('username', 'spanUserName');" />
+						</p:inputText>
+						<span id="spanUserName" class="ui-inputgroup-addon ocultar">
+							<p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('username', 'spanUserName');" />
+							</p:commandLink>
+						</span>
+						<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+							for="labelNombreUsuarioAdmin" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_login['tooltip.NombreUsuario']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<span class="help-block"> <p:message for="username" />
+					</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-10 col-xs-offset-1">
+					<p:outputLabel id="labelContrasenaAdmin" styleClass="label-form"
+						for="password" value="#{txt_login['label.Contrasena']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:password id="password" name="password"
+							styleClass="text-input border-completo" maxlength="20"
+							placeholder="#{txt_login['placeholder.Contrasena']}"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true" value="#{beanInicioSesionVistas.is_contrasena}">
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('password', 'spanPassword');" />
+						</p:password>
+						<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+							for="labelContrasenaAdmin" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_login['tooltip.Contrasena']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanPassword" class="ui-inputgroup-addon ocultar">
+							<p:commandLink styleClass="text-link-input"
+								value="#{txt['label.VerContrasena']}">
+								<p:ajax event="click" onstart="verContrasena('password')" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message for="password" />
+					</span>
+					<p:commandLink process="@this"
+						action="/pages/personas/restablecerClaveAdministrador.jsf?faces-redirect=true"
+						styleClass="text-link">
+						<p:outputLabel id="labelRecordarClaveAdmin"
+							styleClass="label-olvidar"
+							value="#{txt_login['label.RecordarClave']}" />
+					</p:commandLink>
+					<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+						for="labelRecordarClaveAdmin" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel value="#{txt_login['tooltip.RecordarClave']}" />
+						</div>
+					</p:tooltip>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div
+					class="col-sm-offset-1-one col-xs-10 col-sm-10 col-sm-offset-1 col-md-10 col-lg-10">
+					<p:separator styleClass="separador-small" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-10 col-sm-5 col-xs-offset-1 space-row">
+					<p:commandButton icon="icon-flecha-gris" iconPos="right"
+						immediate="true" styleClass="icon-btn pull-right btn-gris"
+						value="#{txt_login['boton.VolverLoginUsuario.Upper']}"
+						action="/pages/personas/inicioSesion/ciudadanos.jsf?faces-redirect=true"
+						process="@this" />
+				</div>
+				<div class="col-xs-10 col-sm-5 col-xs-offset-1 col-sm-offset-0">
+					<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+						type="submit" id="ingresar"
+						styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+						ajax="false" value="#{txt_login['boton.Ingresar.Upper']}"
+						process="@form" update="@form" />
+				</div>
+			</div>
+		</h:form>
+		<br />
+		<script>
+			$(document).ready(function() {
+				validarInputVaciosLoginAdmin();
+				limpiarPath();
+				document.onkeypress = () =>{
+					if(event.keyCode == 13){						
+						$("#ingresar").click()
+					}
+					};
+			});
+		</script>
+	</ui:define>
+</ui:composition>

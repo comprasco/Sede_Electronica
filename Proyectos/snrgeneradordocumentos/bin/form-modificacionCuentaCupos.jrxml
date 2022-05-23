@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="modificacionCuentaCupos" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0dec6b23-377b-4dbc-8f4f-313d22ca1d0f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="192"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#D9C3C3">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFE6E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="2d08ae8a-9f08-4ed4-90a9-c6c663cd6479"/>
+	<parameter name="minjusticialogo" class="Object" isForPrompting="false">
+		<parameterDescription><![CDATA[minjusticialogo]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="logonuevopais" class="Object" isForPrompting="false">
+		<parameterDescription><![CDATA[logonuevopais]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="iso" class="Object" isForPrompting="false">
+		<parameterDescription><![CDATA[iso]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="snrlogo" class="Object" isForPrompting="false">
+		<parameterDescription><![CDATA[snrlogo]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="ano" class="java.lang.String">
+		<fieldDescription><![CDATA[ano]]></fieldDescription>
+	</field>
+	<field name="archivo" class="java.util.List">
+		<fieldDescription><![CDATA[archivo]]></fieldDescription>
+	</field>
+	<field name="cedula" class="java.lang.String">
+		<fieldDescription><![CDATA[cedula]]></fieldDescription>
+	</field>
+	<field name="cedulaExtranjeria" class="java.lang.String">
+		<fieldDescription><![CDATA[cedulaExtranjeria]]></fieldDescription>
+	</field>
+	<field name="celular" class="java.lang.String">
+		<fieldDescription><![CDATA[celular]]></fieldDescription>
+	</field>
+	<field name="ciudad" class="java.lang.String">
+		<fieldDescription><![CDATA[ciudad]]></fieldDescription>
+	</field>
+	<field name="correo" class="java.lang.String">
+		<fieldDescription><![CDATA[correo]]></fieldDescription>
+	</field>
+	<field name="dia" class="java.lang.String">
+		<fieldDescription><![CDATA[dia]]></fieldDescription>
+	</field>
+	<field name="digitoVerificacion" class="java.lang.String">
+		<fieldDescription><![CDATA[digitoVerificacion]]></fieldDescription>
+	</field>
+	<field name="direccion" class="java.lang.String">
+		<fieldDescription><![CDATA[direccion]]></fieldDescription>
+	</field>
+	<field name="imagenes" class="java.util.List">
+		<fieldDescription><![CDATA[imagenes]]></fieldDescription>
+	</field>
+	<field name="ls_nombreFormulario" class="java.lang.String">
+		<fieldDescription><![CDATA[ls_nombreFormulario]]></fieldDescription>
+	</field>
+	<field name="maxpermitido" class="java.lang.String">
+		<fieldDescription><![CDATA[maxpermitido]]></fieldDescription>
+	</field>
+	<field name="maxsolicitado" class="java.lang.String">
+		<fieldDescription><![CDATA[maxsolicitado]]></fieldDescription>
+	</field>
+	<field name="mes" class="java.lang.String">
+		<fieldDescription><![CDATA[mes]]></fieldDescription>
+	</field>
+	<field name="minpermitido" class="java.lang.String">
+		<fieldDescription><![CDATA[minpermitido]]></fieldDescription>
+	</field>
+	<field name="minsolicitado" class="java.lang.String">
+		<fieldDescription><![CDATA[minsolicitado]]></fieldDescription>
+	</field>
+	<field name="motivosSolicitud" class="java.lang.String">
+		<fieldDescription><![CDATA[motivosSolicitud]]></fieldDescription>
+	</field>
+	<field name="nit" class="java.lang.String">
+		<fieldDescription><![CDATA[nit]]></fieldDescription>
+	</field>
+	<field name="numeroCedula" class="java.lang.String">
+		<fieldDescription><![CDATA[numeroCedula]]></fieldDescription>
+	</field>
+	<field name="numeroIdentificacion" class="java.lang.String">
+		<fieldDescription><![CDATA[numeroIdentificacion]]></fieldDescription>
+	</field>
+	<field name="razonSocial" class="java.lang.String">
+		<fieldDescription><![CDATA[razonSocial]]></fieldDescription>
+	</field>
+	<field name="representanteLegal" class="java.lang.String">
+		<fieldDescription><![CDATA[representanteLegal]]></fieldDescription>
+	</field>
+	<field name="telefono" class="java.lang.String">
+		<fieldDescription><![CDATA[telefono]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<image>
+				<reportElement x="20" y="6" width="150" height="43" uuid="1143dfff-8669-41d3-8c4a-ba0b24e18de0"/>
+				<imageExpression><![CDATA[$P{minjusticialogo}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="217" y="6" width="140" height="48" uuid="334f2040-ce87-4fd3-8bfe-af0abd366b01"/>
+				<imageExpression><![CDATA[$P{snrlogo}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="380" y="2" width="114" height="54" uuid="8d3ab9e2-3574-4d58-a4f7-2e2556fe07de"/>
+				<imageExpression><![CDATA[$P{logonuevopais}]]></imageExpression>
+			</image>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="542" splitType="Stretch">
+			<staticText>
+				<reportElement x="162" y="55" width="263" height="16" uuid="8a863c09-3f90-473f-aaea-2ce736bfd51d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUPERINTENDENCIA DE NOTARIADO Y  REGISTRO ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="87" width="263" height="16" uuid="a5572c76-c89f-4d42-98db-61105fa42c70"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRAMITES REGISTRALES EN LÍNEA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="71" width="509" height="16" uuid="4ab0683e-517f-47d5-83ae-e08c99851a0b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FORMULARIO DE SOLICITUD DE MODIFICACION DE CUENTA CUPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="157" width="172" height="14" uuid="59a344c9-170c-498f-96ab-94c64d0a4c59"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Fecha de diligenciamiento: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="192" y="157" width="149" height="14" uuid="10ff6c24-5fa4-403a-9f0f-e303e47fd076"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dia} + "/" + $F{mes} + "/" + $F{ano}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="79" y="263" width="226" height="14" uuid="d1ed93ad-4540-44e6-ba33-effd8dc7bb1b"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{direccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="263" width="164" height="14" uuid="a461f72d-a57f-450c-b451-e8d33a97b2cf"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telefono}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="314" y="263" width="56" height="14" uuid="90cd45a4-9206-48c6-b74c-c8af283eba6c"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Teléfono:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="263" width="59" height="14" uuid="eaf61913-0adc-4a0c-9036-00e805391b31"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Dirección:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="494" y="184" width="42" height="14" uuid="d2f71eaf-1add-4080-aac9-1d5669efb8e6"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{digitoVerificacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="184" width="22" height="14" uuid="dd5a798f-7cee-4c70-876a-648d39e6a800"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Nit]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="395" y="236" width="139" height="14" uuid="9bf2f2a1-f109-4a1f-b4e4-e9453a6b2ebd"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroIdentificacion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="239" y="184" width="113" height="14" uuid="14fdd992-ce9c-4b9a-8269-2bb8a66bacdd"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroCedula}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="184" width="23" height="14" uuid="a9ecee73-c9ef-4564-bfef-5df4cf00c36b"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cedula}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="92" y="211" width="278" height="14" uuid="21b9fed6-2c94-4457-bc28-29e5acb1de73"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{razonSocial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="122" y="236" width="170" height="14" uuid="81af17fd-c3ce-419e-a688-f812256a9eed"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representanteLegal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="236" width="102" height="14" uuid="4a5afdfc-eee0-4e80-b663-a91174007fa2"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Representante legal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="236" width="100" height="14" uuid="e50fe68c-3b43-4fb0-8b34-ceda250ece6b"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*No. Identificación:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="66" y="184" width="47" height="14" uuid="69c62d4e-a98f-460a-9568-e5fe1c703114"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Cédula]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="217" y="184" width="22" height="14" uuid="44a08954-bee8-4a6d-901c-792abc2b6fdd"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*No.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="42" y="184" width="19" height="14" uuid="620f44c0-80f9-40ab-9959-0c64acdd2aba"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nit}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="380" y="184" width="114" height="14" uuid="92bf1319-c6d7-4983-b41e-730ebf55364b"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Digito verificación:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="211" width="72" height="14" uuid="6a9eec64-99a0-4443-9613-b077c54008dd"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Razón social:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="289" width="46" height="14" uuid="9ed7bbf7-a5d8-4644-ab21-f36ce1c788aa"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Ciudad:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="403" y="289" width="131" height="14" uuid="0a6cb664-1c95-469b-a43d-d893daaef5fd"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{correo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="66" y="289" width="120" height="14" uuid="963ed995-fe81-4be3-ad37-fdb337230a10"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ciudad}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="357" y="289" width="46" height="14" uuid="48c6bb88-1a27-4e53-9063-882bbfcef2a5"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Correo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="192" y="289" width="44" height="14" uuid="f17a65a8-d29a-4dc3-ac5e-53824fb81c65"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Celular:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="237" y="289" width="109" height="14" uuid="0cf3c8ef-3d3d-49a1-8803-570eb69861c7"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{celular}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="116" y="317" width="324" height="16" uuid="5e9f675c-fb81-48b4-b94c-7d2ffa7c98cd"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SOLICITUD DE MODIFICACIÓN DE CUENTA CUPOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="348" width="227" height="14" uuid="270f5325-7ab0-4ac0-8a20-4fe6dab7367f"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Valores permitidos para recarga ]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="170" y="377" width="100" height="20" uuid="2f859a82-138c-4bd8-baed-e2cdcc0588e4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="270" y="377" width="100" height="20" uuid="7719fc2d-e641-412f-a9ad-29ae0b90d658"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="170" y="397" width="100" height="20" uuid="33e94c1e-dac0-4523-9747-1f2ba40a2da6"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="270" y="397" width="100" height="20" uuid="bd80c704-1f23-4815-bd2d-b9a0dd729c5f"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="179" y="383" width="74" height="14" uuid="a42eb933-7ab6-4c0e-940f-0823e58fdae5"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Mínimo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="383" width="74" height="14" uuid="ad983106-21d7-4b44-a3b3-aabf1ce60d10"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Máximo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="126" width="324" height="16" uuid="bd9268e1-555a-4be2-986b-95d542184471"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INFORMACIÓN BÁSICA]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="178" y="403" width="82" height="14" uuid="2e2401c0-ca69-41b8-bd24-aebc0bf1b7d2"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{minpermitido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="280" y="403" width="82" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="97155785-a1ad-41dd-996f-f9c3b1406af2"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="Open Sans Light" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{maxpermitido}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="432" width="321" height="14" uuid="04d3de92-b6b6-4f97-a806-f759a2e59e36"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*Valores solictados para las recargas en la cuenta cupo ]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="270" y="466" width="100" height="20" uuid="7e191d01-8b43-426d-a463-b963a69c3ca6"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="170" y="466" width="100" height="20" uuid="f7947a47-c1a6-4e55-979f-06cfb37939bb"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="270" y="486" width="100" height="20" uuid="ee2696d1-0561-46f6-9d6f-6b2ef2c7494b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="170" y="486" width="100" height="20" uuid="6e191ead-a2f3-4ebe-87ff-8603ff1c4da3"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="280" y="472" width="74" height="14" uuid="296f2998-e644-441e-be42-240893a82b4e"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Máximo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="472" width="74" height="14" uuid="0b9379a4-e95b-4a0c-b998-0cf3bb4d88ae"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Mínimo]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="178" y="492" width="82" height="14" uuid="49c1dd40-1c73-4e89-8a68-c7e05f663db6"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{minsolicitado}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="280" y="492" width="82" height="14" uuid="4b21b378-fa33-4eec-a0b7-895f082a3dd1"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{maxsolicitado}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="445">
+			<textField>
+				<reportElement x="20" y="39" width="514" height="222" uuid="407791ed-2b06-450d-b9b4-3e617624472f"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Motivos de la solicitud: "+ $F{motivosSolicitud}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="25" y="388" width="383" height="1" uuid="5bc730cf-233b-4a41-b48d-0f37384c330c"/>
+			</line>
+			<rectangle>
+				<reportElement x="433" y="313" width="75" height="76" uuid="1aee7028-c10d-4877-91ba-c14304b6b744"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="42" y="411" width="483" height="16" uuid="3a010a08-3bf8-4aec-886e-96c66cc95da5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FIRMA PERSONA NATURAL O REPRESENTANTE LEGAL HUELLA INDICE DERECHO]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="78" splitType="Stretch">
+			<image>
+				<reportElement x="20" y="0" width="119" height="76" uuid="51f298e8-8e3f-4dec-9d4e-6c458c32ab76"/>
+				<imageExpression><![CDATA[$P{iso}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="253" y="0" width="283" height="76" uuid="dad0abec-653d-4070-b9a0-d2ca593c5ff0"/>
+				<textElement textAlignment="Right">
+					<font fontName="Open Sans Light" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Superintendencia de Notariado y Registro
+Calle 26 No. 13-49 Int. 201 – PBX (1)328-21- 21
+Bogotá D.C. - Colombia
+http://www.supernotariado.gov.co]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

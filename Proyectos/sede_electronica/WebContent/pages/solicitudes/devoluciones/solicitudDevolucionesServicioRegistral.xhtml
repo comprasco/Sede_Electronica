@@ -1,0 +1,2989 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputScript library="js" name="archivo.js" />
+		<h:outputScript library="js" name="keyfilter.js" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-cuentaCupo.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudDevoluciones.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_registral['DevolucionesServicioRegistral']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_registral['DevolucionesServicioRegistral.Titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_registral['DevolucionesServicioRegistral.Subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/devoluciones/solicitudDevolucionesServicioRegistral.jsf" />
+		</ui:include>
+		<!-- Solicitud devolucion servicio registral -->
+		<p:panel id="panelDevolucionesServicioRegistral"
+			styleClass="no-border">
+			<!-- Formulario solicitud devolucion servicio registral -->
+			<p:outputPanel id="formularioDevolucionServicioRegistral"
+				rendered="#{beanDevolucionesServicioRegistral.ii_seccion == 0}">
+				<h:form id="formformularioDevolucionServicioRegistral">
+					<p:importEnum
+						type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumFormularioDevoluciones"
+						var="CampoConfiguracion" />
+					<div>
+						<div class="col-xs-12">
+							<div class="col-xs-12 text-center">
+								<p:outputLabel id="labelTitulo"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_registral['SuperintendenciaNotariadoRegistro']}" />
+								<br /> <br />
+								<p:outputLabel id="labelSubtitulo"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_registral['FormularioDevoluciones']}" />
+								<br /> <br />
+								<p:outputLabel id="labelTituloTramitesLinea"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_registral['FormularioDevoluciones.tramitesLinea']}" />
+								<br /> <br />
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-xs-12 col-sm-6">
+									<p:outputLabel id="labelFechaDiligenciamiento"
+										styleClass="label-form" for="fechaDiligenciamiento"
+										value="#{txt_registral['label.FechaDiligenciamiento']}" />
+									<p:inputText id="fechaDiligenciamiento" styleClass="no-borde"
+										readonly="true"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										value="#{beanDevolucionesServicioRegistral.obtenerFecha()}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</p:inputText>
+								</div>
+								<div class="col-xs-12 col-sm-6">
+									<p:outputLabel id="labelCiudad" styleClass="label-form"
+										for="ciudad" value="#{txt_registral['label.Ciudad']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:selectOneMenu id="ciudad"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true"
+										value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_ciudad}">
+										<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanDevolucionesServicioRegistral.ild_listaDepartamentoDto}"
+											var="departamento" itemLabel="#{departamento.is_nombre}"
+											itemValue="#{departamento.is_nombre}" />
+										<p:ajax event="blur"
+											update="formModalPrevisualizarPdf:ciudadPrevisualizar"
+											listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.CIUDAD_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_ciudad)}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelCiudad" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_registral['tooltip.Departamento']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="ciudad" />
+									</span>
+								</div>
+							</div>
+						</div>
+						<br />
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_registral['FormularioDevoluciones.SubtituloUno']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<!-- Datos basicos Persona Juridica -->
+						<p:outputPanel id="formularioDatosBasicosPersonaJuridica"
+							rendered="#{beanDevolucionesServicioRegistral.ib_datosBasicos}">
+							<div class="row">
+								<div class="col-xs-12 col-sm-6">
+									<p:outputLabel id="labelTipoDocumento" styleClass="label-form"
+										for="tipoDocumento"
+										value="#{txt_registral['label.TipoDocumento']}" />
+									<p:inputText id="tipoDocumento"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelTipoDocumento"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_registral['tooltip.TipoDocumento']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="tipoDocumento" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-6">
+									<p:outputLabel id="labelNumeroDocumento"
+										styleClass="label-form" for="numeroDocumento"
+										value="#{txt_registral['label.NumeroDocumento']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="numeroDocumento"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelNumeroDocumento"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_registral['tooltip.NumeroDocumento']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="numeroDocumento" />
+									</span>
+								</div>
+							</div>
+
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelRazonSocial" styleClass="label-form"
+										for="razonSocial"
+										value="#{txt_registral['label.RazonSocial']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="razonSocial" readonly="true"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo"
+											value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ipj_personaJuridicaDto.is_razonSocial}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelRazonSocial"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_registral['tooltip.RazonSocial']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="razonSocial" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelRepresentanteLegal"
+										styleClass="label-form" for="representanteLegal"
+										value="#{txt_registral['label.RepresentanteLegal']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="representanteLegal"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ipj_personaJuridicaDto.getNombreRepresentanteLegal()}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelRepresentanteLegal"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_registral['tooltip.RepresentanteLegal']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="representanteLegal" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelNumeroDocumentoRepresentante"
+										styleClass="label-form" for="numeroDocumentoRepresentante"
+										value="#{txt_registral['label.FormularioDevolucionesDocumentoRepresentante']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<div class="ui-inputgroup">
+										<p:inputText id="numeroDocumentoRepresentante"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											for="numeroDocumentoRepresentante" position="top">
+											<div>
+												<p:outputLabel
+													value="#{txt_registral['ayuda.FormularioDevolucionesDocumentoRepresentante']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="numeroDocumentoRepresentante" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel id="labelDireccionCompleta"
+										styleClass="label-form"
+										for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+										value="#{txt_registral['label.Direccion']}" />
+									<div class="ui-inputgroup">
+										<p:inputText styleClass="text-input border-completo"
+											readonly="true"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											id="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+											value="#{beanDevolucionesServicioRegistral.mostrarDireccionCompleta()}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelDireccionCompleta"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel value="#{txt_registral['tooltip.Direccion']}" />
+										</div>
+									</p:tooltip>
+									<span id="spanDireccionJur" class="help-block"> <p:message
+											for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelTelefono" styleClass="label-form"
+										for="telefonoFijo" value="#{txt_registral['label.Telefono']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="telefonoFijo" readonly="true"
+											styleClass="text-input border-completo"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ipj_personaJuridicaDto.is_telefono}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelTelefono"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel value="#{txt_registral['tooltip.Telefono']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="telefonoFijo" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelCelular" styleClass="label-form"
+										for="celular" value="#{txt_registral['label.NumeroCelular']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="celular"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.is_celular}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCelular" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_registral['tooltip.NumeroCelular']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="celular" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelCorreo" styleClass="label-form"
+										for="correo"
+										value="#{txt_registral['label.CorreoElectronico']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="correo" readonly="true"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo"
+											value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.is_correoElectronico}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCorreo" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_registral['tooltip.CorreoElectronico']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="correo" />
+									</span>
+								</div>
+							</div>
+						</p:outputPanel>
+						<!-- Datos basicos Persona Natural -->
+						<p:outputPanel id="formularioDatosBasicosPersonaNatural"
+							rendered="#{!beanDevolucionesServicioRegistral.ib_datosBasicos}">
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelTipoDocumentoPN"
+										styleClass="label-form" for="tipoDocumentoPN"
+										value="#{txt_registral['label.TipoDocumento']}" />
+									<p:inputText id="tipoDocumentoPN"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelTipoDocumentoPN"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_registral['tooltip.TipoDocumento']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="tipoDocumentoPN" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelNumeroDocumentoPN"
+										styleClass="label-form" for="numeroDocumentoPN"
+										value="#{txt_registral['label.NumeroDocumento']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="numeroDocumentoPN"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelNumeroDocumentoPN"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_registral['tooltip.NumeroDocumento']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="numeroDocumentoPN" />
+									</span>
+								</div>
+
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelNombrePN" styleClass="label-form"
+										for="nombrePN" value="#{txt_registral['label.Nombre']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="nombrePN"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo mask-Numeric"
+											readonly="true"
+											placeholder="#{txt_registral['placeholder.NombreApelidosTitular']}"
+											value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_primerNombre} #{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_segundoNombre} #{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_primerApellido} #{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_segundoApellido}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											for="nombrePN" position="top">
+											<div>
+												<p:outputLabel
+													value="#{txt_registral['ayuda.NombreTitular']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="nombrePN" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel id="labelDireccionCompletaPN"
+										styleClass="label-form"
+										for="direccionResidencia${beanPersona.is_tipoUsuarioNatural}"
+										value="#{txt_registral['label.Direccion']}" />
+									<div class="ui-inputgroup">
+										<p:inputText styleClass="text-input border-completo"
+											readonly="true"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											id="direccionResidencia${beanPersona.is_tipoUsuarioNatural}"
+											value="#{beanDevolucionesServicioRegistral.mostrarDireccionCompleta()}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelDireccionCompletaPN"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel value="#{txt_registral['tooltip.Direccion']}" />
+										</div>
+									</p:tooltip>
+									<span id="spanDireccionPN" class="help-block"> <p:message
+											for="direccionResidencia${beanPersona.is_tipoUsuarioNatural}" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelTelefonoPN" styleClass="label-form"
+										for="telefonoFijoPN"
+										value="#{txt_registral['label.Telefono']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="telefonoFijoPN" readonly="true"
+											styleClass="text-input border-completo"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ipj_personaJuridicaDto.is_telefono}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelTelefonoPN"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel value="#{txt_registral['tooltip.Telefono']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="telefonoFijoPN" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelCelularPN" styleClass="label-form"
+										for="celularPN"
+										value="#{txt_registral['label.NumeroCelular']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="celularPN"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.is_celular}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCelularPN"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_registral['tooltip.NumeroCelular']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="celularPN" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelCorreoPN" styleClass="label-form"
+										for="correoPN"
+										value="#{txt_registral['label.CorreoElectronico']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="correoPN" readonly="true"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo"
+											value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.is_correoElectronico}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCorreoPN"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_registral['tooltip.CorreoElectronico']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="correoPN" />
+									</span>
+								</div>
+							</div>
+						</p:outputPanel>
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_registral['FormularioDevoluciones.SubtituloDos']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+
+						<!--Inicio consulta Nir Turno -->
+						<p:outputPanel id="consultaNirTurno">
+
+							<div class="row">
+								<div class="col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-4">
+
+									<p:outputLabel id="labelNir" styleClass="label-form" for="nir"
+										value="#{txt_registral['label.NIR']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="nir" styleClass="mask-AlphaNum"
+											maxlength="20"
+											placeholder="#{txt_registral['placeholder.NIR']}"
+											value="#{beanDevolucionesServicioRegistral.is_nir}">
+											<p:ajax event="blur"
+												listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.NIR_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.is_nir)}" />
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelNir" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel value="#{txt_registral['tooltip.NIR']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="nir" />
+									</span>
+								</div>
+
+								<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+									<p:outputLabel id="labelNumeroTurno" styleClass="label-form"
+										for="numeroTurno"
+										value="#{txt_registral['label.NumeroTurno']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="numeroTurno" styleClass="mask-AlphaNumGuion"
+											maxlength="30"
+											placeholder="#{txt_registral['placeholder.NumeroTurno']}"
+											value="#{beanDevolucionesServicioRegistral.is_turno}">
+											<p:ajax event="blur"
+												listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.TURNO_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.is_turno)}" />
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelNumeroTurno"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_registral['tooltip.NumeroTurno']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="numeroTurno" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="col-xs-12 col-sm-4 col-sm-offset-4 space-row">
+								<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+									type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+									value="#{txt_registral['boton.Consultar']}">
+									<p:ajax
+										listener="#{beanDevolucionesServicioRegistral.consultaNIRTurno}"
+										update="panelDevolucionesServicioRegistral"
+										process="@this formformularioDevolucionServicioRegistral:nir formformularioDevolucionServicioRegistral:numeroTurno"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();" />
+								</p:commandButton>
+							</div>
+						</p:outputPanel>
+
+						<!--Fin consulta Nir Turno -->
+
+						<br />
+						<!--Panel Resultado Consulta NIR-->
+						<p:outputPanel id="ResultadoNIRTurno" class="tablas"
+							rendered="#{beanDevolucionesServicioRegistral.ii_renderizarVistas eq 1}">
+							<br />
+							<br />
+							<br />
+							<p:dataTable styleClass="tablaNirTurno" id="tablaResultadoNir"
+								widgetVar="tablaResultado" reflow="true"
+								emptyMessage="#{txt_registral['tabla.registro.vacia']}"
+								var="registro" stickyHeader="false" paginator="true" rows="10"
+								paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								lazy="true"
+								value="#{beanDevolucionesServicioRegistral.iss_seguimientoSolicitudesDto.ilssr_listaSeguimientoSolicitudesRespuestaDto}"
+								selection="#{beanDevolucionesServicioRegistral.issr_seguimientoSolicitudesRespuestaDto}"
+								rowKey="#{registro.is_numeroTurno}">
+								<p:column headerText="#{txt_registral['tabla.header.nir']}">
+									<h:outputText value="#{registro.is_nir}" id="registroNir" />
+								</p:column>
+								<p:column headerText="#{txt_registral['tabla.header.turno']}">
+									<h:outputText value="#{registro.is_numeroTurno}"
+										id="registroTurno" />
+								</p:column>
+								<p:column selectionMode="single"
+									headerText="#{txt_registral['tabla.header.accion']}"
+									styleClass="columnaRadioButton" />
+								<p:ajax event="rowSelectRadio"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									listener="#{beanDevolucionesServicioRegistral.validarEtapaTurno}" />
+							</p:dataTable>
+							<br />
+						</p:outputPanel>
+						<!--Panel Resultado Fin Consulta NIR-->
+
+						<!--Panel Inicio Seleccion de Actos-->
+						<p:outputPanel id="ConsultaSeleccionActos" class="tablas"
+							rendered="#{beanDevolucionesServicioRegistral.ii_renderizarVistas == 2}">
+							<div class="col-xs-11 text-center">
+								<p:outputLabel
+									value="#{txt_registral['FormularioDevoluciones.SubtituloCuatro']}"
+									styleClass="titulo tamano-subtitulo" />
+
+							</div>
+							<br />
+							<br />
+							<br />
+							<div class="col-xs-12 text-center">
+							<p:dataTable styleClass="tablaCertificados"
+								id="tablaSeleccionActos" widgetVar="tablaSeleccionActos"
+								reflow="true"
+								emptyMessage="#{txt_registral['tabla.registro.vacia']}"
+								value="#{beanDevolucionesServicioRegistral.ila_actosDto}"
+								var="registro" stickyHeader="false">
+								<p:column headerText="#{txt_registral['tabla.header.cod.acto']}">
+									<h:outputText value="#{registro.is_codigoActo}"
+										id="registroCodActo" />
+								</p:column>
+								<p:column
+									headerText="#{txt_registral['tabla.header.especificacion']}">
+									<h:outputText value="#{registro.is_nombreTipoActo}"
+										id="registroEspecificacion" />
+								</p:column>
+								<p:column
+									headerText="#{txt_registral['tabla.header.cuantia.acto']}">
+									<h:outputText value="#{registro.is_tieneCuantia}"
+										id="registroCuantiaActo" />
+								</p:column>
+								<p:column
+									headerText="#{txt_registral['tabla.header.tipo.tarifa']}">
+									<h:outputText value="" />
+								</p:column>
+								<p:column
+									headerText="#{txt_registral['tabla.header.cuantia.acto']}">
+									<h:outputText value="#{registro.is_valorCuantia}" />
+								</p:column>
+								<p:column headerText="#{txt_registral['tabla.header.valor']}">
+									<h:outputText value="#{registro.is_valorAvaluo}"
+										id="registroValor" />
+								</p:column>
+								<p:column
+									headerText="#{txt_registral['tabla.header.cantidad.actos']}">
+									<h:outputText value="#{registro.is_cantidadActos}"
+										id="registroCantidadActos" />
+								</p:column>
+								<p:column
+									headerText="#{txt_registral['tabla.header.valor.derechos']}">
+									<h:outputText value="#{registro.is_valorDerechos}"
+										id="registroDerechos" />
+								</p:column>
+								<p:column
+									headerText="#{txt_registral['tabla.header.valor.conservacion']}">
+									<h:outputText
+										value="#{registro.is_valorConservacionDocumental}"
+										id="registroConservacion" />
+								</p:column>
+								<p:column
+									headerText="#{txt_registral['tabla.header.valor.total']}">
+									<h:outputText value="#{registro.is_valorTotal}"
+										id="registroValortotal" />
+								</p:column>
+								<p:column headerText="#{txt_registral['tabla.header.accion']}">
+									<p:inputSwitch id="seleccionActos"
+										value="#{registro.ib_actoSeleccionado}">
+									</p:inputSwitch>
+								</p:column>
+							</p:dataTable>
+							</div>
+							<br />
+							<!--Panel Fin Seleccion de Actos-->
+
+							<!-- Panel Inicio Seleccion de Certificados -->
+							<div class="col-xs-11 text-center">
+								<p:outputLabel
+									value="#{txt_registral['FormularioDevoluciones.SubtituloCinco']}"
+									styleClass="titulo tamano-subtitulo" />
+								<br /> <br />
+							</div>
+
+							<div class="col-xs-12">
+								<p:dataTable styleClass="tablaCertificados"
+									id="tablaSeleccionCertificados"
+									widgetVar="consultaSeleccionCertificados" reflow="true"
+									emptyMessage="#{txt_registral['tabla.registro.vacia']}"
+									value="#{beanDevolucionesServicioRegistral.ilc_certificadosDto}"
+									var="registro" stickyHeader="false">
+									<p:column headerText="#{txt_registral['tabla.header.turno']}">
+										<h:outputText
+											value="#{beanDevolucionesServicioRegistral.issr_seguimientoSolicitudesRespuestaDto.is_numeroTurno}"
+											id="registroEspecificacionCertificado" />
+									</p:column>
+									<p:column
+										headerText="#{txt_registral['tabla.header.especificacion']}">
+										<h:outputText value="#{registro.is_nombre}"
+											id="registroEspecificacion" />
+									</p:column>
+									<p:column
+										headerText="#{txt_registral['tabla.header.tipo.certificado']}">
+										<h:outputText value="#{registro.is_proceso}"
+											id="tipoCertificado" />
+									</p:column>
+									<p:column
+										headerText="#{txt_registral['tabla.header.cantidad.certificados']}">
+										<h:outputText value="#{registro.is_cantidad}"
+											id="registroCantCertificado" />
+									</p:column>
+									<p:column
+										headerText="#{txt_registral['tabla.header.valor.derechos']}">
+										<h:outputText value="#{registro.is_valor}"
+											id="registroValorDerechos" />
+									</p:column>
+									<p:column
+										headerText="#{txt_registral['tabla.header.valor.total']}">
+										<h:outputText value="#{registro.is_valorTotal}"
+											id="registroValorTotal" />
+									</p:column>
+									<p:column headerText="#{txt_registral['tabla.header.accion']}">
+										<p:inputSwitch id="seleccionActos"
+											value="#{registro.ib_certificadoSeleccionado}">
+										</p:inputSwitch>
+									</p:column>
+								</p:dataTable>
+								<br />
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel id="lblObservacionesReg"
+											styleClass="label-form text-left" for="observacionesReg"
+											value="#{txt_registral['label.modal.observaciones']}" />
+										<div class="ui-inputgroup observacionesTabla">
+											<p:inputTextarea id="observacionesReg" rows="6" cols="40"
+												styleClass="mask-AlphaNumChars2" autoResize="false"
+												maxlength="1000" editable="false"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_registral['placeholder.registro.observaciones']}"
+												value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_observacionDevolucionServicioRegistral}">
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:ciudadPrevisualizar"
+													listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.OBSERVACION_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_observacionDevolucionServicioRegistral)}" />
+											</p:inputTextarea>
+											<span class="help-block"> <p:message
+													for="observacionesReg" />
+											</span>
+										</div>
+									</div>
+								</div>
+								<br /> <br />
+							</div>
+
+						</p:outputPanel>
+						<!--Panel Fin Seleccion de Certificados -->
+
+						<br /> <br /> <br />
+
+						<div class="col-xs-12">
+							<div class="col-xs-12 col-md-9">
+								<p:outputLabel value="#{txt_registral['label.PreguntaUno']}"
+									styleClass="titulo tamano-subtitulo" />
+							</div>
+							<div class="col-xs-6 col-md-3">
+								<p:outputPanel id="panelSwitchIntervino">
+									<h:outputText id="spanNoIntervino"
+										value="#{txt_registral['label.No']}"
+										class="#{!beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.ib_intervino ? 'textoRojo' : 'textoGris' }" />
+									<p:inputSwitch id="intervinoSwitch"
+										value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.ib_intervino}">
+										<p:ajax
+											update="panelSwitchIntervino formformularioDevolucionServicioRegistral:formularioPersonaNoTitular formModalPrevisualizarPdf:spanNoIntervino"
+											listener="#{beanDevolucionesServicioRegistral.previsualizarPreguntaIntervino}"
+											oncomplete="#{beanDevolucionesServicioRegistral.guardarTransaccionIntervino(CampoConfiguracion.SOLICITANTE_INTERVINIENTE_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.ib_intervino)}"
+											render="formformularioDevolucionServicioRegistral:panelSwitchIntervino:0:spaNoIntervino formformularioDevolucionServicioRegistral:panelSwitchIntervino:0:spanSiIntervino" />
+									</p:inputSwitch>
+									<h:outputText id="spanSiIntervino"
+										value="#{txt_registral['label.Si']}"
+										class="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.ib_intervino ?  'textoRojo' : 'textoGris' }" />
+								</p:outputPanel>
+								<br />
+							</div>
+						</div>
+						<br />
+						<!-- Informacion no titular -->
+						<p:outputPanel id="formularioPersonaNoTitular">
+							<br />
+							<ui:fragment
+								rendered="#{beanDevolucionesServicioRegistral.ib_camposNoTitular}">
+								<div class="col-xs-12">
+									<div class="col-xs-12 text-left">
+										<p:outputLabel
+											value="#{txt_registral['PersonaNoRealizoPago']}" />
+									</div>
+								</div>
+								<br />
+								<br />
+								<div class="row">
+									<div class="col-xs-12 col-sm-6">
+										<p:outputLabel id="labelTipoDocumentoPersonaNoTitular"
+											styleClass="label-form" for="tipoDocumentoPersonaNoTitular"
+											value="#{txt_registral['label.TipoDocumento']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<p:selectOneMenu id="tipoDocumentoPersonaNoTitular"
+											widgetVar="tipoDocumentoSelectNoTitular"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											required="true"
+											value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_tipoDocumentoNoTitular}">
+											<p:ajax event="change"
+												update="formformularioDevolucionServicioRegistral:formularioNoTitularPersonas"
+												listener="#{beanDevolucionesServicioRegistral.guardarTransaccionNoTitularCuentaBancaria(CampoConfiguracion.TIPO_DOCUMENTO_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_tipoDocumentoNoTitular)}" />
+											<f:selectItem itemValue=""
+												itemLabel="#{txt['label.SeleccioneComboBox']}" />
+											<f:selectItems
+												value="#{beanDevolucionesServicioRegistral.iltd_tiposDocumento}"
+												var="tipoDocumento" itemValue="#{tipoDocumento.getIs_id()}"
+												itemLabel="#{tipoDocumento.getIs_nombre()}" />
+										</p:selectOneMenu>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral"
+											for="labelTipoDocumentoPersonaNoTitular" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_registral['tooltip.TipoDocumento']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="tipoDocumentoPersonaNoTitular" />
+										</span>
+									</div>
+									<div class="col-xs-12 col-sm-6">
+										<p:outputLabel id="labelNumeroDocumentoPersonaNoTitular"
+											styleClass="label-form" for="numeroDocumentoPersonaNoTitular"
+											value="#{txt_registral['label.NumeroDocumento']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<p:inputText id="numeroDocumentoPersonaNoTitular"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											autocomplete="off"
+											styleClass="text-input border-completo mask-Numeric"
+											maxlength="20"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											placeholder="#{txt_registral['placeholder.NumeroDocumento']}"
+											required="true"
+											value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_numeroDocumentoNoTitular}">
+											<p:keyFilter regEx="/[0-9]/i" />
+											<p:ajax event="blur"
+												update="formModalPrevisualizarPdf:numeroDocumentoTitularCuentaBancariaPrevisualizar"
+												listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.NUMERO_DOCUMENTO_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_numeroDocumentoNoTitular)}" />
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral"
+											for="labelNumeroDocumentoPersonaNoTitular" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_registral['tooltip.NumeroDocumento']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="numeroDocumentoPersonaNoTitular" />
+										</span>
+									</div>
+									<br />
+								</div>
+								<p:outputPanel id="formularioNoTitularPersonas">
+									<ui:fragment
+										rendered="#{beanDevolucionesServicioRegistral.ib_noTitularPersonas}">
+										<p:outputPanel id="formularioPersonaNoTitularPN"
+											rendered="#{beanDevolucionesServicioRegistral.ib_personaNoTitular}">
+											<div class="row">
+												<div class="col-xs-12 col-sm-3">
+													<p:outputLabel id="labelNombrePersonaNoTitular"
+														styleClass="label-form" for="nombrePersonaNoTitular"
+														value="#{txt_registral['label.NombreTitular']}" />
+													<p:outputLabel styleClass="required-field">*</p:outputLabel>
+													<p:inputText id="nombrePersonaNoTitular"
+														onkeypress="if (event.keyCode == 13){return false;}"
+														autocomplete="off"
+														styleClass="text-input border-completo mask-Numeric"
+														maxlength="30"
+														requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+														placeholder="#{txt_registral['placeholder.NombreTitular']}"
+														required="true"
+														value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_primerNombreNoTitular}">
+														<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+														<p:ajax event="blur"
+															update="formModalPrevisualizarPdf:nombrePersonaNoTitularPrevisualizar"
+															listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.PRIMER_NOMBRE_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_primerNombreNoTitular)}" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="labelNombrePersonaNoTitular" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_registral['ayuda.NombreTitular']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="nombrePersonaNoTitular" />
+													</span>
+												</div>
+												<div class="col-xs-12 col-sm-3">
+													<p:outputLabel id="labelSegundoNombrePersonaNoTitular"
+														styleClass="label-form"
+														for="segundoNombrePersonaNoTitular"
+														value="#{txt_registral['label.SegundoNombreTitular']}" />
+													<p:inputText id="segundoNombrePersonaNoTitular"
+														onkeypress="if (event.keyCode == 13){return false;}"
+														autocomplete="off"
+														styleClass="text-input border-completo mask-Numeric"
+														maxlength="30"
+														placeholder="#{txt_registral['placeholder.SegundoNombreTitular']}"
+														value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_segundoNombreNoTitular}">
+														<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+														<p:ajax event="blur"
+															update="formModalPrevisualizarPdf:segundoNombrePersonaNoTitularPrevisualizar"
+															listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.SEGUNDO_NOMBRE_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_segundoNombreNoTitular)}" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="labelSegundoNombrePersonaNoTitular" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_registral['ayuda.SegundoNombreTitular']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="segundoNombrePersonaNoTitular" />
+													</span>
+												</div>
+												<div class="col-xs-12 col-sm-3">
+													<p:outputLabel id="labelApellidoPersonaNoTitular"
+														styleClass="label-form" for="apellidoPersonaNoTitular"
+														value="#{txt_registral['label.ApellidoTitular']}" />
+													<p:outputLabel styleClass="required-field">*</p:outputLabel>
+													<p:inputText id="apellidoPersonaNoTitular"
+														onkeypress="if (event.keyCode == 13){return false;}"
+														autocomplete="off"
+														styleClass="text-input border-completo mask-Numeric"
+														maxlength="30"
+														requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+														placeholder="#{txt_registral['placeholder.ApellidoTitular']}"
+														required="true"
+														value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_primerApellidoNoTitular}">
+														<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+														<p:ajax event="blur"
+															update="formModalPrevisualizarPdf:apellidoPersonaNoTitularPrevisualizar"
+															listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.PRIMER_APELLIDO_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_primerApellidoNoTitular)}" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="labelApellidoPersonaNoTitular" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_registral['ayuda.ApellidoTitular']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="apellidoPersonaNoTitular" />
+													</span>
+												</div>
+												<div class="col-xs-12 col-sm-3">
+													<p:outputLabel id="labelSegundoApellidoPersonaNoTitular"
+														styleClass="label-form"
+														for="segundoApellidoPersonaNoTitular"
+														value="#{txt_registral['label.SegundoApellidoTitular']}" />
+													<p:inputText id="segundoApellidoPersonaNoTitular"
+														onkeypress="if (event.keyCode == 13){return false;}"
+														autocomplete="off"
+														styleClass="text-input border-completo mask-Numeric"
+														maxlength="30"
+														placeholder="#{txt_registral['placeholder.SegundoApellidoTitular']}"
+														value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_segundoApellidoNoTitular}">
+														<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+														<p:ajax event="blur"
+															update="formModalPrevisualizarPdf:segundoApellidoPersonaNoTitularPrevisualizar"
+															listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.SEGUNDO_APELLIDO_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_segundoApellidoNoTitular)}" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="labelSegundoApellidoPersonaNoTitular" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_registral['ayuda.SegundoApellidoTitular']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="segundoApellidoPersonaNoTitular" />
+													</span>
+												</div>
+											</div>
+										</p:outputPanel>
+										<br />
+										<p:outputPanel id="formularioPersonaNoTitularPJ"
+											rendered="#{!beanDevolucionesServicioRegistral.ib_personaNoTitular}">
+											<div class="row">
+												<div class="col-xs-12 col-sm-12">
+													<p:outputLabel id="labelRazonSocialPersonaNoTitular"
+														styleClass="label-form" for="razonSocialPersonaNoTitular"
+														value="#{txt_registral['label.RazonSocial']}" />
+													<p:inputText id="razonSocialPersonaNoTitular"
+														onkeypress="if (event.keyCode == 13){return false;}"
+														autocomplete="off"
+														styleClass="text-input border-completo mask-Numeric"
+														maxlength="30" placeholder="Razon social"
+														value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_razonSocialNoTitular}">
+														<p:keyFilter regEx="/[a-z\A-Z\0-9\.\s]/i" />
+														<p:ajax event="blur"
+															update="formModalPrevisualizarPdf:razonSocialPersonaNoTitularPrevisualizar"
+															listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.EMPRESA_RAZON_SOCIAL_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_razonSocialNoTitular)}" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="labelRazonSocialPersonaNoTitular" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel value="Razon Social']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="razonSocialPersonaNoTitular" />
+													</span>
+												</div>
+											</div>
+										</p:outputPanel>
+										<br />
+									</ui:fragment>
+								</p:outputPanel>
+							</ui:fragment>
+						</p:outputPanel>
+						<br />
+						<div class="col-xs-12">
+							<div class="col-xs-12 col-md-9">
+								<p:outputLabel value="#{txt_registral['label.PreguntaDos']}"
+									styleClass="titulo tamano-subtitulo" />
+							</div>
+							<div class="col-xs-6 col-md-3">
+								<p:outputPanel id="panelSwitchIntervinoTitular">
+									<h:outputText id="spanNoIntervinoTitular"
+										value="#{txt_registral['label.No']}"
+										class="#{!beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.ib_intervinoTitularCuentaBancaria ? 'textoRojo' : 'textoGris' }" />
+									<p:inputSwitch
+										value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.ib_intervinoTitularCuentaBancaria}">
+										<p:ajax update="panelSwitchIntervinoTitular formModalPrevisualizarPdf:spanNoIntervinoPrevisualizar"
+											listener="#{beanDevolucionesServicioRegistral.previsualizarPreguntaIntervinoCuentaBancaria}"
+											oncomplete="#{beanDevolucionesServicioRegistral.guardarTransaccionIntervino(CampoConfiguracion.INTERVINO_TITULAR_CUENTA_BANCARIA_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.ib_intervinoTitularCuentaBancaria)}"
+											render="formformularioDevolucionServicioRegistral:panelSwitchIntervinoTitular:0:spaNoIntervinoTitular formformularioDevolucionServicioRegistral:panelSwitchIntervinoTitular:0:spanSiIntervinoTitular" />
+									</p:inputSwitch>
+									<h:outputText id="spanSiIntervinoTitular"
+										value="#{txt_registral['label.Si']}"
+										class="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.ib_intervinoTitularCuentaBancaria ?  'textoRojo' : 'textoGris' }" />
+								</p:outputPanel>
+							</div>
+							<br /> <br />
+						</div>
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_registral['InformacionCuentaBancaria.SubtituloCuatro']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelEntidadFinanciera"
+									styleClass="label-form" for="entidadFinanciera"
+									value="#{txt_registral['label.EntidadFinanciera']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="entidadFinanciera"
+									widgetVar="entidadFinancieraSelect"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_entidadFinanciera}">
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:entidadFinancieraPrevisualizar"
+										listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.CODIGO_ENTIDAD_FINANCIERA_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_entidadFinanciera)}" />
+									<f:selectItem itemValue=""
+										itemLabel="#{txt['label.SeleccioneComboBox']}" />
+									<f:selectItems
+										value="#{beanDevolucionesServicioRegistral.illeb_entidadBancaria}"
+										var="entidadBancaria" itemValue="#{entidadBancaria.is_nombre}"
+										itemLabel="#{entidadBancaria.is_nombreEntidad}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelEntidadFinanciera"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_registral['tooltip.EntidadFinanciera']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="entidadFinanciera" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelTipoCuenta" styleClass="label-form"
+									for="tipoCuenta" value="#{txt_registral['label.TipoCuenta']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="tipoCuenta" widgetVar="tipoCuentaSelect"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_tipoCuenta}">
+									<p:ajax event="blur"
+										listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.TIPO_CUENTA_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_tipoCuenta)}" />
+									<f:selectItem itemValue=""
+										itemLabel="#{txt['label.SeleccioneComboBox']}" />
+									<f:selectItems
+										value="#{beanDevolucionesServicioRegistral.ilec_tipoCuentaBancaria}"
+										var="tipoCuentaBancaria"
+										itemValue="#{tipoCuentaBancaria.getIs_criterio()}"
+										itemLabel="#{tipoCuentaBancaria.getIs_criterio()}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelTipoCuenta"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_registral['tooltip.TipoCuenta']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="tipoCuenta" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelNumeroCuenta" styleClass="label-form"
+									for="numeroCuenta"
+									value="#{txt_registral['label.NumeroCuenta']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:inputText id="numeroCuenta"
+									onkeypress="if (event.keyCode == 13){return false;}"
+									autocomplete="off"
+									styleClass="text-input border-completo mask-Numeric"
+									maxlength="20"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_registral['placeholder.NumeroCuentaBancaria']}"
+									required="true"
+									value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_numeroCuenta}">
+									<p:keyFilter regEx="/[0-9\-\a-z\A-Z]/i" />
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:numeroCuentaPrevisualizar"
+										listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.NUMERO_CUENTA_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_numeroCuenta)}" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNumeroCuenta"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_registral['tooltip.NumeroCuenta']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="numeroCuenta" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelTipoDocumentoTitularCuentaBancaria"
+									styleClass="label-form"
+									for="tipoDocumentoTitularCuentaBancaria"
+									value="#{txt_registral['label.TipoDocumento']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="tipoDocumentoTitularCuentaBancaria"
+									widgetVar="tipoDocumentoSelect"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_tipoDocumentoTitularCuentaBancaria}">
+									<p:ajax event="change"
+										update="formformularioDevolucionServicioRegistral:formularioCuentaBancariaPersonas"
+										listener="#{beanDevolucionesServicioRegistral.guardarTransaccionTitularCuentaBancaria(CampoConfiguracion.TITULAR_CUENTA_TIPO_DOCUMENTO_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_tipoDocumentoTitularCuentaBancaria)}" />
+									<f:selectItem itemValue=""
+										itemLabel="#{txt['label.SeleccioneComboBox']}" />
+									<f:selectItems
+										value="#{beanDevolucionesServicioRegistral.iltd_tiposDocumento}"
+										var="tipoDocumento" itemValue="#{tipoDocumento.getIs_id()}"
+										itemLabel="#{tipoDocumento.getIs_nombre()}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral"
+									for="labelTipoDocumentoTitularCuentaBancaria" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_registral['tooltip.TipoDocumento']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="tipoDocumentoTitularCuentaBancaria" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelNumeroDocumentoTitularCuentaBancaria"
+									styleClass="label-form"
+									for="numeroDocumentoTitularCuentaBancaria"
+									value="#{txt_registral['label.NumeroDocumento']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:inputText id="numeroDocumentoTitularCuentaBancaria"
+									onkeypress="if (event.keyCode == 13){return false;}"
+									autocomplete="off"
+									styleClass="text-input border-completo mask-Numeric"
+									maxlength="20"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_registral['placeholder.NumeroDocumento']}"
+									required="true"
+									value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_numeroDocumentoTitularCuentaBancaria}">
+									<p:keyFilter regEx="/[0-9]/i" />
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:numeroDocumentoTitularCuentaBancariaPrevisualizar"
+										listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_NUMERO_DOCUMENTO_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_numeroDocumentoTitularCuentaBancaria)}" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral"
+									for="labelNumeroDocumentoTitularCuentaBancaria" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_registral['tooltip.NumeroDocumento']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="numeroDocumentoTitularCuentaBancaria" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<!-- Campo persona Natural y Juridical -->
+						<p:outputPanel id="formularioCuentaBancariaPersonas">
+							<ui:fragment
+								rendered="#{beanDevolucionesServicioRegistral.ib_camposCuentaBancaria}">
+								<!-- Cuenta Bancaria Persona Natural -->
+								<p:outputPanel id="formularioCuentaBancariaPersonaNatural"
+									rendered="#{beanDevolucionesServicioRegistral.ib_datosBasicosCuentaBancaria}">
+									<div class="row">
+										<div class="col-xs-12 col-sm-3">
+											<p:outputLabel id="labelNombreTitular"
+												styleClass="label-form" for="nombreTitular"
+												value="#{txt_registral['label.NombreTitular']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											<p:inputText id="nombreTitular"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_registral['placeholder.NombreTitular']}"
+												required="true"
+												value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_nombreTitularCuentaBancaria}">
+												<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:nombreTitularPrevisualizar"
+													listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_PRIMER_NOMBRE_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_nombreTitularCuentaBancaria)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelNombreTitular"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_registral['ayuda.NombreTitular']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="nombreTitular" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-sm-3">
+											<p:outputLabel id="labelSegundoNombreTitular"
+												styleClass="label-form" for="segundoNombreTitular"
+												value="#{txt_registral['label.SegundoNombreTitular']}" />
+											<p:inputText id="segundoNombreTitular"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30"
+												placeholder="#{txt_registral['placeholder.SegundoNombreTitular']}"
+												value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_segundoNombreTitularCuentaBancaria}">
+												<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:segundoNombreTitularPrevisualizar"
+													listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_SEGUNDO_NOMBRE_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_segundoNombreTitularCuentaBancaria)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelSegundoNombreTitular"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_registral['ayuda.SegundoNombreTitular']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="segundoNombreTitular" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-sm-3">
+											<p:outputLabel id="labelApellidoTitular"
+												styleClass="label-form" for="apellidoTitular"
+												value="#{txt_registral['label.ApellidoTitular']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											<p:inputText id="apellidoTitular"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_registral['placeholder.ApellidoTitular']}"
+												required="true"
+												value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_apellidoTitularCuentaBancaria}">
+												<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:apellidoTitularPrevisualizar"
+													listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_PRIMER_APELLIDO_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_apellidoTitularCuentaBancaria)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelApellidoTitular"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_registral['ayuda.ApellidoTitular']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="apellidoTitular" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-sm-3">
+											<p:outputLabel id="labelSegundoApellidoTitular"
+												styleClass="label-form" for="segundoApellidoTitular"
+												value="#{txt_registral['label.SegundoApellidoTitular']}" />
+											<p:inputText id="segundoApellidoTitular"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30"
+												placeholder="#{txt_registral['placeholder.SegundoApellidoTitular']}"
+												value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_segundoApellidoTitularCuentaBancaria}">
+												<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:segundoApellidoTitularPrevisualizar"
+													listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_SEGUNDO_APELLIDO_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_segundoApellidoTitularCuentaBancaria)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral"
+												for="labelSegundoApellidoTitular" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_registral['ayuda.SegundoApellidoTitular']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="segundoApellidoTitular" />
+											</span>
+										</div>
+									</div>
+								</p:outputPanel>
+								<!-- Cuenta Bancaria Persona Juridica -->
+								<p:outputPanel id="formularioCuentaBancariaPersonaJuridica"
+									rendered="#{!beanDevolucionesServicioRegistral.ib_datosBasicosCuentaBancaria}">
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel id="labelRazonSocialCuentaBancaria"
+												styleClass="label-form" for="razonSocialCuentaBancaria"
+												value="#{txt_registral['label.RazonSocial']}" />
+											<p:inputText id="razonSocialCuentaBancaria"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30" placeholder="Razon social"
+												value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_titularCuentaBancariaRazonSocial}">
+												<p:keyFilter regEx="/[a-z\A-Z\0-9\.\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:razonSocialCuentaBancariaPrevisualizar"
+													listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_RAZON_SOCIAL_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_titularCuentaBancariaRazonSocial)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral"
+												for="labelRazonSocialCuentaBancaria" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_registral['tooltip.RazonSocial']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="razonSocialCuentaBancaria" />
+											</span>
+										</div>
+									</div>
+								</p:outputPanel>
+							</ui:fragment>
+						</p:outputPanel>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel id="labelMotivoSolicitud" styleClass="label-form"
+								for="motivoSolicitud"
+								value="#{txt_registral['label.MotivoSolicitud']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:inputTextarea id="motivoSolicitud" rows="6" cols="40"
+									styleClass="mask-AlphaNumChars2"
+									counter="mostrarContadorMotivoSolicitud" maxlength="1000"
+									placeholder="#{txt_registral['placeholder.MotivoSolicitud']}"
+									counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+									autoResize="false"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_motivoSolicitud}">
+									<p:keyFilter regEx="/[0-9\A-Z\a-z\s\,\.]/i" />
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:motivoSolicitudPrevisualizar"
+										listener="#{beanDevolucionesServicioRegistral.guardarTransaccion(CampoConfiguracion.MOTIVO_SOLICITUD_DEVOLUCION_SERVICIO_REGISTRAL.getIs_nombreCampo(),beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_motivoSolicitud)}" />
+								</p:inputTextarea>
+								<br />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="motivoSolicitud" position="top">
+									<div>
+										<p:outputLabel
+											value="#{txt_registral['tooltip.MotivoSolicitud']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<h:outputText id="mostrarContadorMotivoSolicitud" />
+							<span class="help-block"> <p:message for="motivoSolicitud" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<br />
+					<p:separator />
+					<br />
+					<div class="row">
+						<div class="col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-4">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_registral['boton.Previsualizar']}"
+								onstart="PF('blockUI-Loading').show();"
+								action="#{beanDevolucionesServicioRegistral.previsualizarPdf}"
+								oncomplete="PF('blockUI-Loading').hide();"
+								update="formModalPrevisualizarPdf panelDevolucionesServicioRegistral"
+								process="formformularioDevolucionServicioRegistral">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_registral['boton.CargarDocumentos']}"
+								action="#{beanDevolucionesServicioRegistral.validarGenerarNir}"
+								onstart="cargarKeyfilters();"
+								oncomplete="if(args &amp;&amp; args.validationFailed) validarFormulario('#{txt_registral['campos.obligatorios']}');"
+								update="panelDevolucionesServicioRegistral"
+								process="formformularioDevolucionServicioRegistral">
+							</p:commandButton>
+						</div>
+					</div>
+					<br />
+				</h:form>
+			</p:outputPanel>
+			<!-- Cargue de documentos devolucion servicio registral -->
+			<p:outputPanel id="cargueDocumentosDevolucionServicioRegistral"
+				rendered="#{beanDevolucionesServicioRegistral.ii_seccion == 1}"
+				styleClass="no-border">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelAdjuntarDocumentos"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_registral['label.AdjuntarDocumentos']}" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="col-xs-12">
+					<p:outputLabel styleClass="tamano-subtitulo"
+						value="#{txt_registral['Mensaje.IntervinoObligatorio']}" />
+					<br /> <br />
+				</div>
+				<div class="col-xs-12">
+					<p:outputLabel styleClass="tamano-subtitulo"
+						value="#{txt_registral['Mensaje.IntervinoTitularObligatorio']}" />
+					<br /> <br /> <br />
+				</div>
+				<p:outputPanel id="cargaDeDocumentos" class="tablas">
+					<div class="col-xs-12">
+						<p:dataTable var="cargaDocumentosDevolucionServicioRegistral"
+							styleClass="centrar"
+							widgetVar="paramscargaDocumentosDevolucionServicioRegistral"
+							id="cargarDocumento" reflow="true" rowIndexVar="index"
+							value="#{beanDevolucionesServicioRegistral.ilcdf_listaDocumentoFormularioDto}"
+							emptyMessage="#{txt_administrador['tabla.vacia.PJ']}"
+							stickyHeader="false">
+							<p:column
+								headerText="#{txt_registral['header.DocumentosSolicitados']}"
+								styleClass="centrar45 documento-medio">
+								<h:outputText
+									value="#{cargaDocumentosDevolucionServicioRegistral.icd_catalogoDocumentoDto.is_nombre}" />
+								<p:fragment id="documentosObligatorios"
+									rendered="#{!cargaDocumentosDevolucionServicioRegistralicd_catalogoDocumentoDto.ib_opcional}">
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</p:fragment>
+							</p:column>
+							<p:column headerText="Adjuntar"
+								styleClass="centrar35 documento-medio">
+								<div class="ui-inputgroup">
+									<h:form>
+										<p:fileUpload
+											id="certificado${cargaDocumentosDevolucionServicioRegistral.ic_catalogoDocumentoDto.is_nombre}"
+											styleClass="cargar-archivo" showButtons="false"
+											sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+											allowTypes="/(\.|\/)(pdf|PDF)$/"
+											disabled="#{cargaDocumentosDevolucionServicioRegistral.ib_desactivarBotonesCarga}"
+											fileUploadListener="#{beanDevolucionesServicioRegistral.generarArchivoCargado}"
+											auto="true" label="#{txt_registral['boton.CargarArchivo']}"
+											process="@this" update="cargaDeDocumentos"
+											invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+											invalidFileMessage="#{txt_registral['Mensaje.archivo.formatoInvalido']}">
+											<f:attribute name="foo"
+												value="${cargaDocumentosDevolucionServicioRegistral}" />
+											<div class="col-xs-12 tamano-examinar">
+												<br />
+												<h:outputText id="textoSalidaArchivo"
+													styleClass="text-input"
+													value="#{cargaDocumentosDevolucionServicioRegistral.ia_archivoDto.is_nombreArchivo}" />
+											</div>
+										</p:fileUpload>
+									</h:form>
+								</div>
+							</p:column>
+							<p:column headerText="#{txt_registral['header.CargarArchivos']}"
+								styleClass="centrarEnviado">
+								<p:commandButton value="#{txt_registral['boton.Subir']}"
+									disabled="#{cargaDocumentosDevolucionServicioRegistral.ib_desactivarBotonesCarga}"
+									styleClass="btn-gradiente btn-rojo">
+									<p:ajax oncomplete="PF('confirmarCargueDocumento').show();"
+										update="panelDevolucionesServicioRegistral"
+										process="formformularioDevolucionServicioRegistral" />
+									<f:setPropertyActionListener
+										value="#{cargaDocumentosDevolucionServicioRegistral}"
+										target="#{beanDevolucionesServicioRegistral.icdf_cargaDocumentosFormularioDto}" />
+								</p:commandButton>
+							</p:column>
+							<p:column headerText="#{txt_registral['header.Estado']}"
+								styleClass="centrarEnviado documento-medio">
+								<p:outputPanel
+									rendered="#{cargaDocumentosDevolucionServicioRegistral.ib_desactivarBotonesCarga}">
+									<p:graphicImage name="/iconos/check-verde.png" />
+									<br />
+									<h:outputText value="#{txt_registral['Mensaje.archivoSubido']}" />
+								</p:outputPanel>
+							</p:column>
+							<br />
+							<br />
+						</p:dataTable>
+						<br /> <br />
+					</div>
+					<br />
+					<p:outputPanel id="panelEnviarSolicitud">
+						<h:form id="cargueDocumento">
+							<div class="row">
+								<div class="col-xs-12 observacionesIzq">
+									<p:outputLabel id="labelObservaciones" styleClass="label-form"
+										for="observaciones"
+										value="#{txt_registral['label.Observaciones']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<div class="ui-inputgroup">
+										<p:inputTextarea id="observaciones" rows="6" cols="40"
+											styleClass="mask-AlphaNumChars2"
+											counter="mostrarContadorObservaciones" maxlength="1000"
+											placeholder="#{txt_registral['placeholder.Observaciones']}"
+											counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+											autoResize="false"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											required="true"
+											value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_observacionDevolucionServicioRegistral}">
+											<p:keyFilter regEx="/[0-9\A-Z\a-z\s\,\.]/i" />
+										</p:inputTextarea>
+										<br />
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											for="observaciones" position="top">
+											<div>
+												<p:outputLabel
+													value="#{txt_registral['placeholder.Observaciones']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<h:outputText id="mostrarContadorObservaciones" />
+									<span class="help-block"> <p:message for="observaciones" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<br />
+							<div class="row">
+								<div class="col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-4">
+									<p:commandButton icon="icon-flecha-gris" iconPos="right"
+										type="submit" styleClass="icon-btn btn-gris "
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();"
+										value="#{txt_registral['boton.Eliminar']}">
+										<p:ajax
+											oncomplete="PF('eliminarTransaccionDevolucionServicioRegistral').show();" />
+									</p:commandButton>
+								</div>
+								<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+									<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+										type="submit" onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();"
+										styleClass="btn-gradiente icon-btn btn-rojo "
+										value="#{txt_registral['boton.EnviarSolicitud']}">
+										<p:ajax process="@form @all"
+											listener="#{beanDevolucionesServicioRegistral.validarCamposEnviarSolicitud()}" />
+									</p:commandButton>
+								</div>
+							</div>
+						</h:form>
+					</p:outputPanel>
+				</p:outputPanel>
+			</p:outputPanel>
+			<!-- Resumen solicitud devolucion servicio registral -->
+			<p:outputPanel id="resumenSolicitudExitosa"
+				rendered="#{beanDevolucionesServicioRegistral.ii_seccion == 2}">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelResumenSolicitudExitosa"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_registral['FormularioResumenServicioRegistral']}" />
+							<br /> <br />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="solicitudExitosa" styleClass="tamano-subtitulo"
+						value="#{txt_registral['Mensaje.RealizadoSolicitudDevolucionServicioRegistral']}" />
+					<br /> <br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelFechaSolicitudExitosa"
+									styleClass="label-form" for="fechaSolicitudExitosa"
+									value="#{txt_registral['label.FechaDiligenciamiento']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesServicioRegistral.itf_transaccionFormularioDto.id_fechaCreacion}"
+									id="fechaSolicitudExitosa">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelNirSolicitudExitosa"
+									styleClass="label-form" for="nirSolicitudExitosa"
+									value="#{txt_registral['label.Nir']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesServicioRegistral.itf_transaccionFormularioDto.is_nir}"
+									id="nirSolicitudExitosa" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudExitosa"
+									styleClass="label-form" for="estadoSolicitudExitosa"
+									value="#{txt_registral['label.Estado']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesServicioRegistral.itf_transaccionFormularioDto.is_estadoTransaccion}"
+									id="estadoSolicitudExitosa" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudExitosa" />
+								</span>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<br /> <br />
+						<p:outputPanel id="entendido">
+							<p:commandButton type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo"
+								value="#{txt_registral['boton.Aceptar']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</p:outputPanel>
+
+			<p:outputPanel id="resumenSolicitudPendiente"
+				rendered="#{beanDevolucionesServicioRegistral.ii_seccion == 3}">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelResumenSolicitudPendiente"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_registral['FormularioResumenServicioRegistral']}" />
+							<br /> <br />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="solicitudPendiente"
+						styleClass="tamano-subtitulo"
+						value="#{txt_registral['Mensaje.SolicitudDevolucionConsignacionErradaRadicada']}" />
+					<br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelFechaSolicitudPendiente"
+									styleClass="label-form" for="fechaSolicitudPendiente"
+									value="#{txt_registral['label.FechaDiligenciamiento']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesServicioRegistral.getItf_transaccionFormularioDto().getId_fechaCreacion()}"
+									id="fechaSolicitudPendiente">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelNirSolicitudPendiente"
+									styleClass="label-form" for="nirSolicitudPendiente"
+									value="#{txt_registral['label.Nir']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesServicioRegistral.itf_transaccionFormularioDto.is_nir}"
+									id="nirSolicitudPendiente" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudPendiente"
+									styleClass="label-form" for="estadoSolicitudPendiente"
+									value="#{txt_registral['label.Estado']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesServicioRegistral.itf_transaccionFormularioDto.is_estadoTransaccion}"
+									id="estadoSolicitudPendiente" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudPendiente" />
+								</span>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-4">
+						<br /> <br />
+						<p:outputPanel id="entendidoPendiente">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_registral['boton.Aceptar']}"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</p:outputPanel>
+		</p:panel>
+
+		<!-- Modal de informacion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalInformacionTurno" />
+			<ui:param name="tituloModal"
+				value="#{txt_registral['modalInformativo.titulo']}" />
+			<ui:param name="formulario" value="formModalInformacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel styleClass="textoInfo"
+							value="#{beanDevolucionesServicioRegistral.is_mensajeModalTurno}" />
+						<br /> <br />
+						<p:outputLabel styleClass="textoInfo"
+							value="#{txt_registral['Mensaje.FinalizoProceso']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton
+							styleClass="btn-gradiente icon-btn btn-rojo modalInformativo"
+							value="#{txt_solicitud_consulta['boton.entendido']}"
+							oncomplete="PF('modalInformacionTurno').hide(); PF('blockUI-Loading').hide();"
+							onstart="PF('blockUI-Loading').show();">
+						</p:commandButton>
+
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal Información -->
+
+		<!-- Modal de transaccion Aprobada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="devolucionServicioRegistralAprobada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.redireccion']}" />
+			<ui:param name="formulario"
+				value="formModalDevolucionServicioRegistral" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12">
+					<br />
+					<p:outputLabel id="solicitudAprobada"
+						value="#{txt_registral['Mensaje.SolicitudAprobada']}" />
+					<br />
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="estadoSolicitudes"
+						value="#{txt_registral['ayuda.estadosDevolucionConsignacionErrada']}" />
+					<br /> <br /> <br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudAprobada"
+									styleClass="label-form" for="estadoSolicitudAprobada"
+									value="#{txt_registral['label.Estado']}" />
+							</p:column>
+							<p:column styleClass="text-center">
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesServicioRegistral.is_estadoDevolucionConsignacionErrada}"
+									id="estadoSolicitudAprobada" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudAprobada" />
+								</span>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelIdSolicitudAprobada"
+									styleClass="label-form" for="idSolicitudAprobada"
+									value="#{txt_registral['label.IdCuentaCupo']}" />
+							</p:column>
+							<p:column styleClass="text-center">
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesServicioRegistral.is_idDevolucionConsignacionErrada}"
+									id="idSolicitudAprobada" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="col-xs-12">
+					<br />
+					<p:outputLabel id="solicitudRecarga"
+						value="#{txt_registral['Mensaje.SolicitudAprobada1']}" />
+					<br /> <br />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:outputPanel id="entendidoAprobada">
+							<p:commandButton immediate="true" type="submit"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_registral['boton.ConsultarSaldo']}"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de transaccion Encontrada Devolucion Servicio Registral -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId"
+				value="transaccionEncontradaDevolucionServicioRegistral" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalTransaccionEncontradaDevolucionServicioRegistral" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_registral['wizard.modal.transaccion.retormar']}" />
+						<br /> <br />
+						<h:outputText
+							value="#{txt_registral['wizard.modal.transaccion.retormar1']}" />
+						<br />
+						<h:outputText
+							value="#{txt_registral['wizard.modal.transaccion.retormar2']}" />
+						<br /> <br />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-md-6">
+						<p:outputPanel id="botonDescartar">
+							<p:commandButton styleClass="btn-gris"
+								value="#{txt['boton.Cancelar.Upper']}"
+								action="#{beanDevolucionesServicioRegistral.limpiarFormulario}">
+								<p:confirm header="#{txt_minuta['modal.confirmarQuitar']}"
+									message="#{txt_registral['Mensaje.SeguroEliminar']}" />
+							</p:commandButton>
+						</p:outputPanel>
+						<p:confirmDialog styleClass="box-solid box-danger cerrarModal"
+							global="true" showEffect="fade" hideEffect="fade"
+							responsive="true">
+							<div class="row">
+								<div class="col-xs-5 col-xs-offset-1">
+									<p:commandButton immediate="true"
+										styleClass="ui-confirmdialog-no pull-right btn-gris"
+										value="#{txt['boton.Cancelar.Upper']}"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();">
+									</p:commandButton>
+								</div>
+								<div class="col-xs-5 col-xs-offset-0">
+									<p:commandButton
+										styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left boton-iz"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('transaccionEncontradaDevolucionServicioRegistral').hide();PF('blockUI-Loading').hide();irArriba(); cargarKeyfilters();"
+										value="#{txt_registral['boton.Aceptar']}">
+									</p:commandButton>
+								</div>
+							</div>
+						</p:confirmDialog>
+					</div>
+					<div class="col-md-6">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_registral['boton.Aceptar']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide(); irArriba(); PF('transaccionEncontradaDevolucionServicioRegistral').hide(); cargarKeyfilters();"
+							update="panelDevolucionesServicioRegistral"
+							action="#{beanDevolucionesServicioRegistral.cargarFormulario}" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de Gegenerar Nir Devolucion servicio registral -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId"
+				value="generarNirDevolucionServicioRegistral" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalGenerarNitDevolucionServicioRegistral" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_registral['Mensaje.DevolucionConsignacionErradaFormulario']}" />
+						<br /> <br />
+						<h:outputText
+							value="#{txt_registral['Mensaje.DevolucionConsignacionErradaFormulario1']}" />
+						<br /> <br />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="pull-right btn-gris"
+								value="#{txt['boton.Cancelar.Upper']}">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();PF('generarNirDevolucionServicioRegistral').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+								value="#{txt_registral['boton.Aceptar']}"
+								update="panelDevolucionesServicioRegistral">
+								<p:ajax
+									listener="#{beanDevolucionesServicioRegistral.generarNir()}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('generarNirDevolucionServicioRegistral').hide();PF('blockUI-Loading').hide();irArriba()" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de eliminar transaccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId"
+				value="eliminarTransaccionDevolucionServicioRegistral" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalEliminarTransaccionDevolucionServicioRegistral" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_registral['Mensaje.SeguroEliminar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="pull-right btn-gris"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								value="#{txt['boton.Cancelar.Upper']}">
+								<p:ajax
+									oncomplete="PF('eliminarTransaccionDevolucionServicioRegistral').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								value="#{txt_registral['boton.Aceptar']}"
+								update="panelDevolucionesServicioRegistral">
+								<f:ajax
+									listener="#{beanDevolucionesServicioRegistral.eliminarTransaccion()}"
+									oncomplete="PF('eliminarTransaccionDevolucionServicioRegistral').hide();irArriba()" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de enviar solicitud -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId"
+				value="enviarSolicitudDevolucionServicioRegistral" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalEnviarSolicitudDevolucionServicioRegistral" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_registral['Mensaje.EnvioSolicitud']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_minuta['boton.cancelar.upper']}"
+								oncomplete="PF('enviarSolicitudDevolucionServicioRegistral').hide();">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton
+								styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+								value="#{txt_registral['boton.Aceptar']}"
+								oncomplete="PF('enviarSolicitudDevolucionServicioRegistral').hide();irArriba()">
+								<p:ajax
+									listener="#{beanDevolucionesServicioRegistral.enviarSolicitud()}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									update="panelDevolucionesServicioRegistral" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal de confirmacion al cargar Documentos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarCargueDocumento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmarCargueDocumento" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_registral['Mensaje.SubirArchivo']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt['boton.Cancelar.Upper']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton
+								disabled="#{cargaDocumentosDevolucionServicioRegistral.ib_desactivarBotonesCarga}"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_registral['boton.Aceptar']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+								<p:ajax
+									listener="#{beanDevolucionesServicioRegistral.servicioCargarArchivos(beanDevolucionesServicioRegistral.icdf_cargaDocumentosFormularioDto)}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									update="panelDevolucionesServicioRegistral" />
+								<f:attribute name="foo"
+									value="${cargaDocumentosDevolucionServicioRegistral}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de codigo verificacion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="validadorCodigoVerificacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalValidadorCodigoVerificacion" />
+			<ui:define name="body-modal">
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_registral['Mensaje.codigoVerificacion']}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-md-9 col-md-offset-1">
+						<div class="col-xs-6">
+							<p:outputLabel id="labelCodigoVerificacion"
+								styleClass="label-form text-center" for="codigoVerificacion"
+								value="#{txt_registral['label.codigoVerificacion']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						</div>
+						<div class="col-xs-6">
+							<p:inputText id="codigoVerificacion" styleClass="mask-AlphaNum"
+								maxlength="6" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								placeholder="#{txt_registral['placheHolder.codigoVerificacion']}"
+								value="#{beanDevolucionesServicioRegistral.is_codigoVerificacion}">
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelCodigoVerificacion"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_registral['tooltip.codigoVerificacion']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="codigoVerificacion" /></span>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:outputPanel id="botonDescartar">
+								<p:commandButton styleClass="btn-gris"
+									value="#{txt_registral['boton.cancelar.solicitud']}">
+									<p:confirm header="#{txt_minuta['modal.confirmarQuitar']}"
+										message="#{txt_registral['Mensaje.SeguroEliminar']}" />
+								</p:commandButton>
+							</p:outputPanel>
+							<p:confirmDialog styleClass="box-solid box-danger cerrarModal"
+								global="true" showEffect="fade" hideEffect="fade"
+								responsive="true">
+								<div class="row">
+									<div class="col-xs-5 col-xs-offset-1">
+										<p:commandButton immediate="true"
+											styleClass="ui-confirmdialog-no pull-right btn-gris"
+											value="#{txt['boton.Cancelar.Upper']}">
+											<p:ajax onstart="PF('blockUI-Loading').show();"
+												oncomplete="PF('blockUI-Loading').hide();" />
+										</p:commandButton>
+									</div>
+									<div class="col-xs-5 col-xs-offset-0">
+										<p:commandButton
+											styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left boton-iz"
+											onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('validadorCodigoVerificacion').hide();PF('blockUI-Loading').hide();irArriba()"
+											value="#{txt_registral['boton.Aceptar']}"
+											action="/pages/solicitudes/devoluciones/solicitudDevolucionesServicioRegistral.jsf?faces-redirect=true">
+											<f:ajax
+												update="panelDevolucionesServicioRegistral formModalValidadorCodigoVerificacion:validarCodigo"
+												listener="#{beanDevolucionesServicioRegistral.limpiarFormulario()}"
+												oncomplete="PF('validadorCodigoVerificacion').hide();" />
+										</p:commandButton>
+									</div>
+								</div>
+							</p:confirmDialog>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton id="validarCodigo"
+								styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+								value="#{txt_registral['boton.verificar']}"
+								disabled="#{beanDevolucionesServicioRegistral.ib_botonValidar}"
+								oncomplete="PF('blockUI-Loading').hide();irArriba()">
+								<p:ajax process="formModalValidadorCodigoVerificacion"
+									listener="#{beanDevolucionesServicioRegistral.validarCodigoVerificacion()}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="if(args &amp;&amp; args.validationFailed) validarFormulario('#{txt_registral['campos.obligatorios']}');"
+									update="panelDevolucionesServicioRegistral formModalValidadorCodigoVerificacion:validarCodigo" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de Previsualizar PDF -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="previsualizarPdf" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalPrevisualizarPdf" />
+			<ui:define name="body-modal">
+				<div id="container_logos_pp">
+					<div class="row">
+						<div class="col-sm-4 pad-top1">
+							<a href="#" id="ministerio-justicia"><img
+								src="#{resource['img/dinamicas/minjusticialogo.png']}"
+								class="imagenes" alt="" /></a>
+						</div>
+						<div class="col-sm-4 pad-top">
+							<a href="#" id="logo-snr-60"><img
+								src="#{resource['img/dinamicas/logo-snr-60-pdf.png']}"
+								class="imagenes" alt="" /></a>
+						</div>
+						<div class="col-sm-4">
+							<a href="#" id="logonuevopais"><img
+								src="#{resource['img/dinamicas/logonuevopais.png']}"
+								class="imagenes1" alt="" /></a> <br /> <br />
+						</div>
+					</div>
+				</div>
+				<div class="text-center contenido-previsualizar">
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelSuperintendenciaNotariadoRegistro"
+								styleClass="text-center tamano-titulo"
+								value="#{txt_registral['SuperintendenciaNotariadoRegistro']}" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelFormularioServicioRegistral"
+								styleClass="text-center tamano-titulo"
+								value="#{txt_registral['FormularioDevoluciones']}" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelFormularioDevoluciones"
+								styleClass="text-center tamano-titulo"
+								value="#{txt_registral['FormularioDevoluciones.tramitesLinea']}" />
+							<br /> <br />
+						</div>
+					</div>
+					<div class="row pad-left">
+						<div class="col-md-6">
+							<p:outputLabel>*</p:outputLabel>
+							<p:outputLabel id="labelFechaDiligenciamiento"
+								styleClass="textoNegrilla" for="fechaDiligenciamiento"
+								value="#{txt_registral['label.FechaDiligenciamiento']}" />
+							<p:outputLabel>:</p:outputLabel>
+							<p:outputLabel value="-" styleClass="espacio" />
+							<h:outputText id="fechaDiligenciamiento" readonly="true"
+								value="#{beanDevolucionesServicioRegistral.obtenerFecha()}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</div>
+						<div class="col-md-6 text-left">
+							<p:outputLabel id="labelCiudadPrevisualizar"
+								styleClass="textoNegrilla" for="ciudadPrevisualizar"
+								value="#{txt_registral['label.Ciudad']}" />
+							<p:outputLabel>:</p:outputLabel>
+							<p:outputLabel value="-" styleClass="espacio" />
+							<h:outputText id="ciudadPrevisualizar"
+								value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_ciudad}">
+							</h:outputText>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel
+								value="#{txt_registral['FormularioDevoluciones.SubtituloUno']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+					</div>
+					<p:outputPanel id="formularioDatosBasicosPersonaJuridica"
+						rendered="#{beanDevolucionesServicioRegistral.ib_datosBasicos}">
+						<div class="row">
+							<div class="col-sm-4 text-left">
+								<p:outputLabel id="labelTipoDocumentoPrevisualizar"
+									for="tipoDocumentoPrevisualizar" styleClass="textoNegrilla"
+									value="#{txt_registral['label.TipoDocumento']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="tipoDocumentoPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+								</h:outputText>
+							</div>
+							<div class="col-sm-4 text-left">
+								<p:outputLabel id="labelNumeroDocumentoPN"
+									for="numeroDocumentoPN" styleClass="textoNegrilla"
+									value="#{txt_registral['label.NumeroDocumento']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<h:outputText id="numeroDocumentoPN"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+								</h:outputText>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-sm-4 text-left">
+								<p:outputLabel id="labelRazonSocialPrevisualizar"
+									for="razonSocialPrevisualizar" styleClass="textoNegrilla"
+									value="#{txt_registral['label.RazonSocial']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="razonSocialPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ipj_personaJuridicaDto.is_razonSocial}">
+								</h:outputText>
+							</div>
+							<div class="col-sm-4 text-left">
+								<p:outputLabel id="labelRepresentanteLegalPrevisualizar"
+									for="representanteLegalPrevisualizar"
+									styleClass="textoNegrilla"
+									value="#{txt_registral['label.RepresentanteLegal']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="representanteLegalPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ipj_personaJuridicaDto.getNombreRepresentanteLegal()}">
+								</h:outputText>
+							</div>
+							<div class="col-sm-4 text-left">
+								<p:outputLabel
+									id="labelNumeroDocumentoRepresentantePrevisualizar"
+									for="numeroDocumentoRepresentantePrevisualizar"
+									styleClass="textoNegrilla"
+									value="#{txt_registral['label.FormularioDevolucionesDocumentoRepresentante']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="numeroDocumentoRepresentantePrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_numeroDocumentoRepresentanteLegal}">
+								</h:outputText>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-sm-4 text-left">
+								<p:outputLabel id="labelTelefonoPrevisualizar"
+									for="telefonoFijoPrevisualizar" styleClass="textoNegrilla"
+									value="#{txt_registral['label.Telefono']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="telefonoFijoPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ipj_personaJuridicaDto.is_telefono}">
+								</h:outputText>
+							</div>
+							<div class="col-sm-4 text-left">
+								<p:outputLabel id="labelCelularPrevisualizar"
+									for="celularPrevisualizar" styleClass="textoNegrilla"
+									value="#{txt_registral['label.NumeroCelular']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="celularPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.is_celular}">
+								</h:outputText>
+							</div>
+							<div class="col-sm-4 text-left">
+								<p:outputLabel id="labelCorreoPrevisualizar"
+									for="correoPrevisualizar" styleClass="textoNegrilla"
+									value="#{txt_registral['label.CorreoElectronico']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="correoPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.is_correoElectronico}">
+								</h:outputText>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 text-left">
+								<p:outputLabel id="labelDireccionCompletaPrevisualizar"
+									for="direccionCompletaPrevisualizar" styleClass="textoNegrilla"
+									value="#{txt_registral['label.Direccion']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="direccionCompletaPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.mostrarDireccionCompleta()}">
+								</h:outputText>
+							</div>
+						</div>
+						<br />
+					</p:outputPanel>
+					<br />
+					<!-- Inicio Tabla Seleccion Actos -->
+					<br /> <br />
+					<!--Fin tabla Nir, actos, certificados -->
+					<p:outputPanel id="formularioDatosBasicosPersonaNatural"
+						rendered="#{!beanDevolucionesServicioRegistral.ib_datosBasicos}">
+						<div class="row">
+							<div class="col-sm-4 text-left">
+								<p:outputLabel id="labelTipoDocumentoPNPrevisualizar"
+									for="tipoDocumentoPNPrevisualizar" styleClass="textoNegrilla"
+									value="#{txt_registral['label.TipoDocumento']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="tipoDocumentoPNPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+								</h:outputText>
+							</div>
+							<div class="col-sm-4 text-left">
+								<p:outputLabel id="labelNumeroDocumentoPNPrevisualizar"
+									for="numeroDocumentoPNPrevisualizar" styleClass="textoNegrilla"
+									value="#{txt_registral['label.NumeroDocumento']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="numeroDocumentoPNPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+								</h:outputText>
+							</div>
+							<div class="col-sm-4 text-left">
+								<p:outputLabel id="labelNombrePNPrevisualizar"
+									for="nombrePNPrevisualizar" styleClass="textoNegrilla"
+									value="#{txt_registral['label.Nombre']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+
+								<h:outputText id="nombrePNPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_primerNombre} #{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_segundoNombre} #{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_primerApellido} #{beanDevolucionesServicioRegistral.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_segundoApellido}">
+								</h:outputText>
+
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 text-left">
+								<p:outputLabel id="labelDireccionCompletaPNPrevisualizar"
+									for="direccionResidenciaPrevisualizar"
+									styleClass="textoNegrilla"
+									value="#{txt_registral['label.Direccion']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="direccionResidenciaPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.mostrarDireccionCompleta()}">
+								</h:outputText>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelTelefonoPNPrevisualizar"
+									for="telefonoFijoPNPrevisualizar" styleClass="textoNegrilla"
+									value="#{txt_registral['label.Telefono']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="telefonoFijoPNPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.ipj_personaJuridicaDto.is_telefono}">
+								</h:outputText>
+							</div>
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelCelularPNPrevisualizar"
+									for="celularPNPrevisualizar" styleClass="textoNegrilla"
+									value="#{txt_registral['label.NumeroCelular']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="celularPNPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.is_celular}">
+								</h:outputText>
+							</div>
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelCorreoPNPrevisualizar"
+									for="correoPNPrevisualizar" styleClass="textoNegrilla"
+									value="#{txt_registral['label.CorreoElectronico']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="correoPNPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.iu_usuarioDto.is_correoElectronico}">
+								</h:outputText>
+							</div>
+						</div>
+					</p:outputPanel>
+					<!--Inicio tabla Nir, actos, certificados -->
+					<ui:fragment
+						rendered="#{beanDevolucionesServicioRegistral.iss_seguimientoSolicitudesDto.ilssr_listaSeguimientoSolicitudesRespuestaDto ne null}">
+						<div class="row">
+							<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+								<p:outputLabel
+									value="#{txt_registral['FormularioDevoluciones.SubtituloDos']}"
+									styleClass="titulo tamano-subtitulo" />
+								<br /> <br />
+							</div>
+						</div>
+						<div class="row">
+							<div
+								class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4 text-center">
+								<!-- Inicio Tabla Consulta Nir -->
+								<table Class="tablaCertificados">
+									<thead>
+										<tr>
+											<th>#{txt_registral['tabla.header.nir']}</th>
+											<th>#{txt_registral['tabla.header.turno']}</th>
+										</tr>
+									</thead>
+									<tbody>
+										<ui:repeat var="consultaNir"
+											value="#{beanDevolucionesServicioRegistral.issr_seguimientoSolicitudesRespuestaDto}">
+											<tr>
+												<td>#{consultaNir.is_nir}</td>
+												<td>#{consultaNir.is_numeroTurno}</td>
+											</tr>
+										</ui:repeat>
+									</tbody>
+								</table>
+								<br />
+							</div>
+						</div>
+						<!-- Fin Tabla Consulta Nir -->
+						<!-- Inicio Tabla Seleccion Actos -->
+						<div class="row">
+							<div
+								class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4 text-center">
+								<p:outputLabel
+									value="#{txt_registral['FormularioDevoluciones.SubtituloCuatro']}"
+									styleClass="titulo tamano-subtitulo" />
+								<br /> <br />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 text-center space-row scroll-politicas">
+								<table>
+									<thead>
+										<tr>
+											<th>#{txt_registral['tabla.header.cod.acto']}</th>
+											<th>#{txt_registral['tabla.header.especificacion']}</th>
+											<th>#{txt_registral['tabla.header.cuantia.acto']}</th>
+											<th>#{txt_registral['tabla.header.tipo.tarifa']}</th>
+											<th>#{txt_registral['tabla.header.cuantia.acto']}</th>
+											<th>#{txt_registral['tabla.header.valor']}</th>
+											<th>#{txt_registral['tabla.header.cantidad.actos']}</th>
+											<th>#{txt_registral['tabla.header.valor.derechos']}</th>
+											<th>#{txt_registral['tabla.header.valor.conservacion']}</th>
+											<th>#{txt_registral['tabla.header.valor.total']}</th>
+
+										</tr>
+									</thead>
+									<tbody>
+										<ui:repeat var="consultaActos"
+											value="#{beanDevolucionesServicioRegistral.ila_actosDto}">
+											<ui:fragment rendered="#{consultaActos.ib_actoSeleccionado}">
+												<tr>
+													<td>#{consultaActos.is_codigoActo}</td>
+													<td>#{consultaActos.is_nombreTipoActo}</td>
+													<td>#{consultaActos.is_tieneCuantia}</td>
+													<td></td>
+													<td>#{consultaActos.is_valorCuantia}</td>
+													<td>#{consultaActos.is_valorAvaluo}</td>
+													<td>#{consultaActos.is_cantidadActos}</td>
+													<td>#{consultaActos.is_valorDerechos}</td>
+													<td>#{consultaActos.is_valorConservacionDocumental}</td>
+													<td>#{consultaActos.is_valorTotal}</td>
+												</tr>
+											</ui:fragment>
+										</ui:repeat>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="row">
+							<div
+								class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4 text-center">
+								<p:outputLabel
+									value="#{txt_registral['FormularioDevoluciones.SubtituloCinco']}"
+									styleClass="titulo tamano-subtitulo" />
+								<br /> <br />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 text-center scroll-politicas">
+								<table class="dialogMargen">
+									<thead>
+										<tr>
+											<th>#{txt_registral['tabla.header.turno']}</th>
+											<th>#{txt_registral['tabla.header.especificacion']}</th>
+											<th>#{txt_registral['tabla.header.tipo.certificado']}</th>
+											<th>#{txt_registral['tabla.header.cantidad.certificados']}</th>
+											<th>#{txt_registral['tabla.header.valor.derechos']}</th>
+											<th>#{txt_registral['tabla.header.valor.total']}</th>
+										</tr>
+									</thead>
+									<tbody>
+										<ui:repeat var="consultaCertificado"
+											value="#{beanDevolucionesServicioRegistral.ilc_certificadosDto}">
+											<ui:fragment
+												rendered="#{consultaCertificado.ib_certificadoSeleccionado}">
+												<tr>
+													<td>#{beanDevolucionesServicioRegistral.issr_seguimientoSolicitudesRespuestaDto.is_numeroTurno}</td>
+													<td>#{consultaCertificado.is_nombre}</td>
+													<td>#{consultaCertificado.is_proceso}</td>
+													<td>#{consultaCertificado.is_cantidad}</td>
+													<td>#{consultaCertificado.is_valor}</td>
+													<td>#{consultaCertificado.is_valorTotal}</td>
+												</tr>
+											</ui:fragment>
+										</ui:repeat>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</ui:fragment>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 text-left">
+							<p:outputLabel id="labelObservacion"
+								for="observacionPrevisualizar"
+								value="#{txt_registral['label.Observaciones']}" />
+							<p:outputLabel>:</p:outputLabel>
+							<p:outputLabel value="-" styleClass="espacio" />
+							<p:inputTextarea id="observacionPrevisualizar" readonly="true"
+								styleClass="borde-no"
+								value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_observacionDevolucionServicioRegistral}" />
+						</div>
+					</div>
+					<br /> <br />
+					<div class="row">
+						<div class="col-xs-10 col-md-9 text-left">
+							<p:outputLabel value="#{txt_registral['label.PreguntaUno']}"
+								styleClass="titulo tamano-subtitulo" />
+						</div>
+						<div class="col-xs-2 col-md-3">
+							<p:outputPanel id="panelSwitchIntervino">
+								<h:outputText id="spanNoIntervino"
+									value="#{beanDevolucionesServicioRegistral.is_intervinoSelecccion}" />
+							</p:outputPanel>
+						</div>
+					</div>
+					<br />
+					<!-- Persona realizo pago Previsualizar -->
+					<p:outputPanel id="formularioPersonaNoTitular">
+						<ui:fragment
+							rendered="#{beanDevolucionesServicioRegistral.ib_camposNoTitular}">
+							<div class="row">
+								<div class="col-xs-12 text-center">
+									<p:outputLabel value="#{txt_registral['PersonaNoRealizoPago']}" />
+								</div>
+							</div>
+							<br />
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 text-left">
+									<p:outputLabel
+										id="labelTipoDocumentoPersonaNoTitularPrevisualizar"
+										for="tipoDocumentoPersonaNoTitularPrevisualizar"
+										styleClass="textoNegrilla"
+										value="#{txt_registral['label.TipoDocumento']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="tipoDocumentoPersonaNoTitularPrevisualizar"
+										value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_tipoDocumentoNoTitular}">
+									</h:outputText>
+								</div>
+								<div class="col-xs-12 col-sm-6 text-left">
+									<p:outputLabel
+										id="labelNumeroDocumentoPersonaNoTitularPrevisualizar"
+										for="numeroDocumentoPersonaNoTitularPrevisualizar"
+										styleClass="textoNegrilla"
+										value="#{txt_registral['label.NumeroDocumento']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="numeroDocumentoPersonaNoTitularPrevisualizar"
+										value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_numeroDocumentoNoTitular}">
+									</h:outputText>
+								</div>
+							</div>
+							<br />
+							<p:outputPanel id="formularioNoTitularPersonas">
+								<ui:fragment
+									rendered="#{beanDevolucionesServicioRegistral.ib_noTitularPersonas}">
+									<p:outputPanel id="formularioPersonaNoTitularPN"
+										rendered="#{beanDevolucionesServicioRegistral.ib_personaNoTitular}">
+										<div class="row">
+											<div class="col-xs-12 col-sm-3 text-left">
+												<p:outputLabel id="labelNombrePersonaNoTitularPrevisualizar"
+													for="nombrePersonaNoTitularPrevisualizar"
+													styleClass="textoNegrilla"
+													value="#{txt_registral['label.NombreTitular']}" />
+												<p:outputLabel>:</p:outputLabel>
+												<p:outputLabel value="-" styleClass="espacio" />
+												<h:outputText id="nombrePersonaNoTitularPrevisualizar"
+													value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_primerNombreNoTitular}">
+												</h:outputText>
+											</div>
+											<div class="col-xs-12 col-sm-3 text-left">
+												<p:outputLabel
+													id="labelSegundoNombrePersonaNoTitularPrevisualizar"
+													for="segundoNombrePersonaNoTitularPrevisualizar"
+													styleClass="textoNegrilla"
+													value="#{txt_registral['label.SegundoNombreTitular']}" />
+												<p:outputLabel>:</p:outputLabel>
+												<p:outputLabel value="-" styleClass="espacio" />
+												<h:outputText
+													id="segundoNombrePersonaNoTitularPrevisualizar"
+													value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_segundoNombreNoTitular}">
+												</h:outputText>
+											</div>
+											<div class="col-xs-12 col-sm-3 text-left">
+												<p:outputLabel
+													id="labelApellidoPersonaNoTitularPrevisualizar"
+													for="apellidoPersonaNoTitularPrevisualizar"
+													styleClass="textoNegrilla"
+													value="#{txt_registral['label.ApellidoTitular']}" />
+												<p:outputLabel>:</p:outputLabel>
+												<p:outputLabel value="-" styleClass="espacio" />
+												<h:outputText id="apellidoPersonaNoTitularPrevisualizar"
+													value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_primerApellidoNoTitular}">
+												</h:outputText>
+											</div>
+											<div class="col-xs-12 col-sm-3 text-left">
+												<p:outputLabel
+													id="labelSegundoApellidoPersonaNoTitularPrevisualizar"
+													for="segundoApellidoPersonaNoTitularPrevisualizar"
+													styleClass="textoNegrilla"
+													value="#{txt_registral['label.SegundoApellidoTitular']}" />
+												<p:outputLabel>:</p:outputLabel>
+												<p:outputLabel value="-" styleClass="espacio" />
+												<h:outputText
+													id="segundoApellidoPersonaNoTitularPrevisualizar"
+													value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_segundoApellidoNoTitular}">
+												</h:outputText>
+											</div>
+										</div>
+									</p:outputPanel>
+									<p:outputPanel id="formularioPersonaNoTitularPJ"
+										rendered="#{!beanDevolucionesServicioRegistral.ib_personaNoTitular}">
+										<div class="row">
+											<div class="col-xs-12 text-left">
+												<p:outputLabel
+													id="labelRazonSocialPersonaNoTitularPrevisualizar"
+													for="razonSocialPersonaNoTitularPrevisualizar"
+													styleClass="textoNegrilla"
+													value="#{txt_registral['label.RazonSocial']}" />
+												<p:outputLabel>:</p:outputLabel>
+												<p:outputLabel value="-" styleClass="espacio" />
+												<h:outputText id="razonSocialPersonaNoTitularPrevisualizar"
+													value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_razonSocialNoTitular}">
+												</h:outputText>
+											</div>
+										</div>
+									</p:outputPanel>
+								</ui:fragment>
+							</p:outputPanel>
+						</ui:fragment>
+					</p:outputPanel>
+					<br />
+					<div class="row">
+						<div class="col-xs-10 col-md-9 text-left">
+							<p:outputLabel value="#{txt_registral['label.PreguntaDos']}"
+								styleClass="titulo tamano-subtitulo" />
+						</div>
+						<div class="col-xs-2 col-md-3">
+							<p:outputPanel id="panelSwitchIntervinoTitular">
+								<h:outputText id="spanNoIntervinoPrevisualizar"
+									value="#{beanDevolucionesServicioRegistral.is_intervinoTitularCuentaBancariaSeleccion}" />
+							</p:outputPanel>
+						</div>
+					</div>
+					<br /> <br />
+					<p:separator />
+					<div class="row">
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_registral['InformacionCuentaBancaria.SubtituloCuatro']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-sm-4 text-left">
+							<p:outputLabel id="labelEntidadFinancieraPrevisualizar"
+								for="entidadFinancieraPrevisualizar" styleClass="textoNegrilla"
+								value="#{txt_registral['label.EntidadFinanciera']}" />
+							<p:outputLabel>:</p:outputLabel>
+							<p:outputLabel value="-" styleClass="espacio" />
+							<h:outputText id="entidadFinancieraPrevisualizar"
+								value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_entidadFinanciera}">
+							</h:outputText>
+						</div>
+						<div class="col-xs-12 col-sm-4 text-left">
+							<p:outputLabel id="labelTipoCuentaPrevisualizar"
+								for="tipoCuentaPrevisualizar" styleClass="textoNegrilla"
+								value="#{txt_registral['label.TipoCuenta']}" />
+							<p:outputLabel>:</p:outputLabel>
+							<p:outputLabel value="-" styleClass="espacio" />
+							<h:outputText id="tipoCuentaPrevisualizar"
+								value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_tipoCuenta}">
+							</h:outputText>
+						</div>
+						<div class="col-xs-12 col-sm-4 text-left">
+							<p:outputLabel id="labelNumeroCuentaPrevisualizar"
+								for="numeroCuentaPrevisualizar" styleClass="textoNegrilla"
+								value="#{txt_registral['label.NumeroCuenta']}" />
+							<p:outputLabel>:</p:outputLabel>
+							<p:outputLabel value="-" styleClass="espacio" />
+							<h:outputText id="numeroCuentaPrevisualizar"
+								value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_numeroCuenta}">
+							</h:outputText>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-sm-6 text-left">
+							<p:outputLabel
+								id="labelTipoDocumentoTitularCuentaBancariaPrevisualizar"
+								for="tipoDocumentoTitularCuentaBancariaPrevisualizar"
+								styleClass="textoNegrilla"
+								value="#{txt_registral['label.TipoDocumento']}" />
+							<p:outputLabel>:</p:outputLabel>
+							<p:outputLabel value="-" styleClass="espacio" />
+							<h:outputText
+								id="tipoDocumentoTitularCuentaBancariaPrevisualizar"
+								value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_tipoDocumentoTitularCuentaBancaria}">
+							</h:outputText>
+						</div>
+						<div class="col-xs-12 col-sm-6 text-left">
+							<p:outputLabel
+								id="labelNumeroDocumentoTitularCuentaBancariaPrevisualizar"
+								for="numeroDocumentoTitularCuentaBancariaPrevisualizar"
+								styleClass="textoNegrilla"
+								value="#{txt_registral['label.NumeroDocumento']}" />
+							<p:outputLabel>:</p:outputLabel>
+							<p:outputLabel value="-" styleClass="espacio" />
+							<h:outputText
+								id="numeroDocumentoTitularCuentaBancariaPrevisualizar"
+								value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_numeroDocumentoTitularCuentaBancaria}">
+							</h:outputText>
+						</div>
+					</div>
+					<br />
+					<!-- Render Previsualizar Cuenta bancaria  -->
+					<p:outputPanel id="formularioCuentaBancariaPersonas">
+						<ui:fragment
+							rendered="#{beanDevolucionesServicioRegistral.ib_camposCuentaBancaria}">
+							<!-- Cuenta Bancaria Persona Natural Previsualizar -->
+							<p:outputPanel id="formularioCuentaBancariaPersonaNatural"
+								rendered="#{beanDevolucionesServicioRegistral.ib_datosBasicosCuentaBancaria}">
+								<div class="row">
+									<div class="col-xs-12 col-sm-6 text-left">
+										<p:outputLabel id="labelNombreTitularPrevisualizar"
+											for="nombreTitularPrevisualizar" styleClass="textoNegrilla"
+											value="#{txt_registral['label.NombreTitular']}" />
+										<p:outputLabel>:</p:outputLabel>
+										<p:outputLabel value="-" styleClass="espacio" />
+										<h:outputText id="nombreTitularPrevisualizar"
+											value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_nombreTitularCuentaBancaria}">
+										</h:outputText>
+									</div>
+									<div class="col-xs-12 col-sm-6 text-left">
+										<p:outputLabel id="labelSegundoNombreTitularPrevisualizar"
+											for="segundoNombreTitularPrevisualizar"
+											styleClass="textoNegrilla"
+											value="#{txt_registral['label.SegundoNombreTitular']}" />
+										<p:outputLabel>:</p:outputLabel>
+										<p:outputLabel value="-" styleClass="espacio" />
+										<h:outputText id="segundoNombreTitularPrevisualizar"
+											value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_segundoNombreTitularCuentaBancaria}">
+										</h:outputText>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-xs-12 col-sm-6 text-left">
+										<p:outputLabel id="labelApellidoTitularPrevisualizar"
+											for="apellidoTitularPrevisualizar" styleClass="textoNegrilla"
+											value="#{txt_registral['label.ApellidoTitular']}" />
+										<p:outputLabel>:</p:outputLabel>
+										<p:outputLabel value="-" styleClass="espacio" />
+										<h:outputText id="apellidoTitularPrevisualizar"
+											value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_apellidoTitularCuentaBancaria}">
+										</h:outputText>
+									</div>
+									<div class="col-xs-12 col-sm-6 text-left">
+										<p:outputLabel id="labelSegundoApellidoTitularPrevisualizar"
+											for="segundoApellidoTitularPrevisualizar"
+											styleClass="textoNegrilla"
+											value="#{txt_registral['label.SegundoApellidoTitular']}" />
+										<p:outputLabel>:</p:outputLabel>
+										<p:outputLabel value="-" styleClass="espacio" />
+										<h:outputText id="segundoApellidoTitularPrevisualizar"
+											value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_segundoApellidoTitularCuentaBancaria}">
+										</h:outputText>
+									</div>
+								</div>
+							</p:outputPanel>
+							<!-- Cuenta Bancaria Persona Juridica -->
+							<p:outputPanel id="formularioCuentaBancariaPersonaJuridica"
+								rendered="#{!beanDevolucionesServicioRegistral.ib_datosBasicosCuentaBancaria}">
+								<div class="row">
+									<div class="col-xs-12 text-left">
+										<p:outputLabel
+											id="labelRazonSocialCuentaBancariaPrevisualizar"
+											for="razonSocialCuentaBancariaPrevisualizar"
+											styleClass="textoNegrilla"
+											value="#{txt_registral['label.RazonSocial']}" />
+										<p:outputLabel>:</p:outputLabel>
+										<p:outputLabel value="-" styleClass="espacio" />
+										<h:outputText id="razonSocialCuentaBancariaPrevisualizar"
+											value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_titularCuentaBancariaRazonSocial}">
+										</h:outputText>
+									</div>
+								</div>
+							</p:outputPanel>
+						</ui:fragment>
+					</p:outputPanel>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 text-left">
+							<p:outputLabel id="labelMotivoSolicitudPrevisualizar"
+								for="motivoSolicitudPrevisualizar" styleClass="textoNegrilla"
+								value="#{txt_registral['label.MotivoSolicitud']}" />
+							<p:outputLabel>:</p:outputLabel>
+							<p:outputLabel value="-" styleClass="espacio" />
+							<p:inputTextarea id="motivoSolicitudPrevisualizar"
+								readonly="true" styleClass="borde-no"
+								value="#{beanDevolucionesServicioRegistral.ifdsr_formularioDevolucionServicioRegistralDto.is_motivoSolicitud}" />
+						</div>
+					</div>
+					<br /> <br />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt_registral['Boton.Entendido']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();">
+							<p:ajax oncomplete="PF('previsualizarPdf').hide();" />
+						</p:commandButton>
+					</div>
+				</div>
+				<br />
+			</ui:define>
+		</ui:decorate>
+		<!-- 		Fin Modal Previsualizar PDF -->
+	</ui:define>
+</ui:composition>

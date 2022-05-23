@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE facelet-taglib PUBLIC
+  "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN"
+  "http://java.sun.com/dtd/facelet-taglib_1_0.dtd">
+<facelet-taglib>
+    <!-- Se usa el registro de un namespace "sec" de tags_faces propio de este Wrapper (spring-faces-2.5.1.RELEASE.jar) 
+         El namespace base de Spring Security solo es funcional en JSP.
+         (http://www.springframework.org/security/tags).
+     -->
+    <namespace>http://www.springframework.org/security/tags-faces</namespace>
+    <!-- En este tag lib solo se tiene Wrapper para el elemento authorize del namespace base
+         de Spring Security (http://www.springframework.org/security/tags).  
+    -->
+    <tag>
+        <tag-name>authorize</tag-name>
+        <handler-class>org.springframework.faces.security.FaceletsAuthorizeTagHandler</handler-class>
+    </tag>
+    <!--  Este wrapper permite el uso del tag sec:authorize con los atributos base de Spring
+          Security: sec:access, mas las funciones aqui listadas como:
+          sec:authorize access="hasRole('ROLE_ADMIN')"
+          sec:authorize ifAnyGranted="ROLE_FOO, ROLE_BAR"
+          ===        
+          Tambien permite el uso como EL en un atributo rendered:
+          rendered="#{sec:areAnyGranted('ROLE_FOO, ROLE_BAR')}"
+    -->
+    <function>
+        <function-name>areAllGranted</function-name>
+        <function-class>org.springframework.faces.security.FaceletsAuthorizeTagUtils</function-class>
+        <function-signature>boolean areAllGranted(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <function-name>areAnyGranted</function-name>
+        <function-class>org.springframework.faces.security.FaceletsAuthorizeTagUtils</function-class>
+        <function-signature>boolean areAnyGranted(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <function-name>areNotGranted</function-name>
+        <function-class>org.springframework.faces.security.FaceletsAuthorizeTagUtils</function-class>
+        <function-signature>boolean areNotGranted(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <function-name>isAllowed</function-name>
+        <function-class>org.springframework.faces.security.FaceletsAuthorizeTagUtils</function-class>
+        <function-signature>boolean isAllowed(java.lang.String, java.lang.String)</function-signature>
+    </function>
+</facelet-taglib>

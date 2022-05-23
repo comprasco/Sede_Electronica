@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<p:tab id="seleccion">
+		<f:facet name="title">
+			<span class="icono icono-llave" />
+			<p:outputLabel class="tituloWizard"
+				value="#{txt_certificados['wizard.tab.seleccion']}" />
+		</f:facet>
+		<p:panel>
+			<div class="container-fluid-special">
+				<h:form id="form#{vista}">
+					<div class="row text-center">
+						<div class="col-xs-12">
+							<p:outputLabel styleClass="label-form" id="conoceMatricula"
+								value="#{txt_certificados['wizard.seleccion.titulo']}" />
+						</div>
+					</div>
+					<br />
+					<div class="row text-center">
+						<div class="col-xs-12">
+							<h:outputText id="spanNo"
+								value="#{txt_certificados['wizard.seleccion.no']}"
+								class="#{!bean[funcion] ?  'textoRojo' : 'textoGris' }" />
+							<p:inputSwitch value="#{bean[funcion]}">
+								<f:ajax render="spanNo spanSi #{panelRender}" />
+							</p:inputSwitch>
+							<h:outputText id="spanSi"
+								value="#{txt_certificados['wizard.seleccion.si']}"
+								class="#{bean[funcion] ?  'textoRojo' : 'textoGris' }" />
+						</div>
+					</div>
+					<br />
+					<div class="row text-center">
+						<div class="col-xs-12">
+							<p:outputLabel
+								value="#{txt_certificados['wizard.seleccion.obligatorio']}" />
+						</div>
+					</div>
+					<ui:insert name="panelPersonalizado" />
+				</h:form>
+			</div>
+		</p:panel>
+	</p:tab>
+</ui:composition>

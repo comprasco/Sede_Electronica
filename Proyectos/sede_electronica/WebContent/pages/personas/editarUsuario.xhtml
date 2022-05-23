@@ -1,0 +1,1392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags-faces"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-administracion.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_persona['EditarUsuario']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_persona['EditarUsuario.Upper']}" />
+			<ui:param name="imagen" value="img-editarPerfil" />
+			<ui:param name="subtitulo"
+				value="#{(beanPersonaModificar.ib_personaPN) ? txt_persona['PersonaNatural.Upper'] : txt_persona['PersonaJuridica.Upper']}" />
+			<ui:param name="urlVista" value="/pages/personas/editarUsuario.jsf" />
+		</ui:include>
+		<div class="container-fluid">
+			<div class="row">
+				<h:form id="formEditarPersona">
+					<ui:param name="tipoPersona"
+						value="#{(beanPersonaModificar.ib_personaEE) ? txt_persona['Entidad.Especial'] : beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.ic_catalogoDto.is_nombre}"></ui:param>
+					<p:panel
+						styleClass="panel-content no-border ancho-panel align-center">
+						<div class="row">
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
+								<p:outputLabel styleClass="label-form" for="tipoPersona"
+									value="#{txt_persona['label.TipoPersona']}" />
+								<div class="ui-inputgroup-center">
+									<h:outputText id="tipoPersona" widgetVar="tipoPersonaSelect"
+										value="#{tipoPersona}" />
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-8">
+								<div class="row">
+									<ui:fragment rendered="#{beanPersonaModificar.ib_personaPN}">
+										<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+											<p:outputLabel styleClass="label-form" for="usuarioNatural"
+												value="#{txt_persona['label.Usuario']}" />
+											<div class="ui-inputgroup-center">
+												<h:outputText id="usuarioNatural"
+													value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.iu_usuarioDto.is_usuario}" />
+											</div>
+										</div>
+										<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+											<p:outputLabel styleClass="label-form" for="tipoDocumento"
+												value="#{txt_persona['label.TipoDocumento']}" />
+											<div class="ui-inputgroup-center">
+												<h:outputText id="tipoDocumento"
+													value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.itd_tipoDocumentoDto.is_nombre}" />
+											</div>
+										</div>
+										<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+											<p:outputLabel styleClass="label-form"
+												for="numeroDocumentoNatural"
+												value="#{txt_persona['label.NumeroDocumento']}" />
+											<div class="ui-inputgroup-center">
+												<h:outputText id="numeroDocumentoNatural"
+													value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.is_numeroDocumento}" />
+											</div>
+										</div>
+									</ui:fragment>
+									<ui:fragment rendered="#{beanPersonaModificar.ib_personaPJ}">
+										<div class="col-xs-12">
+											<p:outputLabel styleClass="label-form" for="nit"
+												value="#{txt_persona['label.NumeroNit']}" />
+											<div class="ui-inputgroup-center">
+												<h:outputText id="nit"
+													value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.is_numeroDocumento}" />
+											</div>
+										</div>
+									</ui:fragment>
+								</div>
+							</div>
+						</div>
+						<p:separator styleClass="separador" />
+						<!-- INICIO PERSONA NATURAL  -->
+						<p:outputPanel rendered="#{beanPersonaModificar.ib_personaPN}">
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+									<p:outputLabel id="labelPrimerNombreNat"
+										styleClass="label-form" for="primerNombreNatural"
+										value="#{txt_persona['label.PrimerNombre']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<em class="fa fa-fw fa-pencil-square-o"></em>
+									<div class="ui-inputgroup">
+										<p:inputText id="primerNombreNatural"
+											styleClass="text-input border-completo"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											maxlength="15"
+											placeholder="#{txt_persona['placeholder.PrimerNombre']}"
+											required="true"
+											value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.is_primerNombre}">
+											<p:keyFilter regEx="/[a-z\s]/i" />
+											<p:ajax event="change"
+												onstart="mostrarLimpiar('formEditarPersona:primerNombreNatural', 'spanPrimerNombreNat');" />
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+											for="labelPrimerNombreNat" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_persona['tooltip.PrimerNombre']}" />
+											</div>
+										</p:tooltip>
+										<span id="spanPrimerNombreNat"
+											class="ui-inputgroup-addon ocultar"> <p:commandLink>
+												<p:graphicImage styleClass="img-x-size"
+													name="/img/x-roja.png" />
+												<p:ajax event="click"
+													onstart="limpiarCampo('formEditarPersona:primerNombreNatural', 'spanPrimerNombreNat');" />
+											</p:commandLink>
+										</span>
+									</div>
+									<span class="help-block"> <p:message
+											for="primerNombreNatural" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+									<p:outputLabel id="labelSegundoNombreNat"
+										styleClass="label-form" for="segundoNombreNatural"
+										value="#{txt_persona['label.SegundoNombre']}" />
+									<em class="fa fa-fw fa-pencil-square-o"></em>
+									<div class="ui-inputgroup">
+										<p:inputText id="segundoNombreNatural"
+											styleClass="text-input border-completo"
+											placeholder="#{txt_persona['placeholder.SegundoNombre']}"
+											maxlength="15"
+											value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.is_segundoNombre}">
+											<p:keyFilter regEx="/[a-z\s]/i" />
+											<p:ajax event="change"
+												onstart="mostrarLimpiar('formEditarPersona:segundoNombreNatural', 'spanSegundoNombreNat');" />
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+											for="labelSegundoNombreNat" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_persona['tooltip.SegundoNombre']}" />
+											</div>
+										</p:tooltip>
+										<span id="spanSegundoNombreNat"
+											class="ui-inputgroup-addon ocultar"> <p:commandLink>
+												<p:graphicImage styleClass="img-x-size"
+													name="/img/x-roja.png" />
+												<p:ajax event="click"
+													onstart="limpiarCampo('formEditarPersona:segundoNombreNatural', 'spanSegundoNombreNat');" />
+											</p:commandLink>
+										</span>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+									<p:outputLabel id="labelPrimerApellidoNat"
+										styleClass="label-form" for="primerApellidoNatural"
+										value="#{txt_persona['label.PrimerApellido']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<em class="fa fa-fw fa-pencil-square-o"></em>
+									<div class="ui-inputgroup">
+										<p:inputText id="primerApellidoNatural"
+											styleClass="text-input border-completo"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											maxlength="15"
+											placeholder="#{txt_persona['placeholder.PrimerApellido']}"
+											required="true"
+											value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.is_primerApellido}">
+											<p:keyFilter regEx="/[a-z\s]/i" />
+											<p:ajax event="change"
+												onstart="mostrarLimpiar('formEditarPersona:primerApellidoNatural', 'spanPrimerApellidoNat');" />
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+											for="labelPrimerApellidoNat" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_persona['tooltip.PrimerApellido']}" />
+											</div>
+										</p:tooltip>
+										<span id="spanPrimerApellidoNat"
+											class="ui-inputgroup-addon ocultar"> <p:commandLink>
+												<p:graphicImage styleClass="img-x-size"
+													name="/img/x-roja.png" />
+												<p:ajax event="click"
+													onstart="limpiarCampo('formEditarPersona:primerApellidoNatural', 'spanPrimerApellidoNat');" />
+											</p:commandLink>
+										</span>
+									</div>
+									<span class="help-block"> <p:message
+											for="primerApellidoNatural" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+									<p:outputLabel id="labelSegundoApellidoNat"
+										styleClass="label-form" for="segundoApellidoNatural"
+										value="#{txt_persona['label.SegundoApellido']}" />
+									<em class="fa fa-fw fa-pencil-square-o"></em>
+									<div class="ui-inputgroup">
+										<p:inputText id="segundoApellidoNatural"
+											styleClass="text-input border-completo" maxlength="15"
+											placeholder="#{txt_persona['placeholder.SegundoApellido']}"
+											value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.is_segundoApellido}">
+											<p:keyFilter regEx="/[a-z\s]/i" />
+											<p:ajax event="change"
+												onstart="mostrarLimpiar('formEditarPersona:segundoApellidoNatural', 'spanSegundoApellidoNat');" />
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+											for="labelSegundoApellidoNat" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_persona['tooltip.SegundoApellido']}" />
+											</div>
+										</p:tooltip>
+										<span id="spanSegundoApellidoNat"
+											class="ui-inputgroup-addon ocultar"> <p:commandLink>
+												<p:graphicImage styleClass="img-x-size"
+													name="/img/x-roja.png" />
+												<p:ajax event="click"
+													onstart="limpiarCampo('formEditarPersona:segundoApellidoNatural', 'spanSegundoApellidoNat');" />
+											</p:commandLink>
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-md-4">
+									<p:outputLabel id="labelFechaNacimNat" styleClass="label-form"
+										for="fechaNacimientoNatural"
+										value="#{txt_persona['label.FechaNacimiento']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:calendar id="fechaNacimientoNatural"
+										binding="#{fechaNacimientoNatural}" pattern="dd/MM/yyyy"
+										maxlength="10" locale="es" yearRange="1900:2200"
+										navigator="true" disabled="true"
+										placeholder="#{txt['placeholder.FormatoFecha']}"
+										styleClass="text-input-calendar" required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										showOn="button"
+										value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.id_fechaNacimiento}" />
+									<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+										for="labelFechaNacimNat" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_persona['tooltip.FechaNacimiento']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="fechaNacimientoNatural" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-4">
+									<p:outputLabel id="labelFechaExpedicion"
+										styleClass="label-form font-small"
+										for="fechaExpedicionNatural"
+										value="#{txt_persona['label.FechaExpedicionDocumento']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:calendar id="fechaExpedicionNatural" pattern="dd/MM/yyyy"
+										maxlength="10" locale="es" yearRange="1900:2200"
+										navigator="true" disabled="true"
+										placeholder="#{txt['placeholder.FormatoFecha']}"
+										styleClass="text-input-calendar" required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										showOn="button"
+										value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.id_fechaExpedicion}">
+										<f:validator validatorId="ValidarFechasRango" />
+										<f:attribute name="fechaNacimientoNatural"
+											value="#{fechaNacimientoNatural}" />
+									</p:calendar>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelFechaExpedicion"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_persona['tooltip.FechaExpedicionDocumento']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="fechaExpedicionNatural" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-4">
+									<p:outputLabel id="labelGeneroNat" styleClass="label-form"
+										for="genero" value="#{txt_persona['label.Genero']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:selectOneMenu id="genero" disabled="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true"
+										value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.ic_catalogoTipoGenero.is_id}">
+										<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanPersonaModificar.cargarCatalogoTipoGenero()}"
+											var="genero" itemLabel="#{genero.is_nombre}"
+											itemValue="#{genero.is_id}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+										for="labelGeneroNat" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel value="#{txt_persona['tooltip.Genero']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="genero" />
+									</span>
+								</div>
+							</div>
+						</p:outputPanel>
+						<!-- FIN PERSONA NATURAL -->
+						<!-- INICIO PERSONA JURIDICA -->
+						<p:outputPanel id="panelPersonaJuridica"
+							rendered="#{beanPersonaModificar.ib_personaPJ}">
+							<div class="row">
+								<ui:fragment rendered="#{beanPersonaModificar.ib_personaPJ}">
+									<div class="col-xs-12 col-sm-4">
+										<p:outputLabel id="labelPrimerNombreRepresentanteJur"
+											styleClass="label-form" for="primerNombreRepresentante"
+											value="#{txt_persona['label.RepresentanteLegal.primerNombre']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<em class="fa fa-fw fa-pencil-square-o"></em>
+										<div class="ui-inputgroup">
+											<p:inputText id="primerNombreRepresentante"
+												styleClass="text-input border-completo" maxlength="50"
+												placeholder="#{txt_persona['placeholder.RepresentanteLegal.primerNombre']}"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												required="true"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipjd_personaJuridicaDto.is_primerNombreRepresentanteLegal}">
+												<p:keyFilter regEx="/[a-z\s]/i" />
+												<p:ajax event="change"
+													onstart="mostrarLimpiar('formEditarPersona:primerNombreRepresentante', 'spanPrimerNombreRepresentanteJur');" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+												for="labelPrimerNombreRepresentanteJur" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_persona['tooltip.RepresentanteLegal.primerNombre']}" />
+												</div>
+											</p:tooltip>
+											<span id="spanPrimerNombreRepresentanteJur"
+												class="ui-inputgroup-addon ocultar"> <p:commandLink>
+													<p:graphicImage styleClass="img-x-size"
+														name="/img/x-roja.png" />
+													<p:ajax event="click"
+														onstart="limpiarCampo('formEditarPersona:primerNombreRepresentante', 'spanPrimerNombreRepresentanteJur');" />
+												</p:commandLink>
+											</span>
+										</div>
+										<span class="help-block"> <p:message
+												for="primerNombreRepresentante" />
+										</span>
+									</div>
+									<div class="col-xs-12 col-sm-4">
+										<p:outputLabel id="labelSegundoNombreRepresentanteJur"
+											styleClass="label-form" for="segundoNombreRepresentante"
+											value="#{txt_persona['label.RepresentanteLegal.segundoNombre']}" />
+										<em class="fa fa-fw fa-pencil-square-o"></em>
+										<div class="ui-inputgroup">
+											<p:inputText id="segundoNombreRepresentante"
+												styleClass="text-input border-completo" maxlength="50"
+												placeholder="#{txt_persona['placeholder.RepresentanteLegal.segundoNombre']}"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipjd_personaJuridicaDto.is_segundoNombreRepresentanteLegal}">
+												<p:keyFilter regEx="/[a-z\s]/i" />
+												<p:ajax event="change"
+													onstart="mostrarLimpiar('formEditarPersona:segundoNombreRepresentante', 'spanSegundoNombreRepresentanteJur');" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+												for="labelSegundoNombreRepresentanteJur" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_persona['tooltip.RepresentanteLegal.segundoNombre']}" />
+												</div>
+											</p:tooltip>
+											<span id="spanSegundoNombreRepresentanteJur"
+												class="ui-inputgroup-addon ocultar"> <p:commandLink>
+													<p:graphicImage styleClass="img-x-size"
+														name="/img/x-roja.png" />
+													<p:ajax event="click"
+														onstart="limpiarCampo('formEditarPersona:segundoNombreRepresentante', 'spanSegundoNombreRepresentanteJur');" />
+												</p:commandLink>
+											</span>
+										</div>
+										<span class="help-block"> <p:message
+												for="segundoNombreRepresentante" />
+										</span>
+									</div>
+									<div class="col-xs-12 col-sm-4">
+										<p:outputLabel id="labelPrimerApellidoRepresentanteJur"
+											styleClass="label-form" for="primerApellidoRepresentante"
+											value="#{txt_persona['label.RepresentanteLegal.primerApellido']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<em class="fa fa-fw fa-pencil-square-o"></em>
+										<div class="ui-inputgroup">
+											<p:inputText id="primerApellidoRepresentante"
+												styleClass="text-input border-completo" maxlength="50"
+												placeholder="#{txt_persona['placeholder.RepresentanteLegal.primerApellido']}"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												required="true"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipjd_personaJuridicaDto.is_primerApellidoRepresentanteLegal}">
+												<p:keyFilter regEx="/[a-z\s]/i" />
+												<p:ajax event="change"
+													onstart="mostrarLimpiar('formEditarPersona:primerApellidoRepresentante', 'spanPrimerApellidoRepresentanteJur');" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+												for="labelPrimerApellidoRepresentanteJur" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_persona['tooltip.RepresentanteLegal.primerApellido']}" />
+												</div>
+											</p:tooltip>
+											<span id="spanPrimerApellidoRepresentanteJur"
+												class="ui-inputgroup-addon ocultar"> <p:commandLink>
+													<p:graphicImage styleClass="img-x-size"
+														name="/img/x-roja.png" />
+													<p:ajax event="click"
+														onstart="limpiarCampo('formEditarPersona:primerApellidoRepresentante', 'spanPrimerApellidoRepresentanteJur');" />
+												</p:commandLink>
+											</span>
+										</div>
+										<span class="help-block"> <p:message
+												for="primerApellidoRepresentante" />
+										</span>
+									</div>
+									<div class="col-xs-12 col-sm-4">
+										<p:outputLabel id="labelSegundoApellidoRepresentanteJur"
+											styleClass="label-form" for="segundoApellidoRepresentante"
+											value="#{txt_persona['label.RepresentanteLegal.segundoApellido']}" />
+										<em class="fa fa-fw fa-pencil-square-o"></em>
+										<div class="ui-inputgroup">
+											<p:inputText id="segundoApellidoRepresentante"
+												styleClass="text-input border-completo" maxlength="50"
+												placeholder="#{txt_persona['placeholder.RepresentanteLegal.segundoApellido']}"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipjd_personaJuridicaDto.is_segundoApellidoRepresentanteLegal}">
+												<p:keyFilter regEx="/[a-z\s]/i" />
+												<p:ajax event="change"
+													onstart="mostrarLimpiar('formEditarPersona:segundoApellidoRepresentante', 'spanSegundoApellidoRepresentanteJur');" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+												for="labelSegundoApellidoRepresentanteJur" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_persona['tooltip.RepresentanteLegal.segundoApellido']}" />
+												</div>
+											</p:tooltip>
+											<span id="spanSegundoApellidoRepresentanteJur"
+												class="ui-inputgroup-addon ocultar"> <p:commandLink>
+													<p:graphicImage styleClass="img-x-size"
+														name="/img/x-roja.png" />
+													<p:ajax event="click"
+														onstart="limpiarCampo('formEditarPersona:segundoApellidoRepresentante', 'spanSegundoApellidoRepresentanteJur');" />
+												</p:commandLink>
+											</span>
+										</div>
+										<span class="help-block"> <p:message
+												for="segundoApellidoRepresentante" />
+										</span>
+									</div>
+								</ui:fragment>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelRazonSocial" styleClass="label-form"
+										for="razonSocial" value="#{txt_persona['label.RazonSocial']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<em class="fa fa-fw fa-pencil-square-o"></em>
+									<div class="ui-inputgroup">
+										<p:inputText id="razonSocial"
+											styleClass="text-input border-completo" maxlength="50"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											placeholder="#{txt_persona['placeholder.RazonSocial']}"
+											required="true"
+											value="#{beanPersonaModificar.ipcd_personaCompleta.ipjd_personaJuridicaDto.is_razonSocial}">
+											<p:ajax event="change"
+												onstart="mostrarLimpiar('formEditarPersona:razonSocial', 'spanRazonSocial');" />
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+											for="labelRazonSocial" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel value="#{txt_persona['tooltip.RazonSocial']}" />
+											</div>
+										</p:tooltip>
+										<span id="spanRazonSocial" class="ui-inputgroup-addon ocultar">
+											<p:commandLink>
+												<p:graphicImage styleClass="img-x-size"
+													name="/img/x-roja.png" />
+												<p:ajax event="click"
+													onstart="limpiarCampo('formEditarPersona:razonSocial', 'spanRazonSocial');" />
+											</p:commandLink>
+										</span>
+									</div>
+									<span class="help-block"> <p:message for="razonSocial" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelTipoOrganizJur" styleClass="label-form"
+										for="tipoOrganiz"
+										value="#{txt_persona['label.TipoOrganizacion']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<em class="fa fa-fw fa-pencil-square-o"></em>
+									<p:selectOneMenu id="tipoOrganiz"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true"
+										value="#{beanPersonaModificar.ipcd_personaCompleta.ipjd_personaJuridicaDto.ic_tipoCatalogoTipoOrganizacion.is_id}">
+										<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+											itemValue="" noSelectionOption="true" />
+										<f:selectItems
+											value="#{beanPersonaModificar.cargarCatalogoTipoOrganizacion()}"
+											var="tipoOrganizacion"
+											itemLabel="#{tipoOrganizacion.is_nombre}"
+											itemValue="#{tipoOrganizacion.is_id}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+										for="labelTipoOrganizJur" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_persona['tooltip.TipoOrganizacion']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="tipoOrganiz" />
+									</span>
+								</div>
+							</div>
+						</p:outputPanel>
+						<!-- FIN PERSONA JURIDICA -->
+						<!-- INICIO PERSONA ENTIDAD ESPECIAL -->
+						<p:outputPanel id="panelEntidadEspecial"
+							rendered="#{beanPersonaModificar.ib_personaEE}">
+							<div class="row">
+								<div class="col-xs-4 consultarUsuarioPad padBotton">
+									<p:outputLabel id="labelRazonSocialEE" styleClass="label-form"
+										for="razonSocialEE"
+										value="#{txt_usuariosAdminEE['usuario.admin.razonSocial']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:outputLabel id="razonSocialEE" required="true"
+										readonly="#{facesContext.renderResponse}"
+										styleClass="tamano consultarUsuarioPad"
+										value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().is_nombreEE}"
+										onkeypress="return false;">
+										<p:keyFilter regEx="/[0-9a-z\s]/i" />
+									</p:outputLabel>
+									<p:tooltip for="razonSocialEE"
+										value="#{txt_usuariosAdminEE['usuario.admin.tooltip.razonSocial']}"></p:tooltip>
+									<span class="help-block"> <p:message for="razonSocialEE" />
+									</span>
+								</div>
+								<div class="col-xs-4 align-center consultarUsuarioPad padBotton">
+									<p:outputLabel id="labelTipoDocumentoEE"
+										styleClass="label-form" for="tipoDocumentoEE"
+										value="#{txt_usuariosAdminEE['usuario.admin.tipoDocumento']}" />
+									<p:outputLabel id="tipoDocumentoEE" required="true"
+										readonly="#{facesContext.renderResponse}"
+										styleClass="tamano consultarUsuarioPad"
+										value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().is_tipoDocumento}"
+										onkeypress="return false;">
+										<p:keyFilter regEx="/[0-9a-z\s]/i" />
+									</p:outputLabel>
+									<p:tooltip for="tipoDocumentoEE"
+										value="#{txt_usuariosAdminEE['usuario.admin.tooltip.tipoDocumento']}"></p:tooltip>
+									<span class="help-block"> <p:message
+											for="tipoDocumentoEE" /></span>
+								</div>
+								<div class="col-xs-4 align-center consultarUsuarioPad padBotton">
+									<p:outputLabel id="labelNumeroDocumentoEE"
+										styleClass="label-form" for="numeroDocumentoEE"
+										value="#{txt_usuariosAdminEE['usuario.admin.numero.documento']}" />
+									<p:outputLabel id="numeroDocumentoEE" required="true"
+										readonly="#{facesContext.renderResponse}"
+										styleClass="tamano consultarUsuarioPad"
+										value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().is_numeroDocumento}"
+										onkeypress="return false;">
+										<p:keyFilter regEx="/[0-9a-z\s]/i" />
+									</p:outputLabel>
+									<p:tooltip for="numeroDocumentoEE"
+										value="#{txt_usuariosAdminEE['usuario.admin.tooltip.numero.documento']}"></p:tooltip>
+									<span class="help-block"> <p:message
+											for="numeroDocumentoEE" />
+									</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-4 align-center consultarUsuarioPad padBotton">
+									<p:outputLabel id="labelTipoOrganizacionEE"
+										styleClass="label-form" for="tipoOrganizacionEE"
+										value="#{txt_usuariosAdminEE['usuario.admin.tipoOrganizacion']}" />
+									<p:outputLabel id="tipoOrganizacionEE" required="true"
+										readonly="#{facesContext.renderResponse}"
+										styleClass="tamano consultarUsuarioPad"
+										value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().is_tipoEntidad}"
+										onkeypress="return false;">
+										<p:keyFilter regEx="/[0-9a-z\s]/i" />
+									</p:outputLabel>
+									<p:tooltip for="tipoOrganizacionEE"
+										value="#{txt_usuariosAdminEE['usuario.admin.tipoOrganizacion']}"></p:tooltip>
+									<span class="help-block"> <p:message
+											for="tipoOrganizacionEE" />
+									</span>
+								</div>
+								<div class="col-xs-4 align-center consultarUsuarioPad padBotton">
+									<p:outputLabel id="labelRepresentantelegalEE"
+										styleClass="label-form" for="representantelegalEE"
+										value="#{txt_usuariosAdminEE['usuario.admin.representanteLegal']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:outputLabel id="representantelegalEE" required="true"
+										readonly="#{facesContext.renderResponse}"
+										styleClass="tamano consultarUsuarioPad"
+										value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().is_nombresRL} #{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().is_apellidos}"
+										onkeypress="return false;">
+										<p:keyFilter regEx="/[0-9a-z\s]/i" />
+									</p:outputLabel>
+									<p:tooltip for="representantelegalEE"
+										value="#{txt_usuariosAdminEE['usuario.admin.tooltip.representanteLegal']}"></p:tooltip>
+									<span class="help-block"> <p:message
+											for="representantelegalEE" />
+									</span>
+								</div>
+								<div class="col-xs-4 align-center consultarUsuarioPad padBotton">
+									<p:outputLabel id="labelNumeroDocumentoRepresentanteEE"
+										styleClass="label-form" for="numeroDocumentoRepresentanteEE"
+										value="#{txt_usuariosAdminEE['usuario.admin.documentoRepresentanteLegal']}" />
+									<p:outputLabel id="numeroDocumentoRepresentanteEE"
+										required="true" readonly="#{facesContext.renderResponse}"
+										styleClass="tamano consultarUsuarioPad"
+										value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().is_numeroDocumentoRL}"
+										onkeypress="return false;">
+										<p:keyFilter regEx="/[0-9a-z\s]/i" />
+									</p:outputLabel>
+									<p:tooltip for="numeroDocumentoRepresentanteEE"
+										value="#{txt_usuariosAdminEE['usuario.admin.tooltip.documentoRepresentanteLegal']}"></p:tooltip>
+									<span class="help-block"> <p:message
+											for="numeroDocumentoRepresentanteEE" />
+									</span>
+								</div>
+							</div>
+						</p:outputPanel>
+						<!-- FIN PERSONA ENTIDAD ESPECIAL -->
+						<div class="row">
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+								<p:outputLabel id="labelNumeroCelNat" styleClass="label-form"
+									for="numeroCelularNatural"
+									value="#{txt_persona['label.NumeroCelular']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<em class="fa fa-fw fa-pencil-square-o"></em>
+								<div class="ui-inputgroup">
+									<p:inputMask id="numeroCelularNatural"
+										placeholder="#{txt_persona['placeholder.NumeroCelular']}"
+										styleClass="text-input border-completo"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										mask="999 999 99 99" required="true"
+										value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_celular}">
+										<p:ajax event="change"
+											onstart="mostrarLimpiar('formEditarPersona:numeroCelularNatural', 'spanNumeroCelularNat');" />
+									</p:inputMask>
+									<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+										for="labelNumeroCelNat" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_persona['tooltip.NumeroCelular']}" />
+										</div>
+									</p:tooltip>
+									<span id="spanNumeroCelularNat"
+										class="ui-inputgroup-addon ocultar"> <p:commandLink>
+											<p:graphicImage styleClass="img-x-size"
+												name="/img/x-roja.png" />
+											<p:ajax event="click"
+												onstart="limpiarCampo('formEditarPersona:numeroCelularNatural', 'spanNumeroCelularNat');" />
+										</p:commandLink>
+									</span>
+								</div>
+								<span class="help-block"> <p:message
+										for="numeroCelularNatural" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+								<p:outputLabel id="labelTelefono" styleClass="label-form"
+									for="telefonoFijo#{personaJuridica?'Jur':'Nat'}"
+									value="#{txt_persona['label.TelefonoFijo']}" />
+								<em class="fa fa-fw fa-pencil-square-o"></em>
+								<div class="ui-inputgroup">
+									<ui:fragment rendered="#{beanPersonaModificar.ib_personaPN}">
+										<p:inputMask id="telefonoFijoNat"
+											styleClass="text-input border-completo"
+											placeholder="#{txt_persona['placeholder.TelefonoFijo']}"
+											mask="999 9999999"
+											value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.is_telefono}">
+											<p:ajax event="change"
+												onstart="mostrarLimpiar('formEditarPersona:telefonoFijoNat', 'spanTelefonoFijo');" />
+										</p:inputMask>
+									</ui:fragment>
+									<ui:fragment
+										rendered="#{beanPersonaModificar.ib_personaPJ || beanPersonaModificar.ib_personaEE}">
+										<ui:param name="valorTelefonoFijo"
+											value="#{(beanPersonaModificar.ib_personaPJ)?beanPersonaModificar.ipcd_personaCompleta.ipjd_personaJuridicaDto.is_telefono:beanPersonaModificar.ipcd_personaCompleta.getIud_usuarioDto().getIee_entidadEspecial().is_telefono}"></ui:param>
+										<p:inputMask id="telefonoFijoJur"
+											styleClass="text-input border-completo" mask="999 9999999"
+											placeholder="#{txt_persona['placeholder.TelefonoFijo']}"
+											value="#{valorTelefonoFijo}">
+											<p:ajax event="change"
+												onstart="mostrarLimpiar('formEditarPersona:telefonoFijoJur', 'spanTelefonoFijo');" />
+										</p:inputMask>
+									</ui:fragment>
+									<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+										for="labelTelefono" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel value="#{txt_persona['tooltip.TelefonoFijo']}" />
+										</div>
+									</p:tooltip>
+									<span id="spanTelefonoFijo" class="ui-inputgroup-addon ocultar">
+										<p:commandLink>
+											<p:graphicImage styleClass="img-x-size"
+												name="/img/x-roja.png" />
+											<p:ajax event="click"
+												onstart="limpiarCampo('formEditarPersona:telefonoFijo#{personaJuridica?'Jur':'Nat'}', 'spanTelefonoFijo');" />
+										</p:commandLink>
+									</span>
+								</div>
+								<span class="help-block"> <p:message
+										for="telefonoFijo#{personaJuridica?'Jur':'Nat'}" />
+								</span>
+							</div>
+							<p:outputPanel id="panelConfirmarCorreoNat">
+								<ui:param name="correoModificacion"
+									value="#{beanPersonaModificar.ib_cambioCorreo}"></ui:param>
+								<div class="col-xs-12 col-md-4">
+									<p:outputLabel id="labelCorreoNat" styleClass="label-form"
+										for="correoNatural"
+										value="#{txt_persona['label.CorreoElectronico']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<em class="fa fa-fw fa-pencil-square-o"></em>
+									<div class="ui-inputgroup">
+										<p:inputText id="correoNatural"
+											styleClass="text-input border-completo"
+											placeholder="#{txt['placeholder.FormatoCorreo']}"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											maxlength="50" required="true"
+											value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_correoElectronico}">
+											<p:ajax event="change"
+												listener="#{beanPersonaModificar.validarCambioCorreo()}"
+												update="formEditarPersona:panelConfirmarCorreoNat"
+												onstart="mostrarLimpiar('formEditarPersona:correoNatural', 'spanCorreoNat');" />
+											<f:validator validatorId="ValidarCorreoFormato" />
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+											for="labelCorreoNat" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_persona['tooltip.CorreoElectronico']}" />
+											</div>
+										</p:tooltip>
+										<span id="spanCorreoNat" class="ui-inputgroup-addon ocultar">
+											<p:commandLink>
+												<p:graphicImage styleClass="img-x-size"
+													name="/img/x-roja.png" />
+												<p:ajax event="click"
+													onstart="limpiarCampo('formEditarPersona:correoNatural', 'spanCorreoNat');" />
+											</p:commandLink>
+										</span>
+									</div>
+									<span class="help-block"> <p:message for="correoNatural" />
+									</span>
+								</div>
+								<ui:fragment rendered="#{correoModificacion}">
+									<div class="col-xs-12 col-md-4">
+										<p:outputLabel id="labelConfirmarCorreoNat"
+											styleClass="label-form" for="confirmarCorreoNatural"
+											value="#{txt_persona['label.ConfirmarCorreo']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<em class="fa fa-fw fa-pencil-square-o"></em>
+										<div class="ui-inputgroup">
+											<p:inputText id="confirmarCorreoNatural"
+												styleClass="text-input border-completo"
+												placeholder="#{txt['placeholder.FormatoCorreo']}"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												maxlength="50" required="true"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_correoElectronicoValidar}">
+												<p:ajax event="change"
+													onstart="mostrarLimpiar('formEditarPersona:confirmarCorreoNatural', 'spanConfirmarCorreoNatural');" />
+												<f:validator validatorId="ValidarCorreoFormato" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+												for="labelConfirmarCorreoNat" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_persona['tooltip.ConfirmarCorreo']}" />
+												</div>
+											</p:tooltip>
+											<span id="spanConfirmarCorreoNatural"
+												class="ui-inputgroup-addon ocultar"> <p:commandLink>
+													<p:graphicImage styleClass="img-x-size"
+														name="/img/x-roja.png" />
+													<p:ajax event="click"
+														onstart="limpiarCampo('formEditarPersona:confirmarCorreoNatural', 'spanConfirmarCorreoNatural');" />
+												</p:commandLink>
+											</span>
+										</div>
+										<span class="help-block"> <p:message
+												for="confirmarCorreoNatural" />
+										</span>
+										<!-- /h:panelGroup-->
+									</div>
+								</ui:fragment>
+							</p:outputPanel>
+						</div>
+						<div class="row">
+							<ui:fragment rendered="#{!beanPersonaModificar.ib_personaEE}">
+								<div class="col-xs-10 col-sm-8 consultarUsuarioPad padBotton">
+									<p:outputLabel id="labelDireccionCompleta"
+										styleClass="label-form" for="direccionCompleta"
+										value="#{txt_persona['modificacion.direccionCompleta']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:inputTextarea id="direccionCompleta" autoResize="true"
+										rows="1" styleClass="text-input border-completo"
+										readonly="#{facesContext.renderResponse}"
+										value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDireccionDto.is_direccionCompleta}"
+										onkeypress="return false;">
+										<p:keyFilter regEx="/[0-9a-z\s]/i" />
+									</p:inputTextarea>
+									<p:tooltip for="direccionCompleta"
+										value="#{txt_persona['modificacion.tooltip.direccionCompleta']}"></p:tooltip>
+									<span class="help-block"> <p:message
+											for="direccionCompleta" />
+									</span>
+								</div>
+								<div class="col-xs-1 col-sm-2 consultaPad consultarPad">
+									<p:commandButton icon="icon-direccion"
+										styleClass="btn-gradiente icon-input alinear-boton-di icono_boton"
+										proccess="@this" update="formDireccionEditar"
+										oncomplete="PF('direccionEditar').show();">
+									</p:commandButton>
+								</div>
+							</ui:fragment>
+							<ui:fragment rendered="#{beanPersonaModificar.ib_personaEE}">
+								<div class="col-sm-3 consultaPad consultarPad">
+									<p:commandButton icon="icon-direccion"
+										value="#{txt_persona['modificacion.botonDetalleDireccion']}"
+										styleClass="btn-gradiente btn-rojo icono_boton"
+										proccess="@this"
+										oncomplete="PF('modalDetalleDireccion').show();">
+									</p:commandButton>
+								</div>
+							</ui:fragment>
+							<ui:fragment
+								rendered="#{sec:isAllowed('/pages/personas/modificarContrasenaUsuario.jsf', 'POST')}">
+								<div class="col-sm-3 consultaPad consultarPad boton-contrasena">
+									<p:commandButton
+										value="#{txt_persona['modificacion.botonContrasena']}"
+										styleClass="btn-gradiente btn-rojo alinear-boton-di boton-contrasena icono_boton"
+										proccess="@this" update="formContrasenaEditar"
+										oncomplete="PF('contrasenaEditar').show();">
+									</p:commandButton>
+								</div>
+							</ui:fragment>
+						</div>
+						<div class="row">
+							<ui:fragment
+								rendered="#{sec:isAllowed('/pages/personas/modificarContrasenaUsuario.jsf', 'POST')}">
+								<div class="col-xs-4 col-xs-offset-4 consultaPad consultarPad">
+									<p:commandButton
+										value="#{txt_persona['modificacion.botonContrasena']}"
+										styleClass="btn-gradiente btn-rojo alinear-boton-di boton-movil centrar-texto-boton"
+										proccess="@this" update="formContrasenaEditar"
+										oncomplete="PF('contrasenaEditar').show();">
+									</p:commandButton>
+								</div>
+							</ui:fragment>
+						</div>
+						<br />
+						<br />
+					</p:panel>
+					<div class="container-fluid-btn">
+						<div class="row">
+							<div class="col-sm-4 col-sm-offset-2">
+								<p:commandButton id="btn-atras"
+									styleClass="icon-btn pull-right btn-gris centrar-texto-boton"
+									value="#{txt['boton.Cancelar.Upper']}" immediate="true"
+									action="/pages/personas/inicio.jsf?faces-redirect=true"
+									process="@this" />
+							</div>
+							<div class="col-sm-4">
+								<p:commandButton id="btn-editar"
+									styleClass="btn-gradiente icon-btn btn-rojo pull-left centrar-texto-boton"
+									type="submit"
+									value="#{txt_persona['boton.GuardarCambios.Upper']}"
+									action="#{beanPersonaModificar.validarInformacionModificacion()}"
+									update="@form" />
+							</div>
+						</div>
+					</div>
+				</h:form>
+			</div>
+		</div>
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgSeguridad" />
+			<ui:param name="tituloModal"
+				value="#{txt_persona['label.ModalContrasena.Header']}" />
+			<ui:param name="formulario" value="formContrasena" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel
+							value="#{txt_persona['label.ModalContrasena.Titulo']}"
+							styleClass="text-contrasena-title" />
+						<p:outputLabel
+							value="#{txt_persona['label.ModalContrasena.TextoUno']}"
+							styleClass="text-contrasena" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel id="labelContrasenaValida" styleClass="label-form"
+							for="contrasenaValida" value="#{txt_persona['label.Contrasena']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:password id="contrasenaValida"
+								styleClass="text-input border-completo" maxlength="20"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								required="true"
+								value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_contrasenaConfirmacion}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('formContrasena:contrasenaValida', 'spanContrasenaValida');" />
+							</p:password>
+							<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+								for="labelContrasenaValida" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_persona['tooltip.Contrasena']}" />
+								</div>
+							</p:tooltip>
+							<span id="spanContrasenaValida"
+								class="ui-inputgroup-addon ocultar"> <p:commandLink
+									styleClass="text-link-input"
+									value="#{txt['label.VerContrasena']}">
+									<p:ajax event="click"
+										onstart="verContrasena('formContrasena:contrasenaValida');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message for="contrasenaValida" />
+						</span>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-sm-4 col-sm-offset-2 space-row">
+						<p:commandButton id="btn-cancel" icon="icon-flecha-gris" iconPos="right"
+							styleClass="icon-btn pull-right btn-gris "
+							value="#{txt['boton.Cancelar.Upper']}"
+							onclick="PF('dlgSeguridad').hide();return false" />
+					</div>
+					<div class="col-sm-4">
+						<p:commandButton id="btn-finalizar" icon="icon-flecha-blanca"
+							iconPos="right"
+							styleClass="icon-btn btn-rojo-dialog pull-left btn-gradiente"
+							value="#{txt_persona['boton.Continuar.Upper']}"
+							process="@form :formEditarPersona" type="submit"
+							oncomplete="return true; limpiarCampoContrasenaConfirmacion(); PF('dlgSeguridad').hide();"
+							action="#{beanPersonaModificar.realizarModificacion}"
+							update="@(div[id$=operacionGrid]),@(div[id$=seguridadGrid])" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgOperacion" />
+			<ui:param name="tituloModal" value="#{txt_persona['Modal.Header']}" />
+			<ui:param name="formulario" value="formOperacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:define name="body-modal">
+				<div class="scroll-validacion">
+					<p:panelGrid id="operacionGrid" columns="1" cellpadding="3"
+						layout="grid" styleClass="no-border container-fluid-scroll-empty">
+						<div class="row">
+							<h:outputText id="msgOperacion"
+								value="#{beanPersonaModificar.is_msgOperacion}" />
+						</div>
+					</p:panelGrid>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div
+						class="col-xs-12 col-sm-6 col-sm-offset-6 center-component">
+						<p:commandButton id="btn-aceptar" icon="icon-flecha-blanca"
+							iconPos="right"
+							styleClass="icon-btn btn-rojo-dialog btn-gradiente"
+							value="#{txt_persona['Modal.BotonAceptar.Upper']}" type="submit"
+							action="/pages/personas/inicio.jsf?faces-redirect=true"
+							process="@form" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!--  Modal modificar contraseña -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="contrasenaEditar" />
+			<ui:param name="tituloModal"
+				value="#{txt_persona['Modal.contrasena.header']}" />
+			<ui:param name="formulario" value="formContrasenaEditar" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:define name="body-modal">
+				<p:panel styleClass="panel-content no-border ancho-panel">
+					<div class="row">
+						<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+							<p:outputLabel id="labelContrasenaActual" styleClass="label-form"
+								for="contrasenaActual"
+								value="#{txt_persona['label.ContrasenaActual']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:password id="contrasenaActual"
+									styleClass="text-input border-completo"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									maxlength="20" required="true"
+									value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_contrasenaActual}">
+									<p:ajax event="change"
+										onstart="mostrarLimpiar('formContrasenaEditar:contrasenaActual', 'spanContrasenaActual');" />
+								</p:password>
+								<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+									for="labelContrasenaActual" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_persona['tooltip.ContrasenaActual']}" />
+									</div>
+								</p:tooltip>
+								<span id="spanContrasenaActual"
+									class="ui-inputgroup-addon ocultar"> <p:commandLink
+										styleClass="text-contrasena-link"
+										value="#{txt['label.VerContrasena']}">
+										<p:ajax event="click"
+											onstart="verContrasena('formContrasenaEditar:contrasenaActual');" />
+									</p:commandLink>
+								</span>
+							</div>
+							<span class="help-block"> <p:message
+									for="contrasenaActual" />
+							</span>
+						</div>
+					</div>
+					<p:separator styleClass="separador" />
+					<div class="row ui-g">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelNuevaContrasena" styleClass="label-form"
+								for="nuevaContrasena"
+								value="#{txt_persona['label.ContrasenaNueva']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:password id="nuevaContrasena"
+									styleClass="text-input border-completo" maxlength="20"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_contrasena}">
+									<p:ajax event="change" oncomplete="PF('tooltipMsg').show();"
+										onstart="mostrarLimpiar('formContrasenaEditar:nuevaContrasena', 'spanNuevaContrasena');" />
+									<p:ajax event="focus" onstart="PF('tooltipMsg').show();" />
+								</p:password>
+								<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+									for="labelNuevaContrasena" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_persona['tooltip.ContrasenaNueva']}" />
+									</div>
+								</p:tooltip>
+								<span id="spanNuevaContrasena"
+									class="ui-inputgroup-addon ocultar"> <p:commandLink
+										styleClass="text-contrasena-link"
+										value="#{txt['label.VerContrasena']}">
+										<p:ajax event="click"
+											onstart="verContrasena('formContrasenaEditar:nuevaContrasena');" />
+									</p:commandLink>
+								</span>
+								<p:commandButton id="infoNuevaContrasena" icon="icon-contrasena"
+									styleClass="icon-input btn-gradiente icono_boton" />
+								<pe:tooltip widgetVar="tooltipMsg" id="tooltipIndica"
+									showEvent="mouseover" myPosition="top, right"
+									hideEvent="mouseout" atPosition="bottom center"
+									styleClass="tooltip-contrasena" for="infoNuevaContrasena">
+									<div id="content-tooltip-msg">
+										<p:outputLabel
+											value="#{beanValidacionContrasena.is_msgValidacion}" />
+									</div>
+								</pe:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="nuevaContrasena" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelConfirmarNuevaContrasena"
+								styleClass="label-form" for="confirmarNuevaContrasena"
+								value="#{txt_persona['label.VerificarContrasenaNueva']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:password id="confirmarNuevaContrasena"
+									styleClass="text-input border-completo" maxlength="20"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_contrasenaConfirmacion}">
+									<p:ajax event="change"
+										onstart="mostrarLimpiar('formContrasenaEditar:confirmarNuevaContrasena', 'spanConfirmarNuevaContrasena');" />
+								</p:password>
+								<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+									for="labelConfirmarNuevaContrasena" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_persona['tooltip.VerificarContrasenaNueva']}" />
+									</div>
+								</p:tooltip>
+								<span id="spanConfirmarNuevaContrasena"
+									class="ui-inputgroup-addon ocultar"> <p:commandLink
+										styleClass="text-contrasena-link"
+										value="#{txt['label.VerContrasena']}">
+										<p:ajax event="click"
+											onstart="verContrasena('formContrasenaEditar:confirmarNuevaContrasena')" />
+									</p:commandLink>
+								</span>
+							</div>
+							<span class="help-block"> <p:message
+									for="confirmarNuevaContrasena" />
+							</span>
+						</div>
+					</div>
+				</p:panel>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-atras"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_persona['boton.volver']}" immediate="true"
+							onclick="PF('contrasenaEditar').hide();" process="@this" />
+					</div>
+					<div class="col-xs-4">
+						<p:commandButton id="btn-finalizar"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_persona['boton.guardar']}" type="submit"
+							action="#{beanPersonaModificar.modificarContrasena}"
+							update="@form :formOperacion:msgOperacion"
+							onclick="ocultarTooltips();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal Direccion final -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="direccionEditar" />
+			<ui:param name="tituloModal"
+				value="#{txt_persona['Modal.direccion.header']}" />
+			<ui:param name="formulario" value="formDireccionEditar" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:define name="body-modal">
+				<p:panel id="panelDir" styleClass="panel-dir">
+					<ui:decorate template="/pages/includes/direccion.xhtml">
+						<ui:param name="bean" value="${beanPersonaModificar}" />
+						<ui:param name="direccionDto"
+							value="${beanPersonaModificar.id_direccionDto}" />
+						<ui:param name="mostrarPais" value="true" />
+						<ui:param name="formularioDireccion" value="formDireccionEditar" />
+						<ui:param name="requerido" value="true" />
+					</ui:decorate>
+				</p:panel>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-volver-formularioEditar"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_persona['boton.volver']}"
+							oncomplete="PF('direccionEditar').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-4 col-xs-offset-0">
+						<p:commandButton id="btn-aceptoEditar"
+							update="formEditarPersona:direccionCompleta formDireccionEditar"
+							styleClass="icon-btn btn-rojo pull-left btn-gradiente"
+							value="#{txt_persona['boton.guardar']}"
+							oncomplete="if(args.validationFailed){PF('direccionEditar').jq.effect('shake', {times: 3}, 100);}else{PF('dlgSeguridad').show(); PF('direccionEditar').hide();return true;}"
+							process="@all" ignoreAutoUpdate="true">
+							<f:setPropertyActionListener value="true"
+								target="#{beanPersonaModificar.ib_modificarDireccion}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal detalle direccion entidad especial -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalDetalleDireccion" />
+			<ui:param name="formulario" value="formDetalleEntidad" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:param name="tituloModal"
+				value="#{txt_usuariosAdminEE['usuario.admin.titulo.informacion']}" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12 align-center consultarPad padBotton">
+						<h:outputText styleClass="titulo tituloText"
+							value="#{txt_usuariosAdminEE['usuario.admin.direccionEntidadEspecial']}" />
+					</div>
+				</div>
+				<p:separator />
+				<!-- Direccion Entidad Especial -->
+				<div class="row">
+					<div class="col-xs-4 align-center consultarPad padBotton">
+						<p:outputLabel id="labelPais" styleClass="label-form" for="pais"
+							value="#{txt_usuariosAdminEE['usuario.admin.pais']}" />
+						<p:outputLabel id="pais" required="true"
+							readonly="#{facesContext.renderResponse}"
+							styleClass="tamano consultarUsuarioPad"
+							value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().id_direccion.ip_paisDto.is_nombre}"
+							onkeypress="return false;">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+						</p:outputLabel>
+						<span class="help-block"> <p:message for="pais" />
+						</span>
+					</div>
+					<div class="col-xs-4 align-center consultarPad padBotton">
+						<p:outputLabel id="labelDepartamento" styleClass="label-form"
+							for="departamento"
+							value="#{txt_usuariosAdminEE['usuario.admin.departamento']}" />
+						<p:outputLabel id="departamento" required="true"
+							readonly="#{facesContext.renderResponse}"
+							styleClass="tamano consultarUsuarioPad"
+							value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().id_direccion.id_departamentoDto.is_nombre}"
+							onkeypress="return false;">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+						</p:outputLabel>
+						<span class="help-block"> <p:message for="departamento" />
+						</span>
+					</div>
+					<div class="col-xs-4 align-center consultarPad padBotton">
+						<p:outputLabel id="labelMunicipio" styleClass="label-form"
+							for="municipio"
+							value="#{txt_usuariosAdminEE['usuario.admin.municipio']}" />
+						<p:outputLabel id="municipio" required="true"
+							readonly="#{facesContext.renderResponse}"
+							styleClass="tamano consultarUsuarioPad"
+							value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().id_direccion.im_municipioDto.is_nombre}"
+							onkeypress="return false;">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+						</p:outputLabel>
+						<span class="help-block"> <p:message for="municipio" />
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4 align-center consultarPad padBotton">
+						<p:outputLabel id="labelVereda" styleClass="label-form"
+							for="vereda"
+							value="#{txt_usuariosAdminEE['usuario.admin.vereda']}" />
+						<p:outputLabel id="vereda" required="true"
+							readonly="#{facesContext.renderResponse}"
+							styleClass="tamano consultarUsuarioPad"
+							value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().id_direccion.iv_vereda.is_nombre}"
+							onkeypress="return false;">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+						</p:outputLabel>
+						<span class="help-block"> <p:message for="vereda" />
+						</span>
+					</div>
+					<div class="col-xs-4 align-center consultarPad padBotton">
+						<p:outputLabel id="labelTipoPredio" styleClass="label-form"
+							for="tipoPredio"
+							value="#{txt_usuariosAdminEE['usuario.admin.tipoPredio']}" />
+						<p:outputLabel id="tipoPredio" required="true"
+							readonly="#{facesContext.renderResponse}"
+							styleClass="tamano consultarUsuarioPad"
+							value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().id_direccion.ietd_enumTipoDireccion}"
+							onkeypress="return false;">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+						</p:outputLabel>
+						<span class="help-block"> <p:message for="tipoPredio" />
+						</span>
+					</div>
+					<div class="col-xs-4 align-center consultarPad padBotton">
+						<p:outputLabel id="labelNombrePredio" styleClass="label-form"
+							for="nombrePredio"
+							value="#{txt_usuariosAdminEE['usuario.admin.nombrePredio']}" />
+						<p:outputLabel id="nombrePredio" required="true"
+							readonly="#{facesContext.renderResponse}"
+							styleClass="tamano consultarUsuarioPad"
+							value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().id_direccion.is_nombrePredio}"
+							onkeypress="return false;">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+						</p:outputLabel>
+						<span class="help-block"> <p:message for="nombrePredio" />
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4 align-center consultarPad padBotton">
+						<p:outputLabel id="labelTipoEje" styleClass="label-form"
+							for="tipoEje"
+							value="#{txt_usuariosAdminEE['usuario.admin.tipoEje']}" />
+						<p:outputLabel id="tipoEje" required="true"
+							readonly="#{facesContext.renderResponse}"
+							styleClass="tamano consultarUsuarioPad"
+							value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().id_direccion.ite_tipoEjeDto.is_nombre}"
+							onkeypress="return false;">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+						</p:outputLabel>
+						<span class="help-block"> <p:message for="tipoEje" />
+						</span>
+					</div>
+					<div class="col-xs-4 align-center consultarPad padBotton">
+						<p:outputLabel id="labelEjePrincipal" styleClass="label-form"
+							for="ejePrincipal"
+							value="#{txt_usuariosAdminEE['usuario.admin.ejePrincipal']}" />
+						<p:outputLabel id="ejePrincipal" required="true"
+							readonly="#{facesContext.renderResponse}"
+							styleClass="tamano consultarUsuarioPad"
+							value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().id_direccion.is_datoEjePrincipal}"
+							onkeypress="return false;">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+						</p:outputLabel>
+						<span class="help-block"> <p:message for="ejePrincipal" />
+						</span>
+					</div>
+					<div class="col-xs-4 align-center consultarPad padBotton">
+						<p:outputLabel id="labelEjeUno" styleClass="label-form"
+							for="ejeUno"
+							value="#{txt_usuariosAdminEE['usuario.admin.ejeUno']}" />
+						<p:outputLabel id="ejeUno" required="true"
+							readonly="#{facesContext.renderResponse}"
+							styleClass="tamano consultarUsuarioPad"
+							value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().id_direccion.ite_tipoEjeUnoDto.is_nombre}"
+							onkeypress="return false;">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+						</p:outputLabel>
+
+						<span class="help-block"> <p:message for="nombrePredio" />
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4 align-center consultarPad padBotton">
+						<p:outputLabel id="labelEjeSecundario" styleClass="label-form"
+							for="ejeSecundario"
+							value="#{txt_usuariosAdminEE['usuario.admin.ejeSecundario']}" />
+						<p:outputLabel id="ejeSecundario" required="true"
+							readonly="#{facesContext.renderResponse}"
+							styleClass="tamano consultarUsuarioPad"
+							value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().id_direccion.is_datoEjeSecundario}"
+							onkeypress="return false;">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+						</p:outputLabel>
+						<span class="help-block"> <p:message for="ejeSecundario" />
+						</span>
+					</div>
+					<div class="col-xs-4 align-center consultarPad padBotton">
+						<p:outputLabel id="LabelComplementoDireccion"
+							styleClass="label-form" for="complementoDireccion"
+							value="#{txt_usuariosAdminEE['usuario.admin.complementoDireccion']}" />
+						<p:outputLabel id="complementoDireccion" required="true"
+							readonly="#{facesContext.renderResponse}"
+							styleClass="tamano consultarUsuarioPad"
+							value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().id_direccion.is_complementoDireccion}"
+							onkeypress="return false;">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+						</p:outputLabel>
+						<span class="help-block"> <p:message
+								for="complementoDireccion" />
+						</span>
+					</div>
+					<div class="col-xs-4 align-center consultarPad padBotton">
+						<p:outputLabel id="labelDireccionCompleta" styleClass="label-form"
+							for="direccionCompleta"
+							value="#{txt_usuariosAdminEE['usuario.admin.direccionCompleta']}" />
+						<p:outputLabel id="direccionCompleta" required="true"
+							readonly="#{facesContext.renderResponse}"
+							styleClass="tamano consultarUsuarioPad"
+							value="#{beanPersonaModificar.ipcd_personaCompleta.getIee_entidadEspecialDTO().id_direccion.is_direccionCompleta}"
+							onkeypress="return false;">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+						</p:outputLabel>
+						<span class="help-block"> <p:message
+								for="direccionCompleta" />
+						</span>
+					</div>
+				</div>
+			</ui:define>
+			<p:separator />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-sm-4 align-center pad"></div>
+					<div class="col-xs-4 col-sm-4 align-center pad">
+						<p:commandButton id="aceptarDetalle"
+							value="#{txt_usuariosAdmin['boton.Entendido']}"
+							styleClass="btn-gradiente btn-rojo"
+							oncomplete="PF('modalDetalleDireccion').hide();return false;">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

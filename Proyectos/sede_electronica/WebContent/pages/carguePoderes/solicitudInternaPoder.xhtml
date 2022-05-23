@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_solicitudes_poderes['titulo.solicitudes.pendientes']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudesInternasPoderes.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_solicitudes_poderes['titulo.solicitudes.pendientes']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo"
+				value="#{txt_solicitudes_poderes[beanSolicitudPendientePoder.is_tipoConsulta]}" />
+		</ui:include>
+
+		<!-- Importancion de tipos de criterios de busqueda-->
+		<p:importEnum
+			type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTiposSolicitudesPoderes"
+			var="enumCriterioBusqueda" />
+
+		<ui:param name="solicitudCargue"
+			value="#{ beanSolicitudPendientePoder.is_tipoConsulta eq  enumCriterioBusqueda.SOLICITUDES_PENDIENTES_CARGUE_PODER.is_criterio}" />
+		<ui:param name="pendienteCorreccion"
+			value="#{ beanSolicitudPendientePoder.is_tipoConsulta eq enumCriterioBusqueda.SOLICITUDES_PENDIENTES_CORRECCION.is_criterio}" />
+		<ui:param name="pendienteAnulacion"
+			value="#{ beanSolicitudPendientePoder.is_tipoConsulta eq enumCriterioBusqueda.SOLICITUDES_PENDIENTES_ANULACION.is_criterio}" />
+
+
+		<div class="row espaciado-superior">
+			<div class="col-xs-12 col-sm-12 center">
+				<p:outputLabel id="labelTitulo" styleClass="titulo"
+					value="#{txt_solicitudes_poderes[beanSolicitudPendientePoder.is_tipoConsulta]}" />
+			</div>
+		</div>
+
+		<ui:fragment rendered="#{pendienteCorreccion or pendienteAnulacion}">
+
+			<div class="row espaciado-superior">
+				<div class="col-xs-12 col-sm-5 col-sm-offset-1">
+					<p:outputLabel id="labelNumeroPoder" styleClass="label-form"
+						for="numeroPoder"
+						value="#{txt_solicitudes_poderes['tabla.id.poder']}" />
+					<div class="ui-inputgroup">
+						<h:outputText id="numeroPoder" styleClass="mask-Alpha"
+							maxlength="50" required="false"
+							placeholder="#{txt_solicitudes_poderes['tabla.id.poder']}"
+							readonly="true"
+							value="#{beanSolicitudPendientePoder.ispp_solicitudes.is_id}">
+						</h:outputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelNumeroPoder" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_solicitudes_poderes['detalle.tooltip.id.poder']}" />
+							</div>
+						</p:tooltip>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-5 ">
+					<p:outputLabel id="labelEstadoPoder" styleClass="label-form"
+						for="estadoPoder"
+						value="#{txt_solicitudes_poderes['detalle.estado.poder']}" />
+					<div class="ui-inputgroup">
+						<h:outputText id="estadoPoder" styleClass="mask-Alpha"
+							maxlength="50" required="false"
+							placeholder="#{txt_solicitudes_poderes['detalle.estado.poder']}"
+							readonly="true"
+							value="#{beanSolicitudPendientePoder.ip_poder.is_xEstadoPoder}">
+						</h:outputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelEstadoPoder" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_solicitudes_poderes['detalle.tooltip.estado.poder']}" />
+							</div>
+						</p:tooltip>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="row espaciado-superior">
+				<div class="col-xs-12 col-sm-5 col-sm-offset-1">
+					<p:outputLabel id="labelTipoPoder" styleClass="label-form"
+						for="tipoPoder"
+						value="#{txt_solicitudes_poderes['tabla.tipo.poder']}" />
+					<div class="ui-inputgroup">
+						<h:outputText id="tipoPoder" styleClass="mask-Alpha"
+							maxlength="50" required="false" placeholder="Tipo de poder"
+							readonly="true"
+							value="#{beanSolicitudPendientePoder.ispp_solicitudes.is_tipoPoder}">
+						</h:outputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelTipoPoder" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_solicitudes_poderes['detalle.tooltip.tipo.poder']}" />
+							</div>
+						</p:tooltip>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-5">
+					<p:outputLabel id="labelNotariaOrigen" styleClass="label-form"
+						for="notariaOrigen"
+						value="#{txt_solicitudes_poderes['detalle.notaria.origen']}" />
+					<div class="ui-inputgroup">
+						<h:outputText id="notariaOrigen" styleClass="mask-Alpha"
+							maxlength="50" required="false"
+							placeholder="#{txt_solicitudes_poderes['detalle.notaria.origen']}"
+							readonly="true"
+							value="#{beanSolicitudPendientePoder.ispp_solicitudes.iee_entidadEspecialOrigen.is_nombreEntidadExterna}">
+						</h:outputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelNotariaOrigen"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_solicitudes_poderes['detalle.tooltip.notaria.origen']}" />
+							</div>
+						</p:tooltip>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="row espaciado-superior">
+				<div class="col-xs-12 col-sm-5 col-sm-offset-1">
+					<p:outputLabel id="labelUsoPoder" styleClass="label-form"
+						for="usoPoder"
+						value="#{txt_solicitudes_poderes['detalle.uso.poder']}" />
+					<div class="ui-inputgroup">
+						<h:outputText id="usoPoder" styleClass="mask-Alpha" maxlength="50"
+							required="false" placeholder="Uso de poder a tramitar"
+							readonly="true"
+							value="#{beanSolicitudPendientePoder.ispp_solicitudes.is_tipoTramite}">
+						</h:outputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelUsoPoder" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_solicitudes_poderes['detalle.uso.poder']}" />
+							</div>
+						</p:tooltip>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-5">
+					<p:outputLabel id="labelDiligenciaReconocimiento"
+						styleClass="label-form" for="diligenciaReconocimiento"
+						value="#{txt_solicitudes_poderes['detalle.diligencia.reconocimiento']}" />
+					<div class="ui-inputgroup">
+						<h:outputText id="diligenciaReconocimiento"
+							styleClass="mask-Alpha" maxlength="50" required="false"
+							placeholder="#{txt_solicitudes_poderes['detalle.diligencia.reconocimiento']}"
+							readonly="true"
+							value="#{beanSolicitudPendientePoder.ip_poder.is_diligenciaReconocimiento}">
+						</h:outputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelDiligenciaReconocimiento"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_solicitudes_poderes['detalle.diligencia.reconocimiento']}" />
+							</div>
+						</p:tooltip>
+					</div>
+				</div>
+			</div>
+			<div class="row espaciado-superior">
+				<div class="col-xs-12 col-sm-12">
+					<p:outputLabel id="labelObservacionesExistentes"
+						styleClass="label-form" for="observacionesExistentes"
+						value="#{txt_solicitudes_poderes['detalle.observaciones.existentes']}" />
+					<div class="ui-inputgroup">
+						<p:inputTextarea id="observacionesExistentes" rows="6"
+							autocomplete="off" cols="40"
+							counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+							autoResize="false"
+							styleClass="text-input border-completo tamano text-area-observaciones-existentes"
+							maxlength="2000" readonly="true"
+							placeholder="#{txt_solicitudes_poderes['detalle.observaciones.existentes']}"
+							value="#{beanSolicitudPendientePoder.ispp_solicitudes.is_observacion}">
+							<p:keyFilter regEx="/[A-Za-z0-9\.\,\:\;\(\)\s]/i" />
+						</p:inputTextarea>
+						<p:tooltip for="labelObservacionesExistentes"
+							value="#{txt_solicitudes_poderes['detalle.observaciones.existentes']}" />
+					</div>
+					<span class="help-block"> <p:message
+							for="labelObservacionesExistentes" />
+					</span>
+				</div>
+			</div>
+
+			<ui:fragment rendered="#{pendienteAnulacion}">
+				<div class="row espaciado-superior">
+					<div class="col-xs-12">
+						<p:outputLabel id="labelObservacionesAnulacion"
+							styleClass="label-form" for="observacionesAnulacion"
+							value="#{txt_solicitudes_poderes['detalle.observaciones.anulacion']}" />
+						<div class="ui-inputgroup">
+							<p:inputTextarea id="observacionesAnulacion" rows="6"
+								autocomplete="off" cols="40"
+								counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+								autoResize="false"
+								styleClass="text-input border-completo text-area-observaciones-existentes"
+								maxlength="2000" readonly="true"
+								placeholder="#{txt_solicitudes_poderes['detalle.observaciones.anulacion.placeholder']}"
+								value="#{beanSolicitudPendientePoder.ispp_solicitudes.is_observacion}">
+								<p:keyFilter regEx="/[A-Za-z0-9\.\,\:\;\(\)\s]/i" />
+							</p:inputTextarea>
+							<p:tooltip for="labelObservacionesAnulacion"
+								value="#{txt_solicitudes_poderes['detalle.observaciones.anulacion.placeholder']}" />
+						</div>
+						<span class="help-block"> <p:message
+								for="labelObservacionesAnulacion" />
+						</span>
+					</div>
+				</div>
+			</ui:fragment>
+
+		</ui:fragment>
+
+		<!-- Poderes pendientes de cargue -->
+		<ui:fragment rendered="#{solicitudCargue}">
+
+			<div class="row espaciado-superior">
+				<div class="col-xs-12 col-sm-5 col-sm-offset-1">
+					<p:outputLabel id="labelEntidad" styleClass="label-form"
+						for="entidad"
+						value="#{txt_solicitudes_poderes['detalle.notaria.solicitante']}" />
+					<div class="ui-inputgroup">
+						<h:outputText id="entidad" styleClass="mask-Alpha" maxlength="50"
+							required="false"
+							placeholder="#{txt_solicitudes_poderes['detalle.notaria.solicitante']}"
+							readonly="true"
+							value="#{beanSolicitudPendientePoder.ispp_solicitudes.is_idNotariaSolicitante}">
+						</h:outputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelEntidad" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_solicitudes_poderes['detalle.notaria.solicitante']}" />
+							</div>
+						</p:tooltip>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-5">
+					<p:outputLabel id="labelTipoPoderPendiente" styleClass="label-form"
+						for="tipoPoderPendiente"
+						value="#{txt_solicitudes_poderes['tabla.tipo.poder']}" />
+					<div class="ui-inputgroup">
+						<h:outputText id="tipoPoderPendiente" styleClass="mask-Alpha"
+							maxlength="50" required="false"
+							placeholder="#{txt_solicitudes_poderes['tabla.tipo.poder']}"
+							readonly="true"
+							value="#{beanSolicitudPendientePoder.ispp_solicitudes.is_tipoPoder}">
+						</h:outputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelTipoPoderPendiente"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_solicitudes_poderes['tabla.tipo.poder']}" />
+							</div>
+						</p:tooltip>
+					</div>
+				</div>
+
+				<div class="row espaciado-superior">
+					<div class="col-xs-12 col-sm-12">
+						<p:outputLabel id="labelObservacionCargue"
+							styleClass="label-form titulo-observaciones"
+							for="ObservacionCargue"
+							value="#{txt_solicitudes_poderes['detalle.observaciones.cargue']}" />
+						<div class="ui-inputgroup">
+							<p:inputTextarea id="ObservacionCargue" rows="6"
+								autocomplete="off" cols="40"
+								counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+								autoResize="false" readonly="true"
+								styleClass="text-input border-completo tamano text-area-observaciones-existentes"
+								maxlength="2000"
+								placeholder="#{txt_solicitudes_poderes['detalle.observaciones.cargue']}"
+								value="#{beanSolicitudPendientePoder.ispp_solicitudes.is_observacion}">
+								<p:keyFilter regEx="/[A-Za-z0-9\.\,\:\;\(\)\s]/i" />
+							</p:inputTextarea>
+							<p:tooltip for="labelObservacionCargue"
+								value="#{txt_solicitudes_poderes['detalle.observaciones.cargue']}" />
+						</div>
+						<span class="help-block"> <p:message
+								for="labelObservacionCargue" />
+						</span>
+					</div>
+				</div>
+			</div>
+
+		</ui:fragment>
+
+		<div class="row espaciado-superior">
+
+			<div class="col-sm-4 col-sm-offset-2 space-row">
+				<p:commandButton
+					value="#{txt_solicitudes_poderes['boton.rechazar']}"
+					icon="icon-flecha-blanca" iconPos="right" styleClass="btn-gris"
+					onclick="PF('modalSolicitudPendinteRechazo').show()">
+				</p:commandButton>
+			</div>
+			<div class="col-sm-4">
+				<p:commandButton value="#{txt_solicitudes_poderes['boton.aceptar']}"
+					icon="icon-flecha-blanca" iconPos="right"
+					styleClass="btn-gradiente  btn-rojo"
+					onclick="PF('modalSolicitudPendinteAceptacion').show()">
+				</p:commandButton>
+			</div>
+
+		</div>
+
+		<ui:fragment>
+			<ui:decorate template="/pages/includes/modal.xhtml">
+				<ui:param name="modalId" value="modalSolicitudPendinteAceptacion" />
+				<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+				<ui:param name="tituloModal"
+					value="#{txt_solicitudes_poderes['modal.titulo.confirmacion']}" />
+				<ui:param name="formulario"
+					value="formModalRedireccionMatriculaAceptacion" />
+				<ui:define name="body-modal">
+
+					<div class="row espaciado-superior">
+						<div class="col-xs-12 col-sm-12 center">
+							<p:outputLabel id="labelTitulo"
+								value="#{txt_solicitudes_poderes['modal.preguta.aceptacion']}" />
+						</div>
+					</div>
+
+				</ui:define>
+				<ui:define name="accion-modal">
+					<div class="row">
+						<div class="col-xs-10 col-xs-offset-1 col-sm-5 space-row">
+							<p:commandButton
+								value="#{txt_solicitudes_poderes['boton.cancelar']}"
+								class="btn-gris" oncomplete="PF('#{modalId}').hide()">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
+							<p:commandButton
+								value="#{txt_solicitudes_poderes['boton.aceptar']}"
+								class="btn-rojo btn-gradiente"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('#{modalId}').hide()">
+								<f:ajax
+									listener="#{beanSolicitudPendientePoder.redireccionAprobacion}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</ui:define>
+			</ui:decorate>
+		</ui:fragment>
+
+
+		<!-- Modal de rechazo justificacion -->
+		<ui:fragment>
+			<ui:decorate template="/pages/includes/modal.xhtml">
+				<ui:param name="modalId" value="modalSolicitudPendinteRechazo" />
+				<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+				<ui:param name="tituloModal" value="#{txt_solicitudes_poderes['modal.titulo.confirmacion']}" />
+				<ui:param name="formulario"
+					value="formModalRedireccionMatriculaRechazo" />
+				<ui:define name="body-modal">
+					<!-- Script que ejecuta el Keyfilter-->
+					<script type="text/javascript">
+						$(document).ready(function() {
+							cargarKeyfilters();
+						});
+					</script>
+					<!-- Script que ejecuta el Keyfilter-->
+					<div class="row espaciado-superior">
+						<div class="col-xs-12 col-sm-12 center">
+							<p:outputLabel id="labelTitulo" styleClass="titulo"
+								value="#{txt_solicitudes_poderes['modal.justificacion']}" />
+						</div>
+					</div>
+
+					<ui:fragment>
+						<div class="row espaciado-superior">
+
+							<div class="col-xs-12 col-sm-10 col-sm-offset-1">
+								<p:outputLabel id="labelJustificacion"
+									styleClass="label-form titulo-observaciones"
+									for="justificacion"
+									value="#{txt_solicitudes_poderes['detalle.observaciones.justificacion']}" />
+								<div class="ui-inputgroup tamaño-tabla">
+									<p:inputTextarea id="justificacion" rows="6" autocomplete="off"
+										cols="40"
+										counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+										autoResize="false"
+										styleClass="tamanio-tabla text-area-observaciones-existentes mask-Tilde"
+										maxlength="2000"
+										placeholder="#{txt_solicitudes_poderes['detalle.observaciones.justificacion']}"
+										value="#{beanSolicitudPendientePoder.ispp_solicitudes.is_justificacion}">
+									</p:inputTextarea>
+									<p:tooltip for="labelJustificacion"
+										value="#{txt_solicitudes_poderes['detalle.observaciones.justificacion']}" />
+								</div>
+								<span class="help-block"> <p:message
+										for="labelJustificacion" />
+								</span>
+							</div>
+						</div>
+					</ui:fragment>
+
+				</ui:define>
+				<ui:define name="accion-modal">
+					<div class="row">
+						<div class="col-xs-10 col-xs-offset-1 col-sm-5 space-row">
+							<p:commandButton value="#{txt['boton.Cancelar.Upper']}"
+								class="btn-gris" oncomplete="PF('#{modalId}').hide()">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
+							<p:commandButton
+								value="#{txt['boton.Aceptar.Upper']}"
+								class="btn-rojo btn-gradiente"
+								onclick="PF('modalConfirmacionRechazo').show()"
+								oncomplete="PF('#{modalId}').hide()">
+							</p:commandButton>
+						</div>
+					</div>
+				</ui:define>
+			</ui:decorate>
+		</ui:fragment>
+
+
+		<!-- Modal de rechazo justificacion -->
+		<ui:fragment>
+			<ui:decorate template="/pages/includes/modal.xhtml">
+				<ui:param name="modalId" value="modalConfirmacionRechazo" />
+				<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+				<ui:param name="tituloModal"
+					value="#{txt_solicitudes_poderes['modal.titulo.confirmacion']}" />
+				<ui:param name="formulario" value="formModalConfirmacionRechazo" />
+				<ui:define name="body-modal">
+
+					<div class="row espaciado-superior">
+						<div class="col-xs-12 col-sm-12 center">
+							<p:outputLabel
+								value="#{txt_solicitudes_poderes['modal.preguta.rechazo']}" />
+						</div>
+					</div>
+
+				</ui:define>
+				<ui:define name="accion-modal">
+					<div class="row">
+						<div class="col-xs-10 col-xs-offset-1 col-sm-5 space-row">
+							<p:commandButton value="#{txt['boton.Cancelar.Upper']}"
+								class="btn-gris" oncomplete="PF('#{modalId}').hide()">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
+							<p:commandButton
+								value="#{txt_solicitudes_poderes['boton.aceptar']}"
+								class="btn-rojo btn-gradiente"
+								oncomplete="PF('#{modalId}').hide(); ">
+								<f:ajax
+									listener="#{beanSolicitudPendientePoder.redireccionRechazo}"
+									oncomplete="PF('#{modalId}').hide()" />
+							</p:commandButton>
+						</div>
+					</div>
+				</ui:define>
+			</ui:decorate>
+		</ui:fragment>
+
+		<!-- Modal de rechazo aceptado -->
+		<ui:fragment>
+			<ui:decorate template="/pages/includes/modal.xhtml">
+				<ui:param name="modalId" value="modalRechazoAceptado" />
+				<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+				<ui:param name="tituloModal" value="Informacion" />
+				<ui:param name="formulario" value="formModalRechazoAceptado" />
+				<ui:define name="body-modal">
+
+					<div class="row espaciado-superior">
+						<div class="col-xs-12 col-sm-12 center">
+							<p:outputLabel id="labelTitulo" styleClass="titulo"
+								value="#{txt_solicitudes_poderes['modal.confirmacion.rechazo']}" />
+						</div>
+					</div>
+
+				</ui:define>
+				<ui:define name="accion-modal">
+					<div class="row">
+						<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-2">
+							<p:commandButton value="#{txt_certificados['boton.redirigir']}"
+								class="btn-rojo btn-gradiente"
+								oncomplete="PF('#{modalId}').hide(); ">
+								<f:ajax
+									listener="#{beanSolicitudPendientePoder.redireccionarInicioSolicitudes}"
+									oncomplete="PF('#{modalId}').hide()" />
+							</p:commandButton>
+						</div>
+					</div>
+				</ui:define>
+			</ui:decorate>
+		</ui:fragment>
+
+
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();
+			});
+		</script>
+		<!-- Script que ejecuta el Keyfilter-->
+	</ui:define>
+</ui:composition>

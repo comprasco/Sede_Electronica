@@ -1,0 +1,569 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<div class="row ui-g">
+		<div class="col-xs-12">
+			<div class="row">
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel id="labelNitJur" styleClass="label-form"
+						for="numeroDocumentoJuridico"
+						value="#{txt_persona['label.NumeroNit']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputText id="numeroDocumentoJuridico" autocomplete="off"
+							maxlength="20" styleClass="text-input border-completo"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							placeholder="#{txt_persona['placeholder.NumeroDocumento']}"
+							required="true"
+							value="#{beanPersona.ipc_personaCompletaDto.ipd_personaDto.is_numeroDocumento}">
+							<p:keyFilter regEx="/[0-9]/i" />
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('formCrearPersona:numeroDocumentoJuridico', 'spanNitJur');" />
+						</p:inputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelNitJur" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_persona['tooltip.NumeroNit']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanNitJur" class="ui-inputgroup-addon ocultar">
+							<p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('formCrearPersona:numeroDocumentoJuridico', 'spanNitJur');" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message
+							for="numeroDocumentoJuridico" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-md-8">
+					<p:outputLabel id="labelRazonSocial" styleClass="label-form"
+						for="razonSocial" value="#{txt_persona['label.RazonSocial']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputText id="razonSocial" autocomplete="off"
+							styleClass="text-input border-completo" maxlength="50"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							placeholder="#{txt_persona['placeholder.RazonSocial']}"
+							required="true"
+							value="#{beanPersona.ipc_personaCompletaDto.ipjd_personaJuridicaDto.is_razonSocial}">
+							<p:keyFilter regEx="/[0-9a-z\s]/i" />
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('formCrearPersona:razonSocial', 'spanRazonSocial');" />
+						</p:inputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelRazonSocial" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_persona['tooltip.RazonSocial']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanRazonSocial" class="ui-inputgroup-addon ocultar">
+							<p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('formCrearPersona:razonSocial', 'spanRazonSocial');" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message for="razonSocial" />
+					</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel id="labelTipoOrganizJur" styleClass="label-form"
+						for="tipoOrganiz" value="#{txt_persona['label.TipoOrganizacion']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<p:selectOneMenu id="tipoOrganiz"
+						requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+						required="true" converter="selectOneMenuConverter"
+						value="#{beanPersona.ipc_personaCompletaDto.ipjd_personaJuridicaDto.ic_tipoCatalogoTipoOrganizacion}">
+						<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+							itemValue="" noSelectionOption="true" />
+						<f:selectItems
+							value="#{beanPersona.ilc_listaCatalogoOrganizacionDto}"
+							var="organizacion" itemLabel="#{organizacion.is_nombre}"
+							itemValue="#{organizacion}" />
+					</p:selectOneMenu>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelTipoOrganizJur"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel value="#{txt_persona['tooltip.TipoOrganizacion']}" />
+						</div>
+					</p:tooltip>
+					<span class="help-block"> <p:message for="tipoOrganiz" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel id="labelCelularJur" styleClass="label-form"
+						for="celularJuridica"
+						value="#{txt_persona['label.NumeroCelular']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputMask id="celularJuridica" autocomplete="off"
+							styleClass="text-input border-completo" mask="999 999 99 99"
+							placeholder="#{txt_persona['placeholder.NumeroCelular']}"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true"
+							value="#{beanPersona.ipc_personaCompletaDto.iud_usuarioDto.is_celular}">
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('formCrearPersona:celularJuridica', 'spanCelularJur');" />
+						</p:inputMask>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelCelularJur" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_persona['tooltip.NumeroCelular']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanCelularJur" class="ui-inputgroup-addon ocultar">
+							<p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('formCrearPersona:celularJuridica', 'spanCelularJur');" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message for="celularJuridica" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel id="labelTelefonoJur" styleClass="label-form"
+						for="telefonoFijoJuridica"
+						value="#{txt_persona['label.TelefonoFijo']}" />
+					<div class="ui-inputgroup">
+						<p:inputMask id="telefonoFijoJuridica" autocomplete="off"
+							styleClass="text-input border-completo" mask="999 9999999"
+							placeholder="#{txt_persona['placeholder.TelefonoFijo']}"
+							value="#{beanPersona.ipc_personaCompletaDto.ipjd_personaJuridicaDto.is_telefono}">
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('formCrearPersona:telefonoFijoJuridica', 'spanTelefonoJur');" />
+						</p:inputMask>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelTelefonoJur" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_persona['tooltip.TelefonoFijo']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanTelefonoJur" class="ui-inputgroup-addon ocultar">
+							<p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('formCrearPersona:telefonoFijoJuridica', 'spanTelefonoJur');" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message
+							for="telefonoFijoJuridica" />
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<p:outputPanel id="paneldireccionJuri">
+				<p:outputLabel id="labelDireccionJud" styleClass="label-form"
+					for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+					value="#{txt_persona['label.DireccionResidencia']}" />
+				<p:outputLabel styleClass="required-field">*</p:outputLabel>
+				<div class="ui-inputgroup">
+					<p:inputTextarea autoResize="true" rows="1"
+						styleClass="text-input dir" readonly="true" required="true"
+						requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+						placeholder="#{txt_persona['placeholder.DireccionResidencia']}"
+						id="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+						value="#{beanPersona.id_direccionDto.is_direccionCompleta}">
+					</p:inputTextarea>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelDireccionJud" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_persona['tooltip.DireccionResidencia']}" />
+						</div>
+					</p:tooltip>
+					<p:commandButton icon="icon-direccion"
+						styleClass="icon-input btn-gradiente icono_boton"
+						oncomplete="PF('dialog-direccion').show();" process="@this" />
+				</div>
+				<span id="spanDireccionJur" class="help-block"> <p:message
+						for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}" />
+				</span>
+			</p:outputPanel>
+		</div>
+		<div class="col-xs-12">
+			<div class="row">
+				<div class="col-xs-12 col-md-3">
+					<p:outputLabel id="labelPrimerNombreRepresentanteJur"
+						styleClass="label-form" for="primerNombreRepresentante"
+						value="#{txt_persona['label.RepresentanteLegal.primerNombre']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputText id="primerNombreRepresentante" autocomplete="off"
+							styleClass="text-input border-completo" maxlength="50"
+							placeholder="#{txt_persona['placeholder.RepresentanteLegal.primerNombre']}"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true"
+							value="#{beanPersona.ipc_personaCompletaDto.ipjd_personaJuridicaDto.is_primerNombreRepresentanteLegal}">
+							<p:keyFilter regEx="/[a-z\s]/i" />
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('formCrearPersona:primerNombreRepresentante', 'spanPriemrNombreRepresentanteJur');" />
+						</p:inputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral"
+							for="labelPrimerNombreRepresentanteJur" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_persona['tooltip.RepresentanteLegal.primerNombre']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanPriemrNombreRepresentanteJur"
+							class="ui-inputgroup-addon ocultar"> <p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('formCrearPersona:primerNombreRepresentante', 'spanPriemrNombreRepresentanteJur');" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message
+							for="primerNombreRepresentante" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-md-3">
+					<p:outputLabel id="labelSegundoNombreRepresentanteJur"
+						styleClass="label-form" for="segundoNombreRepresentante"
+						value="#{txt_persona['label.RepresentanteLegal.segundoNombre']}" />
+					<div class="ui-inputgroup">
+						<p:inputText id="segundoNombreRepresentante" autocomplete="off"
+							styleClass="text-input border-completo" maxlength="50"
+							placeholder="#{txt_persona['placeholder.RepresentanteLegal.segundoNombre']}"
+							value="#{beanPersona.ipc_personaCompletaDto.ipjd_personaJuridicaDto.is_segundoNombreRepresentanteLegal}">
+							<p:keyFilter regEx="/[a-z\s]/i" />
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('formCrearPersona:segundoNombreRepresentante', 'spanSegundoNombreRepresentanteJur');" />
+						</p:inputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral"
+							for="labelSegundoNombreRepresentanteJur" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_persona['tooltip.RepresentanteLegal.segundoNombre']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanSegundoNombreRepresentanteJur"
+							class="ui-inputgroup-addon ocultar"> <p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('formCrearPersona:segundoNombreRepresentante', 'spanSegundoNombreRepresentanteJur');" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message
+							for="segundoNombreRepresentante" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-md-3">
+					<p:outputLabel id="labelPrimerApellidoRepresentanteJur"
+						styleClass="label-form" for="primerApellidoRepresentante"
+						value="#{txt_persona['label.RepresentanteLegal.primerApellido']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputText id="primerApellidoRepresentante" autocomplete="off"
+							styleClass="text-input border-completo" maxlength="50"
+							placeholder="#{txt_persona['placeholder.RepresentanteLegal.primerApellido']}"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true"
+							value="#{beanPersona.ipc_personaCompletaDto.ipjd_personaJuridicaDto.is_primerApellidoRepresentanteLegal}">
+							<p:keyFilter regEx="/[a-z\s]/i" />
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('formCrearPersona:primerApellidoRepresentante', 'spanPriemrApellidoRepresentanteJur');" />
+						</p:inputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral"
+							for="labelPrimerApellidoRepresentanteJur" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_persona['tooltip.RepresentanteLegal.primerApellido']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanPriemrApellidoRepresentanteJur"
+							class="ui-inputgroup-addon ocultar"> <p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('formCrearPersona:primerApellidoRepresentante', 'spanPriemrApellidoRepresentanteJur');" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message
+							for="primerApellidoRepresentante" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-md-3">
+					<p:outputLabel id="labelSegundoApellidoRepresentanteJur"
+						styleClass="label-form" for="segundoApellidoRepresentante"
+						value="#{txt_persona['label.RepresentanteLegal.segundoApellido']}" />
+					<div class="ui-inputgroup">
+						<p:inputText id="segundoApellidoRepresentante" autocomplete="off"
+							styleClass="text-input border-completo" maxlength="50"
+							placeholder="#{txt_persona['placeholder.RepresentanteLegal.segundoApellido']}"
+							value="#{beanPersona.ipc_personaCompletaDto.ipjd_personaJuridicaDto.is_segundoApellidoRepresentanteLegal}">
+							<p:keyFilter regEx="/[a-z\s]/i" />
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('formCrearPersona:segundoApellidoRepresentante', 'spanSegundoApellidoRepresentanteJur');" />
+						</p:inputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral"
+							for="labelSegundoApellidoRepresentanteJur" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_persona['tooltip.RepresentanteLegal.segundoApellido']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanSegundoApellidoRepresentanteJur"
+							class="ui-inputgroup-addon ocultar"> <p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('formCrearPersona:segundoApellidoRepresentante', 'spanSegundoApellidoRepresentanteJur');" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message
+							for="segundoApellidoRepresentante" />
+					</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-6">
+					<p:outputLabel id="labelCorreoJur" styleClass="label-form"
+						for="correoJuridica"
+						value="#{txt_persona['label.CorreoElectronico']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputText id="correoJuridica" autocomplete="off"
+							styleClass="text-input border-completo mask-Correo"
+							placeholder="#{txt['placeholder.FormatoCorreo']}"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							maxlength="50" required="true"
+							value="#{beanPersona.ipc_personaCompletaDto.iud_usuarioDto.is_correoElectronico}">
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('formCrearPersona:correoJuridica', 'spanCorreoJur');" />
+							<f:validator validatorId="ValidarCorreoFormato" />
+						</p:inputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelCorreoJur" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_persona['tooltip.CorreoElectronico']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanCorreoJur" class="ui-inputgroup-addon ocultar">
+							<p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('formCrearPersona:correoJuridica', 'spanCorreoJur');" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message for="correoJuridica" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-md-6">
+					<p:outputLabel id="labelConfirmarCorreo" styleClass="label-form"
+						for="confirmarCorreoJuridica"
+						value="#{txt_persona['label.ConfirmarCorreo']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputText id="confirmarCorreoJuridica" autocomplete="off"
+							styleClass="text-input border-completo mask-Correo"
+							placeholder="#{txt['placeholder.FormatoCorreo']}"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							maxlength="50" required="true"
+							value="#{beanPersona.ipc_personaCompletaDto.iud_usuarioDto.is_correoElectronicoValidar}">
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('formCrearPersona:confirmarCorreoJuridica', 'spanConfirmarCorreoJur');" />
+							<f:validator validatorId="ValidarCorreoFormato" />
+						</p:inputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelConfirmarCorreo"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_persona['tooltip.ConfirmarCorreo']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanConfirmarCorreoJur"
+							class="ui-inputgroup-addon ocultar"> <p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('formCrearPersona:confirmarCorreoJuridica', 'spanConfirmarCorreoJur');" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message
+							for="confirmarCorreoJuridica" />
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<div class="row">
+				<div class="col-xs-12 col-md-6">
+					<p:outputLabel id="labelContrasenaJur" styleClass="label-form"
+						for="contrasenaJuridica"
+						value="#{txt_persona['label.Contrasena']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:password id="contrasenaJuridica"
+							styleClass="text-input border-completo" maxlength="20"
+							placeholder="#{txt_persona['placeholder.Contrasena']}"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true"
+							value="#{beanPersona.ipc_personaCompletaDto.iud_usuarioDto.is_contrasena}">
+							<p:ajax event="focus" oncomplete="PF('tooltipMsg').show();"
+								onstart="mostrarLimpiar('formCrearPersona:contrasenaJuridica', 'spanContrasenaJur');" />
+						</p:password>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelContrasenaJur"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_persona['tooltip.Contrasena']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanContrasenaJur" class="ui-inputgroup-addon ocultar">
+							<p:commandLink styleClass="text-link-input"
+								value="#{txt['label.VerContrasena']}">
+								<p:ajax event="click"
+									onstart="verContrasena('formCrearPersona:contrasenaJuridica');" />
+							</p:commandLink>
+						</span>
+						<p:commandButton id="infoContrasena" icon="icon-contrasena"
+							styleClass="icon-input btn-gradiente icono_boton" />
+						<p:tooltip id="tooltipIndica" showEvent="mouseover"
+							hideEvent="mouseout" myPosition="top, right"
+							widgetVar="tooltipMsg" atPosition="bottom center"
+							styleClass="tooltip-contrasena" for="infoContrasena">
+							<div id="content-tooltip-msg">
+								<p:outputLabel
+									value="#{beanValidacionContrasena.is_msgValidacion}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<span class="help-block"> <p:message
+							for="contrasenaJuridica" />
+					</span>
+				</div>
+
+				<div class="col-xs-12 col-md-6">
+					<p:outputLabel id="labelConfirmarContrasenaJur"
+						styleClass="label-form" for="confirmarContrasenaJuridica"
+						value="#{txt_persona['label.VerificarContrasena']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:password id="confirmarContrasenaJuridica"
+							styleClass="text-input border-completo" maxlength="20"
+							placeholder="#{txt_persona['placeholder.VerificarContrasena']}"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true"
+							value="#{beanPersona.ipc_personaCompletaDto.iud_usuarioDto.is_contrasenaConfirmacion}">
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('formCrearPersona:confirmarContrasenaJuridica', 'spanConfirmarContrasenaJur');" />
+						</p:password>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelConfirmarContrasenaJur"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_persona['tooltip.VerificarContrasena']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanConfirmarContrasenaJur"
+							class="ui-inputgroup-addon ocultar"> <p:commandLink
+								styleClass="text-link-input"
+								value="#{txt['label.VerContrasena']}">
+								<p:ajax event="click"
+									onstart="verContrasena('formCrearPersona:confirmarContrasenaJuridica')" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message
+							for="confirmarContrasenaJuridica" />
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row vcenter">
+						<div class="col-xs-12">
+							<p:outputLabel id="labelCargarCamaraComercio"
+								styleClass="label-form"
+								value="#{txt_persona['archivo.camara.label']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:fileUpload styleClass="cargaArchivo"
+								fileUploadListener="#{beanPersonaJuridica.generarArchivoCamaraComercio}"
+								mode="advanced" auto="false" allowTypes="/(\.|\/)(pdf)$/"
+								invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+								invalidFileMessage="#{txt_persona['archivo.error.extension']}"
+								label="#{txt_persona['label.ExaminarArchivo']}"
+								fileLimitMessage="#{txt_certificados['wizardMasivos.archivo.error.archivo']}"
+								uploadLabel="#{txt_persona['label.Cargar']}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								cancelLabel="#{txt_persona['label.Cancelar']}"
+								update="@this formCrearPersona:archivoCamaraComercio"
+								sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+								fileLimit="1">
+								<p:outputLabel id="archivoCamaraComercio"
+									styleClass="label-form"
+									value="#{beanPersonaJuridica.is_nombreArchivoCamaraComercio}" />
+							</p:fileUpload>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelCargarCamaraComercio"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_persona['archivo.camara.tooltip']}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row vcenter">
+						<div class="col-xs-12">
+							<p:outputLabel id="labelCargarRepresentanteLegal"
+								styleClass="label-form"
+								value="#{txt_persona['archivo.representante.label']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:fileUpload styleClass="cargaArchivo"
+								fileUploadListener="#{beanPersonaJuridica.generarArchivoCartaRepresentanteLegal}"
+								mode="advanced" auto="false" allowTypes="/(\.|\/)(pdf)$/"
+								invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+								invalidFileMessage="#{txt_persona['archivo.error.extension']}"
+								label="#{txt_persona['label.ExaminarArchivo']}"
+								fileLimitMessage="#{txt_certificados['wizardMasivos.archivo.error.archivo']}"
+								uploadLabel="#{txt_persona['label.Cargar']}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								cancelLabel="#{txt_persona['label.Cancelar']}"
+								update="@this formCrearPersona:archivoRepresentanteLegal"
+								sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+								fileLimit="1">
+								<p:outputLabel id="archivoRepresentanteLegal"
+									styleClass="label-form"
+									value="#{beanPersonaJuridica.is_nombreArchivoRepresentanteLegal}" />
+							</p:fileUpload>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelCargarRepresentanteLegal"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_persona['archivo.representante.tooltip']}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</ui:composition>

@@ -1,0 +1,1196 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_estadoJuridico['titulo.consultaEstadoJuridico']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-seguimientoSolicitudes.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_estadoJuridico['banner.consultaEstadoJuridico']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo"
+				value="#{txt_estadoJuridico['banner.SubtituloconsultaEstadoJuridico']}" />
+			<ui:param name="urlVista" value="/pages/estado/estadoJuridico.jsf" />
+		</ui:include>
+		<h:form id="estadoJuridico">
+			<p:panel>
+				<div class="row">
+					<br />
+					<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+						<p:outputLabel styleClass="label-form"
+							id="labelIdentificacionPredio" for="identificacionPredio"
+							value="#{txt_estadoJuridico['label.identificacionPredio']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<p:selectOneMenu id="identificacionPredio" filter="true"
+							filterMatchMode="contains" required="true"
+							converter="selectOneMenuConverter"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanConsultaEstadoJuridico.ic_catalogoTipoIdentificacionPredio}">
+							<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{beanConsultaEstadoJuridico.ilc_listaCatalogoTipoIdentificacionPredio}"
+								var="tipoIdentificacionPredio"
+								itemLabel="#{tipoIdentificacionPredio.is_descripcion}"
+								itemValue="#{tipoIdentificacionPredio}" />
+							<p:ajax update="estadoJuridico:numeroTurno"
+								oncomplete="cargarKeyfilters();" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelIdentificacionPredio"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_estadoJuridico['tooltip.identificacionPredio']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message
+								for="identificacionPredio" />
+						</span>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel id="labelValor" styleClass="label-form"
+							for="numeroTurno"
+							value="#{txt_estadoJuridico['label.identificacion']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:inputText id="numeroTurno" styleClass="mask-AlphaNumGuion"
+								maxlength="30" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								placeholder="#{txt_estadoJuridico['placeholder.identificacion']}"
+								value="#{beanConsultaEstadoJuridico.is_identificacionPredio}">
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelValor" position="top">
+								<div class="row">
+									<p:outputLabel
+										value="#{txt_estadoJuridico['tooltip.identificacion']}" />
+								</div>
+							</p:tooltip>
+						</div>
+						<span class="help-block"> <p:message for="numeroTurno" />
+						</span>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+						<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+							type="submit" onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();"
+							styleClass="btn-gradiente icon-btn btn-rojo "
+							value="#{txt_estadoJuridico['boton.consultar']}" ajax="false"
+							actionListener="#{beanConsultaEstadoJuridico.consultarEstadoJuridicoPredio}"
+							update="consultaListado" />
+					</div>
+				</div>
+				<br />
+				<p:outputPanel id="consultaListado"
+					rendered="#{beanConsultaEstadoJuridico.ib_mostrar}">
+					<div class="row">
+						<div class="text-center">
+							<p:outputLabel styleClass="label-form" for="municipio"
+								value="#{txt_estadoJuridico['titulo']}" />
+						</div>
+						<br />
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="municipio"
+								value="#{txt_estadoJuridico['label.municipio']}" />
+							<p:inputText id="municipio" readonly="true"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_nomMunicipio} - (#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_codMunicipio})">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="circuloRegistral"
+								value="#{txt_estadoJuridico['label.circuloRegistral']}" />
+							<p:inputText id="circuloRegistral" readonly="true"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_nomCirculoRegistral} - (#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_codCirculoRegistral})">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="departamento"
+								value="#{txt_estadoJuridico['label.departamento']}" />
+							<p:inputText id="departamento" readonly="true"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_nomDepartamento} - (#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_codDepartamento})">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form"
+								for="matricualInmobiliaria"
+								value="#{txt_estadoJuridico['label.numeroMatriculaIn']}" />
+							<p:inputText id="matricualInmobiliaria" readonly="true"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_numMatriculaInmobiliaria}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="numPredial"
+								value="#{txt_estadoJuridico['label.predial']}" />
+							<p:inputText id="numPredial" readonly="true"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_numPredial}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="numPredialAnterior"
+								value="#{txt_estadoJuridico['label.predial.anterior']}" />
+							<p:inputText id="numPredialAnterior" readonly="true"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_numPredialAnterior}">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="nupre"
+								value="#{txt_estadoJuridico['label.nupre']}" />
+							<p:inputText id="nupre" readonly="true"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_nupre}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="estadoNupre"
+								value="#{txt_estadoJuridico['label.nupre.estado']}" />
+							<p:inputText id="estadoNupre" readonly="true"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_estadoNupre}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="direccion"
+								value="#{txt_estadoJuridico['label.direccion']}" />
+							<p:inputText id="direccion" readonly="true"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_direccionPredio}">
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="direccion" position="top">
+								<div class="row">
+									<p:outputLabel
+										value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.is_direccionPredio}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="numeroConsulta"
+								value="#{txt_estadoJuridico['label.num.consulta']}" />
+							<p:inputText id="numeroConsulta" readonly="true"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.il_numeroConsulta}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="fechaHoraConsulta"
+								value="#{txt_estadoJuridico['label.fecha.consulta']}" />
+							<p:inputText id="fechaHoraConsulta" readonly="true"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.id_fechaHoraConsulta}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:inputText>
+						</div>
+					</div>
+					<br />
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="text-center">
+								<p:outputLabel
+									value="#{txt_estadoJuridico['tabla.propietario']}"
+									styleClass="label-form" />
+							</div>
+							<br />
+							<p:dataTable var="propietario" styleClass="table-center"
+								id="propietario"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.ilp_propietarios}"
+								widgetVar="solicitudesTable" reflow="true"
+								emptyMessage="#{txt_estadoJuridico['tabla.vacia']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								stickyHeader="false">
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.propietario.tipoDocumento']}">
+									<h:outputText value="#{propietario.is_tipoDocumentoDto}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.propietario.numDocumento']}">
+									<h:outputText value="#{propietario.is_numDocumentoPersona}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.propietario.numNit']}">
+									<h:outputText value="#{propietario.is_numNIT}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.propietario.primerNombre']}">
+									<h:outputText value="#{propietario.is_primerNombre}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.propietario.segundoNombre']}">
+									<h:outputText value="#{propietario.is_segundoNombre}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.propietario.primerApellido']}">
+									<h:outputText value="#{propietario.is_primerApellido}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.propietario.segundoApellido']}">
+									<h:outputText value="#{propietario.is_segundoApellido}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.propietario.razonSocial']}">
+									<h:outputText value="#{propietario.is_razonSocial}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.propietario.porcentaje']}">
+									<h:outputText value="#{propietario.is_porcentajeParticipacion}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.propietario.tipoPersona']}">
+									<h:outputText value="#{propietario.is_tipoPersona}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.propietario.genero']}">
+									<h:outputText value="#{propietario.is_codGenero}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="text-center">
+								<p:outputLabel value="#{txt_estadoJuridico['tabla.anotacion']}"
+									styleClass="label-form" />
+							</div>
+							<br />
+							<p:dataTable var="anotacion" styleClass="table-center"
+								id="anotacion"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.ilaej_anotacionesDto}"
+								widgetVar="solicitudesTable" reflow="true"
+								emptyMessage="#{txt_estadoJuridico['tabla.vacia']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								stickyHeader="false">
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.anotacion.numero']}">
+									<h:outputText value="#{anotacion.ibi_numAnotacion}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.anotacion.comentario']}">
+									<h:outputText value="#{anotacion.is_comentario}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.anotacion.tipoDocumento']}">
+									<h:outputText value="#{anotacion.is_codTipoDocumentoPublico}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.anotacion.fechaDocumento']}">
+									<h:outputText value="#{anotacion.id_fechaDocumento}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.anotacion.numDocumento']}">
+									<h:outputText value="#{anotacion.is_nomDocumentoPublico}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.anotacion.detalle']}">
+									<p:commandButton
+										actionListener="#{beanConsultaEstadoJuridico.setIaej_anotaciones(anotacion)}"
+										icon="fa fa-eye" styleClass="icon-input btn-gradiente"
+										update="formDetalleAnotacion"
+										onclick="PF('detalleAnotacion').show()" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="text-center">
+								<p:outputLabel styleClass="label-form"
+									value="#{txt_estadoJuridico['tabla.matrizMatricula']}" />
+							</div>
+							<br />
+							<p:dataTable var="matrizMatricula" styleClass="table-center"
+								id="matrizMatricula"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.ilmm_matriculasMatrizDto}"
+								widgetVar="solicitudesTable" reflow="true"
+								emptyMessage="#{txt_estadoJuridico['tabla.vacia']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								stickyHeader="false">
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.matrizMatricula.inmobiliaria']}">
+									<h:outputText
+										value="#{matrizMatricula.is_numMatriculaInmobiliaria}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.matrizMatricula.registral']}">
+									<h:outputText value="#{matrizMatricula.is_codCirculoRegistral}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="text-center">
+								<p:outputLabel value="#{txt_estadoJuridico['tabla.derivadas']}"
+									styleClass="label-form" />
+							</div>
+							<br />
+							<p:dataTable var="derivadas" styleClass="table-center"
+								id="derivadas"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.ilmd_matriculasDerivadasDto}"
+								widgetVar="solicitudesTable" reflow="true"
+								emptyMessage="#{txt_estadoJuridico['tabla.vacia']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								stickyHeader="false">
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.derivadas.inmobiliaria']}">
+									<h:outputText value="#{derivadas.is_numMatriculaInmobiliaria}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.derivadas.registral']}">
+									<h:outputText value="#{derivadas.is_codCirculoRegistral}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.derivadas.direccion']}">
+									<h:outputText value="#{derivadas.is_direccionPredial}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.derivadas.nir']}">
+									<h:outputText value="#{derivadas.is_nir}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.derivadas.radicacion']}">
+									<h:outputText value="#{derivadas.is_radicacion}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.derivadas.anotacion']}">
+									<h:outputText value="#{derivadas.is_anotacionRelacionada}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="text-center">
+								<p:outputLabel styleClass="label-form"
+									value="#{txt_estadoJuridico['tabla.cautelares']}" />
+							</div>
+							<br />
+							<p:dataTable var="cautelares" styleClass="table-center"
+								id="cautelares"
+								value="#{beanConsultaEstadoJuridico.iej_estadoJuridicoDto.ilmc_medidasCautelaresDto}"
+								widgetVar="solicitudesTable" reflow="true"
+								emptyMessage="#{txt_estadoJuridico['tabla.vacia']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								stickyHeader="false">
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.cautelares.anotacion']}">
+									<h:outputText value="#{cautelares.ibi_numAnotacion}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.cautelares.comentario']}">
+									<h:outputText value="#{cautelares.is_comentario}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.cautelares.tipoDocumento']}">
+									<h:outputText value="#{cautelares.is_codTipoDocumentoPublico}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.cautelares.fechaDocumento']}">
+									<h:outputText value="#{cautelares.id_fechaDocumento}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.cautelares.nomDocumento']}">
+									<h:outputText value="#{cautelares.is_nomDocumentoPublico}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.cautelares.actoJuridico']}">
+									<h:outputText
+										value="#{cautelares.is_nomDominioActoJuridico} - (#{cautelares.is_codDominioActoJuridico})" />
+								</p:column>
+								<p:column
+									headerText="#{txt_estadoJuridico['tabla.cautelares.detalle']}">
+									<p:commandButton update="formDetalleCautelar"
+										actionListener="#{beanConsultaEstadoJuridico.setImc_medidasCautelaresDto(cautelares)}"
+										icon="fa fa-eye"
+										styleClass="icon-input btn-gradiente icon-completo"
+										onclick="PF('detalleCautelar').show()" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+							<p:commandButton update=":estadoJuridico" styleClass="btn-gris"
+								actionListener="#{beanConsultaEstadoJuridico.limpiarConsulta}"
+								value="#{txt['boton.limpiar']}" />
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:panel>
+		</h:form>
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();
+			});
+		</script>
+		<!-- Script que ejecuta el Keyfilter-->
+		<!-- Modal detalle anotaciones -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande"></ui:param>
+			<ui:param name="modalId" value="detalleAnotacion"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}"></ui:param>
+			<ui:param name="formulario" value="formDetalleAnotacion"></ui:param>
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel styleClass="label-form"
+							value="#{txt_estadoJuridico['titulo.modal.anotacion']}" />
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form" for="numAnotacion"
+							value="#{txt_estadoJuridico['modal.anotacion.numAnotacion']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="numAnotacion" readonly="true"
+								styleClass="centrar-img border-completo"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.ibi_numAnotacion}">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form" for="comentario"
+							value="#{txt_estadoJuridico['modal.anotacion.comentario']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="comentario" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_comentario}">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form"
+							for="codTipoDocumentoPublico"
+							value="#{txt_estadoJuridico['modal.anotacion.codTipoDocumentoPublico']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="codTipoDocumentoPublico" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_codTipoDocumentoPublico}">
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form" for="fechaDocumento"
+							value="#{txt_estadoJuridico['modal.anotacion.fechaDocumento']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="fechaDocumento" readonly="true"
+								styleClass="centrar-img border-completo"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.id_fechaDocumento}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form" for="nomDocumentoPublico"
+							value="#{txt_estadoJuridico['modal.anotacion.nomDocumentoPublico']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="nomDocumentoPublico" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_nomDocumentoPublico}">
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="nomDocumentoPublico"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_nomDocumentoPublico}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form" for="dominioActoJuridico"
+							value="#{txt_estadoJuridico['modal.anotacion.dominioActoJuridico']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="dominioActoJuridico" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_nomDominioActoJuridico} (#{beanConsultaEstadoJuridico.iaej_anotaciones.is_codDominioActoJuridico})">
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form" for="oficinaOrigen"
+							value="#{txt_estadoJuridico['modal.anotacion.oficinaOrigen']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="oficinaOrigen" readonly="true"
+								styleClass="centrar-img border-completo"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_oficinaOrigen}">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form"
+							for="comentarioEspecificoAnotacion"
+							value="#{txt_estadoJuridico['modal.anotacion.comentarioEspecificoAnotacion']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="comentarioEspecificoAnotacion" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_comentarioEspecificoAnotacion}">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form" for="drr"
+							value="#{txt_estadoJuridico['modal.anotacion.drr']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="drr" readonly="true" styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_drr}">
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form"
+							for="codNaturalezaJuridicaFolio"
+							value="#{txt_estadoJuridico['modal.anotacion.codNaturalezaJuridicaFolio']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="codNaturalezaJuridicaFolio" readonly="true"
+								styleClass="centrar-img border-completo"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_codNaturalezaJuridicaFolio}">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form" for="fechaAnotacion"
+							value="#{txt_estadoJuridico['modal.anotacion.fechaAnotacion']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="fechaAnotacion" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.id_fechaAnotacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form" for="nir"
+							value="#{txt_estadoJuridico['modal.anotacion.nir']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="nir" readonly="true" styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_nir}">
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form" for="radicacion"
+							value="#{txt_estadoJuridico['modal.anotacion.radicacion']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="radicacion" readonly="true"
+								styleClass="centrar-img border-completo"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_radicacion}">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form" for="estadoAnotacion"
+							value="#{txt_estadoJuridico['modal.anotacion.estadoAnotacion']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="estadoAnotacion" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_estadoAnotacion}">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel styleClass="label-form" for="valorActo"
+							value="#{txt_estadoJuridico['modal.anotacion.valorActo']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="valorActo" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.iaej_anotaciones.is_valorActo}">
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<br />
+				<p:dataList id="anotacionesCanceladas"
+					value="#{beanConsultaEstadoJuridico.iaej_anotaciones.ils_anotacionesCanceladas}"
+					paginator="true" var="anotacionesCanceladas" type="ordered"
+					emptyMessage="#{txt_estadoJuridico['anotacionesCanceladas']}"
+					paginatorPosition="bottom" rows="4" styleClass="paginated"
+					paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+					currentPageReportTemplate="{currentPage} / {totalPages}">
+					<f:facet name="header">
+						<p:outputLabel
+							value="#{txt_estadoJuridico['modal.anotacion.anotacionesCanceladas']}" />
+					</f:facet>
+					<p:outputLabel value="#{anotacionesCanceladas}" />
+				</p:dataList>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel styleClass="label-form"
+							value="#{txt_estadoJuridico['modal.anotacion.intervinientes']}" />
+						<p:dataTable var="intervinientes"
+							value="#{beanConsultaEstadoJuridico.iaej_anotaciones.iliej_intervinientesDto}"
+							responsive="true" styleClass="centrar-img" rowIndexVar="true"
+							reflow="true"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							currentPageReportTemplate="{currentPage} / {totalPages}"
+							emptyMessage="#{txt_estadoJuridico['tabla.vacia']}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							rowsPerPageTemplate="10">
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.rol']}">
+								<p:outputLabel id="tablaRolInterviniente"
+									value="#{intervinientes.is_rolInterviniente}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="tablaRolInterviniente"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_rolInterviniente}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.tipoPersona']}">
+								<p:outputLabel id="tipoPersona"
+									value="#{intervinientes.is_tipoPersona}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="tipoPersona" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_tipoPersona}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.esPropietario']}">
+								<p:outputLabel id="esPropietario"
+									value="#{intervinientes.is_esPropietario}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="esPropietario" position="top">
+									<div class="content-tootip-general">
+										<p:outputLabel value="#{intervinientes.is_esPropietario}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.tipoDoc']}">
+								<p:outputLabel id="tipoDoc"
+									value="#{intervinientes.is_tipoDocumentoPersona}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="tipoDoc" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{intervinientes.is_tipoDocumentoPersona}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.numDoc']}">
+								<p:outputLabel id="numDoc"
+									value="#{intervinientes.is_numDocumentoPersona}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="numDoc" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{intervinientes.is_numDocumentoPersona}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.nit']}">
+								<p:outputLabel id="nit" value="#{intervinientes.is_numNit}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="nit" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_numNit}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.porcentaje']}">
+								<p:outputLabel id="porcentaje"
+									value="#{intervinientes.is_porcentajeParticipacion}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="porcentaje" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{intervinientes.is_porcentajeParticipacion}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.priApellido']}">
+								<p:outputLabel id="priApellido"
+									value="#{intervinientes.is_primerApellido}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="priApellido" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_primerApellido}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.priNombre']}">
+								<p:outputLabel id="priNombre"
+									value="#{intervinientes.is_primerNombre}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="priNombre" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_primerNombre}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.segApellido']}">
+								<p:outputLabel id="segApellido"
+									value="#{intervinientes.is_segundoApellido}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="segApellido" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_segundoApellido}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.segnombre']}">
+								<p:outputLabel id="segnombre"
+									value="#{intervinientes.is_segundoNombre}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="segnombre" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_segundoNombre}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.genero']}">
+								<p:outputLabel id="genero"
+									value="#{intervinientes.is_codGenero}" styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="genero" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_codGenero}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.anotacion.tabla.razonSocial']}">
+								<p:outputLabel id="razonSocial"
+									value="#{intervinientes.is_razonSocial}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="razonSocial" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_razonSocial}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo "
+							value="#{txt['boton.entendido']}"
+							onclick="PF('detalleAnotacion').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal detalle cautelares -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande"></ui:param>
+			<ui:param name="modalId" value="detalleCautelar"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}"></ui:param>
+			<ui:param name="formulario" value="formDetalleCautelar"></ui:param>
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel styleClass="label-form"
+							value="#{txt_estadoJuridico['titulo.modal.cautelares']}" />
+					</div>
+					<br /> <br />
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="numAnotacion"
+								value="#{txt_estadoJuridico['modal.cautelar.numAnotacion']}" />
+							<p:inputText id="numAnotacion" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.ibi_numAnotacion}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="comentario"
+								value="#{txt_estadoJuridico['modal.cautelar.comentario']}" />
+							<p:inputText id="comentario" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_comentario}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form"
+								for="codTipoDocumentoPublico"
+								value="#{txt_estadoJuridico['modal.cautelar.codTipoDocumentoPublico']}" />
+							<p:inputText id="codTipoDocumentoPublico" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_codTipoDocumentoPublico}">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="fechaDocumento"
+								value="#{txt_estadoJuridico['modal.cautelar.fechaDocumento']}" />
+							<p:inputText id="fechaDocumento" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.id_fechaDocumento}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="nomDocumentoPublico"
+								value="#{txt_estadoJuridico['modal.cautelar.nomDocumentoPublico']}" />
+							<p:inputText id="nomDocumentoPublico" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_nomDocumentoPublico}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="dominioActoJuridico"
+								value="#{txt_estadoJuridico['modal.cautelar.dominioActoJuridico']}" />
+							<p:inputText id="dominioActoJuridico" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_nomDominioActoJuridico} (#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_codDominioActoJuridico})">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="oficinaOrigen"
+								value="#{txt_estadoJuridico['modal.cautelar.oficinaOrigen']}" />
+							<p:inputText id="oficinaOrigen" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_oficinaOrigen}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form"
+								for="comentarioEspecificoAnotacion"
+								value="#{txt_estadoJuridico['modal.cautelar.comentarioEspecificoAnotacion']}" />
+							<p:inputText id="comentarioEspecificoAnotacion" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_comentarioEspecificoAnotacion}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="drr"
+								value="#{txt_estadoJuridico['modal.cautelar.drr']}" />
+							<p:inputText id="drr" readonly="true" styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_drr}">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form"
+								for="codNaturalezaJuridicaFolio"
+								value="#{txt_estadoJuridico['modal.cautelar.codNaturalezaJuridicaFolio']}" />
+							<p:inputText id="codNaturalezaJuridicaFolio" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_codNaturalezaJuridicaFolio}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="fechaAnotacion"
+								value="#{txt_estadoJuridico['modal.cautelar.fechaAnotacion']}" />
+							<p:inputText id="fechaAnotacion" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.id_fechaAnotacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="nir"
+								value="#{txt_estadoJuridico['modal.cautelar.nir']}" />
+							<p:inputText id="nir" readonly="true" styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_nir}">
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="radicacion"
+								value="#{txt_estadoJuridico['modal.cautelar.radicacion']}" />
+							<p:inputText id="radicacion" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_radicacion}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="estadoAnotacion"
+								value="#{txt_estadoJuridico['modal.cautelar.estadoAnotacion']}" />
+							<p:inputText id="estadoAnotacion" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_estadoAnotacion}">
+							</p:inputText>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel styleClass="label-form" for="valorActo"
+								value="#{txt_estadoJuridico['modal.cautelar.valorActo']}" />
+							<p:inputText id="valorActo" readonly="true"
+								styleClass="centrar-img"
+								value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.is_valorActo}">
+							</p:inputText>
+						</div>
+					</div>
+					<br />
+					<p:dataList id="anotacionesCautelares"
+						value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.ils_anotacionesCautelares}"
+						paginator="true" var="anotacionesCanceladas" type="ordered"
+						emptyMessage="#{txt_estadoJuridico['anotacionesCanceladas']}"
+						paginatorPosition="bottom" rows="4" styleClass="paginated"
+						paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+						currentPageReportTemplate="{currentPage} / {totalPages}">
+						<f:facet name="header">
+							<p:outputLabel
+								value="#{txt_estadoJuridico['modal.cautelar.anotacionesCautelares']}" />
+						</f:facet>
+						<p:outputLabel value="#{anotacionesCautelares}" />
+					</p:dataList>
+					<br />
+					<p:outputLabel styleClass="label-form"
+						value="#{txt_estadoJuridico['modal.cautelar.intervinientes']}" />
+					<div class="col-xs-12">
+						<p:dataTable var="intervinientes"
+							value="#{beanConsultaEstadoJuridico.imc_medidasCautelaresDto.iliej_intervinientes}"
+							responsive="true" styleClass="centrar-img" rowIndexVar="true"
+							reflow="true"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							currentPageReportTemplate="{currentPage} / {totalPages}"
+							emptyMessage="#{txt_estadoJuridico['tabla.vacia']}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							rowsPerPageTemplate="10">
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.rol']}">
+								<p:outputLabel id="tablaRolInterviniente"
+									value="#{intervinientes.is_rolInterviniente}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="tablaRolInterviniente"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_rolInterviniente}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.tipoPersona']}">
+								<p:outputLabel id="tipoPersona"
+									value="#{intervinientes.is_tipoPersona}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="tipoPersona" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_tipoPersona}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.esPropietario']}">
+								<p:outputLabel id="esPropietario"
+									value="#{intervinientes.is_esPropietario}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="esPropietario" position="top">
+									<div class="content-tootip-general">
+										<p:outputLabel value="#{intervinientes.is_esPropietario}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.tipoDoc']}">
+								<p:outputLabel id="tipoDoc"
+									value="#{intervinientes.is_tipoDocumentoPersona}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="tipoDoc" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{intervinientes.is_tipoDocumentoPersona}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.numDoc']}">
+								<p:outputLabel id="numDoc"
+									value="#{intervinientes.is_numDocumentoPersona}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="numDoc" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{intervinientes.is_numDocumentoPersona}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.nit']}">
+								<p:outputLabel id="nit" value="#{intervinientes.is_numNit}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="nit" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_numNit}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.porcentaje']}">
+								<p:outputLabel id="porcentaje"
+									value="#{intervinientes.is_porcentajeParticipacion}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="porcentaje" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{intervinientes.is_porcentajeParticipacion}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.priApellido']}">
+								<p:outputLabel id="priApellido"
+									value="#{intervinientes.is_primerApellido}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="priApellido" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_primerApellido}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.priNombre']}">
+								<p:outputLabel id="priNombre"
+									value="#{intervinientes.is_primerNombre}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="priNombre" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_primerNombre}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.segApellido']}">
+								<p:outputLabel id="segApellido"
+									value="#{intervinientes.is_segundoApellido}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="segApellido" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_segundoApellido}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.segnombre']}">
+								<p:outputLabel id="segnombre"
+									value="#{intervinientes.is_segundoNombre}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="segnombre" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_segundoNombre}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.genero']}">
+								<p:outputLabel id="genero"
+									value="#{intervinientes.is_codGenero}" styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="genero" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_codGenero}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_estadoJuridico['modal.cautelar.tabla.razonSocial']}">
+								<p:outputLabel id="razonSocial"
+									value="#{intervinientes.is_razonSocial}"
+									styleClass="tresPuntos" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" form="razonSocial" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{intervinientes.is_razonSocial}"></p:outputLabel>
+									</div>
+								</p:tooltip>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo "
+							value="#{txt['boton.entendido']}"
+							onclick="PF('informacionPropietarios').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+	</ui:define>
+</ui:composition>

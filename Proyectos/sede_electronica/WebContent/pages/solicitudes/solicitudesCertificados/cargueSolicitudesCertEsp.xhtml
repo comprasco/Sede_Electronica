@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputScript library="js" name="archivo.js" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+		<h:outputStylesheet library="css" name="snr-se-inscribirAlerta.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_certificados['certificado.especial.titulo']}</title>
+	</ui:define>
+	<ui:define name="banner">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_certificados['banner']}" />
+			<ui:param name="imagen" value="img-solicitudCertificados" />
+			<ui:param name="subtitulo"
+				value="#{txt_certificados['banner.subtitulo.certificados']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/solicitudesCertificados/certificadosEspeciales.jsf" />
+		</ui:include>
+	</ui:define>
+	<ui:define name="body">
+		<f:metadata>
+			<f:viewParam name="is_nir" value="#{beanCertificadoEspecial.is_nir}" />
+			<f:event type="preRenderView"
+				listener="#{beanCertificadoEspecial.valorParametro}" />
+		</f:metadata>
+		<p:panel id="panelCargarDocumento" styleClass="noBorde">
+			<h:form id="formFormularioCargarDocumento">
+				<div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel
+								value="#{txt_certificados['title.RecepcionDocumentos']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_certificados['boton.AdnutarDocumento']}">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('formularioAgregarDocumento').show(); PF('blockUI-Loading').hide();"
+									update="formularioAgregarDocumento" process="@this" />
+							</p:commandButton>
+							<br /> <br />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row"></div>
+				<div class="row">
+					<p:outputPanel id="cargaDeDocumentos">
+						<p:dataTable var="cargaDocumento" styleClass="centrar padTabla"
+							widgetVar="paramsCargaDocumento" id="cargarDocumento"
+							emptyMessage="#{txt_certificados['tabla.vacia']}"
+							value="#{beanCertificadoEspecial.ilst_cargarDocumentosCertificadosEspecialesDto}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							currentPageReportTemplate="{currentPage} / {totalPages}"
+							reflow="true" rowIndexVar="index" stickyHeader="false">
+							<p:column styleClass="img-vertical-align"
+								headerText="#{txt_certificados['table.column.nombreArchivo']}">
+								<h:outputText styleClass="text-input"
+									value="#{cargaDocumento.ia_archivoDto.is_nombreArchivo}" />
+							</p:column>
+							<p:column styleClass="img-vertical-align"
+								headerText="#{txt_certificados['header.TipoDocumental']}">
+								<h:outputText styleClass="text-input"
+									value="#{cargaDocumento.icd_catalogoDocumentoDto.is_codigoValor}" />
+							</p:column>
+							<p:column styleClass="img-vertical-align"
+								headerText="#{txt_certificados['table.column.observaciones']}">
+								<h:outputText styleClass="text-input"
+									value="#{cargaDocumento.is_observacion}" />
+							</p:column>
+							<p:column headerText="#{txt_certificados['table.column.accion']}">
+								<div class="col-xs-12 col-md-6">
+									<p:commandButton
+										disabled="#{cargaDocumento.ib_desactivarBotonesCarga}"
+										styleClass="btn-rojo btn-gradiente fa fa-trash btn-CargueDcmt"
+										title=" ">
+										<p:ajax
+											oncomplete="PF('confirmarEliminarDocumento').show(); PF('blockUI-Loading').hide();"
+											process="@this" onstart="PF('blockUI-Loading').show();"
+											update="formFormularioCargarDocumento:cargarDocumento" />
+										<f:setPropertyActionListener value="#{index}"
+											target="#{beanCertificadoEspecial.ii_indexSoporte}" />
+									</p:commandButton>
+								</div>
+								<div class="col-xs-12 col-md-6">
+									<p:commandButton
+										disabled="#{cargaDocumento.ib_desactivarBotonesCarga}"
+										styleClass="btn-rojo btn-gradiente fa fa-check btn-CargueDcmt"
+										title=" ">
+										<p:ajax
+											listener="#{beanCertificadoEspecial.servicioCargarDocumentos(cargaDocumento)}"
+											update="formFormularioCargarDocumento:cargarDocumento" />
+									</p:commandButton>
+								</div>
+							</p:column>
+						</p:dataTable>
+						<br />
+					</p:outputPanel>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+						<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+							type="submit"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_certificados['boton.guardarDocumento']}">
+							<p:ajax process="formFormularioCargarDocumento"
+								listener="#{beanCertificadoEspecial.guardarInformacion}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</h:form>
+		</p:panel>
+		<!-- Formulario Agregar Documento -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="formularioAgregarDocumento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_certificados['title.adjuntarDocumentosCE']}" />
+			<ui:param name="formulario" value="formAgregarDocumento" />
+			<ui:define name="body-modal">
+				<div class="text-left tamanoForm">
+					<div class="row">
+						<div class="col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelTipoDocumental"
+								value="#{txt_certificados['label.cargue.nombreTipoDoc']}"
+								for="tipoDocumental" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="tipoDocumental" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								styleClass="tamano" converter="selectOneMenuConverter"
+								value="#{beanCertificadoEspecial.ist_cargaDocumentosCertificadosEspecialesDto.icd_catalogoDocumentoDto}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems
+									value="#{beanCertificadoEspecial.ilcd_tipoDocumental}"
+									var="tipoDocumento" itemLabel="#{tipoDocumento.is_nombre}"
+									itemValue="#{tipoDocumento}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTipoDocumental"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_certificados['placeHolder.tipoDocumental']}" />
+								</div>
+							</p:tooltip>
+						</div>
+						<br />
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-md-12 tamanoTabla">
+							<p:outputLabel id="labelCargarArchivos" styleClass="label-form"
+								value="#{txt_certificados['wizardMasivos.datos.archivo']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:fileUpload id="prueba" styleClass="cargar-archivo"
+								showButtons="false"
+								sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+								allowTypes="/(\.|\/)(pdf|PDF)$/"
+								fileUploadListener="#{beanCertificadoEspecial.generarArchivo}"
+								auto="true" label="#{txt_persona['label.ExaminarArchivo']}"
+								process="@this"
+								invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+								invalidFileMessage="#{txt_cuentaCupo['Mensaje.archivo.formatoInvalido']}"
+								update=":formAgregarDocumento:textoSalidaArchivo formAgregarDocumento:textoSalidaArchivo">
+								<div class="col-xs-12 tamano-examinar">
+									<br />
+									<h:outputText id="textoSalidaArchivo" styleClass="text-input"
+										value="#{beanCertificadoEspecial.ist_cargaDocumentosCertificadosEspecialesDto.ia_archivoDto.is_nombreArchivo}" />
+								</div>
+							</p:fileUpload>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelCargarArchivos"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_certificados['wizardMasivos.datos.archivo.tooltip']}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-md-12 tamanoTabla">
+							<p:outputLabel id="labelObservaciones" styleClass="label-form"
+								for="observaciones"
+								value="#{txt_certificados['label.cargue.observaciones']}" />
+							<div class="ui-inputgroup">
+								<p:inputTextarea id="observaciones" rows="6" autocomplete="off"
+									cols="40" counter="mostrarContadorObervaciones"
+									counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+									autoResize="false"
+									styleClass="text-input border-completo tamano mask-AlphaNumChars2"
+									maxlength="2000"
+									placeholder="#{txt_administrador['placeholder.Observaciones.Bloqueo']}"
+									value="#{beanCertificadoEspecial.ist_cargaDocumentosCertificadosEspecialesDto.is_observacion}">
+								</p:inputTextarea>
+								<p:tooltip for="labelObservaciones"
+									value="#{txt_administrador['tooltip.Observaciones']}" />
+							</div>
+							<h:outputText id="mostrarContadorObervaciones" />
+							<span class="help-block"> <p:message for="observaciones" />
+							</span> <br /> <br />
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<br />
+			<div class="row"></div>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton immediate="true"
+							styleClass="ui-confirmdialog-no pull-right btn-gris"
+							value="#{txt_certificados['wizard.seleccion.modal.cancelar']}"
+							oncomplete="PF('formularioAgregarDocumento').hide();">
+							<p:ajax listener="#{beanCertificadoEspecial.limpiarModal()}" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_certificados['button.documentos.guardar']}">
+							<p:ajax
+								update="formFormularioCargarDocumento:cargaDeDocumentos :formAgregarDocumento:textoSalidaArchivo formAgregarDocumento"
+								process="@form @all :formAgregarDocumento formAgregarDocumento"
+								listener="#{beanCertificadoEspecial.generarDocumentoCertificadoEspecial}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();" />
+						</p:commandButton>
+					</div>
+				</div>
+				<br />
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al eliminar documento -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarEliminarDocumento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalConfirmarEliminarDocumento" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_certificados['mensaje.Confirmacion']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_certificados['wizard.seleccion.modal.cancelar']}"
+								oncomplete="PF('confirmarEliminarDocumento').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								value="#{txt_certificados['wizard.seleccion.modal.aceptar']}">
+								<p:ajax listener="#{beanCertificadoEspecial.eliminarDocumento}"
+									onstart="PF('blockUI-Loading').show();"
+									update="formFormularioCargarDocumento:cargarDocumento"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

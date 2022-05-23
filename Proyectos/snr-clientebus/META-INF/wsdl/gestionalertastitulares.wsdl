@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions targetNamespace="https://www.supernotariado.gov.co/services/bachue/ee/gestionalertastitulares/v1" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/consultaralerta/v1" xmlns:WL5G3N2="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/consultartarifaalertastitulares/v1" xmlns:WL5G3N3="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/inactivaralerta/v1" xmlns:WL5G3N4="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/validarsolicitudalertaindividual/v1" xmlns:WL5G3N5="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/validarsolicitudalertamasiva/v1" xmlns:WL5G3N6="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/actualizarcontactoalerta/v1" xmlns:WL5G3N7="https://www.supernotariado.gov.co/services/bachue/ee/gestionalertastitulares/v1" xmlns:WL5G3N8="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <WL5G3N0:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bachue="https://www.supernotariado.gov.co/services/bachue/ee/gestionalertastitulares/v1" xmlns:bachue1="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/consultaralerta/v1" xmlns:bachue2="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/consultartarifaalertastitulares/v1" xmlns:bachue3="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/inactivaralerta/v1" xmlns:bachue4="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/validarsolicitudalertaindividual/v1" xmlns:bachue5="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/validarsolicitudalertamasiva/v1" xmlns:bachue6="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/actualizarcontactoalerta/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/consultaralerta/v1" schemaLocation="http://52.170.212.47:7016/services/ee/gestionalertastitulares/v1/?SCHEMA%2FExpuestosExternamente%2FGestionAlertasTitulares%2FResources%2FSchemas%2FEE_GAT_ConsultarAlerta"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/consultartarifaalertastitulares/v1" schemaLocation="http://52.170.212.47:7016/services/ee/gestionalertastitulares/v1/?SCHEMA%2FExpuestosExternamente%2FGestionAlertasTitulares%2FResources%2FSchemas%2FEE_GAT_ConsultarTarifaAlertasTitulares"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/inactivaralerta/v1" schemaLocation="http://52.170.212.47:7016/services/ee/gestionalertastitulares/v1/?SCHEMA%2FExpuestosExternamente%2FGestionAlertasTitulares%2FResources%2FSchemas%2FEE_GAT_InactivarAlerta"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/validarsolicitudalertaindividual/v1" schemaLocation="http://52.170.212.47:7016/services/ee/gestionalertastitulares/v1/?SCHEMA%2FExpuestosExternamente%2FGestionAlertasTitulares%2FResources%2FSchemas%2FEE_GAT_ValidarSolicitudAlertaIndividual"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/validarsolicitudalertamasiva/v1" schemaLocation="http://52.170.212.47:7016/services/ee/gestionalertastitulares/v1/?SCHEMA%2FExpuestosExternamente%2FGestionAlertasTitulares%2FResources%2FSchemas%2FEE_GAT_ValidarSolicitudAlertaMasiva"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/gestionalertastitulares/actualizarcontactoalerta/v1" schemaLocation="http://52.170.212.47:7016/services/ee/gestionalertastitulares/v1/?SCHEMA%2FExpuestosExternamente%2FGestionAlertasTitulares%2FResources%2FSchemas%2FEE_GAT_ActualizarContactoAlerta"/>
+    </schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="ConsultarAlerta_Request">
+    <WL5G3N0:part element="WL5G3N1:entradaConsultarAlerta" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarAlerta_Response">
+    <WL5G3N0:part element="WL5G3N1:salidaConsultarAlerta" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarTarifaAlertasTitulares_Request">
+    <WL5G3N0:part element="WL5G3N2:entradaConsultarTarifaAlertasTitulares" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarTarifaAlertasTitulares_Response">
+    <WL5G3N0:part element="WL5G3N2:salidaConsultarTarifaAlertasTitulares" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="InactivarAlerta_Request">
+    <WL5G3N0:part element="WL5G3N3:entradaInactivarAlerta" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="InactivarAlerta_Response">
+    <WL5G3N0:part element="WL5G3N3:salidaInactivarAlerta" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ValidarSolicitudAlertaIndividual_Request">
+    <WL5G3N0:part element="WL5G3N4:entradaValidarSolicitudAlertaIndividual" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ValidarSolicitudAlertaIndividual_Response">
+    <WL5G3N0:part element="WL5G3N4:salidaValidarSolicitudAlertaIndividual" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ValidarSolicitudAlertaMasiva_Request">
+    <WL5G3N0:part element="WL5G3N5:entradaValidarSolicitudAlertaMasiva" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ValidarSolicitudAlertaMasiva_Response">
+    <WL5G3N0:part element="WL5G3N5:salidaValidarSolicitudAlertaMasiva" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ActualizarContactoAlerta_Request">
+    <WL5G3N0:part element="WL5G3N6:entradaActualizarContactoAlerta" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ActualizarContactoAlerta_Response">
+    <WL5G3N0:part element="WL5G3N6:salidaActualizarContactoAlerta" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="SDI_EE_GestionAlertasTitulares">
+    <WL5G3N0:operation name="ConsultarAlerta">
+      <WL5G3N0:input message="WL5G3N7:ConsultarAlerta_Request"/>
+      <WL5G3N0:output message="WL5G3N7:ConsultarAlerta_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarTarifaAlertasTitulares">
+      <WL5G3N0:input message="WL5G3N7:ConsultarTarifaAlertasTitulares_Request"/>
+      <WL5G3N0:output message="WL5G3N7:ConsultarTarifaAlertasTitulares_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="InactivarAlerta">
+      <WL5G3N0:input message="WL5G3N7:InactivarAlerta_Request"/>
+      <WL5G3N0:output message="WL5G3N7:InactivarAlerta_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ValidarSolicitudAlertaIndividual">
+      <WL5G3N0:input message="WL5G3N7:ValidarSolicitudAlertaIndividual_Request"/>
+      <WL5G3N0:output message="WL5G3N7:ValidarSolicitudAlertaIndividual_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ValidarSolicitudAlertaMasiva">
+      <WL5G3N0:input message="WL5G3N7:ValidarSolicitudAlertaMasiva_Request"/>
+      <WL5G3N0:output message="WL5G3N7:ValidarSolicitudAlertaMasiva_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ActualizarContactoAlerta">
+      <WL5G3N0:input message="WL5G3N7:ActualizarContactoAlerta_Request"/>
+      <WL5G3N0:output message="WL5G3N7:ActualizarContactoAlerta_Response"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="SDI_EE_GestionAlertasTitularesSOAP12Binding" type="WL5G3N7:SDI_EE_GestionAlertasTitulares">
+    <WL5G3N8:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="ConsultarAlerta">
+      <WL5G3N8:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/gestionalertastitulares/v1/ConsultarAlerta" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N8:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N8:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarTarifaAlertasTitulares">
+      <WL5G3N8:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/gestionalertastitulares/v1/ConsultarTarifaAlertasTitulares" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N8:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N8:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="InactivarAlerta">
+      <WL5G3N8:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/gestionalertastitulares/v1/InactivarAlerta" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N8:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N8:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ValidarSolicitudAlertaIndividual">
+      <WL5G3N8:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/gestionalertastitulares/v1/ValidarSolicitudAlertaIndividual" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N8:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N8:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ValidarSolicitudAlertaMasiva">
+      <WL5G3N8:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/gestionalertastitulares/v1/ValidarSolicitudAlertaMasiva" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N8:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N8:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ActualizarContactoAlerta">
+      <WL5G3N8:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/gestionalertastitulares/v1/ActualizarContactoAlerta" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N8:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N8:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="SDI_EE_GestionAlertasTitularesSOAP12BindingQSService">
+    <WL5G3N0:documentation>OSB Service</WL5G3N0:documentation>
+    <WL5G3N0:port binding="WL5G3N7:SDI_EE_GestionAlertasTitularesSOAP12Binding" name="SDI_EE_GestionAlertasTitularesSOAP12BindingQSPort">
+      <WL5G3N8:address location="http://10.0.0.27:7016/services/ee/gestionalertastitulares/v1"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

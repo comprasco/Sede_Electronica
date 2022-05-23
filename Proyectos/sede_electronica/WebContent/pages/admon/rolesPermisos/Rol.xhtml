@@ -1,0 +1,161 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<div class="row">
+		<div class="col-xs-12">
+			<h:form id="formRol" rendered="#{beanRol.getCbAdministracionroles()}">
+				<p:dataTable id="dataTableRol"
+					value="#{beanRol.ilrb_listaRolBooleanoDto}" var="rol"
+					responsive="true" widgetVar="rolTable" styleClass="centrar-img"
+					rowIndexVar="true" reflow="true"
+					paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+					currentPageReportTemplate="{currentPage} / {totalPages}"
+					emptyMessage="#{txt_rolesPermisos['TablaVacia.Rol']}"
+					paginator="true" rows="10" paginatorPosition="bottom"
+					rowsPerPageTemplate="10">
+					<p:column headerText="#{txt_rolesPermisos['Pestana.Estado']}">
+						<p:inputSwitch id="estadoRol"
+							disabled="#{beanRol.verificarEditableRol(rol.is_nombre)}"
+							value="#{beanRol.imrb_mapaRolesBooleanos[rol]}" />
+						<p:tooltip for="estadoRol"
+							value="#{beanRol.verificarEditableRol(rol.is_nombre) ? txt_rolesPermisos['Pestana.No.Editable'] : txt_rolesPermisos['Pestana.Editable']}"
+							position="bottom" />
+						<span class="help-block"> <p:message for="estadoRol" />
+						</span>
+					</p:column>
+					<p:column headerText="#{txt_rolesPermisos['Pestana.Nombre']}">
+						<h:outputText id="fadeRol" value="#{rol.is_nombreLargo}" />
+						<p:tooltip for="fadeRol" value="#{rol.is_descripcion}"
+							position="bottom" />
+					</p:column>
+					<p:column
+						headerText="#{txt_rolesPermisos['Pestana.FechaCreacion']}">
+						<h:outputText value="#{rol.id_fechaCreacion}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+						<h:outputText></h:outputText>
+					</p:column>
+					<p:column
+						headerText="#{txt_rolesPermisos['Pestana.EstadoDefecto']}">
+						<h:outputText value="#{rol.ib_activoPorDefecto ? 'Si' : 'No' }" />
+					</p:column>
+				</p:dataTable>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-2 text-center">
+						<p:commandButton
+							value="#{txt_rolesPermisos['Boton.GuardarCambios.Upper']}"
+							class="btn-rojo btn-gradiente">
+							<f:ajax listener="#{beanRol.cambiarEstadoRoles}" render="@form"
+								execute="@form" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-sm-4 text-center">
+						<p:commandButton id="btnDialogRol"
+							value="#{txt_rolesPermisos['Boton.CrearRol.Upper']}"
+							class="btn-rojo btn-gradiente" oncomplete="PF('dlgRol').show();"
+							update="@(div[id$=rolGrid])" />
+					</div>
+				</div>
+			</h:form>
+		</div>
+	</div>
+	<!-- Inicio Dialog AdminFaces -->
+	<p:dialog header="#{txt_rolesPermisos['Modal.Header']}"
+		widgetVar="dlgRol" resizable="false" draggable="false"
+		appendTo="@(body)" responsive="true" modal="true"
+		styleClass="dialog-login box-solid box-danger" id="dlgRol">
+		<h:form id="formCrear">
+			<ui:fragment rendered="#{beanRol.getCbAdministracionroles()}">
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel styleClass="label-form" for="nombreLargo"
+							value="#{txt_rolesPermisos['Modal.Parametros.Nombre']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<p:inputText id="nombreLargo"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true"
+							placeholder="#{txt_rolesPermisos['Modal.Placeholder.Nombre.Rol']}"
+							value="#{beanRol.irb_rolBooleanoDto.is_nombreLargo}"
+							maxlength="50">
+							<p:keyFilter regEx="/[0-9a-zA-Z\s]/i" />
+						</p:inputText>
+						<span class="help-block"> <p:message for="nombreLargo" />
+						</span>
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel styleClass="label-form" for="descripcion"
+							value="#{txt_rolesPermisos['Modal.Parametros.Descripcion']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<p:inputText id="descripcion"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true"
+							placeholder="#{txt_rolesPermisos['Modal.Placeholder.Descripcion.Rol']}"
+							value="#{beanRol.irb_rolBooleanoDto.is_descripcion}"
+							maxlength="200">
+							<p:keyFilter regEx="/[0-9a-zA-Z\s]/i" />
+						</p:inputText>
+						<span class="help-block"> <p:message for="descripcion" />
+						</span>
+					</div>
+				</div>
+			</ui:fragment>
+			<br />
+			<div class="row">
+				<div class="col-xs-12 col-md-6">
+					<p:outputLabel styleClass="label-form" for="activo"
+						value="#{txt_rolesPermisos['Modal.Parametros.Activo']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<p:selectOneMenu id="activo"
+						value="#{beanRol.irb_rolBooleanoDto.ib_activo}"
+						requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+						required="true">
+						<f:selectItem itemLabel="#{txt_rolesPermisos['tabla.seleccione']}"
+							itemValue="" noSelectionOption="true" />
+						<f:selectItem itemLabel="#{txt_rolesPermisos['tabla.si']}"
+							itemValue="true" />
+						<f:selectItem itemLabel="#{txt_rolesPermisos['tabla.no']}"
+							itemValue="false" />
+					</p:selectOneMenu>
+					<span class="help-block"> <p:message for="activo" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-md-6">
+					<p:outputLabel styleClass="label-form" for="activoPorDefecto"
+						value="#{txt_rolesPermisos['Modal.Parametros.ActivoPorDefecto']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<p:selectOneMenu id="activoPorDefecto"
+						value="#{beanRol.irb_rolBooleanoDto.ib_activoPorDefecto}"
+						requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+						required="true">
+						<f:selectItem itemLabel="#{txt_rolesPermisos['tabla.seleccione']}"
+							itemValue="" noSelectionOption="true" />
+						<f:selectItem itemLabel="#{txt_rolesPermisos['tabla.si']}"
+							itemValue="true" />
+						<f:selectItem itemLabel="#{txt_rolesPermisos['tabla.no']}"
+							itemValue="false" />
+					</p:selectOneMenu>
+					<span class="help-block"> <p:message for="activoPorDefecto" />
+					</span>
+				</div>
+			</div>
+			<br />
+			<p:separator />
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<p:commandButton
+						value="#{txt_rolesPermisos['Boton.Guardar.Upper']}" type="submit"
+						styleClass="btn-gradiente btn-rojo" process="@form"
+						action="#{beanRol.crearRol()}" update="formCrear"
+						ignoreAutoUpdate="true"
+						oncomplete="if(args.validationFailed){PF('dlgRol').jq.effect('shake', {times: 3}, 100);}else{PF('dlgRol').hide();return true;}">
+					</p:commandButton>
+				</div>
+			</div>
+		</h:form>
+	</p:dialog>
+	<!--  Fin Dialog AdminFaces -->
+</ui:composition>

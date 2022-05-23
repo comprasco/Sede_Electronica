@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
+	<persistence-unit name="project-snr-base"
+		transaction-type="JTA">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+		<jta-data-source>jdbc/ds_snr-sede-remoto</jta-data-source>
+
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.ServicioIntegracion</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Accion</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.BitacoraAud</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Catalogo</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Carrito</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.CirculoRegistral</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Departamento</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.DepartamentoPK</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.DetalleCatalogo</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.HistoricoClave</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Integracion</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.IntegracionTemporal</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.ModeloMinuta</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.ModeloMinutaActo</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.MunicipioPK</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Pais</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Parametro</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Permiso</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Persona</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.PersonaDireccion</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.PersonaJuridica</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.PersonaNatural</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Rol</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.RolPermiso</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.SolicitudRecuperacionClave</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.TipoActo</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.TipoCatalogo</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.TipoDocumento</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.TipoEje</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.TipoEstadoCuenta</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.TipoProceso</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Usuario</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.UsuarioBloqueo</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.UsuarioRol</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.AsociacionUsuarioPersonaJuridica</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.AsociacionUsuarioEntidadEspecial</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Direccion</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.EntidadEspecial</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.HistorialInicioSesion</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Observaciones</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.RangoTarifasAlerta</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Vereda</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.VeredaPK</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.HistorialSolicitudRegistro</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.HistoricoTransaccionesDescartadas</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.ParametrosDinamicosAlcaldia</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.AlcaldiaParametrizacion</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Municipio</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.ConfiguracionCampo</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.ConfiguracionCampoPK</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.ConfiguracionFormulario</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.FormularioUsuario</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.TransaccionSolicitudModelo</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.TransaccionFormulario</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.ValorCampoFormulario</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.DocumentosCargadosOwcc</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.ValorCampoFormularioPK</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.TransaccionPasarela</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Archivo</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.ColaEnvio</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.HistorialEnvio</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.ParametrizacionPlantilla</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.HistoricoConsulta</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.Coordenada</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.LetraEje</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.TurnosBancarizacion</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.TransaccionBancarizacion</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.TurnosBancarizacionPK</class>
+		<class>co.gov.supernotariado.bachue.sedeelectronica.admon.persistence.model.SolicitudesPendientesPoderes</class>
+		
+		<properties>
+			<!---<property name="eclipselink.ddl-generation" value="create-tables"/> -->
+			<property name="eclipselink.ddl-generation.output-mode"
+				value="database" />
+			<property name="eclipselink.target-database"
+				value="org.eclipse.persistence.platform.database.oracle.Oracle12Platform" />
+			<property name="eclipselink.target-server" value="Weblogic" />
+			<property name="eclipselink.logging.level" value="FINEST" />
+		</properties>
+		
+	</persistence-unit>
+</persistence>

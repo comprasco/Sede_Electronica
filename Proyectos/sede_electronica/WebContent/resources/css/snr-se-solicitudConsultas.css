@@ -1,0 +1,44 @@
+.tituloPanel {
+	color: white;
+	text-transform: uppercase;
+	font-size: 16px;
+	padding: 5px 0;
+}
+.subtituloCondiciones {
+	text-transform: uppercase;
+	font-size: 15px;
+	padding: 10px 0;
+}
+.checkBoxTipoActo {
+	min-width: 100% !important;
+}
+.ui-selectonemenu-panel {
+    max-width: 50% !important;
+}
+
+#valorTotal{
+	background-color: #ccc;
+    height: 60px;
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+.consultaItem{
+	display:flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: #e6e6e6;
+    padding: 15px 0;
+}
+.consultaItem > label:nth-child(1){
+	width: 40%;
+}
+
+.ui-widget-content .panelEliminarEstilos {
+    border: none;
+    padding: 0 !important;
+    margin-top: 0;
+}
+

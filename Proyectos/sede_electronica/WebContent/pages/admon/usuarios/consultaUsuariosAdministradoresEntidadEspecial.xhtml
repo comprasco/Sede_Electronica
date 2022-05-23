@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputScript library="js" name="keyfilter.js" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-administracion.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_usuariosAdminEE['usuario.admin.titulo.crear']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_usuariosAdminEE['usuario.admin.titulo.crear']}" />
+			<ui:param name="imagen" value="img-parametrizacion" />
+			<ui:param name="subtitulo"
+				value="#{txt_usuariosAdminEE['usuario.admin.titulo.consultar']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/usuarios/consultaUsuariosAdministradoresEntidadEspecial.jsf" />
+		</ui:include>
+		<p:panel id="panelEntidadEspecial" styleClass="no-border">
+			<h:form id="formEntidadEspecial">
+				<p:outputPanel id="seccionConsultaEntidadEspecial"
+					rendered="#{beanEntidadEspecial.ib_consultaEntidadEspecial}">
+					<h:form id="formUsuarioEntidadEspecial">
+						<div class="row">
+							<div class="col-xs-12 align-center consultarUsuarioPad">
+								<h:outputText styleClass="subTituloConvenios titulo"
+									value="#{txt_usuariosAdminEE['usuario.admin.titulo.consultar']}" />
+							</div>
+						</div>
+						<div class="row space-row">
+							<div class="col-xs-12 col-sm-6 col-xs-offset-3">
+								<div class="title">
+									<div>
+										<p:outputLabel id="labelTipoOficina" styleClass="label-form"
+											for="tipoOficina"
+											value="#{txt_usuariosAdminEE['usuario.admin.label.tipoOficina']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									</div>
+								</div>
+								<p:selectOneMenu id="tipoOficina" required="true"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									value="#{beanEntidadEspecial.iee_entidadEspecial.is_tipoOficina}">
+									<p:ajax
+										listener="#{beanEntidadEspecial.actualizarNombreOficinaOrigen}"
+										update="tipoEntidad nombreOficina" process="@this" />
+									<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+										itemValue="" />
+									<f:selectItems
+										value="#{beanEntidadEspecial.illee_listaEntidadesEspecialesDto}"
+										var="tipoOficina" itemLabel="#{tipoOficina.is_nombre}"
+										itemValue="#{tipoOficina.is_nombre}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelTipoOficina"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_usuariosAdminEE['usuario.admin.tooltip.tipoOficina']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="tipoOficina" />
+								</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<div class="title">
+									<div>
+										<p:outputLabel id="labelTipoEntidad" styleClass="label-form"
+											for="tipoEntidad"
+											value="#{txt_usuariosAdminEE['usuario.admin.label.tipoEntidad']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									</div>
+								</div>
+								<div class="ui-inputgroup">
+									<p:inputText id="tipoEntidad" styleClass="tamano"
+										readonly="true" required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										placeholder="#{txt_usuariosAdminEE['usuario.admin.placeholder.tipoEntidad']}"
+										value="#{beanEntidadEspecial.iee_entidadEspecial.is_nombreEntidad}">
+									</p:inputText>
+								</div>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelTipoEntidad"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_usuariosAdminEE['usuario.admin.tooltip.tipoEntidad']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="tipoEntidad" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<div class="title">
+									<div>
+										<p:outputLabel id="labelNombreOficina" styleClass="label-form"
+											for="nombreOficina"
+											value="#{txt_usuariosAdminEE['usuario.admin.label.nombreEntidad']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									</div>
+								</div>
+								<p:selectOneMenu id="nombreOficina" required="true" styleClass="pais-nat"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}" filter="true"
+									filterMatchMode="contains" filterPlaceholder="#{txt_certificados['wizardCertificado.datos.placeholder.oficinaRegistro']}"
+									value="#{beanEntidadEspecial.iee_entidadEspecial.is_nombreEntidadCodigo}">
+									<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+										itemValue="" />
+									<f:selectItems
+										value="#{beanEntidadEspecial.ilnee_nombreEntidadEspecialDto}"
+										var="nombreEntidades" itemLabel="#{nombreEntidades.is_nombre}"
+										itemValue="#{nombreEntidades.is_codigo}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNombreOficina"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_usuariosAdminEE['usuario.admin.tooltip.nombreEntidad']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="nombreOficina" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div
+								class="col-xs-10 col-sm-4 col-xs-offset-2 align-center consultarPad">
+								<p:commandButton id="volverInicio"
+									value="#{txt_usuariosAdmin['usuario.admin.volver']}"
+									styleClass="btn-gris"
+									action="/pages/personas/inicio.jsf?faces-redirect=true">
+									<p:ajax onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();" />
+								</p:commandButton>
+							</div>
+							<div class="col-xs-10 col-sm-4 align-center consultarPad">
+								<p:commandButton id="crearModal"
+									value="#{txt_usuariosAdminEE['usuario.admin.consultar']}"
+									styleClass="btn-gradiente btn-rojo" type="submit"
+									process="@form" onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									update="panelEntidadEspecial formEntidadEspecial:seccionCrearEntidadEspecial formEntidadEspecial:seccionConsultaEntidadEspecial"
+									action="#{beanEntidadEspecial.consultarEntidadesEspeciales}">
+								</p:commandButton>
+							</div>
+						</div>
+					</h:form>
+				</p:outputPanel>
+
+				<p:outputPanel id="seccionCrearEntidadEspecial"
+					rendered="#{beanEntidadEspecial.ib_crearEntidadEspecial}">
+					<h:form id="formCreacionUsuario">
+						<div class="row">
+							<div class="col-xs-12 align-center consultarUsuarioPad padBotton">
+								<h:outputText styleClass="subTituloConvenios titulo"
+									value="#{txt_usuariosAdminEE['usuario.admin.creacion.ee']}" />
+							</div>
+						</div>
+						<p:separator />
+						<div class="row">
+							<div class="col-xs-5">
+								<p:outputLabel id="labelNombreUsuario" for="nombreUsuario"
+									value="#{txt_usuariosAdminEE['usuario.admin.ee.nombre']}"
+									styleClass="label-form" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<div class="ui-inputgroup">
+									<p:inputText id="nombreUsuario" autocomplete="off"
+										styleClass="label-form tamano mask-NombreUsuario"
+										value="#{beanEntidadEspecial.is_nombreUsuario}" maxlength="20"
+										placeholder="#{txt_usuariosAdminEE['usuario.admin.placeholder.nombre']}">
+										<p:keyFilter regEx="/[a-z0-9_\.\-\@]/i" />
+										<p:ajax event="blur" render="nombreUsuario"
+											update="nombreUsuario"
+											listener="#{beanEntidadEspecial.comprobarNombreUsuario}" />
+									</p:inputText>
+									<p:tooltip for="labelNombreUsuario"
+										value="#{txt_usuariosAdminEE['usuario.admin.tooltip.nombre']}"></p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="nombreUsuario" />
+								</span>
+							</div>
+						</div>
+						<p:separator />
+						<div class="row">
+							<div class="col-xs-4 align-center consultarPad padBotton">
+								<p:outputLabel id="labelRazonSocial" styleClass="label-form"
+									for="razonSocial"
+									value="#{txt_usuariosAdminEE['usuario.admin.razonSocial']}" />
+								<p:outputLabel id="razonSocial" required="true" readonly="true"
+									styleClass="tamano consultarUsuarioPad"
+									value="#{beanEntidadEspecial.iee_entidadEspecial.is_nombreEntidadExterna}"
+									onkeypress="return false;">
+								</p:outputLabel>
+								<p:tooltip for="labelRazonSocial"
+									value="#{txt_usuariosAdminEE['usuario.admin.tooltip.razonSocial']}"></p:tooltip>
+								<span class="help-block"> <p:message for="razonSocial" />
+								</span>
+							</div>
+							<div class="col-xs-4 align-center consultarPad padBotton">
+								<p:outputLabel id="labelIdEntidad" styleClass="label-form"
+									for="idEntidad"
+									value="#{txt_usuariosAdminEE['usuario.admin.idEntidad']}" />
+								<p:outputLabel id="idEntidad" required="true" readonly="true"
+									styleClass="tamano consultarUsuarioPad"
+									value="#{beanEntidadEspecial.iee_entidadEspecial.is_nombreEntidadCodigo}"
+									onkeypress="return false;">
+								</p:outputLabel>
+								<p:tooltip for="labelIdEntidad"
+									value="#{txt_usuariosAdminEE['usuario.admin.idEntidad']}"></p:tooltip>
+								<span class="help-block"> <p:message for="idEntidad" />
+								</span>
+							</div>
+							<div class="col-xs-4 align-center consultarPad padBotton">
+								<p:outputLabel id="labelRepresentantelegal"
+									styleClass="label-form" for="representanteLegal"
+									value="#{txt_usuariosAdminEE['usuario.admin.representanteLegal']}" />
+								<p:outputLabel id="representanteLegal" required="true"
+									readonly="true" styleClass="tamano consultarPad"
+									value="#{beanEntidadEspecial.iee_entidadEspecial.is_nombreCompletoRL}"
+									onkeypress="return false;">
+								</p:outputLabel>
+								<p:tooltip for="labelRepresentantelegal"
+									value="#{txt_usuariosAdminEE['usuario.admin.tooltip.representanteLegal']}"></p:tooltip>
+								<span class="help-block"> <p:message
+										for="representanteLegal" />
+								</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-4 align-center consultarPad padBotton">
+								<p:outputLabel id="labelNumeroDocumentoRepresentante"
+									styleClass="label-form" for="numeroDocumentoRepresentante"
+									value="#{txt_usuariosAdminEE['usuario.admin.documentoRepresentanteLegal']}" />
+								<p:outputLabel id="numeroDocumentoRepresentante" required="true"
+									readonly="true" styleClass="tamano consultarPad"
+									value="#{beanEntidadEspecial.iee_entidadEspecial.is_numeroDocumentoRL}"
+									onkeypress="return false;">
+								</p:outputLabel>
+								<p:tooltip for="labelNumeroDocumentoRepresentante"
+									value="#{txt_usuariosAdminEE['usuario.admin.tooltip.documentoRepresentanteLegal']}"></p:tooltip>
+								<span class="help-block"> <p:message
+										for="numeroDocumentoRepresentante" />
+								</span>
+							</div>
+							<div class="col-xs-4 align-center consultarPad padBotton">
+								<p:outputLabel id="labelTipoDocumento" styleClass="label-form"
+									for="tipoDocumento"
+									value="#{txt_usuariosAdminEE['usuario.admin.tipoDocumento']}" />
+								<p:outputLabel id="tipoDocumento" required="true"
+									readonly="true" styleClass="tamano consultarUsuarioPad"
+									value="#{beanEntidadEspecial.iee_entidadEspecial.is_tipoDocumentoRL}"
+									onkeypress="return false;">
+								</p:outputLabel>
+								<p:tooltip for="labelTipoDocumento"
+									value="#{txt_usuariosAdminEE['usuario.admin.tooltip.tipoDocumento']}"></p:tooltip>
+								<span class="help-block"> <p:message for="tipoDocumento" /></span>
+							</div>
+							<div class="col-xs-4 align-center consultarUsuarioPad padBotton">
+								<p:outputLabel id="labelTipoOrganizacion"
+									styleClass="label-form" for="tipoOrganizacion"
+									value="#{txt_usuariosAdminEE['usuario.admin.tipoOrganizacion']}" />
+								<p:outputLabel id="tipoOrganizacion" required="true"
+									readonly="true" styleClass="tamano consultarPad"
+									value="#{beanEntidadEspecial.iee_entidadEspecial.is_tipoOficina}"
+									onkeypress="return false;">
+								</p:outputLabel>
+								<p:tooltip for="labelTipoOrganizacion"
+									value="#{txt_usuariosAdminEE['usuario.admin.tipoOrganizacion']}"></p:tooltip>
+								<span class="help-block"> <p:message
+										for="tipoOrganizacion" />
+								</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-4 align-center consultarPad padBotton">
+								<p:outputLabel id="labelCorreoElectronico"
+									styleClass="label-form" for="correoElectronico"
+									value="#{txt_usuariosAdminEE['usuario.admin.correo']}" />
+								<p:outputLabel id="correoElectronico" required="true"
+									readonly="true" styleClass="tamano consultarPad"
+									value="#{beanEntidadEspecial.iee_entidadEspecial.is_correoElectronico}"
+									onkeypress="return false;">
+								</p:outputLabel>
+								<p:tooltip for="labelCorreoElectronico"
+									value="#{txt_usuariosAdminEE['usuario.admin.tooltip.correo']}"></p:tooltip>
+								<span class="help-block"> <p:message
+										for="correoElectronico" />
+								</span>
+							</div>
+							<div class="col-xs-4 align-center consultarPad padBotton">
+								<p:outputLabel id="labelTelefono" styleClass="label-form"
+									for="telefono"
+									value="#{txt_usuariosAdminEE['usuario.admin.telefonoFijo']}" />
+								<p:outputLabel id="telefono" required="true" readonly="true"
+									styleClass="tamano consultarPad"
+									value="#{beanEntidadEspecial.iee_entidadEspecial.is_telefono}"
+									onkeypress="return false;">
+								</p:outputLabel>
+								<p:tooltip for="labelTelefono"
+									value="#{txt_usuariosAdminEE['usuario.tooltip.admin.telefonoFijo']}"></p:tooltip>
+
+								<span class="help-block"> <p:message for="telefono" />
+								</span>
+							</div>
+							<div class="col-xs-4 align-center consultarPad padBotton">
+								<p:outputLabel id="labelNombreEntidad" styleClass="label-form"
+									for="nombreEntidad"
+									value="#{txt_usuariosAdminEE['usuario.admin.nombreEntidad']}" />
+								<p:outputLabel id="nombreEntidad" required="true" readonly="true"
+									styleClass="tamano consultarPad"
+									value="#{beanEntidadEspecial.iee_entidadEspecial.is_nombreEntidad}"
+									onkeypress="return false;">
+								</p:outputLabel>
+								<p:tooltip for="labelNombreEntidad"
+									value="#{txt_usuariosAdminEE['usuario.admin.nombreEntidad']}"></p:tooltip>
+
+								<span class="help-block"> <p:message for="nombreEntidad" />
+								</span>
+							</div>
+						</div>
+
+						<p:separator />
+						<!--  Tabla Convenios -->
+						<div class="row">
+							<div class="col-xs-12 align-center text-center">
+								<p:outputLabel id="tituloConvenios"
+									value="#{txt_usuariosAdminEE['usuario.admin.convenios']}"
+									styleClass="subTituloConvenios titulo" />
+								<br />
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 text-center">
+								<p:dataTable var="conveniosSeccion"
+									value="#{beanEntidadEspecial.ilcee_conveniosEntidadEspecialDto}"
+									styleClass="centrar" widgetVar="paramsSeccionConvenios"
+									id="tablaSeccionMatriculas" reflow="true" rowIndexVar="index"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									emptyMessage="#{txt_usuariosAdmin['usuario.admin.tabla.vacia']}"
+									stickyHeader="false">
+									<p:column
+										headerText="#{txt_usuariosAdmin['usuario.admin.tabla.nombre']}"
+										styleClass="documento-medio">
+										<h:outputText
+											value="#{conveniosSeccion.is_descripcionConvenio}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_usuariosAdmin['usuario.admin.tabla.codigoConvenio']}"
+										styleClass="documento-medio">
+										<h:outputText value="#{conveniosSeccion.is_codigoConvenio}" />
+									</p:column>
+								</p:dataTable>
+								<br />
+							</div>
+						</div>
+						<p:separator />
+						<div class="row">
+							<div class="col-xs-4 col-sm-4 col-xs-offset-2 align-center pad">
+								<p:commandButton id="volver"
+									value="#{txt_usuariosAdmin['usuario.admin.volver']}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									styleClass="btn-gris" proccess="@this" immediate="true"
+									action="/pages/admon/usuarios/consultaUsuariosAdministradoresEntidadEspecial.jsf?faces-redirect=true">
+								</p:commandButton>
+							</div>
+							<div class="col-xs-4 pad">
+								<p:commandButton id="crearModal"
+									value="#{txt_usuariosAdminEE['usuario.admin.creacionRol']}"
+									styleClass="btn-gradiente btn-rojo" type="submit">
+									<p:ajax onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();irArriba()"
+										listener="#{beanEntidadEspecial.mostrarModalConfirmacionCrearEntidad}"
+										process="@form formCreacionUsuario formEntidadEspecial" />
+								</p:commandButton>
+							</div>
+						</div>
+					</h:form>
+				</p:outputPanel>
+			</h:form>
+		</p:panel>
+
+		<!-- Modal confirmacion creacion usuario entidad especial -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalCrearUsuario" />
+			<ui:param name="formulario" value="formCrearUsuario" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:define name="body-modal">
+				<h:outputText
+					value="#{txt_usuariosAdminEE['usuario.admin.titulo.confirmacion.mensaje']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<p:commandButton id="cancelarModal"
+							value="#{txt_usuariosAdmin['usuario.admin.cancelar']}"
+							styleClass="btn-gris" onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide(); PF('modalCrearUsuario').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<p:commandButton id="crear"
+							value="#{txt_usuariosAdmin['usuario.admin.aceptar']}"
+							styleClass="btn-gradiente btn-rojo"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();"
+							action="#{beanEntidadEspecial.crearUsuario}">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal creacion exitosa -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalCreacionExitosa" />
+			<ui:param name="formulario" value="formCreacionExitosa" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:define name="body-modal">
+				<div class="Row">
+					<div class="col-xs-12 align-center padBotton">
+						<p:outputLabel>#{txt_usuariosAdminEE['usuario.admin.titulo.confirmacion.exitosa']}</p:outputLabel>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:commandButton id="aceptarExito"
+							value="#{txt_usuariosAdminEE['boton.entendido']}"
+							styleClass="btn-gradiente btn-rojo"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();"
+							action="/pages/admon/usuarios/consultaUsuariosAdministradoresEntidadEspecial.jsf?faces-redirect=true">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal correo existente -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalCorreoExistente" />
+			<ui:param name="formulario" value="formCorreoExistente" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:define name="body-modal">
+				<div class="Row">
+					<div class="col-xs-12 align-center padBotton">
+						<p:outputLabel>#{txt_usuariosAdminEE['usuario.admin.entidad.correo.existente']}</p:outputLabel>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:commandButton id="aceptarExito"
+							value="#{txt_usuariosAdminEE['boton.entendido']}"
+							styleClass="btn-gradiente btn-rojo"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();"
+							action="/pages/admon/usuarios/consultaUsuariosAdministradoresEntidadEspecial.jsf?faces-redirect=true">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,488 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="formDatosPredio">
+		<h:outputText
+			value="#{txt_traslado_matricula['datosPredio.explicacion']}" />
+		<br />
+		<br />
+		<br />
+		<p:outputPanel id="panelBuscarCertificados">
+			<div class="row">
+				<ui:decorate template="/pages/includes/numeroMatricula.xhtml">
+					<ui:param name="numCol" value="6" />
+					<ui:param name="bean" value="${beanTrasladoMatricula}" />
+					<ui:param name="oficinaRegistroSeleccionado"
+						value="icr_circuloRegistralSeleccionadoDto" />
+					<ui:param name="listaOficinaRegistro"
+						value="ilcr_listaCirculoRegistralDto" />
+					<ui:param name="numeroMatricula" value="is_numeroMatricula" />
+					<ui:param name="requerido" value="true" />
+					<ui:param name="panelAnterior" value="formDatosPredio" />
+					<ui:param name="nupre" value="is_nupre" />
+					<ui:param name="mostrarNupre" value="true" />
+				</ui:decorate>
+			</div>
+		</p:outputPanel>
+		<br />
+		<div class="row text-right">
+			<div class="col-xs-12 col-md-6 col-md-offset-3">
+				<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+					styleClass="btn-gradiente icon-btn btn-rojo"
+					value="#{txt_traslado_matricula['datos.matricula.boton']}"
+					update="formModalCertificado1 panelBuscarCertificados"
+					process="@form"
+					action="#{beanTrasladoMatricula.consultarDatosMatricula}"
+					onstart="PF('blockUI-Loading').show();"
+					onsuccess="PF('blockUI-Loading').hide();">
+				</p:commandButton>
+			</div>
+		</div>
+		<br />
+		<p:outputPanel>
+			<div class="label-form text-center">
+				<h:outputText value="#{txt_traslado_matricula['tabla.cantidad']}" />
+				<h:outputText
+					value="#{(beanTrasladoMatricula.ittm_transaccionTrasladoMatriculaDto.itm_trasladoMatriculaDto == null)?0:1}" />
+				<h:outputText
+					value="#{txt_traslado_matricula['tabla.cantidad.uno']}" />
+			</div>
+			<p:dataTable var="cargarDocumento" styleClass="centrar"
+				widgetVar="paramsCargaDocumentosCuentaCupo" id="cargarDocumento"
+				reflow="true" rowIndexVar="index"
+				value="#{beanTrasladoMatricula.ittm_transaccionTrasladoMatriculaDto.itm_trasladoMatriculaDto}"
+				emptyMessage="#{txt_traslado_matricula['tabla.vacia']}"
+				stickyHeader="false">
+				<p:column
+					headerText="#{txt_traslado_matricula['tabla.circuloRegistral']}">
+					<h:outputText
+						value="#{cargarDocumento.im_matriculaDto.icr_circuloRegistralMatricula.is_nombre}" />
+				</p:column>
+				<p:column headerText="#{txt_traslado_matricula['tabla.matricula']}">
+					<h:outputText
+						value="#{cargarDocumento.im_matriculaDto.is_codigoMatricula}" />
+				</p:column>
+				<p:column headerText="#{txt_traslado_matricula['tabla.nupre']}">
+					<h:outputText value="#{cargarDocumento.is_nupre}" />
+				</p:column>
+				<p:column
+					headerText="#{txt_traslado_matricula['tabla.direccionPredio']}">
+					<h:outputText value="#{cargarDocumento.is_direccionPredio}" />
+				</p:column>
+				<p:column headerText="#{txt_traslado_matricula['tabla.traslado']}"
+					styleClass="text-center">
+					<p:commandLink 
+						disabled="#{beanTrasladoMatricula.ittm_transaccionTrasladoMatriculaDto.ilcr_listaCirculoRegistralDestinoDto eq null}"
+						styleClass="fa fa-search #{cargarDocumento.ib_llenado ?'colorVerde':'colorRojo'}">
+						<p:ajax
+							listener="#{beanTrasladoMatricula.cargarListaCorrecciones(cargarDocumento)}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide(); cargarKeyfilters(); window.addEventListener('scroll', deshabilitarScrollModales);"></p:ajax>
+					</p:commandLink>
+				</p:column>
+				<p:column headerText="#{txt_traslado_matricula['tabla.eliminar']}"
+					styleClass="text-center">
+					<p:commandLink styleClass="fa fa-trash-o colorRojo"
+						onclick="PF('confirmarEliminar').show();">
+						<p:ajax
+							listener="#{beanTrasladoMatricula.setIc_correccionDto(cargarDocumento)}"></p:ajax>
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+		<br />
+		<br />
+	</h:form>
+	<!-- Modal para listar la matricula consultada y confirmar -->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="dialogConfirmacionDatosMatricula" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+		<ui:param name="tituloModal"
+			value="#{txt_traslado_matricula['modal.datos']}" />
+		<ui:param name="formulario" value="formModalCertificado1" />
+		<ui:define name="body-modal">
+			<div class="row">
+				<div class="col-xs-12">
+					<h:outputLabel class="label-form"
+						value="#{txt_traslado_matricula['modal.datos.titulo']}" />
+				</div>
+			</div>
+			<br />
+			<div class="row gradiente tablaConsultaPredio">
+				<div class="col-xs-4">
+					<h:outputText
+						value="#{txt_traslado_matricula['modal.datos.matricula']}" />
+				</div>
+				<div class="col-xs-4">
+					<h:outputText
+						value="#{txt_traslado_matricula['modal.datos.ciurculoRegistral']}" />
+				</div>
+				<div class="col-xs-4">
+					<h:outputText
+						value="#{txt_traslado_matricula['modal.datos.direccion']}" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-xs-4">
+					<h:outputText
+						value="#{beanTrasladoMatricula.itm_trasladoMatriculaDto.im_matriculaDto.icr_circuloRegistralMatricula.is_id}" />
+				</div>
+				<div class="col-xs-4">
+					<h:outputText
+						value="#{beanTrasladoMatricula.itm_trasladoMatriculaDto.im_matriculaDto.is_codigoMatricula}" />
+				</div>
+				<div class="col-xs-4">
+					<h:outputText
+						value="#{beanTrasladoMatricula.itm_trasladoMatriculaDto.is_direccionPredio}" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-xs-12">
+					<h:outputText class="label-form"
+						value="#{txt_traslado_matricula['modal.datos.pregunta']}" />
+				</div>
+			</div>
+		</ui:define>
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-12 col-md-5 col-md-offset-1 space-row">
+					<p:commandButton styleClass="btn-gris"
+						value="#{txt['boton.Cancelar.Upper']}"
+						oncomplete="PF('dialogConfirmacionDatosMatricula').hide(); limpiarCampo('formDatosPredio:numeroMatricula','spanNumeroMatricula'); limpiarLista('oficinaRegistro');"
+						update="formDatosPredio">
+					</p:commandButton>
+				</div>
+				<div class="col-xs-12 col-md-5">
+					<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+						styleClass="btn-gradiente icon-btn btn-rojo"
+						value="#{txt_traslado_matricula['modal.boton.adiccionar']}"
+						oncomplete="PF('dialogConfirmacionDatosMatricula').hide(); limpiarCampo('formDatosPredio:numeroMatricula','spanNumeroMatricula'); limpiarLista('oficinaRegistro');"
+						update="formDatosPredio">
+						<p:ajax
+							listener="#{beanTrasladoMatricula.cargarListaCorreccionYLimpiarCampos(true)}"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();" />
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+	<!-- Modal para llenar la correccion a este predio-->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="dataCorreccion" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+		<ui:param name="tituloModal"
+			value="#{txt_traslado_matricula['modal.trasladoMatricula']}" />
+		<ui:param name="formulario" value="formDataCorreccion" />
+		<ui:define name="body-modal">
+			<h:outputText styleClass="tituloParametrizacion"
+				value="#{txt_traslado_matricula['modal.trasladoMatricula.matricula']} "></h:outputText>
+			<h:outputText styleClass="tituloParametrizacion"
+				value="#{beanTrasladoMatricula.itm_trasladoMatriculaDto.im_matriculaDto.is_codigoMatricula}"></h:outputText>
+			<br />
+			<div class="row">
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form" id="labelOficinaRegistro"
+						for="oficinaRegistro"
+						value="#{txt_traslado_matricula['oficinaRegistro.origen']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputText id="oficinaRegistro" readonly="true"
+							styleClass="block"
+							value="#{beanTrasladoMatricula.itm_trasladoMatriculaDto.im_matriculaDto.icr_circuloRegistralMatricula.is_nombre}" />
+					</div>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelOficinaRegistro"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_traslado_matricula['oficinaRegistro.origen']}" />
+						</div>
+					</p:tooltip>
+					<span class="help-block"> <p:message for="oficinaRegistro" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-sm-2">
+					<p:outputLabel id="labelNumeroOficinaRegistro"
+						for="numeroOficinaRegistro" styleClass="label-form tresPuntos"
+						value="#{txt_traslado_matricula['numeroOficina.origen']}" />
+					<div class="ui-inputgroup">
+						<p:inputText id="numeroOficinaRegistro" readonly="true"
+							styleClass="block"
+							value="#{beanTrasladoMatricula.itm_trasladoMatriculaDto.im_matriculaDto.icr_circuloRegistralMatricula.is_id}" />
+					</div>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelNumeroOficinaRegistro"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_traslado_matricula['numeroOficina.origen']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form"
+						id="labelOficinaRegistroDestino" for="oficinaRegistroDestino"
+						value="#{txt_traslado_matricula['oficinaRegistro.destino']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<p:selectOneMenu id="oficinaRegistroDestino" filter="true"
+						widgetVar="oficinaRegistro" filterMatchMode="contains"
+						converter="selectOneMenuConverter" required="true"
+						requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+						filterPlaceholder="#{txt_traslado_matricula['oficinaRegistro.destino']}"
+						value="#{beanTrasladoMatricula.itm_trasladoMatriculaDto.icr_circuloRegistralDestinoDto}">
+						<f:selectItem
+							itemLabel="#{txt_certificados['wizardCertificado.datos.seleccionar']}"
+							itemValue="" />
+						<f:selectItems
+							value="#{beanTrasladoMatricula.ittm_transaccionTrasladoMatriculaDto.ilcr_listaCirculoRegistralDestinoDto}"
+							var="circuloRegistral"
+							itemLabel="#{circuloRegistral.is_nombre} - (#{circuloRegistral.is_id})"
+							itemValue="#{circuloRegistral}" />
+						<p:ajax update="numeroOficinaRegistroDestino" />
+					</p:selectOneMenu>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelOficinaRegistroDestino"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_traslado_matricula['oficinaRegistro.destino']}" />
+						</div>
+					</p:tooltip>
+					<span class="help-block"> <p:message
+							for="oficinaRegistroDestino" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-sm-2">
+					<p:outputLabel id="labelNumeroOficinaRegistroDestino"
+						for="numeroOficinaRegistroDestino"
+						styleClass="label-form tresPuntos"
+						value="#{txt_traslado_matricula['numeroOficina.destino']}" />
+					<div class="ui-inputgroup">
+						<p:inputText id="numeroOficinaRegistroDestino" readonly="true"
+							styleClass="block"
+							value="#{beanTrasladoMatricula.itm_trasladoMatriculaDto.icr_circuloRegistralDestinoDto.is_id}" />
+					</div>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral"
+						for="labelNumeroOficinaRegistroDestino" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_traslado_matricula['numeroOficina.destino']}" />
+						</div>
+					</p:tooltip>
+				</div>
+			</div>
+			<div class="row">
+				<ui:param name="campoNupre"
+					value="#{!beanNupre.getIb_ocultarNupre()}" />
+				<div class="col-xs-12 #{campoNupre ? 'col-sm-6' : ''}">
+					<p:outputLabel id="labelNumeroMatricula" for="numeroMatricula"
+						styleClass="label-form"
+						value="#{txt_traslado_matricula['numeroMatricula']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputText id="numeroMatricula" autocomplete="off"
+							maxlength="10" styleClass="block" readonly="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true"
+							value="#{beanTrasladoMatricula.itm_trasladoMatriculaDto.im_matriculaDto.is_codigoMatricula}">
+						</p:inputText>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelNumeroMatricula"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_traslado_matricula['numeroMatricula']}" />
+							</div>
+						</p:tooltip>
+						<span id="spanNumeroMatricula" class="ui-inputgroup-addon ocultar">
+							<p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('formDataCorreccion:numeroMatricula', 'spanNumeroMatricula');" />
+							</p:commandLink>
+						</span>
+					</div>
+					<span class="help-block"> <p:message for="numeroMatricula" />
+					</span>
+				</div>
+				<ui:fragment rendered="#{campoNupre}">
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel id="labelNupre" for="nupre" styleClass="label-form"
+							value="#{txt_traslado_matricula['numNupre']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="nupre" styleClass="block" readonly="true"
+								autocomplete="off" maxlength="50"
+								value="#{beanTrasladoMatricula.itm_trasladoMatriculaDto.is_nupre}">
+							</p:inputText>
+						</div>
+					</div>
+				</ui:fragment>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<p:outputLabel id="labelDireccion" for="direccion"
+						styleClass="label-form"
+						value="#{txt_traslado_matricula['direccion']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputText id="direccion" styleClass="block" readonly="true"
+							autocomplete="off" maxlength="50"
+							value="#{beanTrasladoMatricula.itm_trasladoMatriculaDto.is_direccionPredio}"
+							placeholder="#{txt_traslado_matricula['direccion']}">
+						</p:inputText>
+					</div>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelDireccion" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel value="#{txt_traslado_matricula['direccion']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<p:outputLabel id="labelObservacion" for="observacion"
+						styleClass="label-form"
+						value="#{txt_traslado_matricula['observacion']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputText id="observacion" styleClass="mask-AlphaNumeric"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							autocomplete="off" maxlength="4000" required="true"
+							value="#{beanTrasladoMatricula.itm_trasladoMatriculaDto.is_observacion}"
+							placeholder="#{txt_traslado_matricula['observacion']}">
+						</p:inputText>
+					</div>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelObservacion" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel value="#{txt_traslado_matricula['observacion']}" />
+						</div>
+					</p:tooltip>
+					<span class="help-block"> <p:message for="observacion" />
+					</span>
+				</div>
+			</div>
+		</ui:define>
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-12 col-md-4 col-md-offset-1">
+					<p:commandButton styleClass="btn-gris"
+						value="#{txt['boton.volver']}"
+						oncomplete="PF('dataCorreccion').hide();" update="formDatosPredio">
+						<p:ajax
+							oncomplete="window.removeEventListener('scroll', deshabilitarScrollModales);"></p:ajax>
+					</p:commandButton>
+				</div>
+				<div class="col-xs-12 col-md-4 col-md-offset-2">
+					<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+						value="#{txt['boton.Guardar.Upper']}">
+						<p:ajax listener="#{beanTrasladoMatricula.agregarTipoCorreccion}"
+							process="@form" onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();"
+							oncomplete="window.removeEventListener('scroll', deshabilitarScrollModales);"
+							update="formDatosPredio formDataCorreccion" />
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+	<!-- 	Eliminar correccion tabla -->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="confirmarEliminar" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+		<ui:param name="tituloModal"
+			value="#{txt['titulo.modal.confirmacion']}" />
+		<ui:param name="formulario" value="formEliminarCorreccion" />
+		<ui:define name="body-modal">
+			<h:outputText
+				value="#{txt_traslado_matricula['modal.eliminar.titulo']}" />
+		</ui:define>
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-12 col-md-5 col-md-offset-1 space-row">
+					<p:commandButton styleClass="btn-gris"
+						value="#{txt['boton.Cancelar.Upper']}"
+						oncomplete="PF('confirmarEliminar').hide();">
+					</p:commandButton>
+				</div>
+				<div class="col-xs-12 col-md-5">
+					<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+						value="#{txt['boton.Aceptar.Upper']}"
+						oncomplete="PF('confirmarEliminar').hide();"
+						update="formDatosPredio">
+						<p:ajax
+							listener="#{beanTrasladoMatricula.cargarListaCorreccionYLimpiarCampos(false)}"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();" />
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+	<!-- 	Confirmar generar solicitud -->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="confirmarGenerarSolicitud" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+		<ui:param name="tituloModal"
+			value="#{txt['titulo.modal.confirmacion']}" />
+		<ui:param name="formulario" value="formConfirmarSolicitudCorreccion" />
+		<ui:define name="body-modal">
+			<h:outputText
+				value="#{txt_traslado_matricula['modal.generarSolicitud.titulo']}" />
+			<br />
+			<h:outputText
+				value="#{txt_traslado_matricula['modal.generarSolicitud.contenido']}" />
+		</ui:define>
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-12 col-md-5 col-md-offset-1">
+					<p:commandButton styleClass="btn-gris"
+						value="#{txt['boton.Cancelar.Upper']}"
+						oncomplete="PF('confirmarGenerarSolicitud').hide();">
+					</p:commandButton>
+				</div>
+				<div class="col-xs-12 col-md-5">
+					<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+						value="#{txt['boton.Aceptar.Upper']}"
+						oncomplete="PF('confirmarGenerarSolicitud').hide();"
+						update="formDatosPredio:cargarDocumento">
+						<p:ajax listener="#{beanTrasladoMatricula.generarSolicitud}"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();" />
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="infNoCompletoCorreccion" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+		<ui:param name="tituloModal"
+			value="#{txt['titulo.modal.informacion']}" />
+		<ui:param name="formulario" value="formNoTipoCorreccion" />
+		<ui:define name="body-modal">
+			<h:outputText
+				value="#{txt_traslado_matricula['modal.noTipoCorreccion.contenido']} " />
+			<br />
+			<h:outputText
+				value="#{txt_traslado_matricula['modal.noTipoCorreccion.contenido1']} " />
+			<h:outputText styleClass="fa fa-search" />
+		</ui:define>
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-12 col-md-6 col-md-offset-3">
+					<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+						styleClass="btn-rojo icon-btn btn-gradiente"
+						value="#{txt['boton.entendido']}"
+						oncomplete="PF('infNoCompletoCorreccion').hide();">
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+</ui:composition>

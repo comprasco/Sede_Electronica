@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_registrar_alerta['consultar.alerta.titulo']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_registrar_alerta['banner.titulo.alertaIndividual']}" />
+			<ui:param name="imagen" value="img-registroAlertas" />
+			<ui:param name="subtitulo"
+				value="#{txt_registrar_alerta['consultar.alerta.titulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/alertas/registroAlertas/historialAlertas.jsf" />
+		</ui:include>
+		<h:form id="formConsultaAlerta">
+			<p:panel id="panelTipoActo">
+				<div class="row">
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel styleClass="label-form" id="lblDepartamento"
+							for="listaDepartamento"
+							value="#{txt_registrar_alerta['consultar.alerta.label.departamento']}" />
+						<p:selectOneMenu id="listaDepartamento"
+							converter="selectOneMenuConverter" filterMatchMode="contains"
+							value="#{beanAlertaTitular.id_departamentoSeleccionadoDto}"
+							widgetVar="listaDepartamento">
+							<p:ajax listener="#{beanAlertaTitular.cargarMunicipios()}"
+								update="listaMunicipio" process="@this" />
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{beanAlertaTitular.ild_listaDepartamentoDto}"
+								var="departamento" itemValue="#{departamento}"
+								itemLabel="#{departamento.is_nombre}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="lblDepartamento" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_registrar_alerta['tooltips.label.consultar.departamento']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel styleClass="label-form" id="lblMunicipio"
+							for="listaMunicipio"
+							value="#{txt_registrar_alerta['consultar.alerta.label.municipio']}" />
+						<p:selectOneMenu id="listaMunicipio"
+							converter="selectOneMenuConverter" filterMatchMode="contains"
+							value="#{beanAlertaTitular.im_municipioSeleccionadoDto}"
+							widgetVar="listaMunicipio">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemValue="" />
+							<f:selectItems value="#{beanAlertaTitular.ilm_listaMunicipioDto}"
+								var="municipio" itemLabel="#{municipio.is_nombre}"
+								itemValue="#{municipio}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="lblMunicipio" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_registrar_alerta['tooltips.label.consultar.municipio']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel styleClass="label-form" id="lblEstado"
+							for="listaEstado"
+							value="#{txt_registrar_alerta['consultar.alerta.label.estado']}" />
+						<p:selectOneMenu id="listaEstado"
+							filterMatchMode="contains"
+							value="#{beanAlertaTitular.is_estado}" widgetVar="listaEstado">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{beanAlertaTitular.ileecat_listaEnumEstadoAlertaTitulares}"
+								var="estado" itemLabel="#{estado.is_valorString}"
+								itemValue="#{estado.is_codigo}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="lblEstado" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_registrar_alerta['tooltips.label.consultar.estado']}" />
+							</div>
+						</p:tooltip>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel styleClass="label-form" id="lblOrip"
+							for="listaOrip"
+							value="#{txt_certificados['wizardCertificado.datos.oficinaRegistro']} (#{txt_registrar_alerta['consultar.alerta.label.orip']})" />
+						<p:selectOneMenu id="listaOrip" converter="selectOneMenuConverter"
+							filterMatchMode="contains" filter="true"
+							filterPlaceholder="#{txt_certificados['wizardCertificado.datos.placeholder.oficinaRegistro']}"
+							value="#{beanAlertaTitular.icr_circuloRegistralEnvioDto}"
+							widgetVar="listaOrip">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{beanAlertaTitular.ilcr_listaCirculoRegistralDto}"
+								var="orip" itemLabel="#{orip.is_nombre} - (#{orip.is_id})"
+								itemValue="#{orip}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="lblOrip" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_registrar_alerta['tooltips.label.consultar.municipio']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel id="lblNumMatricula" styleClass="label-form"
+							for="numMatricula"
+							value="#{txt_certificados['wizardCertificado.datos.numeroMatricula']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="numMatricula" autocomplete="off" maxlength="10"
+								value="#{beanAlertaTitular.is_numeroMatricula}"
+								placeholder="#{txt_certificados['wizardCertificado.datos.placeholder.numeroMatricula']}">
+								<p:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="lblNumMatricula" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_certificados['wizardCertificado.datos.tooltip.numeroMatricula']}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-4">
+						<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+							styleClass="boton-cons btn-gradiente icon-btn btn-rojo"
+							value="#{txt_registrar_alerta['consultar.alerta.boton.consultar']}"
+							update="formConsultaAlerta:formAlertas:panelResultadoAlertas"
+							action="#{beanAlertaTitular.validarConsultar()}">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+			<p:separator styleClass="separador" />
+			<div class="row">
+				<div class="col-xs-12 align-center">
+					<h:form id="formAlertas">
+						<p:panel id="panelResultadoAlertas">
+							<ui:fragment rendered="#{!beanAlertaTitular.ib_tablaResultado}">
+						<p:importEnum
+							type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumEstadoAlertaTierras"
+							var="EnumEstadoAlertaTierras" />
+								<p:dataTable styleClass="tablaCertificados" id="alertaTabla"
+									widgetVar="alertaTabla" reflow="true"
+									emptyMessage="#{txt_registrar_alerta['consultar.alerta.tabla.vacia']}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									value="#{beanAlertaTitular.ildma_datosModeloAlertaWsdto}"
+									var="alerta" stickyHeader="false" lazy="true"
+									filteredValue="#{beanAlertaTitular.il_filtroAlertaTitular}">
+									<f:facet name="header">
+										<p:outputPanel>
+											<p:spacer height="5" />
+											<p:inputText id="globalFilter"
+												onkeyup="PF('alertaTabla').filter()" styleClass="filtro"
+												placeholder="#{txt_registrar_alerta['filtrar.alerta.buscar']}"
+												maxlength="100" />
+										</p:outputPanel>
+									</f:facet>
+									<p:column filterBy="#{alerta.is_numeroMatricula}"
+										filterStyle="display: none"
+										headerText="#{txt_registrar_alerta['consultar.alerta.columna.matricula']}">
+										<h:outputText value="#{alerta.is_numeroMatricula}"
+											id="alertaMatricula" />
+										<p:tooltip for="alertaMatricula"
+											value="#{alerta.is_numeroMatricula}" position="bottom" />
+									</p:column>
+									<p:column filterBy="#{alerta.is_direccion}"
+										filterStyle="display: none"
+										headerText="#{txt_registrar_alerta['consultar.alerta.columna.direccion']}">
+										<h:outputText value="#{alerta.is_direccion}"
+											id="alertaDireccion" />
+										<p:tooltip for="alertaDireccion"
+											value="#{alerta.is_direccion}" position="bottom" />
+									</p:column>
+									<p:column styleClass="tamano-col1"
+										filterBy="#{alerta.is_fechaVigencia}"
+										filterStyle="display: none"
+										headerText="#{txt_registrar_alerta['consultar.alerta.columna.fechaVigencia']}">
+										<h:outputText value="#{alerta.is_fechaVigencia}"
+											id="alertaFechaVigencia">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+										<p:tooltip for="alertaFechaVigencia"
+											value="#{alerta.is_fechaVigencia}" position="bottom" />
+									</p:column>
+									<p:column filterBy="#{alerta.is_departamento}"
+										filterStyle="display: none"
+										headerText="#{txt_registrar_alerta['consultar.alerta.columna.departamento']}">
+										<h:outputText value="#{alerta.is_departamento}"
+											id="alertaDepartamento" />
+										<p:tooltip for="alertaDepartamento"
+											value="#{alerta.is_departamento}" position="bottom" />
+									</p:column>
+									<p:column filterBy="#{alerta.is_municipio}"
+										filterStyle="display: none"
+										headerText="#{txt_registrar_alerta['consultar.alerta.columna.municipio']}">
+										<h:outputText value="#{alerta.is_municipio}"
+											id="alertaMunicipio" />
+										<p:tooltip for="alertaMunicipio"
+											value="#{alerta.is_municipio}" position="bottom" />
+									</p:column>
+									<p:column
+										filterBy="#{alerta.is_orip} - #{alerta.is_nombreOrip}"
+										filterStyle="display: none"
+										headerText="#{txt_registrar_alerta['consultar.alerta.columna.orip']}">
+										<h:outputText
+											value="#{alerta.is_orip} - #{alerta.is_nombreOrip}"
+											id="alertaOrip" />
+										<p:tooltip for="alertaOrip"
+											value="#{alerta.is_orip} - #{alerta.is_nombreOrip}"
+											position="bottom" />
+									</p:column>
+									<p:column styleClass="tamano-col2"
+										headerText="#{txt_registrar_alerta['consultar.alerta.columna.estado']}">
+										<h:outputText value="#{alerta.is_estado}" id="alertaEstado" />
+										<p:tooltip for="alertaEstado" value="#{alerta.is_estado}"
+											position="bottom" />
+									</p:column>
+									<p:column id="columnaAccion"
+										headerText="#{txt_registrar_alerta['consultar.alerta.columna.accion']}">
+										<p:commandButton id="btnInactivar" disabled="#{alerta.is_estado ne EnumEstadoAlertaTierras.ACTIVA.getIs_codigo()}"
+											styleClass="btn-gradiente icon-btn btn-rojo"
+											value="#{txt_registrar_alerta['tabla.accion.inactivar']}"
+											actionListener="#{beanAlertaTitular.confirmarInactivacion(alerta)}">
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</ui:fragment>
+						</p:panel>
+					</h:form>
+				</div>
+			</div>
+		</h:form>
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarInactivarAlerta" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmarInactivacion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_registrar_alerta['modal.confirmar.inactivar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_registrar_alerta['modal.confirmar.boton.cancelar']}"
+								oncomplete="PF('confirmarInactivarAlerta').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								actionListener="#{beanAlertaTitular.inactivarAlerta()}"
+								value="#{txt_registrar_alerta['wizard.seleccion.modal.aceptar']}">
+								<p:ajax oncomplete="PF('confirmarInactivarAlerta').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,78 @@
+.boton-descarga {
+	background-color: transparent !important;
+	font-size: 30px !important;
+	border-color: transparent !important;
+	color: #770707 !important;
+}
+
+.boton-descarga:hover {
+	text-decoration: none !important;
+}
+
+.modal-crear-minuta {
+	width: 30% !important;
+	left: 571.453px !important;
+}
+
+.ui-selectonemenu-panel {
+	max-width: 50% !important;
+}
+
+.ui-selectonemenu-filter-container {
+	width: 100% !important;
+}
+
+.idColumnDataTable {
+	width: 10%;
+}
+
+.nombreActoColumnDataTable {
+	width: 75%;
+	text-align: left;
+}
+
+.checkBoxTipoActo {
+	min-width: 100% !important;
+}
+
+.btn-rojo-crear {
+	background-color: #EB1F28 !important;
+	border-radius: 27px !important;
+	color: #FFFFFF !important;
+	font-size: 12px !important;
+	width: 100%;
+	height: 39px;
+}
+
+.cargar-archivo {
+	width: 100%;
+	text-align: center;
+}
+
+.ui-dialog .ui-dialog-titlebar-close, .ui-dialog .ui-dialog-titlebar-minimize,
+	.ui-dialog .ui-dialog-titlebar-maximize {
+	float: right;
+	margin: 0;
+	top: 0;
+	padding: 1px;
+	cursor: pointer;
+	display: none;
+}
+
+.panel-min {
+	border-radius: 0px;
+	border-color: white;
+}
+
+.botonBuscar {
+	margin-top: 19px;
+	margin-bottom: 15px;
+}
+
+.centrar {
+	text-align: center;
+}
+
+.tamanoTabla {
+	width: 150px !important;
+}

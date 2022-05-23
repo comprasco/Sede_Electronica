@@ -1,0 +1,37 @@
+.bold {
+	font-weight: 700;
+}
+
+.tamano-titulo {
+	font-size: 20px !important;
+}
+
+.tamano-subtitulo {
+	font-size: 16px !important;
+	color: #000000;
+}
+
+.textoRojo {
+	font-weight: bold;
+	color: #EB1F28;
+}
+
+.tablaConsultaPredio {
+	color: white;
+	padding: 4px;
+}
+
+.colorRojo{
+    color: #770707 !important;
+    text-decoration: none !important;
+}
+
+.colorVerde{
+    color: #26d934 !important;
+    text-decoration: none !important;
+}
+
+.observacionesCorreccion {
+	height: 80px !important;
+	display: flex !important;
+}

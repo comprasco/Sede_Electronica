@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_consulta_drr['titulo.drr']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-consultaDrr.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+
+	<ui:define name="body">
+
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_consulta_drr['titulo.drr']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo"
+				value="#{txt_consulta_drr['subtitulo.drr']}" />
+		</ui:include>
+		<h:form id="formPrincipal">
+			<div class="row padding-bottom-row">
+				<div
+					class="col-xs-12 col-sm-8 align-center col-sm-offset-2 padding-general-bottom overflow-y">
+
+					<p:panelGrid styleClass="panelGrid overflow-y">
+
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="4" styleClass="celda-roja">#{txt_consulta_drr['datos.predio']}</p:column>
+							</p:row>
+						</f:facet>
+
+						<!-- Informacion especifica datos del predio -->
+
+						<p:row>
+							<p:column styleClass="negrilla">#{txt_consulta_drr['departamento']}</p:column>
+
+							<p:column styleClass="negrilla">#{txt_consulta_drr['municipio']}</p:column>
+
+							<p:column styleClass="negrilla">#{txt_consulta_drr['circulo.registral']}</p:column>
+
+							<p:column styleClass="negrilla">#{txt_consulta_drr['matricula.inmobiliaria']}</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>#{beanResultadoDrr.im_municipio.id_departamentoDto.is_nombre}</p:column>
+
+							<p:column>#{beanResultadoDrr.im_municipio.is_nombre}</p:column>
+
+							<p:column>#{beanResultadoDrr.icr_circuloRegistral.is_nombre} - #{beanResultadoDrr.itscrm_tipoSalidaConsultaRRRMatricula.is_codCirculoRegistral}</p:column>
+
+							<p:column>#{beanResultadoDrr.itscrm_tipoSalidaConsultaRRRMatricula.is_numMatriculaInmobiliaria}</p:column>
+						</p:row>
+					</p:panelGrid>
+
+				</div>
+			</div>
+
+			<!-- Fragmento con los resultados de la busqueda -->
+			<ui:fragment rendered="#{!beanResultadoDrr.ib_renderDetalle}">
+				<div class="row padding-bottom-row">
+					<div class="col-xs-12 align-center padding-general-bottom">
+						<p:accordionPanel>
+
+							<!-- Lista de derechos -->
+							<p:tab title="#{txt_consulta_drr['lista.derechos']}">
+
+								<p:dataTable var="derecho"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									rowsPerPageTemplate="10" emptyMessage="#{txt_consulta_drr['no.datos.tabla']}"
+									value="#{beanResultadoDrr.itscrm_tipoSalidaConsultaRRRMatricula.ild_listaDerechos}">
+									<p:column headerText="#{txt_consulta_drr['numero.anotacion']}">
+										<h:outputText value="#{derecho.is_numAnotacion}" />
+									</p:column>
+
+									<p:column headerText="#{txt_consulta_drr['fecha.anotacion']}">
+										<h:outputText value="#{derecho.is_fechaAnotacion}" />
+									</p:column>
+
+									<p:column
+										headerText="#{txt_consulta_drr['nom.naturaleza.juridica']}">
+										<h:outputText value="#{derecho.is_nomNaturalezaJuridicaFolio}" />
+									</p:column>
+
+									<p:column headerText="#{txt_consulta_drr['detalle']}">
+										<p:commandButton value="#{txt_consulta_drr['detalle']}"
+											styleClass="btn-gradiente btn-rojo">
+											<p:ajax
+												listener="#{beanResultadoDrr.seleccionarDetalle(beanResultadoDrr.getCs_derechos(),derecho.is_numAnotacion)}"
+												onstart="PF('blockUI-Loading').show();"
+												onsuccess="PF('blockUI-Loading').hide();"
+												update="formPrincipal" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:tab>
+
+							<!-- Lista de restricciones -->
+							<p:tab title="#{txt_consulta_drr['lista.restricciones']}">
+								<p:dataTable var="restriccion"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									rowsPerPageTemplate="10" emptyMessage="#{txt_consulta_drr['no.datos.tabla']}"
+									value="#{beanResultadoDrr.itscrm_tipoSalidaConsultaRRRMatricula.ilr_listaRestricciones}">
+									<p:column headerText="#{txt_consulta_drr['numero.anotacion']}">
+										<h:outputText value="#{restriccion.is_numAnotacion}" />
+									</p:column>
+
+									<p:column headerText="#{txt_consulta_drr['fecha.anotacion']}">
+										<h:outputText value="#{restriccion.is_fechaAnotacion}" />
+									</p:column>
+
+									<p:column
+										headerText="#{txt_consulta_drr['nom.naturaleza.juridica']}">
+										<h:outputText
+											value="#{restriccion.is_nomNaturalezaJuridicaFolio}" />
+									</p:column>
+
+									<p:column headerText="#{txt_consulta_drr['detalle']}">
+										<p:commandButton value="#{txt_consulta_drr['detalle']}"
+											icon="icon-flecha-blanca" iconPos="right"
+											styleClass="btn-gradiente  btn-rojo">
+											<p:ajax
+												listener="#{beanResultadoDrr.seleccionarDetalle(beanResultadoDrr.CS_RESTRICCIONES,restriccion.is_numAnotacion)}"
+												onstart="PF('blockUI-Loading').show();"
+												onsuccess="PF('blockUI-Loading').hide();"
+												update="formPrincipal" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:tab>
+
+							<!-- Lista de responsabilidades -->
+							<p:tab title="#{txt_consulta_drr['lista.responsabilidades']}">
+								<p:dataTable var="responsabilidades"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									rowsPerPageTemplate="10" emptyMessage="#{txt_consulta_drr['no.datos.tabla']}"
+									value="#{beanResultadoDrr.itscrm_tipoSalidaConsultaRRRMatricula.ilr_listaResponsabilidades}">
+									<p:column headerText="#{txt_consulta_drr['numero.anotacion']}">
+										<h:outputText value="#{responsabilidades.is_numAnotacion}" />
+									</p:column>
+
+									<p:column headerText="#{txt_consulta_drr['fecha.anotacion']}">
+										<h:outputText value="#{responsabilidades.is_fechaAnotacion}" />
+									</p:column>
+
+									<p:column
+										headerText="#{txt_consulta_drr['nom.naturaleza.juridica']}">
+										<h:outputText
+											value="#{responsabilidades.is_nomNaturalezaJuridicaFolio}" />
+									</p:column>
+
+									<p:column headerText="#{txt_consulta_drr['detalle']}">
+										<p:commandButton value="#{txt_consulta_drr['detalle']}"
+											icon="icon-flecha-blanca" iconPos="right"
+											styleClass="btn-gradiente  btn-rojo">
+											<p:ajax
+												listener="#{beanResultadoDrr.seleccionarDetalle(beanResultadoDrr.CS_RESPONSABILIDADES,responsabilidades.is_numAnotacion)}"
+												onstart="PF('blockUI-Loading').show();"
+												onsuccess="PF('blockUI-Loading').hide();"
+												update="formPrincipal" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:tab>
+
+							<!-- Lista de publicaciones -->
+							<p:tab title="#{txt_consulta_drr['lista.publicidades']}">
+								<p:dataTable var="publicidad"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									rowsPerPageTemplate="10" emptyMessage="#{txt_consulta_drr['no.datos.tabla']}"
+									value="#{beanResultadoDrr.itscrm_tipoSalidaConsultaRRRMatricula.ilp_listaPublicidades}">
+									<p:column headerText="#{txt_consulta_drr['numero.anotacion']}">
+										<h:outputText value="#{publicidad.is_numAnotacion}" />
+									</p:column>
+
+									<p:column headerText="#{txt_consulta_drr['fecha.anotacion']}">
+										<h:outputText value="#{publicidad.is_fechaAnotacion}" />
+									</p:column>
+
+									<p:column
+										headerText="#{txt_consulta_drr['nom.naturaleza.juridica']}">
+										<h:outputText
+											value="#{publicidad.is_nomNaturalezaJuridicaFolio}" />
+									</p:column>
+
+									<p:column headerText="#{txt_consulta_drr['detalle']}">
+										<p:commandButton value="#{txt_consulta_drr['detalle']}"
+											icon="icon-flecha-blanca" iconPos="right"
+											styleClass="btn-gradiente  btn-rojo">
+											<p:ajax
+												listener="#{beanResultadoDrr.seleccionarDetalle(beanResultadoDrr.getCs_derechos(),publicidad.is_numAnotacion)}"
+												onstart="PF('blockUI-Loading').show();"
+												onsuccess="PF('blockUI-Loading').hide();"
+												update="formPrincipal" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:tab>
+
+							<!-- Lista de hipotecas -->
+							<p:tab title="#{txt_consulta_drr['lista.hipotecas']}">
+								<p:dataTable var="hipotecas"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									rowsPerPageTemplate="10" emptyMessage="#{txt_consulta_drr['no.datos.tabla']}"
+									value="#{beanResultadoDrr.itscrm_tipoSalidaConsultaRRRMatricula.ilp_listaPublicidades}">
+									<p:column headerText="#{txt_consulta_drr['numero.anotacion']}">
+										<h:outputText value="#{hipotecas.is_numAnotacion}" />
+									</p:column>
+
+									<p:column headerText="#{txt_consulta_drr['fecha.anotacion']}">
+										<h:outputText value="#{hipotecas.is_fechaAnotacion}" />
+									</p:column>
+
+									<p:column
+										headerText="#{txt_consulta_drr['nom.naturaleza.juridica']}">
+										<h:outputText
+											value="#{hipotecas.is_nomNaturalezaJuridicaFolio}" />
+									</p:column>
+
+									<p:column headerText="#{txt_consulta_drr['detalle']}">
+										<p:commandButton value="#{txt_consulta_drr['detalle']}"
+											icon="icon-flecha-blanca" iconPos="right"
+											styleClass="btn-gradiente  btn-rojo">
+											<p:ajax
+												listener="#{beanResultadoDrr.seleccionarDetalle(beanResultadoDrr.CS_HIPOTECAS,hipotecas.is_numAnotacion)}"
+												onstart="PF('blockUI-Loading').show();"
+												onsuccess="PF('blockUI-Loading').hide();"
+												update="formPrincipal" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:tab>
+						</p:accordionPanel>
+					</div>
+				</div>
+
+				<div class="row padding-bottom-row">
+					<div class="col-xs-12 align-center padding-general-bottom">
+						<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+							<p:commandButton value="#{txt_consulta_drr['regresar']}"
+								icon="icon-flecha-blanca" iconPos="right"
+								styleClass="btn-gradiente  btn-rojo"
+								action="/pages/consultas/drr/consulta.jsf?faces-redirect=true">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:fragment>
+
+
+			<!-- Fragmento con el detalle de la busqueda -->
+			<ui:fragment rendered="#{beanResultadoDrr.ib_renderDetalle}">
+
+				<!-- Detalle de la anotacion seleccionada -->
+				<div class="row padding-bottom-row">
+					<div
+						class="col-xs-12 col-sm-12 align-center col-sm-offset-0 padding-general-bottom overflow-y">
+
+						<p:panelGrid styleClass="panelGrid">
+
+							<f:facet name="header">
+								<p:row>
+									<p:column colspan="5" styleClass="celda-roja">#{txt_consulta_drr['detalle']}</p:column>
+								</p:row>
+							</f:facet>
+
+							<!-- Informacion especifica datos del predio -->
+
+							<p:row>
+
+								<p:column class="negrilla">#{txt_consulta_drr['numero.anotacion']}</p:column>
+
+								<p:column class="negrilla">#{txt_consulta_drr['comentario']}</p:column>
+
+								<p:column class="negrilla">#{txt_consulta_drr['fecha.anotacion']}</p:column>
+
+								<p:column class="negrilla">#{txt_consulta_drr['nom.naturaleza.juridica']}</p:column>
+
+								<p:column class="negrilla">#{txt_consulta_drr['dominio.drr']}</p:column>
+
+							</p:row>
+
+							<p:row>
+
+								<p:column>#{beanResultadoDrr.iird_resultadoDrr.getIs_numAnotacion()}</p:column>
+								<p:column>#{empty beanResultadoDrr.iird_resultadoDrr.getIs_comentario() ? '-' : beanResultadoDrr.iird_resultadoDrr.getIs_comentario() }</p:column>
+								<p:column>#{beanResultadoDrr.iird_resultadoDrr.getIs_fechaAnotacion()}</p:column>
+								<p:column>#{beanResultadoDrr.iird_resultadoDrr.getIs_nomNaturalezaJuridicaFolio()}</p:column>
+								<p:column>#{beanResultadoDrr.iird_resultadoDrr.getIs_dominioDRR()}</p:column>
+
+							</p:row>
+						</p:panelGrid>
+
+					</div>
+				</div>
+				<p:separator />
+				<!-- Panel de los intervinientes -->
+				<div class="row padding-bottom-row">
+					<div class="col-xs-12 align-center padding-general-bottom ">
+
+						<p:dataTable var="interviniente"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							rowsPerPageTemplate="10" emptyMessage="#{txt_consulta_drr['no.datos.tabla']}"
+							value="#{beanResultadoDrr.iird_resultadoDrr.getIli_intervinientes()}">
+							<p:column
+								headerText="#{txt_consulta_drr['nombre.interviniente']}">
+								<h:outputText
+									value="#{interviniente.is_primerNombre.concat(' ')
+								.concat(interviniente.is_segundoNombre).concat(' ')
+								.concat(interviniente.is_primerApellido).concat(' ').concat(interviniente.is_segundoApellido)}" />
+							</p:column>
+
+							<p:column headerText="#{txt_consulta_drr['tipo.documento']}">
+								<h:outputText value="#{interviniente.is_tipoDocumentoPersona}" />
+							</p:column>
+
+							<p:column headerText="#{txt_consulta_drr['numero.documento']}">
+								<h:outputText value="#{interviniente.is_numDocumentoPersona}" />
+							</p:column>
+
+							<p:column headerText="#{txt_consulta_drr['razon.social']}">
+								<h:outputText value="#{empty interviniente.is_razonSocial ? '-' : interviniente.is_razonSocial}" />
+							</p:column>
+
+							<p:column headerText="#{txt_consulta_drr['rol.interviniente']}">
+								<h:outputText value="#{interviniente.is_rolInterviniente}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_consulta_drr['tipo.parte.interesada']}">
+								<h:outputText value="#{empty interviniente.is_tipoParteInteresada? '-' : interviniente.is_tipoParteInteresada}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+
+				<div class="row">
+					<div
+						class="col-xs-12 col-sm-4 col-sm-offset-4 padding-general-bottom">
+						<p:commandButton value="#{txt_consulta_drr['regresar']}"
+							icon="icon-flecha-blanca" iconPos="right"
+							styleClass="btn-gradiente btn-rojo">
+							<p:ajax listener="#{beanResultadoDrr.renderizarDetalle()}"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();" update="formPrincipal" />
+						</p:commandButton>
+					</div>
+				</div>
+
+			</ui:fragment>
+
+		</h:form>
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();
+			});
+		</script>
+
+	</ui:define>
+</ui:composition>

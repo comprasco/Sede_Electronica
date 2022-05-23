@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-asociacionNaturalAJuridica.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_asociacionPNAEE['AsociacionNaturalAEspecial']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_asociacionPNAEE['AsociacionNaturalAEspecial.Titulo']}" />
+			<ui:param name="imagen" value="img-rolesPermisos" />
+			<ui:param name="subtitulo"
+				value="#{txt_asociacionPNAEE['AsociacionNaturalAEspecial.Subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/asociacionNaturalAEntidadEspecial.jsf" />
+		</ui:include>
+		<div class="row">
+			<div class="col-xs-12">
+				<h:form id="formAsociarUsuarios">
+					<br />
+					<p:panel id="panelPNAPJ">
+						<p:outputPanel id="panelConsultaAsociados"
+							rendered="#{!beanAsociacionNaturalAEE.ib_renderVista}">
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-11 text-center">
+									<h:outputText styleClass="titulo bold" id="asociacionPJ"
+										value="#{txt_asociacionPNAEE['AsociacionNaturalAEspecial.Titulo.Bold']}" />
+								</div>
+							</div>
+							<br />
+							<br />
+							<p:dataTable id="dataTableAsociadosEE"
+								value="#{beanAsociacionNaturalAEE.ilauee_listaAsociacionUsuarioEntidadEspecialDto}"
+								var="asociacion" widgetVar="dataTableAsociadosEE"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								emptyMessage="#{txt_asociacionPNAEE['Tabla.Vacia']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								rowIndexVar="rowIndex" rowsPerPageTemplate="10">
+
+
+								<p:column
+									headerText="#{txt_asociacionPNAEE['Tabla.Encabezado.Tipo.Documento']}"
+									styleClass="centrar10">
+									<h:outputText styleClass="centrar ajustar"
+										value="#{asociacion.getIu_usuarioDto().getIp_personaDto().getItd_tipoDocumentoDto().getIs_id()}" />
+								</p:column>
+								<p:column
+									filterBy="#{asociacion.getIu_usuarioDto().getIp_personaDto().getIs_numeroDocumento()}"
+									headerText="#{txt_asociacionPNAEE['Tabla.Encabezado.Numero.Documento']}"
+									styleClass="centrar10">
+									<h:outputText styleClass="centrar ajustar"
+										value="#{asociacion.getIu_usuarioDto().getIp_personaDto().getIs_numeroDocumento()}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_asociacionPNAEE['Tabla.Encabezado.Nombre']}"
+									styleClass="centrar25">
+									<h:outputText styleClass="centrar ajustar"
+										value="#{asociacion.getIu_usuarioDto().getIp_personaDto().getIpn_personaNaturalDto().getIs_primerNombre()}" />
+									<h:outputText styleClass="centrar ajustar"
+										value=" #{asociacion.getIu_usuarioDto().getIp_personaDto().getIpn_personaNaturalDto().getIs_segundoNombre()}" />
+									<h:outputText styleClass="centrar ajustar"
+										value=" #{asociacion.getIu_usuarioDto().getIp_personaDto().getIpn_personaNaturalDto().getIs_primerApellido()}" />
+									<h:outputText styleClass="centrar ajustar"
+										value=" #{asociacion.getIu_usuarioDto().getIp_personaDto().getIpn_personaNaturalDto().getIs_segundoApellido()}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_asociacionPNAEE['Tabla.Encabezado.Correo.Corporativo']}"
+									styleClass="centrar25">
+									<h:outputText styleClass="centrar ajustar"
+										value="#{asociacion.getIs_correoElectronico()}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_asociacionPNAEE['Tabla.Encabezado.Celular.Corporativo']}"
+									styleClass="centrar10">
+									<h:outputText styleClass="centrar ajustar"
+										value="#{asociacion.getIs_celular()}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_asociacionPNAEE['Tabla.Encabezado.Estado.Asociacion']}"
+									styleClass="centrar10">
+									<ui:fragment>
+										<div class="row">
+											<div class="col-xs-12">
+												<h:outputText id="spanNo"
+													value="#{txt_asociacionPNAPJ['opcion.desasociar']}"
+													class="#{!asociacion.ib_estadoAsociacion ?  'textoRojo' : 'textoGris' }" />
+												<p:inputSwitch value="#{asociacion.ib_estadoAsociacion}"
+													valueChangeListener="#{beanAsociacionNaturalAEE.generarModalAsociacionUsuario(asociacion)}">
+
+													<p:ajax update="dlgConfirmativo"
+														oncomplete="PF('dlgConfirmativo').show()"
+														listener="#{beanAsociacionNaturalAEE.cargarVariable(asociacion)}"
+														render="formAsociarUsuarios:dataTableAsociadosEE:#{rowIndex}:spanNo formAsociarUsuarios:dataTableAsociadosEE:#{rowIndex}:spanSi" />
+												</p:inputSwitch>
+												<h:outputText id="spanSi"
+													value="#{txt_asociacionPNAPJ['opcion.asociar']}"
+													class="#{asociacion.ib_estadoAsociacion ?  'textoRojo' : 'textoGris' }" />
+											</div>
+										</div>
+									</ui:fragment>
+								</p:column>
+							</p:dataTable>
+							<br />
+							<div
+								class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+								<p:commandButton id="crearAsociacion" icon="icon-flecha-blanca"
+									iconPos="right"
+									styleClass="icon-btn pull-right btn-gradiente btn-rojo"
+									action="/pages/admon/asociarUsuariosAEE.jsf?faces-redirect=true"
+									value="#{txt_asociacionPNAPJ['btn.nueva.asociacion']}" />
+							</div>
+						</p:outputPanel>
+						<br />
+						<br />
+					</p:panel>
+					<br />
+					<br />
+				</h:form>
+			</div>
+		</div>
+		<!-- Modal Confirmativo Asociacion Usuario -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgConfirmativo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModaldlgConfirmativo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{beanAsociacionNaturalAEE.is_mensajeModalAsociacionUsuario}" />
+					</div>
+				</div>
+			</ui:define>
+			<br />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_asociacionPNAEE['btn.cancelar']}"
+							oncomplete="PF('dlgConfirmativo').hide()"
+							action="#{beanAsociacionNaturalAEE.consultarAsociados()}"
+							update="formAsociarUsuarios:dataTableAsociadosEE">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton oncomplete="PF('dlgConfirmativo').hide()"
+							valueChangeListener="#{beanAsociacionNaturalAEE.cambiarEstadoAsociacion()}"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_asociacionPNAEE['btn.aceptar']}"
+							action="#{beanAsociacionNaturalAEE.cambiarEstadoAsociacion()}"
+							update="formAsociarUsuarios:dataTableAsociadosEE">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_solicitudes_poderes['titulo.solicitudes.pendientes']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudesInternasPoderes.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_solicitudes_poderes['titulo.solicitudes.pendientes']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo"
+				value="#{txt_solicitudes_poderes['titulo.creacion.notificacion']}" />
+		</ui:include>
+
+		<div class="row espaciado-superior">
+			<div class="col-xs-12 col-sm-12 center">
+				<p:outputLabel id="labelTitulo" styleClass="titulo"
+					value="#{txt_solicitudes_poderes['titulo.notificacion']}" />
+			</div>
+		</div>
+
+		<div class="row espaciado-superior">
+			<div class="col-xs-12 col-sm-5 col-sm-offset-1">
+				<p:outputLabel id="labelNumeroPoder" styleClass="label-form"
+					for="numeroPoder"
+					value="#{txt_solicitudes_poderes['tabla.id.poder']}" />
+				<div class="ui-inputgroup">
+					<h:outputText id="numeroPoder" styleClass="mask-Alpha"
+						maxlength="50" required="false"
+						placeholder="#{txt_solicitudes_poderes['tabla.id.poder']}"
+						readonly="true" value="#{beanNotificacionPoder.is_idPoder}">
+					</h:outputText>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelNumeroPoder" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_solicitudes_poderes['detalle.tooltip.id.poder']}" />
+						</div>
+					</p:tooltip>
+				</div>
+			</div>
+
+			<div class="col-xs-12 col-sm-5 ">
+				<p:outputLabel id="labelEstadoPoder" styleClass="label-form"
+					for="estadoPoder"
+					value="#{txt_solicitudes_poderes['detalle.estado.poder']}" />
+				<div class="ui-inputgroup">
+					<h:outputText id="estadoPoder" styleClass="mask-Alpha"
+						maxlength="50" required="false"
+						placeholder="#{txt_solicitudes_poderes['detalle.estado.poder']}"
+						readonly="true"
+						value="#{beanNotificacionPoder.ip_parametros.is_xEstadoPoder}">
+					</h:outputText>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelEstadoPoder" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_solicitudes_poderes['detalle.tooltip.estado.poder']}" />
+						</div>
+					</p:tooltip>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row espaciado-superior">
+			<div class="col-xs-12 col-sm-5 col-sm-offset-1">
+				<p:outputLabel id="labelTipoPoder" styleClass="label-form"
+					for="tipoPoder"
+					value="#{txt_solicitudes_poderes['tabla.tipo.poder']}" />
+				<div class="ui-inputgroup">
+					<h:outputText id="tipoPoder" styleClass="mask-Alpha" maxlength="50"
+						required="false" placeholder="Tipo de poder" readonly="true"
+						value="#{beanNotificacionPoder.ip_parametros.is_xTipoPoder}">
+					</h:outputText>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelTipoPoder" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_solicitudes_poderes['detalle.tooltip.tipo.poder']}" />
+						</div>
+					</p:tooltip>
+				</div>
+			</div>
+
+			<div class="col-xs-12 col-sm-5">
+				<p:outputLabel id="labelNotariaOrigen" styleClass="label-form"
+					for="notariaOrigen"
+					value="#{txt_solicitudes_poderes['detalle.notaria.origen']}" />
+				<div class="ui-inputgroup">
+					<h:outputText id="notariaOrigen" styleClass="mask-Alpha"
+						maxlength="50" required="false"
+						placeholder="#{txt_solicitudes_poderes['detalle.notaria.origen']}"
+						readonly="true"
+						value="#{beanNotificacionPoder.iee_notariaDestino.is_nombreEntidadExterna}">
+					</h:outputText>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelNotariaOrigen"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_solicitudes_poderes['detalle.tooltip.notaria.origen']}" />
+						</div>
+					</p:tooltip>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row espaciado-superior">
+			<div class="col-xs-12 col-sm-5 col-sm-offset-1">
+				<p:outputLabel id="labelDiligenciaReconocimiento"
+					styleClass="label-form" for="diligenciaReconocimiento"
+					value="#{txt_solicitudes_poderes['detalle.diligencia.reconocimiento']}" />
+				<div class="ui-inputgroup">
+					<h:outputText id="diligenciaReconocimiento" styleClass="mask-Alpha"
+						maxlength="50" required="false"
+						placeholder="#{txt_solicitudes_poderes['detalle.diligencia.reconocimiento']}"
+						readonly="true"
+						value="#{beanNotificacionPoder.ip_parametros.is_diligenciaReconocimiento}">
+					</h:outputText>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelDiligenciaReconocimiento"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_solicitudes_poderes['detalle.diligencia.reconocimiento']}" />
+						</div>
+					</p:tooltip>
+				</div>
+			</div>
+		</div>
+
+		<div class="row espaciado-superior">
+			<div class="col-xs-12 col-sm-12">
+				<p:outputLabel id="labelnotificacionesExistentes"
+					styleClass="label-form" for="notificacionesExistentes"
+					value="#{txt_solicitudes_poderes['detalle.notificaciones.existentes']}" />
+				<div class="ui-inputgroup">
+					<p:inputTextarea id="notificacionesExistentes" rows="6"
+						autocomplete="off" cols="40"
+						counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+						autoResize="false"
+						styleClass="text-input border-completo tamano text-area-observaciones-existentes"
+						maxlength="2000" readonly="true"
+						placeholder="#{txt_solicitudes_poderes['detalle.observaciones.existentes']}"
+						value="#{beanNotificacionPoder.is_notificaciones}">
+						<p:keyFilter regEx="/[A-Za-z0-9\.\,\:\;\(\)\s]/i" />
+					</p:inputTextarea>
+					<p:tooltip for="labelnotificacionesExistentes"
+						value="#{txt_solicitudes_poderes['detalle.observaciones.existentes']}" />
+				</div>
+				<span class="help-block"> <p:message
+						for="labelnotificacionesExistentes" />
+				</span>
+			</div>
+		</div>
+		<h:form>
+			<div class="row espaciado-superior">
+				<div class="col-xs-12 col-sm-12">
+					<p:outputLabel id="labelObservacionesNotificacion"
+						styleClass="label-form" for="observacionesNotificacion"
+						value="#{txt_solicitudes_poderes['titulo.notificacion.agregar']}" />
+					<div class="ui-inputgroup">
+						<p:inputTextarea id="observacionesNotificacion" rows="6"
+							autocomplete="off" cols="40"
+							counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+							autoResize="false"
+							styleClass="text-input border-completo text-area-observaciones-existentes"
+							maxlength="4000" placeholder="Notificacion"
+							value="#{beanNotificacionPoder.is_notificacion}">
+						</p:inputTextarea>
+						<p:tooltip for="labelObservacionesNotificacion"
+							value="#{txt_solicitudes_poderes['titulo.notificacion']}" />
+					</div>
+					<span class="help-block"> <p:message
+							for="labelObservacionesNotificacion" />
+					</span>
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-xs-5 col-xs-offset-1">
+					<p:commandButton id="btn-atras" icon="icon-flecha-gris"
+						iconPos="right" styleClass="icon-btn pull-right btn-gris"
+						value="#{txt_solicitudes_poderes['boton.cancelar']}"
+						immediate="true"
+						action="/pages/personas/inicio.jsf?faces-redirect=true"
+						process="@this" />
+				</div>
+				<div class="col-xs-5 col-xs-offset-0">
+					<p:commandButton id="btnAsociar" iconPos="right" value="Aceptar"
+						styleClass="btn-gradiente icon-btn btn-rojo"
+						onclick="PF('modalSolicitudPendinteAceptacion').show()">
+					</p:commandButton>
+				</div>
+			</div>
+		</h:form>
+		<!-- Modal confirmacion actualizacion poder -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmacionNotificacionCreada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario"
+				value="formModalConfirmacionActualizacion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['mensaje.confirmacion.notificacion']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton type="submit"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Entendido']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								action="#{beanNotificacionPoder.redireccionarPaginaInicio}">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalSolicitudPendinteAceptacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario"
+				value="formModalRedireccionMatriculaAceptacion" />
+			<ui:define name="body-modal">
+
+				<div class="row espaciado-superior">
+					<div class="col-xs-12 col-sm-12 center">
+						<p:outputLabel id="labelTitulo"
+							value="#{txt_solicitudes_poderes['modal.notificacion.pregunta']}" />
+					</div>
+				</div>
+
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-10 col-xs-offset-1 col-sm-5 space-row">
+						<p:commandButton
+							value="#{txt_solicitudes_poderes['boton.cancelar']}"
+							class="btn-gris" oncomplete="PF('#{modalId}').hide()">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
+						<p:commandButton
+							value="#{txt_solicitudes_poderes['boton.aceptar']}"
+							class="btn-rojo btn-gradiente"
+							action="#{beanNotificacionPoder.guardarCambios}"
+							oncomplete="PF('#{modalId}').hide()">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();
+			});
+		</script>
+		<!-- Script que ejecuta el Keyfilter-->
+	</ui:define>
+</ui:composition>

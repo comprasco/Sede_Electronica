@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_solicitudes_poderes['titulo.solicitudes.pendientes.spcp']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudesInternasPoderes.css" />
+	    <h:outputStylesheet library="css" name="snr-se-administracion.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_solicitudes_poderes['subtitulo.solicitudes.internas']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo"
+				value="#{txt_solicitudes_poderes['titulo.solicitudes.pendientes.spcp']}" />
+		</ui:include>
+
+		<!-- Importancion de tipos de criterios de busqueda-->
+		<p:importEnum
+			type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTiposSolicitudesPoderes"
+			var="enumCriterioBusqueda" />
+
+		<ui:param name="solicitudCargue"
+			value="#{ beanCreacionSolicitudPendientePoder.is_tipoConsulta eq  enumCriterioBusqueda.SOLICITUDES_PENDIENTES_CARGUE_PODER.is_criterio}" />
+		<ui:param name="pendienteCorreccion"
+			value="#{ beanCreacionSolicitudPendientePoder.is_tipoConsulta eq enumCriterioBusqueda.SOLICITUDES_PENDIENTES_CORRECCION.is_criterio}" />
+		<ui:param name="pendienteAnulacion"
+			value="#{ beanCreacionSolicitudPendientePoder.is_tipoConsulta eq enumCriterioBusqueda.SOLICITUDES_PENDIENTES_ANULACION.is_criterio}" />
+		<h:form id="formSolicitud">
+			<ui:fragment rendered="#{solicitudCargue}">
+
+				<div class="row espaciado-superior">
+					<div class="col-xs-12 col-sm-12 center">
+						<p:outputLabel id="labelTitulo" styleClass="titulo"
+							value="#{txt_solicitudes_poderes['titulo.solicitudes.pendientes.spcp']}" />
+					</div>
+				</div>
+
+				<div class="row espaciado-superior">
+
+					<!-- Select de Tipo Poder -->
+					<div class="col-xs-12 col-sm-6">
+
+						<p:outputLabel styleClass="label-form" id="labelTipoPoder"
+							for="TipoPoder" value="#{txt_solicitudes_poderes['detalle.titulo.tipo.poder']}" />
+
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+
+						<p:selectOneMenu id="TipoPoder" filter="true"
+							filterMatchMode="contains" required="true"
+							converter="selectOneMenuConverter"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanCreacionSolicitudPendientePoder.ic_catalogoTipoPoder}">
+							<f:selectItems
+								value="#{beanCreacionSolicitudPendientePoder.ilc_catalogo}"
+								var="tipoPoder" itemLabel="#{tipoPoder.is_nombre}"
+								itemValue="#{tipoPoder}" />
+							<p:ajax event="change" update="@form"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();" />
+						</p:selectOneMenu>
+
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelTipoPoder" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_solicitudes_poderes['detalle.titulo.tipo.poder']}" />
+							</div>
+						</p:tooltip>
+
+						<span class="help-block"> <p:message for="TipoPoder" />
+						</span>
+					</div>
+
+
+					<!-- Select de Tipo Poder -->
+					<div class="col-xs-12 col-sm-6">
+
+						<p:outputLabel styleClass="label-form" id="labelEntidades"
+							for="entidades" value="#{txt_solicitudes_poderes['detalle.titulo.entidades']}" />
+
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+
+						<p:selectOneMenu id="entidades" filter="true"
+							filterMatchMode="contains" required="true"
+							converter="selectOneMenuConverter"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanCreacionSolicitudPendientePoder.iee_entidadEspecialOrigen}">
+							<f:selectItems
+								value="#{beanCreacionSolicitudPendientePoder.ilee_entidadesEspeciales}"
+								var="entidad" itemLabel="#{entidad.is_nombreEntidadExterna}"
+								itemValue="#{entidad}" />
+							<p:ajax event="change" update="@form"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();" />
+						</p:selectOneMenu>
+
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelEntidades" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_solicitudes_poderes['detalle.titulo.entidades']}" />
+							</div>
+						</p:tooltip>
+
+						<span class="help-block"> <p:message for="entidades" />
+						</span>
+					</div>
+
+
+					<div class="col-xs-12 col-sm-12">
+						<p:separator></p:separator>
+					</div>
+					<div class="col-xs-12 col-sm-12">
+						<p:outputLabel id="labelObservacion"
+							styleClass="label-form titulo-observaciones" for="observacion"
+							value="#{txt_solicitudes_poderes['detalle.titulo.observacion.solicitud']}" />
+						
+						<div class="ui-inputgroup tamaño-tabla">
+							<p:inputTextarea id="observacion" rows="6" autocomplete="off"
+								cols="100" required="true"
+								counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+								autoResize="false" 
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								styleClass="text-input border-completo tamano"
+								 maxlength="4000" placeholder="Observaciones"
+								value="#{beanCreacionSolicitudPendientePoder.ispp_solicitudes.is_observacion}">
+								<p:keyFilter regEx="/[A-Za-z0-9\.\,\:\;\(\)\s]/i" />
+							</p:inputTextarea>
+							<p:tooltip for="labelObservacion"
+								value="#{txt_solicitudes_poderes['detalle.titulo.observacion.solicitud']}" />
+						</div>
+						<span class="help-block"> <p:message
+								for="labelObservacion" />
+						</span>
+					</div>
+				</div>
+			</ui:fragment>
+
+			<div class="row">
+				<div class="col-xs-10 col-xs-offset-1 col-sm-5 space-row">
+					<p:commandButton value="#{txt_solicitudes_poderes['boton.cancelar']}"
+						class="btn-gris" oncomplete="PF('#{modalId}').hide()"
+						onclick="window.history.back();" >
+					</p:commandButton>
+				</div>
+				<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
+					<p:commandButton value="#{txt_solicitudes_poderes['boton.aceptar']}" 
+					class="btn-rojo btn-gradiente"
+						update="formSolicitud"
+						onclick="PF('modalConfirmacionSolicitud').show()" >
+					</p:commandButton>
+				</div>
+			</div>
+		</h:form>
+
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalConfirmacionSolicitud" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal" value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmacionSolicitud" />
+			<ui:define name="body-modal">
+
+				<div class="row espaciado-superior">
+					<div class="col-xs-12 col-sm-12 center">
+						<p:outputLabel id="labelTitulo" 
+							value="#{txt_solicitudes_poderes['modal.preguta.confirmacion']}" />
+					</div>
+				</div>
+
+			</ui:define>
+
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-10 col-xs-offset-1 col-sm-5 space-row">
+						<p:commandButton value="#{txt_solicitudes_poderes['boton.cancelar']}"
+							class="btn-gris" oncomplete="PF('#{modalId}').hide()">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
+						<p:commandButton value="#{txt_solicitudes_poderes['boton.aceptar']}" class="btn-rojo btn-gradiente"	>
+							<f:ajax
+								listener="#{beanCreacionSolicitudPendientePoder.agregarSolicitud}"
+								onstart="PF('blockUI-Loading').show();"
+								update="formSolicitud"  />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		
+		
+		
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalSolicitudCreadaExitosamente" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal" value="#{txt_solicitudes_poderes['modal.titulo.informacion']}" />
+			<ui:param name="formulario" value="formModalSolicitudCreadaExitosamente" />
+			<ui:define name="body-modal">
+
+				<div class="row espaciado-superior">
+					<div class="col-xs-12 col-sm-12 center">
+						<p:outputLabel id="labelTitulo" 
+							value="#{txt_solicitudes_poderes['mensaje.confirmacion.creacion']} " />
+					</div>
+				</div>
+
+			</ui:define>
+
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-xs-offset-4 col-sm-4 col-sm-offset-4">
+						<p:commandButton value="#{txt['boton.entendido']}" class="btn-rojo btn-gradiente"	action="/pages/personas/inicio.jsf?faces-redirect=true" >
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		
+
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();
+			});
+		</script>
+		<!-- Script que ejecuta el Keyfilter-->
+	</ui:define>
+</ui:composition>

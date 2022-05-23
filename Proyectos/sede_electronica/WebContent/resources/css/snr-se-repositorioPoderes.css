@@ -1,0 +1,126 @@
+
+.ui-button-icon-only .ui-icon {
+	top: 28% !important;
+	margin-top: -10px !important;
+	left: 8% !important;
+	margin-left: 0px !important;
+}
+
+.ui-inputgroup {
+	display: block;
+}
+
+.tamano-titulo {
+	font-size: 20px !important;
+}
+
+.tamano-subtitulo {
+	font-size: 16px !important;
+	color: #000000;
+}
+
+.textoRojo {
+	font-weight: bold;
+	color: #EB1F28;
+}
+
+.title{
+	display:flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.ui-confirm-dialog-message {
+    display: inline-block;
+    margin-top: 1px;
+    font-weight: 700;
+}
+
+.adjuntar-documentos {
+    margin-right: -17%;
+    margin-left: -17%;
+    text-align: center;
+}
+
+.centrar38 {
+	text-align: center !important;
+	width: 9% !important;
+}
+
+.centrar20 {
+	text-align: center !important;
+	width: 20% !important;
+}
+
+.centrar28 {
+	text-align: center !important;
+	width: 28% !important;
+}
+
+.centrar35 {
+	text-align: center !important;
+	width: 35% !important;
+}
+
+.boton-descarga {
+	background-color: transparent !important;
+	font-size: 30px !important;
+	border-color: transparent !important;
+	color: #770707 !important;
+}
+
+.boton-descarga:hover {
+	text-decoration: none !important;
+}
+
+.ui-dialog .ui-dialog-content {
+    position: relative;
+    border: 0;
+    padding: .5em 1em;
+    background: 0;
+    overflow: inherit;
+    zoom: 1;
+}
+
+div.ui-fileupload-content {
+    display: block !important;
+    flex-direction: column-reverse;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.documento-medio {
+	vertical-align: middle;
+}
+
+.predioConMatricula{
+	padding-right: 3%;
+    padding-left: 8%;
+}
+
+.predioSinMatricula{
+	padding-left: 7%;
+	padding-right: 30px;
+}
+
+.header {
+	background-image: linear-gradient(#EB1F28, #461A13) !important;
+	color: #FFFFFF !important;
+	font-size: 17px !important;
+	height: 24px;
+}
+
+.resumenPoder {
+	text-align: left;
+    padding-left: 16%;
+}
+
+.info-solicitud {
+    text-align: left;
+    padding-left: 25%;
+    display: block !important;
+}
+
+.btn-eliminar {
+    width: 58px !important;
+}

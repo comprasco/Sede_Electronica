@@ -1,0 +1,64 @@
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+	prefer="system">
+	<system
+		systemId="http://localhost/wsdl/consultartrazabilidad.wsdl"
+		uri="wsdl/consultartrazabilidad.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/consultarpazysalvotributario.wsdl"
+		uri="wsdl/consultarpazysalvotributario.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/consultaDatosRegistrales.wsdl"
+		uri="wsdl/consultaDatosRegistrales.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/consultarhistorialsolicitudespagadas.wsdl"
+		uri="wsdl/consultarhistorialsolicitudespagadas.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/controldigitalizacion.wsdl"
+		uri="wsdl/controldigitalizacion.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/entregaproducto.wsdl"
+		uri="wsdl/entregaproducto.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/gestionalertastitulares.wsdl"
+		uri="wsdl/gestionalertastitulares.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/gestioncuentacupos.wsdl"
+		uri='wsdl/gestioncuentacupos.wsdl' />
+	<system
+		systemId="http://localhost/wsdl/operacionesfinancieras.wsdl"
+		uri="wsdl/operacionesfinancieras.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/RRRMatriculas.wsdl"
+		uri="wsdl/RRRMatriculas.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/SBB_EE_AlertaTierras.wsdl"
+		uri="wsdl/SBB_EE_AlertaTierras.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/SBB_EE_GeneracionSolicitud.wsdl"
+		uri="wsdl/SBB_EE_GeneracionSolicitud.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/SDI_EE_HistorialNotificaciones.wsdl"
+		uri="wsdl/SDI_EE_HistorialNotificaciones.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/solicitudDeCopias.wsdl"
+		uri="wsdl/solicitudDeCopias.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/solicituddecorrecciones.wsdl"
+		uri="wsdl/solicituddecorrecciones.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/SUT_CB_ConsultaMigracionPort.wsdl"
+		uri="wsdl/SUT_CB_ConsultaMigracionPort.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/SUT_CO_EnvioDocumentos.wsdl"
+		uri="wsdl/SUT_CO_EnvioDocumentos.wsdl" />		
+	<system
+		systemId="http://localhost/wsdl/BS_SUT_CO_EnvioPoderes.wsdl"
+		uri="wsdl/BS_SUT_CO_EnvioPoderes.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/actualizacionMetadatosPoderes.wsdl"
+		uri="wsdl/actualizacionMetadatosPoderes.wsdl" />
+	<system
+		systemId="http://localhost/wsdl/consultaPoderes.wsdl"
+		uri="wsdl/consultaPoderes.wsdl" />
+
+</catalog>

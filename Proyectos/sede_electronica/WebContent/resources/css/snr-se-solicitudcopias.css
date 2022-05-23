@@ -1,0 +1,14 @@
+.subtitulosCriterios{
+	color: white;
+	text-align: center;
+	padding: 5px;
+}
+
+.tabla-fija-copias
+{
+	width:120% !important;
+}
+
+.columnaChiqui{
+	width: 70px !important;
+}

@@ -1,0 +1,97 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<div class="row">
+		<div class="col-xs-12">
+			<h:form id="formRolPermiso">
+				<div class="row">
+					<div class="col-xs-12 text-center py-20">
+						<h:outputText styleClass="titulo" id="nombreRolPermiso"
+							value="#{beanRolPermiso.getIs_tituloRolPermiso().equals('') ? txt_rolesPermisos['Seleccion.Vacio']: txt_rolesPermisos['Seleccion']} "></h:outputText>
+						<h:outputText class="titulo bold" id="tituloRolPermiso"
+							value="#{beanRolPermiso.getIs_tituloRolPermiso()}"></h:outputText>
+					</div>
+				</div>
+				<p:panel id="panelRolPermiso">
+					<div class="row">
+						<div class="col-xs-12 col-md-4">
+							<span class="col-xs-12 tituloRojo centrar-img">#{txt_rolesPermisos['Pestana.Roles']}</span>
+							<p:selectOneButton id="roles" styleClass="oneButton"
+								layout="responsive" columns="1"
+								value="#{beanRolPermiso.is_rolSeleccionado}">
+								<p:ajax listener="#{beanRolPermiso.refrescarPermisos}"
+									update="form:formRolPermiso:dataTableRolPermiso form:formRolPermiso:tituloRolPermiso form:formRolPermiso:nombreRolPermiso"
+									process="@all" onstart="PF('blockUI-Loading').show();"
+									onsuccess="PF('blockUI-Loading').hide();" />
+								<f:selectItems
+									value="#{beanRolPermiso.ilrb_listaRolBooleanoDto}" var="rol"
+									itemLabel="#{rol.is_nombreLargo}" itemValue="#{rol.is_id}" />
+							</p:selectOneButton>
+						</div>
+						<div class="col-xs-12 col-md-8">
+							<p:dataTable var="rolPermiso" id="dataTableRolPermiso"
+								value="#{beanRolPermiso.ilpb_listaPermisoBooleanoDto}"
+								responsive="true" widgetVar="rolPermisoTable" reflow="true"
+								styleClass="centrar-img" rowIndexVar="true"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								emptyMessage="#{txt_rolesPermisos['TablaVacia.RolPermiso']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								rowsPerPageTemplate="10">
+								<p:column
+									headerText="#{txt_rolesPermisos['Pestana.NombrePermiso']}">
+									<h:outputText id="nombrePermiso"
+										value="#{rolPermiso.is_nombreLargo}" />
+									<p:tooltip for="nombrePermiso"
+										value="#{rolPermiso.is_descripcion}" position="bottom" />
+								</p:column>
+								<p:column
+									headerText="#{txt_rolesPermisos['Pestana.PermisoDefecto']}">
+									<h:outputText id="permisoPorDefecto"
+										value="#{beanRolPermiso.impb_mapaPermisosBooleanos[rolPermiso].is_activoDefecto}" />
+								</p:column>
+								<p:column headerText="#{txt_rolesPermisos['Pestana.ActivoRol']}">
+									<p:inputSwitch id="estadoRolPermiso"
+										disabled="#{!beanRolPermiso.impb_mapaPermisosBooleanos[rolPermiso].ib_editable}"
+										value="#{beanRolPermiso.impb_mapaPermisosBooleanos[rolPermiso].ib_estado}" />
+									<p:tooltip for="estadoRolPermiso"
+										value="#{(!beanRolPermiso.impb_mapaPermisosBooleanos[rolPermiso].ib_editable) ? txt_rolesPermisos['Pestana.No.Editable'] : txt_rolesPermisos['Pestana.Editable']}"
+										position="bottom" />
+									<span class="help-block"> <p:message
+											for="estadoRolPermiso" />
+									</span>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</p:panel>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-2 text-center">
+						<p:commandButton
+							value="#{txt_rolesPermisos['Boton.DescartarCambios.Upper']}"
+							styleClass="btn-gris btn-login-gris">
+							<p:ajax listener="#{beanRolPermiso.cargarPermisos}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								update="formRolPermiso:dataTableRolPermiso" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-4 text-center">
+						<p:commandButton
+							value="#{txt_rolesPermisos['Boton.Guardar.Upper']}"
+							class="btn-rojo btn-gradiente">
+							<p:ajax listener="#{beanRolPermiso.cambiarActivos}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								update="dataTableRolPermiso" process="@form" />
+						</p:commandButton>
+					</div>
+				</div>
+			</h:form>
+		</div>
+	</div>
+</ui:composition>

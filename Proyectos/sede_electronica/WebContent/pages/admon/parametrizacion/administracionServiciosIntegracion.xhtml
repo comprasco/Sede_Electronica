@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_parametro['servicioIntegracion.titulo']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_parametro['banner.titulo']}" />
+			<ui:param name="imagen" value="img-parametrizacion" />
+			<ui:param name="subtitulo"
+				value="#{txt_parametro['servicioIntegracion.banner.subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/parametrizacion/administracionServiciosIntegracion.jsf" />
+		</ui:include>
+		<div class="container-fluid">
+			<h:form id="formServicioIntegracion">
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-xs-12 tituloPoliticas">
+						<p:outputLabel
+							value="#{txt_parametro['servicioIntegracion.titulo']}" />
+					</div>
+				</div>
+				<br />
+				<p:separator />
+				<br />
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<p:dataTable id="tablaServicioIntegraciones"
+							value="#{beanServicioIntegracion.ilsib_listaServiciosIntegracionesBooleanos}"
+							var="servicioIntegracion" widgetVar="tablaServicioIntegraciones"
+							reflow="true"
+							emptyMessage="#{txt_parametro['servicioIntegracion.tabla.vacio']}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							currentPageReportTemplate="{currentPage} / {totalPages}"
+							rowKey="#{servicioIntegracion.is_id}" stickyHeader="false">
+							<p:column styleClass="maxTexto"
+								headerText="#{txt_parametro['servicioIntegracion.tabla.nombre']}">
+								<p:outputLabel id="nombreServicioIntegracion"
+									value="#{servicioIntegracion.is_nombre}" />
+								<p:tooltip for="nombreServicioIntegracion"
+									value="#{servicioIntegracion.is_descripcion}" position="bottom" />
+							</p:column>
+							<p:column styleClass="maxTexto"
+								headerText="#{txt_parametro['servicioIntegracion.tabla.url']}">
+								<p:outputLabel id="urlServicioIntegracion"
+									value="#{servicioIntegracion.is_url}" />
+								<p:tooltip for="urlServicioIntegracion"
+									value="#{servicioIntegracion.is_url}" position="bottom" />
+							</p:column>
+							<p:column styleClass="tamano-columna-adm"
+								headerText="#{txt_parametro['servicioIntegracion.tabla.activo']}">
+								<p:outputLabel
+									value="#{(servicioIntegracion.ib_activo) ? txt_parametro['servicioIntegracion.tabla.si'] : txt_parametro['servicioIntegracion.tabla.no']}" />
+							</p:column>
+							<p:column styleClass="tamano-columna-adm"
+								headerText="#{txt_parametro['servicioIntegracion.tabla.accion']}">
+								<p:commandButton
+									value="#{txt_parametro['servicioIntegracion.tabla.boton']}"
+									styleClass="btn-rojo btn-gradiente"
+									update=":formModalServicioIntegracion"
+									onsuccess="PF('modalEditarServicioIntegracion').show(); cargarKeyfilters();">
+									<f:setPropertyActionListener value="#{servicioIntegracion}"
+										target="#{beanServicioIntegracion.isib_servicioIntegracionBooleanoSeleccionado}" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</h:form>
+		</div>
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalEditarServicioIntegracion" />
+			<ui:param name="tituloModal"
+				value="#{txt_parametro['servicioIntegracion.modal.titulo']}" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="formulario" value="formModalServicioIntegracion" />
+			<ui:define name="body-modal">
+				<div class="row text-left">
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel styleClass="label-form" for="nombre"
+									value="#{txt_parametro['servicioIntegracion.modal.label.nombre']}" />
+							</div>
+							<div class="col-xs-12">
+								<p:outputLabel id="nombre"
+									value="#{beanServicioIntegracion.isib_servicioIntegracionBooleanoSeleccionado.is_nombre}" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel styleClass="label-form" for="descripcion"
+									value="#{txt_parametro['servicioIntegracion.modal.label.descripcion']}" />
+							</div>
+							<div class="col-xs-12">
+								<p:outputLabel id="descripcion"
+									value="#{beanServicioIntegracion.isib_servicioIntegracionBooleanoSeleccionado.is_descripcion}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row text-left">
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel styleClass="label-form" for="url"
+									value="#{txt_parametro['servicioIntegracion.modal.label.url']}" />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText id="url"
+									value="#{beanServicioIntegracion.isib_servicioIntegracionBooleanoSeleccionado.is_url}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row text-left">
+					<div class="col-xs-12 col-sm-9">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel styleClass="label-form" for="espacioNombre"
+									value="#{txt_parametro['servicioIntegracion.modal.label.espacioNombre']}" />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText id="espacioNombre"
+									value="#{beanServicioIntegracion.isib_servicioIntegracionBooleanoSeleccionado.is_espacioNombre}" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-3">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel styleClass="label-form" for="activo"
+									value="#{txt_parametro['servicioIntegracion.modal.label.estado']}" />
+							</div>
+							<div class="col-xs-12">
+								<p:inputSwitch id="activo"
+									value="#{beanServicioIntegracion.isib_servicioIntegracionBooleanoSeleccionado.ib_activo}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 text-left">
+						<p:outputLabel styleClass="label-form" id="labelNombreServicio"
+							value="#{txt_parametro['servicioIntegracion.modal.label.nombreServicio']}" />
+					</div>
+					<div class="col-xs-12 text-left">
+						<p:inputText id="nombreServicio" class="mask-Alpha"
+							value="#{beanServicioIntegracion.isib_servicioIntegracionBooleanoSeleccionado.is_nombreServicio}" />
+					</div>
+					<br />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<p:separator />
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-1">
+						<p:commandButton id="btn-atras" icon="icon-flecha-gris"
+							iconPos="right" styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_parametro['boton.volver']}" immediate="true"
+							process="@this" oncomplete="PF('modalEditarServicioIntegracion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-4 col-md-offset-2">
+						<p:commandButton
+							value="#{txt_parametro['modal.boton']}"
+							class="btn-rojo btn-gradiente"
+							actionListener="#{beanServicioIntegracion.editarServicio}"
+							update="formServicioIntegracion:tablaServicioIntegraciones"
+							oncomplete="PF('#{modalId}').hide()">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

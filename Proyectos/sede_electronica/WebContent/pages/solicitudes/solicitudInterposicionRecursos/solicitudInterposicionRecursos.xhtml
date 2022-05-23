@@ -1,0 +1,1089 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css" name="snr-se-correcciones.css" />
+		<h:outputStylesheet library="css" name="snr-se-solicitudConsultas.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_interposicion_recursos['titulo']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_interposicion_recursos['titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_interposicion_recursos['subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/solicitudesInterposicionRecursos/solicitudInterposicionRecursos.jsf" />
+		</ui:include>
+		<p:panel id="panelInterposicionRecursos"
+			styleClass="panel-content no-border">
+			<!-- datos predio -->
+			<p:outputPanel id="datosConsulta"
+				rendered="#{beanInterposicionRecursos.ii_renderizarVistas eq 0}">
+				<h:form id="formSolicitante">
+					<div class="row">
+						<div class="col-sm-6">
+							<p:outputLabel id="labelInterposicion"
+								for="interposicionRecursos" styleClass="label-form tresPuntos"
+								value="#{txt_interposicion_recursos['titulo.interposicion']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="interposicionRecursos" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								converter="selectOneMenuConverter"
+								value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.idc_detalleCatalgoDto}">
+								<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+									itemValue="" />
+								<f:selectItems var="interposicionrecursos"
+									value="#{beanInterposicionRecursos.ildc_listaDetalleCatalogoDto}"
+									itemLabel="#{txt_interposicion_recursos[interposicionrecursos.is_codigoDescripcion]}"
+									itemValue="#{interposicionrecursos}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelSolicitante"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_interposicion_recursos['titulo.interposicion']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="interposicionRecursos" />
+							</span>
+						</div>
+						<div class="col-sm-6">
+							<p:outputLabel
+								value="#{txt_interposicion_recursos['mensaje.primero']}" />
+						</div>
+					</div>
+					<div class="row space-row">
+						<div class="col-xs-12">
+							<p:outputLabel
+								value="#{txt_interposicion_recursos['mensaje.segundo']}" />
+						</div>
+					</div>
+					<div class="row space-row">
+						<div class="col-xs-12 tituloPanel gradiente text-center space-row">
+							<h:outputText
+								value="#{txt_interposicion_recursos['titulo.consulta']}" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelNir" styleClass="label-form" for="nir"
+								value="#{txt_interposicion_recursos['consulta.nir']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="nir" styleClass="mask-AlphaNum" maxlength="20"
+									placeholder="#{txt_interposicion_recursos['consulta.nir']}"
+									value="#{beanInterposicionRecursos.is_nir}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNir" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_interposicion_recursos['consulta.nir']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="nir" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelNumeroTurno" styleClass="label-form"
+								for="numeroTurno"
+								value="#{txt_interposicion_recursos['consulta.turno']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="numeroTurno" styleClass="mask-AlphaNumGuion"
+									maxlength="30"
+									placeholder="#{txt_interposicion_recursos['consulta.turno']}"
+									value="#{beanInterposicionRecursos.is_numeroTurno}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNumeroTurno"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_interposicion_recursos['consulta.turno']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="numeroTurno" />
+							</span>
+						</div>
+					</div>
+					<p:separator />
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel id="labelSolicitante" for="solicitante"
+								styleClass="label-form tresPuntos"
+								value="#{txt_interposicion_recursos['calidad.solicitante']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="solicitante" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.is_solicitante}">
+								<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+									itemValue="" />
+								<f:selectItems
+									value="#{beanInterposicionRecursos.ilc_listaCatalogoInteresado}"
+									var="interesado"
+									itemLabel="#{txt_traslado_matricula[interesado.is_nombre]}"
+									itemValue="#{interesado.is_id}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelSolicitante"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_interposicion_recursos['calidad.solicitante']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="solicitante" />
+							</span>
+						</div>
+					</div>
+					<div class="row space-row">
+						<div class="col-xs-12 tituloPanel gradiente text-center space-row">
+							<h:outputText
+								value="#{txt_interposicion_recursos['titulo.solicitante']}" />
+						</div>
+					</div>
+					<div class="row space-row">
+						<div class="col-xs-12 col-md-4">
+							<p:outputLabel id="labelTipoPersona"
+								styleClass="label-form tresPuntos" for="tipoPersonaSelect"
+								value="#{txt_interposicion_recursos['tipoPersona']}" />
+							<p:selectOneMenu id="tipoPersonaSelect"
+								widgetVar="tipoPersonaSelect" disabled="true"
+								value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.ic_catalogoDto.is_codigoValor}">
+								<f:selectItems
+									value="#{beanInterposicionRecursos.ilc_listaTipoPersonas}"
+									var="tipoPersona"
+									itemLabel="#{tipoPersona.is_codigoValor eq 'N' ? txt_login['label.TipoPersonaNatural'] : txt_login['label.TipoPersonaJuridica']}"
+									itemValue="#{tipoPersona.is_codigoValor}" />
+							</p:selectOneMenu>
+							<p:tooltip styleClass="tooltipGeneral" for="labelTipoPersona"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_interposicion_recursos['tipoPersona']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="tipoPersonaSelect" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-md-4">
+							<p:outputLabel id="labelTipoDocumentoUsuario"
+								styleClass="label-form tresPuntos"
+								for="tipoDocumentoUsuarioSelect"
+								value="#{txt_interposicion_recursos['tipoDocumentoUsuario']}" />
+							<p:selectOneMenu id="tipoDocumentoUsuarioSelect"
+								widgetVar="tipoDocumentoUsuarioSelect" disabled="true"
+								value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.itd_tipoDocumentoDto.is_id}">
+								<f:selectItems
+									value="#{beanInterposicionRecursos.iltd_tiposDocumento}"
+									var="tipoDocumento" itemValue="#{tipoDocumento.is_id}"
+									itemLabel="#{tipoDocumento.is_nombre}" />
+							</p:selectOneMenu>
+							<p:tooltip styleClass="tooltipGeneral"
+								for="labelTipoDocumentoUsuario" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_interposicion_recursos['tipoDocumentoUsuario']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="tipoDocumentoUsuarioSelect" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-md-4">
+							<p:outputLabel id="labelNumeroDocLogin"
+								styleClass="label-form tresPuntos" for="numeroDocumento"
+								value="#{txt_interposicion_recursos['numeroDocumento']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="numeroDocumento"
+									styleClass="text-input border-completo" readonly="true"
+									placeholder="#{txt_interposicion_recursos['numeroDocumento']}"
+									value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.is_numeroDocumento}">
+								</p:inputText>
+								<span id="spanNumeroDocumento"
+									class="ui-inputgroup-addon ocultar"> <p:commandLink>
+										<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+										<p:ajax event="click"
+											onstart="limpiarCampo('numeroDocumento', 'spanNumeroDocumento');" />
+									</p:commandLink>
+								</span>
+								<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+									for="labelNumeroDocLogin" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.ic_catalogoDto.is_codigoValor ne 'N' and not empty beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.ic_catalogoDto.is_codigoValor ? txt_login['label.numeroDocumentoOrg'] : txt_login['label.NumeroDocumentoUsuario']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="numeroDocumento" />
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<p:outputPanel
+							rendered="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.ic_catalogoDto.is_codigoValor ne 'J'}">
+							<div class="col-xs-12 col-sm-3">
+								<p:outputLabel id="labelPrimerNombre"
+									styleClass="label-form tresPuntos" for="primerNombre"
+									value="#{txt_interposicion_recursos['primerNombre']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="primerNombre" readonly="true"
+										styleClass="text-input border-completo"
+										placeholder="#{txt_interposicion_recursos['primerNombre']}"
+										value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.ipn_personaNaturalDto.is_primerNombre}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelPrimerNombre"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_interposicion_recursos['primerNombre']}" />
+										</div>
+									</p:tooltip>
+									<span id="spanPrimerNombre" class="ui-inputgroup-addon ocultar">
+										<p:commandLink>
+											<p:graphicImage styleClass="img-x-size"
+												name="/img/x-roja.png" />
+											<p:ajax event="click"
+												onstart="limpiarCampo('formSolicitante:primerNombre', 'spanPrimerNombre');" />
+										</p:commandLink>
+									</span>
+								</div>
+								<span class="help-block"> <p:message for="primerNombre" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<p:outputLabel id="labelSegundoNombre"
+									styleClass="label-form tresPuntos" for="segundoNombre"
+									value="#{txt_interposicion_recursos['segundoNombre']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="segundoNombre" readonly="true"
+										styleClass="text-input border-completo"
+										placeholder="#{txt_interposicion_recursos['segundoNombre']}"
+										value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.ipn_personaNaturalDto.is_segundoNombre}">
+										<p:keyFilter regEx="/[a-zñ\s]/i" />
+										<p:ajax event="change"
+											onstart="mostrarLimpiar('formSolicitante:segundoNombre', 'spanSegundoNombre');" />
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelSegundoNombre"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_interposicion_recursos['segundoNombre']}" />
+										</div>
+									</p:tooltip>
+									<span id="spanSegundoNombre"
+										class="ui-inputgroup-addon ocultar"> <p:commandLink>
+											<p:graphicImage styleClass="img-x-size"
+												name="/img/x-roja.png" />
+											<p:ajax event="click"
+												onstart="limpiarCampo('formSolicitante:segundoNombre', 'spanSegundoNombre');" />
+										</p:commandLink>
+									</span>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<p:outputLabel id="labelPrimerApellido"
+									styleClass="label-form tresPuntos" for="primerApellido"
+									value="#{txt_interposicion_recursos['primerApellido']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="primerApellido"
+										styleClass="text-input border-completo" readonly="true"
+										placeholder="#{txt_interposicion_recursos['primerApellido']}"
+										value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.ipn_personaNaturalDto.is_primerApellido}">
+										<p:keyFilter regEx="/[a-zñ\s]/i" />
+										<p:ajax event="change"
+											onstart="mostrarLimpiar('formSolicitante:primerApellido', 'spanPrimerApellido');" />
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelPrimerApellido"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_interposicion_recursos['primerApellido']}" />
+										</div>
+									</p:tooltip>
+									<span id="spanPrimerApellido"
+										class="ui-inputgroup-addon ocultar"> <p:commandLink>
+											<p:graphicImage styleClass="img-x-size"
+												name="/img/x-roja.png" />
+											<p:ajax event="click"
+												onstart="limpiarCampo('formSolicitante:primerApellido', 'spanPrimerApellido');" />
+										</p:commandLink>
+									</span>
+								</div>
+								<span class="help-block"> <p:message for="primerApellido" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-3">
+								<p:outputLabel id="labelSegundoApellido"
+									styleClass="label-form tresPuntos" for="segundoApellido"
+									value="#{txt_interposicion_recursos['segundoApellido']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="segundoApellido" readonly="true"
+										styleClass="text-input border-completo" maxlength="50"
+										placeholder="#{txt_interposicion_recursos['segundoApellido']}"
+										value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.ipn_personaNaturalDto.is_segundoApellido}">
+										<p:keyFilter regEx="/[a-zñ\s]/i" />
+										<p:ajax event="change"
+											onstart="mostrarLimpiar('formSolicitante:segundoApellido', 'spanSegundoApellido');" />
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelSegundoApellido"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_interposicion_recursos['segundoApellido']}" />
+										</div>
+									</p:tooltip>
+									<span id="spanSegundoApellido"
+										class="ui-inputgroup-addon ocultar"> <p:commandLink>
+											<p:graphicImage styleClass="img-x-size"
+												name="/img/x-roja.png" />
+											<p:ajax event="click"
+												onstart="limpiarCampo('formSolicitante:segundoApellido', 'spanSegundoApellido');" />
+										</p:commandLink>
+									</span>
+								</div>
+							</div>
+						</p:outputPanel>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel id="labelGeneroNat" styleClass="label-form"
+								for="genero" value="#{txt_interposicion_recursos['genero']}" />
+							<p:selectOneMenu id="genero" disabled="true"
+								value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.ipn_personaNaturalDto.ic_catalogoTipoGenero.is_id}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems
+									value="#{beanInterposicionRecursos.cargarCatalogoTipoGenero()}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelGeneroNat" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_interposicion_recursos['genero']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="genero" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-8">
+							<p:outputLabel id="labelCorreoNat" styleClass="label-form"
+								for="correoNatural"
+								value="#{txt_interposicion_recursos['correoElectronico']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="correoNatural" readonly="true"
+									styleClass="text-input border-completo mask-Correo"
+									placeholder="#{txt['placeholder.FormatoCorreo']}"
+									value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.iu_usuarioDto.is_correoElectronico}">
+									<p:ajax event="change"
+										onstart="mostrarLimpiar('formCrearPersona:correoNatural', 'spanCorreoNat');" />
+									<f:validator validatorId="ValidarCorreoFormato" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelCorreoNat" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_interposicion_recursos['correoElectronico']}" />
+									</div>
+								</p:tooltip>
+								<span id="spanCorreoNat" class="ui-inputgroup-addon ocultar">
+									<p:commandLink>
+										<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+										<p:ajax event="click"
+											onstart="limpiarCampo('formCrearPersona:correoNatural', 'spanCorreoNat');" />
+									</p:commandLink>
+								</span>
+							</div>
+							<span class="help-block"> <p:message for="correoNatural" />
+							</span>
+						</div>
+					</div>
+
+					<p:outputPanel
+						rendered="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.ic_catalogoDto.is_codigoValor eq 'J'}">
+						<div class="col-xs-12">
+							<p:outputLabel id="labelRazonSocial"
+								styleClass="label-form tresPuntos" for="razonSocial"
+								value="#{txt_interposicion_recursos['razonSocial']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="razonSocial" disabled="true"
+									styleClass="text-input border-completo"
+									placeholder="#{txt_interposicion_recursos['razonSocial']}"
+									value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ip_personaDto.ipj_personaJuridicaDto.is_razonSocial}">
+									<p:keyFilter regEx="/[0-9a-z\s]/i" />
+									<p:ajax event="change"
+										onstart="mostrarLimpiar('formSolicitante:razonSocial', 'spanRazonSocial');" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelRazonSocial"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_interposicion_recursos['razonSocial']}" />
+									</div>
+								</p:tooltip>
+								<span id="spanRazonSocial" class="ui-inputgroup-addon ocultar">
+									<p:commandLink>
+										<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+										<p:ajax event="click"
+											onstart="limpiarCampo('formSolicitante:razonSocial', 'spanRazonSocial');" />
+									</p:commandLink>
+								</span>
+							</div>
+							<span class="help-block"> <p:message for="razonSocial" />
+							</span>
+						</div>
+					</p:outputPanel>
+					<div class="row">
+
+						<div class="col-xs-12 col-sm-4 col-sm-offset-4 space-row">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_interposicion_recursos['btn.buscar']}" ajax="false"
+								update="datosConsulta"
+								actionListener="#{beanInterposicionRecursos.validacionNIRTurno}" />
+						</div>
+					</div>
+					<p:fragment
+						rendered="#{beanInterposicionRecursos.ib_mostrar ne null and beanInterposicionRecursos.ib_mostrar}">
+						<div class="text-center">
+							<h:outputText styleClass="label-form"
+								value=" #{txt_interposicion_recursos['mensaje.busqueda']}" />
+							<br />
+							<h:outputText
+								value=" #{txt_interposicion_recursos['mensaje.busqueda.dos']}" />
+						</div>
+						<br />
+						<div class="row panel-seguimiento">
+							<p:dataTable var="lss_consulta" styleClass="table-center"
+								id="listaConsulta"
+								value="#{beanInterposicionRecursos.iss_seguimientoSolicitudesDto.ilssr_listaSeguimientoSolicitudesRespuestaDto}"
+								widgetVar="solicitudesTable" reflow="true"
+								emptyMessage="#{txt_interposicion_recursos['mensaje.MensajeVacio']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								stickyHeader="false">
+								<p:column
+									headerText="#{txt_interposicion_recursos['tabla.nir']}">
+									<h:outputText value="#{lss_consulta.is_nir}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_interposicion_recursos['tabla.turno']}">
+									<h:outputText value="#{lss_consulta.is_numeroTurno}"></h:outputText>
+								</p:column>
+								<p:column
+									headerText="#{txt_interposicion_recursos['tabla.actualTurno']}">
+									<h:outputText value="#{lss_consulta.is_faseActualTurno}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_interposicion_recursos['tabla.proceso']}">
+									<h:outputText value="#{lss_consulta.is_procesoTurno}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_interposicion_recursos['tabla.documento']}">
+									<h:outputText
+										value="#{lss_consulta.is_tipo} #{lss_consulta.is_numeroDocumento} -#{lss_consulta.is_fechaDocumento} #{lss_consulta.is_oficinaRegistro}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_interposicion_recursos['tabla.accion']}">
+									<p:commandButton styleClass="btn-rojo btn-gradiente"
+										value="#{txt_interposicion_recursos['tabla.btn']}"
+										update="formRegistroEncuentrado"
+										action="#{beanInterposicionRecursos.validarEtapaRecursos(lss_consulta)}">
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-4 col-sm-offset-4 space-row">
+								<p:commandButton
+									value="#{txt_interposicion_recursos['btn.limpiar']}"
+									styleClass="btn-gris" process="@none"
+									update="panelInterposicionRecursos"
+									action="#{beanInterposicionRecursos.limpiarDatos}">
+								</p:commandButton>
+							</div>
+						</div>
+					</p:fragment>
+				</h:form>
+			</p:outputPanel>
+			<!-- Cargue de archivos  -->
+			<p:outputPanel id="cargueSoportes"
+				rendered="#{beanInterposicionRecursos.ii_renderizarVistas eq 1}">
+				<div class="row">
+					<div class="col-xs-12 align-center">
+						<p:outputLabel id="labelSoporteCorrecciones"
+							styleClass="label-form text-center tamano-titulo"
+							value="#{txt_interposicion_recursos['tabs.soporte']}" />
+						<br /> <br />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 align-center">
+						<p:outputLabel
+							value="#{txt_suspension_temporal['text.info.docobligatorios']}" />
+						<br />
+						<p:outputLabel styleClass="label-form"
+							value="#{beanInterposicionRecursos.is_nombreDocumentosObligatorios}" />
+						<br /> <br />
+					</div>
+				</div>
+				<h:form id="formCargueArchivo">
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelTipoDocumental"
+								for="tipoDocumental"
+								value="#{txt_traslado_matricula['label.tipoDocumental']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="tipoDocumental" widgetVar="tipoDocumental"
+								filterMatchMode="contains" filter="true" required="true"
+								converter="selectOneMenuConverter"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								value="#{beanInterposicionRecursos.ist_soporteTransaccionDto.icd_catalogoDocumentoDto}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" noSelectionOption="true" />
+								<f:selectItems
+									value="#{beanInterposicionRecursos.ilcd_tipoDocumental}"
+									var="tipoDocumental" itemLabel="#{tipoDocumental.is_nombre}"
+									itemValue="#{tipoDocumental}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTipoDocumental"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_traslado_matricula['tooltipo.tipoDocumental']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="tipoDocumental" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelTurno"
+								for="turno"
+								value="#{txt_interposicion_recursos['numero.documento']}" />
+							<p:inputText id="turno" autocomplete="off" maxlength="20"
+								value="#{beanInterposicionRecursos.ist_soporteTransaccionDto.is_turno}"
+								placeholder="#{txt_interposicion_recursos['numero.documento']}">
+								<p:keyFilter regEx="/[0-9\-]/i" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTurno" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_interposicion_recursos['numero.documento']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="turno" />
+							</span>
+						</div>
+					</div>
+					<div class="row space-row">
+						<div class="col-xs-12 col-md-6">
+							<p:outputLabel id="labelFecha" styleClass="label-form"
+								for="fecha"
+								value="#{txt_interposicion_recursos['label.fechaDocumento']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:calendar id="fecha" readonlyInput="true" pattern="dd/MM/yyyy"
+								maxlength="10" locale="es" yearRange="1900:2200"
+								navigator="true"
+								placeholder="#{txt['placeholder.FormatoFecha']}"
+								styleClass="text-input-calendar" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								showOn="button"
+								value="#{beanInterposicionRecursos.ist_soporteTransaccionDto.id_fechaDocumento}">
+							</p:calendar>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelFecha" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_interposicion_recursos['label.fechaDocumento']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="fecha" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelArchivo"
+								for="cargaDocumentos"
+								value="#{txt_traslado_matricula['label.archivo']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:fileUpload id="cargaDocumentos" styleClass="cargar-archivo"
+								showButtons="false"
+								sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+								allowTypes="/(\.|\/)(pdf|PDF)$/"
+								fileUploadListener="#{beanInterposicionRecursos.cargarArchivo}"
+								auto="true" label="#{txt_persona['label.ExaminarArchivo']}"
+								process="@this" update="textoSalidaArchivo"
+								invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+								invalidFileMessage="#{txt_traslado_matricula['Mensaje.archivo.formatoInvalido']}">
+								<div class="col-xs-12 tamano-examinar">
+									<br />
+									<h:outputText id="textoSalidaArchivo" styleClass="text-input"
+										value="#{beanInterposicionRecursos.ist_soporteTransaccionDto.ia_archivoDto.is_nombreArchivo}" />
+								</div>
+							</p:fileUpload>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelArchivo" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_traslado_matricula['tooltip.archivo']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="cargaDocumentos" />
+							</span>
+						</div>
+					</div>
+					<div class="row space-row">
+						<div
+							class="col-xs-10 col-sm-4 col-xs-offset-1 col-sm-offset-4 space-row">
+							<p:commandButton
+								value="#{txt_traslado_matricula['label.agregar']}"
+								styleClass="btn-gradiente btn-rojo" type="submit"
+								actionListener="#{beanInterposicionRecursos.agregarTipoDocumental}"
+								process="formCargueArchivo" update="cargueSoportes"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();">
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="col-xs-12  align-center">
+						<p:dataTable var="documento" styleClass="centrar"
+							widgetVar="listaDocumentos" id="listaDocumentos" reflow="true"
+							rowIndexVar="index"
+							value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.ilst_soportesTransaccionCargadosDto}"
+							emptyMessage="#{txt_traslado_matricula['tabla.vacia.soporte']}"
+							stickyHeader="false">
+							<p:column
+								headerText="#{txt_traslado_matricula['label.tipoDocumental']}">
+								<h:outputText
+									value="#{documento.icd_catalogoDocumentoDto.is_nombre}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_interposicion_recursos['label.fecha']}">
+								<h:outputText value="#{documento.id_fechaDocumento}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_interposicion_recursos['label.nombre']}">
+								<h:outputText
+									value="#{documento.ia_archivoDto.is_nombreArchivo}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_interposicion_recursos['tabla.soporte.subir']}">
+								<p:commandLink
+									styleClass="#{documento.ib_desactivarBotonesCarga ? 'fa fa-check colorVerde' : 'fa fa-cloud-upload colorRojo' }"
+									disabled="#{documento.ib_desactivarBotonesCarga}">
+									<p:ajax
+										listener="#{beanInterposicionRecursos.cargarSeleccion(true,index)}"
+										update="formAccionArchivo"
+										onsuccess="PF('accionArchivo').show();" />
+								</p:commandLink>
+
+							</p:column>
+							<p:column
+								headerText="#{txt_interposicion_recursos['tabla.soporte.eliminar']}"
+								styleClass="text-center">
+								<p:commandLink styleClass="fa fa-trash-o colorRojo"
+									disabled="#{documento.ib_desactivarBotonesCarga}">
+									<p:ajax
+										listener="#{beanInterposicionRecursos.cargarSeleccion(false,index)}"
+										update="formAccionArchivo"
+										onsuccess="PF('accionArchivo').show();" />
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+						<br /> <br />
+					</div>
+				</h:form>
+				<div class="row">
+					<div
+						class="col-xs-10 col-sm-4 col-xs-offset-1 col-sm-offset-4 space-row">
+						<p:commandButton
+							value="#{txt_interposicion_recursos['tabs.boton.enviarSolicitud']}"
+							disabled="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.getSize() lt 1}"
+							action="#{beanInterposicionRecursos.finalizarTransaccion}"
+							styleClass="btn-gradiente btn-rojo">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:outputPanel>
+		</p:panel>
+		<!-- Modales -->
+		<!-- modal registro seleccionado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="registroEncuentrado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formRegistroEncuentrado" />
+			<ui:define name="body-modal">
+				<!-- Script que ejecuta el Keyfilter-->
+				<script type="text/javascript">
+					$(document).ready(function() {
+						cargarKeyfilters();
+					});
+				</script>
+				<!-- Script que ejecuta el Keyfilter-->
+				<div class="row space-row">
+					<div class="col-xs-12">
+						<p:dataTable var="lss_consulta" styleClass="table-center"
+							id="listaConsulta"
+							value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.issr_seguimientoSolicitudesRespuestaDto}"
+							widgetVar="solicitudesTable" reflow="true"
+							emptyMessage="#{txt_interposicion_recursos['mensaje.MensajeVacio']}"
+							stickyHeader="false">
+							<p:column headerText="#{txt_interposicion_recursos['tabla.nir']}">
+								<h:outputText value="#{lss_consulta.is_nir}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_interposicion_recursos['tabla.turno']}">
+								<h:outputText value="#{lss_consulta.is_numeroTurno}"></h:outputText>
+							</p:column>
+							<p:column
+								headerText="#{txt_interposicion_recursos['tabla.actualTurno']}">
+								<h:outputText value="#{lss_consulta.is_faseActualTurno}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_interposicion_recursos['tabla.proceso']}">
+								<h:outputText value="#{lss_consulta.is_procesoTurno}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_interposicion_recursos['tabla.documento']}">
+								<h:outputText
+									value="#{lss_consulta.is_tipo} #{lss_consulta.is_numeroDocumento} -#{lss_consulta.is_fechaDocumento} #{lss_consulta.is_oficinaRegistro}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel id="labelObservaciones" styleClass="label-form"
+							for="observaciones"
+							value="#{txt_interposicion_recursos['observaciones']}" />
+						<div class="ui-inputgroup">
+							<p:inputTextarea id="observaciones" maxlength="4000"
+								styleClass="text-input border-completo mask-AlphaNumEsp"
+								rows="6" cols="40" counter="mostrarContador" autoResize="false"
+								placeholder="#{txt_interposicion_recursos['observaciones']}"
+								value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.is_observaciones}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('formRegistroEncuentrado:observaciones', 'spanObservaciones');" />
+							</p:inputTextarea>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelObservaciones"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_interposicion_recursos['observaciones']}" />
+								</div>
+							</p:tooltip>
+							<h:outputText id="mostrarContador" />
+							<span id="spanObservaciones" class="ui-inputgroup-addon ocultar">
+								<p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('formRegistroEncuentrado:observaciones', 'spanObservaciones');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message for="observaciones" />
+						</span>
+					</div>
+				</div>
+				<div class="row text-center">
+					<div class="col-xs-12">
+						<h:outputText styleClass="label-form"
+							value="#{txt_interposicion_recursos['confirmacion']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-5 col-md-offset-1">
+						<p:commandButton styleClass="btn-gris text-center"
+							value="#{txt['boton.Cancelar.Upper']}"
+							oncomplete="PF('registroEncuentrado').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-5">
+						<p:commandButton styleClass="btn-rojo btn-gradiente icon-btn"
+							value="#{txt['boton.Aceptar.Upper']}"
+							actionListener="#{beanInterposicionRecursos.generarSolicitud}"
+							oncomplete="PF('registroEncuentrado').hide();">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- modal tamano archivos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="tamanoArchivos" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formTamanoArchivos" />
+			<ui:define name="body-modal">
+				<h:outputText
+					value="#{txt_interposicion_recursos['archivo.documento']}" />
+				<p:outputLabel styleClass="label-form"
+					value="#{beanInterposicionRecursos.is_nombreDocumentosObligatorios}" />
+				<h:outputText value="#{beanInterposicionRecursos.is_mensajeArchivo}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							oncomplete="PF('tamanoArchivos').hide();"
+							value="#{txt['boton.entendido']}"
+							update="panelInterposicionRecursos" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- 	Recuperar Transaccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="recuperarTransaccion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formRecuperar" />
+			<ui:define name="body-modal">
+				<h:outputText
+					value="#{txt_interposicion_recursos['modal.recuperar.titulo']}" />
+				<br />
+				<h:outputText
+					value="#{txt_interposicion_recursos['modal.recuperar.contenido']}" />
+				<br />
+				<h:outputText
+					value="#{txt_interposicion_recursos['modal.recuperar.pregunta']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-5 col-md-offset-1">
+						<p:commandButton styleClass="btn-gris text-center"
+							value="#{txt['boton.Cancelar.Upper']}"
+							action="#{beanInterposicionRecursos.descartarTransaccion}"
+							update="panelInterposicionRecursos">
+							<div class="col-xs-12 text-center">
+								<p:confirm header="#{txt['titulo.modal.confirmacion']}"
+									message="#{txt_interposicion_recursos['modal.recuperar.confirmar.contenido']}"
+									icon="pi pi-exclamation-triangle" />
+							</div>
+						</p:commandButton>
+						<p:confirmDialog
+							styleClass="box-solid box-danger text-center cerrarModal"
+							global="true" width="400" showEffect="fade" hideEffect="fade"
+							responsive="true">
+							<div class="row">
+								<div class="col-xs-12 col-md-5 col-md-offset-1">
+									<p:commandButton value="#{txt['boton.Cancelar.Upper']}"
+										type="button" styleClass="ui-confirmdialog-no btn-gris " />
+								</div>
+								<div class="col-xs-12 col-md-5">
+									<p:commandButton value="#{txt['boton.Aceptar.Upper']}"
+										type="button"
+										styleClass="ui-confirmdialog-yes  btn-rojo btn-gradiente" />
+								</div>
+							</div>
+						</p:confirmDialog>
+					</div>
+					<div class="col-xs-12 col-md-5">
+						<p:commandButton styleClass="btn-rojo btn-gradiente icon-btn"
+							value="#{txt['boton.Aceptar.Upper']}"
+							update="panelInterposicionRecursos"
+							oncomplete="PF('recuperarTransaccion').hide();">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+
+		<!-- 	accion archivo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="accionArchivo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formAccionArchivo" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_interposicion_recursos['label.carga1']}" />
+				<h:outputText
+					value=" #{beanInterposicionRecursos.ib_cargar ? txt_interposicion_recursos['label.carga.subir'] : txt_interposicion_recursos['label.carga.eliminar']}" />
+				<h:outputText value=" #{txt_interposicion_recursos['label.carga2']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							onsuccess="PF('accionArchivo').hide();PF('blockUI-Loading').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							actionListener="#{beanInterposicionRecursos.accionArchivo}"
+							update="cargueSoportes" onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('accionArchivo').hide();PF('blockUI-Loading').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- modal Inicio -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalInicio" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formInicio" />
+			<ui:define name="body-modal">
+				<h:outputText styleClass="label-form"
+					value="#{beanInterposicionRecursos.is_tituloDecreto}" />
+				<br />
+				<div class="text-left">
+					<h:outputText
+						value=" #{beanInterposicionRecursos.is_contenidoDecreto}" />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.entendido']}"
+							update="panelInterposicionRecursos"
+							actionListener="#{beanInterposicionRecursos.verificarTransaccion}"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();PF('modalInicio').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Error envio documentos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="errorEnvioDocumentos" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formErrorEnvioDocumentos" />
+			<ui:define name="body-modal">
+				<h:outputText
+					value="#{txt_interposicion_recursos['soporte.no.cargado']}" />
+				<br />
+				<h:outputText
+					value="#{txt_interposicion_recursos['soporte.no.cargado1']}" />
+				<h:outputText styleClass="fa fa-cloud-upload" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.entendido']}"
+							onsuccess="PF('errorEnvioDocumentos').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- pregunta finalizar solicitud -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="preguntarFinalizacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formPreguntarFinalizacion" />
+			<ui:define name="body-modal">
+				<h:outputText
+					value="#{txt_interposicion_recursos['label.pregunta']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							onsuccess="PF('preguntarFinalizacion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							actionListener="#{beanInterposicionRecursos.finalizarTransaccion}"
+							onsuccess="PF('preguntarFinalizacion').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 	Finalizar proceso -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="finalizarProceso" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formFinalizarProceso" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_interposicion_recursos['label.envio1']}" />
+				<h:outputText
+					value="#{beanInterposicionRecursos.itir_transaccionInterposicionRecursosDto.is_nir}" />
+				<h:outputText value=" #{txt_interposicion_recursos['label.envio2']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.entendido']}"
+							action="/pages/personas/inicio.jsf?faces-redirect=true" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 	PODER no cargado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="poderNoCargado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formPoderNoCargado" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_interposicion_recursos['modal.noPoder']}" />
+				<br />
+				<h:outputText styleClass="label-form" escape="false"
+					value="#{beanInterposicionRecursos.is_documentosFaltantes}" />
+				<br />
+				<h:outputText
+					value="#{txt_interposicion_recursos['modal.noPoder.pregunta']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.entendido']}"
+							onclick="PF('poderNoCargado').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modales -->
+	</ui:define>
+</ui:composition>

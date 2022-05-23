@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-aprobacionPersonaJuridica.css" />
+		<h:outputScript library="js" name="archivo.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_aprobacionPJ['AprobacionPersonaJuridica']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<p:importEnum
+			type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTiposMIME"
+			var="EnumTiposMIME" />
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_aprobacionPJ['AprobacionPersonaJuridica.titulo']}" />
+			<ui:param name="imagen" value="img-rolesPermisos" />
+			<ui:param name="subtitulo"
+				value="#{txt_aprobacionPJ['AprobacionPersonaJuridica.subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/aprobacionPersonaJuridica.jsf" />
+		</ui:include>
+		<div class="row">
+			<div class="col-xs-12">
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-sm-11 text-center">
+						<h:outputText styleClass="titulo bold" id="aprobacionPJ"
+							value="#{txt_aprobacionPJ['AprobacionPersonaJuridica.titulo.bold']}"></h:outputText>
+					</div>
+				</div>
+				<br />
+				<p:panel id="panelPJ">
+					<h:form>
+						<p:outputPanel id="panelSolicitudesPendientesAprobacion"
+							rendered="#{!beanAprobacionPersonaJuridica.ib_detalle}">
+							<div class="row space-row">
+								<div class="col-xs-2 col-xs-offset-10 text-right">
+									<p:commandButton icon="icon-actualizar"
+										actionListener="#{beanAprobacionPersonaJuridica.consultarUsuarios}"
+										update="panelPJ"
+										styleClass="icon-circle icon-input btn-gradiente icono_boton" />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:dataTable id="dataTableAprobarPJ"
+										value="#{beanAprobacionPersonaJuridica.ilu_listaUsuarioDto}"
+										var="aprobacion" responsive="true" styleClass="centrar"
+										widgetVar="dataTableAprobarPJ" rowIndexVar="true"
+										reflow="true"
+										paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+										currentPageReportTemplate="{currentPage} / {totalPages}"
+										emptyMessage="#{txt_aprobacionPJ['Tabla.vacia']}"
+										paginator="true" rows="10" paginatorPosition="bottom"
+										rowsPerPageTemplate="10"
+										filteredValue="#{beanAprobacionPersonaJuridica.il_filtroNitPJ}">
+										<f:facet name="header">
+											<p:outputPanel>
+												<h:outputText
+													value="#{txt_aprobacionPJ['Buscar.Documento']}" />
+												<p:inputText id="globalFilter"
+													onkeyup="PF('dataTableAprobarPJ').filter()" headerText="Id"
+													footerText="contains" styleClass="buscarDoc"
+													placeholder="#{txt_aprobacionPJ['Placeholder.Buscar.Documento']}" />
+											</p:outputPanel>
+										</f:facet>
+										<p:column filterStyle="display:none"
+											filterBy="#{aprobacion.ipj_personaJuridicaDto.is_razonSocial}"
+											headerText="#{txt_aprobacionPJ['Tabla.Encabezado.Razon.Social']}">
+											<h:outputText id="razonSocial"
+												value="#{aprobacion.ip_personaDto.ipj_personaJuridicaDto.is_razonSocial}" />
+											<p:tooltip for="razonSocial"
+												value="#{txt_aprobacionPJ['Tooltip.Razon.Social']}"
+												position="bottom" />
+										</p:column>
+										<p:column filterStyle="display:none"
+											filterBy="#{aprobacion.ip_personaDto.is_numeroDocumento}"
+											headerText="#{txt_aprobacionPJ['Tabla.Encabezado.Numero.Documento']}">
+											<h:outputText id="numeroDocumento"
+												value="#{aprobacion.ip_personaDto.is_numeroDocumento}" />
+											<p:tooltip for="numeroDocumento"
+												value="#{txt_aprobacionPJ['Tooltip.Numero.Documento']}"
+												position="bottom" />
+										</p:column>
+										<p:column
+											headerText="#{txt_aprobacionPJ['Tabla.Encabezado.Ver.Detalle']}">
+											<p:commandButton id="verDetalle"
+												onstart="PF('blockUI-Loading').show();"
+												oncomplete="PF('blockUI-Loading').hide();"
+												styleClass="btn-gradiente icon-btn btn-rojo tamano-ver"
+												actionListener="#{beanAprobacionPersonaJuridica.verDetalle(aprobacion)}"
+												value="#{txt_aprobacionPJ['Boton.Ver']}" update="panelPJ">
+											</p:commandButton>
+											<p:tooltip for="verDetalle"
+												value="#{txt_aprobacionPJ['Tooltip.Ver.Detalle']}"
+												position="bottom" />
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</p:outputPanel>
+						<p:outputPanel id="panelDetalle"
+							rendered="#{beanAprobacionPersonaJuridica.ib_detalle}">
+							<div class="row">
+								<div class="col-xs-12 text-center">
+									<h:outputText styleClass="titulo bold" id="detalleAprobacionPJ"
+										value="#{txt_aprobacionPJ['Titulo.Detalle']}"></h:outputText>
+								</div>
+							</div>
+							<br />
+							<div class="row space-row">
+								<div class="col-xs-12">
+									<div class="row">
+										<div class="col-xs-12 col-sm-4">
+											<p:outputLabel id="labelNitJur" styleClass="label-form"
+												for="nit" value="#{txt_persona['label.NumeroNit']}" />
+											<div class="ui-inputgroup">
+												<h:outputText id="nit"
+													styleClass="text-input border-completo panel-detalle"
+													value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.is_numeroDocumento}">
+												</h:outputText>
+											</div>
+											<span class="help-block"> <p:message for="nit" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-sm-8">
+											<p:outputLabel id="labelRazonSocial" styleClass="label-form"
+												for="razonSocial"
+												value="#{txt_persona['label.RazonSocial']}" />
+											<div class="ui-inputgroup">
+												<h:outputText id="razonSocial"
+													styleClass="text-input border-completo panel-detalle"
+													value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.ipj_personaJuridicaDto.is_razonSocial}">
+												</h:outputText>
+											</div>
+											<span class="help-block"> <p:message for="razonSocial" />
+											</span>
+										</div>
+									</div>
+									<br />
+									<div class="row">
+									
+										<div class="col-xs-12 col-sm-4">
+											<p:outputLabel id="labelTipoDocumento"
+												styleClass="label-form" for="tipoDocumento"
+												value="#{txt_persona['label.TipoDocumento']}" />
+											<div class="ui-inputgroup">
+												<h:outputText id="tipoDocumento"
+													styleClass="text-input border-completo panel-detalle"
+													value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+												</h:outputText>
+											</div>
+											<span class="help-block"> <p:message
+													for="tipoDocumento" />
+											</span>
+										</div>
+									
+										<div class="col-xs-12 col-md-4">
+											<p:outputLabel id="labelTipoOrganizJur"
+												styleClass="label-form" for="tipoOrganiz"
+												value="#{txt_persona['label.TipoOrganizacion']}" />
+											<div class="ui-inputgroup">
+												<h:outputText id="tipoOrganiz"
+													styleClass="text-input border-completo panel-detalle"
+													value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.ipj_personaJuridicaDto.ic_tipoCatalogoTipoOrganizacion.is_nombre}">
+												</h:outputText>
+											</div>
+											<span class="help-block"> <p:message for="tipoOrganiz" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-md-4">
+											<p:outputLabel id="labelCelularJur" styleClass="label-form"
+												for="celularJuridica"
+												value="#{txt_persona['label.NumeroCelular']}" />
+											<div class="ui-inputgroup">
+												<h:outputText id="celularJuridica"
+													styleClass="text-input border-completo panel-detalle"
+													value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.is_celular}">
+												</h:outputText>
+											</div>
+											<span class="help-block"> <p:message
+													for="celularJuridica" />
+											</span>
+										</div>
+									</div>
+									<br />
+								</div>
+								<div class="col-xs-12">
+									<div class="row">
+																				<div class="col-xs-12 col-md-4">
+											<p:outputLabel id="labelTelefonoJur" styleClass="label-form"
+												for="telefonoFijoJuridica"
+												value="#{txt_persona['label.TelefonoFijo']}" />
+											<div class="ui-inputgroup">
+												<h:outputText id="telefonoFijoJuridica"
+													styleClass="text-input border-completo panel-detalle"
+													value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.ipj_personaJuridicaDto.is_telefono}">
+												</h:outputText>
+											</div>
+											<span class="help-block"> <p:message
+													for="telefonoFijoJuridica" />
+											</span>
+										</div>
+										
+ 										<div class="col-xs-12 col-md-4">
+											<p:outputLabel id="labelPaisDireccionJur"
+												styleClass="label-form" for="paisJur"
+												value="#{txt_persona['label.Pais']}" />
+											<div class="ui-inputgroup">
+												<h:outputText id="paisJur"
+													styleClass="text-input border-completo panel-detalle"
+													value="#{beanAprobacionPersonaJuridica.consultarPais()}">
+												</h:outputText>
+											</div>
+											<span class="help-block"> <p:message for="paisJur" />
+											</span>
+										</div>
+										
+										<div class="col-xs-12 col-md-4">
+											<p:outputLabel id="labelRepresentanteJur"
+												styleClass="label-form" for="representante"
+												value="#{txt_persona['label.RepresentanteLegal']}" />
+											<div class="ui-inputgroup">
+												<h:outputText id="representante"
+													styleClass="text-input border-completo panel-detalle tresPuntos"
+													value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.ipj_personaJuridicaDto.getNombreRepresentanteLegal()}">
+												</h:outputText>
+											</div>
+											<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+												for="labelRepresentanteJur" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.ipj_personaJuridicaDto.getNombreRepresentanteLegal()}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="representante" />
+											</span>
+										</div>
+									</div>
+									<br />
+								</div>
+								<div class="col-xs-12">
+									<div class="row">									
+										<div class="col-xs-12 col-md-8">
+											<p:outputLabel id="labelDireccionJud" styleClass="label-form"
+												for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+												value="#{txt_persona['label.DireccionResidencia']}" />
+											<div class="ui-inputgroup">
+												<h:outputText
+													styleClass="text-input border-completo panel-detalle"
+													id="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+													value="#{beanAprobacionPersonaJuridica.mostrarDireccionCompleta()}" />
+											</div>
+											<span id="spanDireccionJur" class="help-block"> <p:message
+													for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}" />
+											</span>
+										</div>
+										
+										<div class="col-xs-12 col-md-4">
+											<p:outputLabel id="labelCorreoJur" styleClass="label-form"
+												for="correoJuridica"
+												value="#{txt_persona['label.CorreoElectronico']}" />
+											<div class="ui-inputgroup">
+												<h:outputText id="correoJuridica"
+													styleClass="text-input border-completo panel-detalle"
+													value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.is_correoElectronico}">
+												</h:outputText>
+											</div>
+											<span class="help-block"> <p:message
+													for="correoJuridica" />
+											</span>
+										</div>
+									</div>
+									<br />
+								</div>
+								<div class="col-xs-12">
+									<h:form class="row">
+										<div class="col-xs-12 col-sm-6">
+											<div class="row">
+												<p:outputLabel id="labelCargarCamaraComercio"
+													styleClass="label-form"
+													value="#{txt_persona['archivo.camara.label']}" />
+												<p:separator />
+												<div class="ui-inputgroup">
+													<p:commandButton id="archivoCamaraComercio" ajax="false"
+														icon="fa fa-download" iconPos="right"
+														styleClass="btn-gradiente icon-btn btn-rojo downloadAp"
+														value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.ipj_personaJuridicaDto.is_nombreDocumentoCamara}"
+														onclick="botonDescargaArchivo('#{beanAprobacionPersonaJuridica.is_valorArchivoCamaraComercio}','#{EnumTiposMIME.PDF.getIs_tipoMime()}','#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.ipj_personaJuridicaDto.is_nombreDocumentoCamara}')" />
+													<p:tooltip for="archivoCamaraComercio"
+														value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.ipj_personaJuridicaDto.is_nombreDocumentoRepresentante}" />
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-sm-6">
+											<div class="row">
+												<p:outputLabel id="labelCargarRepresentanteLegal"
+													styleClass="label-form"
+													value="#{txt_persona['archivo.representante.label']}" />
+												<p:separator />
+												<div class="ui-inputgroup">
+													<p:commandButton id="archivoRepresentanteLegal"
+														ajax="false"
+														styleClass="btn-gradiente icon-btn btn-rojo downloadAp"
+														icon="fa fa-download" iconPos="right"
+														value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.ipj_personaJuridicaDto.is_nombreDocumentoRepresentante}"
+														onclick="botonDescargaArchivo('#{beanAprobacionPersonaJuridica.is_valorArchivoRepresentanteLegal}','#{EnumTiposMIME.PDF.getIs_tipoMime()}','#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.ipj_personaJuridicaDto.is_nombreDocumentoRepresentante}')" />
+													<p:tooltip for="archivoRepresentanteLegal"
+														value="#{beanAprobacionPersonaJuridica.iu_usuarioSeleccionadoDto.ip_personaDto.ipj_personaJuridicaDto.is_nombreDocumentoRepresentante}" />
+												</div>
+											</div>
+										</div>
+									</h:form>
+									<br />
+								</div>
+							</div>
+							<br />
+							<br />
+							<div class="col-xs-12">
+								<p:outputLabel id="labelObservaciones" styleClass="label-form"
+									for="observaciones"
+									value="#{txt_administrador['label.Observaciones']}" />
+								<p:outputLabel styleClass="required-field"> *</p:outputLabel>
+								<div class="ui-inputgroup">
+									<p:inputTextarea id="observaciones" rows="5" required="true"
+										autocomplete="off" autoResize="false"
+										styleClass="text-input border-completo tamano"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										maxlength="1000" editable="false"
+										placeholder="#{txt_administrador['placeholder.Observaciones.Bloqueo']}"
+										value="#{beanAprobacionPersonaJuridica.ihsr_historialSolicitudRegistroDto.is_observaciones}">
+									</p:inputTextarea>
+									<h:outputText id="mostrarContadorExt" />
+									<p:tooltip for="labelObservaciones"
+										value="#{txt_administrador['tooltip.Observaciones']}" />
+								</div>
+								<span class="help-block"> <p:message for="observaciones" />
+								</span>
+							</div>
+							<div class="row space-row">
+								<div class="col-xs-12 text-center">
+									<p:outputPanel id="panelSwitch">
+										<h:outputText id="spanNo"
+											value="#{txt_aprobacionPJ['Boton.Rechazar']}"
+											class="#{!beanAprobacionPersonaJuridica.ib_switchAprobar ? 'textoRojo' : 'textoGris' }" />
+										<p:inputSwitch
+											value="#{beanAprobacionPersonaJuridica.ib_switchAprobar}">
+											<f:ajax
+												render="spanNo spanSi panelSwitch modalConfirmarSolicitud" />
+										</p:inputSwitch>
+										<h:outputText id="spanSi"
+											value="#{txt_aprobacionPJ['Boton.Aprobar']}"
+											class="#{beanAprobacionPersonaJuridica.ib_switchAprobar ?  'textoRojo' : 'textoGris' }" />
+									</p:outputPanel>
+								</div>
+							</div>
+							<div class="row space-row">
+								<div class="col-xs-12">
+									<p:separator />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-10 col-sm-5 col-xs-offset-1">
+									<p:commandButton id="btn-regresar"
+										actionListener="#{beanAprobacionPersonaJuridica.setIb_detalle(false)}"
+										update="panelPJ" styleClass="btn-gris"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();"
+										value="#{txt_aprobacionPJ['Boton.Volver']}" process="@this" />
+								</div>
+								<div class="col-xs-10 col-sm-5 col-xs-offset-1 col-sm-offset-0">
+									<p:commandButton id="btn-guardar" type="submit"
+										styleClass="btn-gradiente icon-btn btn-rojo"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="if (args &amp;&amp; !args.validationFailed) PF('confirmarSolicitud').show(); PF('blockUI-Loading').hide();"
+										process="@form" update="@form"
+										value="#{txt_aprobacionPJ['Boton.Guardar']}" />
+								</div>
+							</div>
+						</p:outputPanel>
+					</h:form>
+				</p:panel>
+			</div>
+		</div>
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarSolicitud" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="modalConfirmarSolicitud" />
+			<ui:define name="body-modal">
+				<div class="row space-row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_aprobacionPJ['Modal.Texto1']}" />
+						<h:outputText
+							value=" #{beanAprobacionPersonaJuridica.ib_switchAprobar ? txt_aprobacionPJ['Modal.Aprobar'] : txt_aprobacionPJ['Modal.Rechazar']}" />
+						<h:outputText value=" #{txt_aprobacionPJ['Modal.Texto2']}" />
+					</div>
+				</div>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-10 col-sm-5 col-xs-offset-1">
+						<p:commandButton id="btn-regresar"
+							oncomplete="PF('confirmarSolicitud').hide(); PF('blockUI-Loading').hide();"
+							styleClass="btn-gris" onstart="PF('blockUI-Loading').show();"
+							value="#{txt_aprobacionPJ['Boton.Cancelar.Confirmacion']}" />
+					</div>
+					<div class="col-xs-10 col-sm-5 col-xs-offset-1 col-sm-offset-0">
+						<p:commandButton id="btn-guardar"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();"
+							styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_aprobacionPJ['Boton.Aceptar.Confirmacion']}">
+							<p:ajax
+								listener="#{beanAprobacionPersonaJuridica.definirSolicitud}"
+								update="panelPJ" onsuccess="PF('confirmarSolicitud').hide();" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

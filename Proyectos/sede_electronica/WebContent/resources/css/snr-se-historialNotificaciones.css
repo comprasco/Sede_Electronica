@@ -1,0 +1,19 @@
+.centrar {
+	vertical-align: middle;
+}
+
+.botonAsunto {
+	width: 34px !important;
+}
+
+.estilo-boton-asunto {
+	width: 58px !important;
+}
+
+.tituloTamano{
+	font-size: 18px !important;
+}
+
+.seleccionPagina{
+	width: 45px !important;
+}

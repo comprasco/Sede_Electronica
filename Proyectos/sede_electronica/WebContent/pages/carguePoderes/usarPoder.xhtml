@@ -1,0 +1,864 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-solicitudConsultas.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css" name="snr-se-administracion.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_repositorioPoderes['RepositorioPoderes']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_repositorioPoderes['titulo.usar']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_repositorioPoderes['titulo.usar']}" />
+			<ui:param name="urlVista" value="/pages/carguePoderes/usarPoder.jsf" />
+		</ui:include>
+		<f:metadata>
+			<f:viewParam name="poder" value="#{beanUsarPoder.is_detalleId}" />
+			<f:viewParam name="docname" value="#{beanUsarPoder.is_docname}" />
+			<f:event type="preRenderView"
+				listener="#{beanUsarPoder.valorParametro}" />
+		</f:metadata>
+		<div class="row space-row">
+			<div class="col-xs-12 text-center">
+				<h:outputText styleClass="label-form text-center titulo"
+					value="#{txt_repositorioPoderes['titulo.usar']}" />
+			</div>
+		</div>
+		<h:form id="FormUsoPoder">
+			<div class="row">
+				<div class="col-sm-6">
+					<p:outputLabel id="labelNumPoder" for="numPoder"
+						styleClass="label-form tresPuntos"
+						value="#{txt_repositorioPoderes['num.poder']}" />
+					<div class="ui-inputgroup">
+						<p:inputText id="numPoder"
+							styleClass="text-input border-completo caja-completo"
+							readonly="true"
+							placeholder="#{txt_repositorioPoderes['num.poder']}"
+							value="#{beanUsarPoder.ip_poderDto.is_did} - #{beanUsarPoder.ip_poderDto.is_dDocName}">
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('numPoder', 'spanNumPoder');" />
+						</p:inputText>
+						<span id="spanNumPoder" class="ui-inputgroup-addon ocultar">
+							<p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('numPoder', 'spanNumPoder');" />
+							</p:commandLink>
+						</span>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelNumPoder" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_repositorioPoderes['num.poder']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<span class="help-block"> <p:message for="numPoder" />
+					</span>
+				</div>
+				<div class="col-sm-6">
+					<p:outputLabel id="labelEstadoPoder" for="estadoPoder"
+						styleClass="label-form tresPuntos"
+						value="#{txt_repositorioPoderes['estado.poder']}" />
+					<div class="ui-inputgroup">
+						<p:inputText id="estadoPoder"
+							styleClass="text-input border-completo caja-completo"
+							readonly="true"
+							placeholder="#{txt_repositorioPoderes['estado.poder']}"
+							value="#{beanUsarPoder.ip_poderDto.is_estadoPoder}">
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('estadoPoder', 'spanEstadoPoder');" />
+						</p:inputText>
+						<span id="spanEstadoPoder" class="ui-inputgroup-addon ocultar">
+							<p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('estadoPoder', 'spanEstadoPoder');" />
+							</p:commandLink>
+						</span>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelEstadoPoder" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_repositorioPoderes['estado.poder']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<span class="help-block"> <p:message for="estadoPoder" />
+					</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<p:outputLabel id="labelTipoPoder" for="tipoPoder"
+						styleClass="label-form tresPuntos"
+						value="#{txt_repositorioPoderes['detalle.tipo.poder']}" />
+					<div class="ui-inputgroup">
+						<p:inputText id="tipoPoder"
+							styleClass="text-input border-completo caja-completo"
+							readonly="true"
+							placeholder="#{txt_repositorioPoderes['detalle.tipo.poder']}"
+							value="#{beanUsarPoder.ip_poderDto.ic_tipoPoder.is_nombre}">
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('tipoPoder', 'spanTipoPoder');" />
+						</p:inputText>
+						<span id="spanTipoPoder" class="ui-inputgroup-addon ocultar">
+							<p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('tipoPoder', 'spanTipoPoder');" />
+							</p:commandLink>
+						</span>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelTipoPoder" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['detalle.tipo.poder']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<span class="help-block"> <p:message for="tipoPoder" />
+					</span>
+				</div>
+				<div class="col-sm-6">
+					<p:outputLabel id="labelNotariaOrigen" for="notariaOrigen"
+						styleClass="label-form tresPuntos"
+						value="#{txt_repositorioPoderes['notaria.origen']}" />
+					<div class="ui-inputgroup">
+						<p:inputText id="notariaOrigen"
+							styleClass="text-input border-completo caja-completo"
+							readonly="true"
+							placeholder="#{txt_repositorioPoderes['notaria.origen']}"
+							value="#{beanUsarPoder.ip_poderDto.is_idNotariaOrigen}">
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('notariaOrigen', 'spanNotariaOrigen');" />
+						</p:inputText>
+						<span id="spanNotariaOrigen" class="ui-inputgroup-addon ocultar">
+							<p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('notariaOrigen', 'spanNotariaOrigen');" />
+							</p:commandLink>
+						</span>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelNotariaOrigen"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['notaria.origen']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<span class="help-block"> <p:message for="notariaOrigen" />
+					</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<p:outputLabel id="labelDiligenciaReconocimiento"
+						for="diligenciaReconocimiento" styleClass="label-form tresPuntos"
+						value="#{txt_repositorioPoderes['diligencia.reconocimiento']}" />
+					<div class="ui-inputgroup">
+						<p:inputText id="diligenciaReconocimiento"
+							styleClass="text-input border-completo caja-completo"
+							readonly="true"
+							placeholder="#{txt_repositorioPoderes['diligencia.reconocimiento']}"
+							value="#{beanUsarPoder.ip_poderDto.is_diligenciaReconocimiento}">
+							<p:ajax event="change"
+								onstart="mostrarLimpiar('diligenciaReconocimiento', 'spanDiligenciaReconocimiento');" />
+						</p:inputText>
+						<span id="spanDiligenciaReconocimiento"
+							class="ui-inputgroup-addon ocultar"> <p:commandLink>
+								<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								<p:ajax event="click"
+									onstart="limpiarCampo('diligenciaReconocimiento', 'spanDiligenciaReconocimiento');" />
+							</p:commandLink>
+						</span>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelDiligenciaReconocimiento"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['diligencia.reconocimiento']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<span class="help-block"> <p:message
+							for="diligenciaReconocimiento" />
+					</span>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<p:outputLabel id="labelTipoDocPoderdante" for="tipoDocPoderdante"
+						styleClass="label-form tresPuntos"
+						value="#{txt_repositorioPoderes['usar.tipo.uso']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<p:selectOneMenu id="tipoDocPoderdante" required="true"
+						requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+						value="#{beanUsarPoder.is_tipoPoder}">
+						<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}" />
+						<f:selectItems var="tipoDoc"
+							value="#{beanUsarPoder.ileup_listaEnumUsosPoder}"
+							itemLabel="#{txt_repositorioPoderes[tipoDoc.is_nombreVisible]}"
+							itemValue="#{tipoDoc.is_codigo}" />
+						<p:ajax update="@form" process="@this"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();"
+							listener="#{beanUsarPoder.cargarTipoPoder}" />
+					</p:selectOneMenu>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelTipoDocPoderdante"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel value="#{txt_repositorioPoderes['usar.tipo.uso']}" />
+						</div>
+					</p:tooltip>
+					<span class="help-block"> <p:message for="tipoDocPoderdante" />
+					</span>
+				</div>
+			</div>
+			<!-- Tramites para anular -->
+			<ui:fragment rendered="#{beanUsarPoder.ib_anulacion}">
+				<div class="row">
+					<div class="col-sm-12">
+						<p:outputLabel id="labelTipoUsosPoder" for="tipoUsosPoder"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['usar.tipo.anulacion.tramite']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<p:selectOneMenu id="tipoUsosPoder" required="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanUsarPoder.is_tipoPoderTramitar}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}" />
+							<f:selectItems var="tipoDoc"
+								value="#{beanUsarPoder.ileup_listaEnumUsosPoder}"
+								itemLabel="#{txt_repositorioPoderes[tipoDoc.is_nombreVisible]}"
+								itemValue="#{tipoDoc.is_codigo}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="tipoUsosPoder" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['usar.tipo.uso']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message
+								for="tipoDocPoderdante" />
+						</span>
+					</div>
+				</div>
+			</ui:fragment>
+
+			<ui:fragment rendered="#{beanUsarPoder.ib_mostrarUsoParcial}">
+				<div class="row">
+					<div class="col-sm-12">
+						<p:outputLabel id="labelTipoUsosParcial" for="tipoUsosParcial"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['usar.tipo.parcial']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<p:selectOneMenu id="tipoUsosParcial" required="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanUsarPoder.is_tipoPoder}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}" />
+							<f:selectItem
+								itemLabel="#{txt_repositorioPoderes['tipo.parcial.folio']}"
+								itemValue="FOLIO_NMATRICULA" />
+							<f:selectItem
+								itemLabel="#{txt_repositorioPoderes['tipo.parcial.disposicion']}"
+								itemValue="FACULTAD_DISPOSICION" />
+							<f:selectItem
+								itemLabel="#{txt_repositorioPoderes['tipo.parcial.dominio']}"
+								itemValue="LIMITACION_DOMINIO" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelTipoUsosParcial"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['usar.tipo.parcial']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="tipoUsosParcial" />
+						</span>
+					</div>
+				</div>
+			</ui:fragment>
+			<div class="row">
+				<div class="col-sm-12">
+					<p:outputLabel id="labelObservacionesBasico"
+						for="observacionesBasico" styleClass="label-form tresPuntos"
+						value="#{txt_repositorioPoderes['agregar.observaciones']} #{(beanUsarPoder.is_tipoObservacion eq '')?'':txt_repositorioPoderes[beanUsarPoder.is_tipoObservacion]}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputTextarea id="observacionesBasico" rows="6"
+							autocomplete="off" cols="100" autoResize="true" required="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							styleClass="text-input border-completo tamano" maxlength="4000"
+							placeholder="#{txt_repositorioPoderes['agregar.observaciones.placeholder']}"
+							value="#{beanUsarPoder.is_observacion}">
+						</p:inputTextarea>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelObservacionesBasico"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['agregar.observaciones']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<span class="help-block"> <p:message
+							for="observacionesBasico" />
+					</span>
+				</div>
+			</div>
+			<ui:fragment rendered="#{beanUsarPoder.ib_mostrarAnulacion}">
+				<div class="row">
+					<p:outputPanel id="cargaDePoder">
+						<div class="col-xs-12">
+							<p:dataTable var="cargaDocumentoPoder"
+								widgetVar="paramsCargaDocumentoPoder" id="cargarPoder"
+								emptyMessage="#{txt_repositorioPoderes['Tabla.vacia.DocumentoPoder']}"
+								value="#{beanUsarPoder.ilcdf_cargarDocumentoPoderDto}"
+								reflow="true" rowIndexVar="index" stickyHeader="false">
+								<p:column
+									headerText="#{txt_repositorioPoderes['header.DocumentosSolicitados']}"
+									styleClass="centrar20 documento-medio">
+									<h:outputText
+										value="#{cargaDocumentoPoder.icd_catalogoDocumentoDto.is_nombre}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['header.Adjuntar']}"
+									styleClass="centrar35 documento-medio">
+									<div class="ui-inputgroup">
+										<h:form>
+											<p:fileUpload
+												id="certificado${cargaDocumentoPoder.icd_catalogoDocumentoDto.is_nombre}"
+												styleClass="cargar-archivo" showButtons="false"
+												sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+												allowTypes="/(\.|\/)(pdf|PDF)$/"
+												disabled="#{beanUsarPoder.ib_mostrarArchivo or cargaDocumentoPoder.ib_desactivarBotonesCarga}"
+												fileUploadListener="#{beanUsarPoder.generarPoderCargado}"
+												auto="true"
+												label="#{txt_repositorioPoderes['boton.CargarArchivo']}"
+												process="@this"
+												invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+												invalidFileMessage="#{txt_cuentaCupo['Mensaje.archivo.formatoInvalido']}"
+												update="FormUsoPoder:cargarPoder">
+												<f:attribute name="foo" value="${cargaDocumentoPoder}" />
+												<div class="col-xs-12 tamano-examinar">
+													<br />
+													<h:outputText id="textoSalidaArchivo"
+														styleClass="text-input"
+														value="#{cargaDocumentoPoder.ia_archivoDto.is_nombreArchivo}" />
+												</div>
+											</p:fileUpload>
+										</h:form>
+									</div>
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['header.CargarArchivos']}"
+									styleClass="centrar20 documento-medio">
+									<p:commandButton
+										value="#{txt_repositorioPoderes['boton.Validar']}"
+										disabled="#{cargaDocumentoPoder.ia_archivoDto eq null}"
+										styleClass="btn-gradiente btn-rojo">
+										<p:ajax listener="#{beanUsarPoder.validarArchivo}" />
+									</p:commandButton>
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['header.Estado']}"
+									styleClass="centrar20 documento-medio">
+									<p:outputPanel
+										rendered="#{cargaDocumentoPoder.ib_desactivarBotonesCarga ne null and cargaDocumentoPoder.ib_desactivarBotonesCarga}">
+										<p:graphicImage name="/iconos/check-verde.png" />
+										<br />
+										<h:outputText
+											value="#{txt_repositorioPoderes['Mensaje.ArchivoListoCargarse']}" />
+									</p:outputPanel>
+									<p:outputPanel
+										rendered="#{cargaDocumentoPoder.ib_desactivarBotonesCarga ne null and !cargaDocumentoPoder.ib_desactivarBotonesCarga}">
+										<p:graphicImage name="/iconos/advertencia.png" />
+										<br />
+										<h:outputText
+											value="#{txt_repositorioPoderes['Mensaje.ArchivoNoCargado']}" />
+									</p:outputPanel>
+								</p:column>
+							</p:dataTable>
+							<br /> <br />
+						</div>
+						<br />
+					</p:outputPanel>
+				</div>
+			</ui:fragment>
+			<div class="row space-row">
+				<div class="col-sm-12">
+					<p:outputLabel id="labelObservacionesExistentes"
+						for="observacionesBasico" styleClass="label-form tresPuntos"
+						value="#{txt_repositorioPoderes['observaciones.existente']}" />
+					<div class="ui-inputgroup">
+						<p:inputTextarea id="observacionesExistentes" rows="4"
+							autocomplete="off" autoResize="true" readonly="true"
+							styleClass="text-input border-completo tamano"
+							placeholder="#{txt_repositorioPoderes['observaciones.existente']}"
+							value="#{beanUsarPoder.ip_poderDto.getIlop_listaObservacionesPoderDtoTexto()}">
+						</p:inputTextarea>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelObservacionesExistentes"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['observaciones.existente']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<span class="help-block"> <p:message
+							for="observacionesExistentes" />
+					</span>
+				</div>
+			</div>
+			<p:outputPanel styleClass="space-row"
+				rendered="#{beanUsarPoder.ib_revocatoria or beanUsarPoder.ib_mostrarBtnApoderado}">
+				<ui:fragment rendered="#{!beanUsarPoder.ib_mostrarBtnApoderado}">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable var="poderdantes" styleClass="table-center"
+								id="listaPoderdantes"
+								value="#{beanUsarPoder.ip_poderDto.ilapa_listaPoderdantes}"
+								reflow="true"
+								emptyMessage="#{txt_repositorioPoderes['mensaje.vacio']}"
+								paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}"
+								stickyHeader="false">
+								<p:column styleClass="centrar"
+									headerText="#{txt_repositorioPoderes['usar.poderdantes.seleccion']}">
+									<p:selectBooleanCheckbox value="#{poderdantes.ib_seleccion}"></p:selectBooleanCheckbox>
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['usar.poderdantes.nombre']}">
+									<h:outputText value="#{poderdantes.is_nombre}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['usar.poderdantes.tipo.doc']}">
+									<h:outputText value="#{poderdantes.is_tipoDocumento}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_repositorioPoderes['usar.poderdantes.num.doc']}">
+									<h:outputText value="#{poderdantes.is_numeroDocumento}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</ui:fragment>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:dataTable var="apoderados" styleClass="table-center"
+							id="listaApoderados"
+							value="#{beanUsarPoder.ip_poderDto.ilapa_listaApoderados}"
+							reflow="true"
+							emptyMessage="#{txt_repositorioPoderes['mensaje.vacio']}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							currentPageReportTemplate="{currentPage} / {totalPages}"
+							stickyHeader="false">
+							<p:column styleClass="centrar"
+								headerText="#{(beanUsarPoder.ib_mostrarBtnApoderado)?txt_repositorioPoderes['usar.apoderados.sustituir']:txt_repositorioPoderes['usar.apoderados.seleccion']}">
+								<p:selectBooleanCheckbox
+									rendered="#{apoderados.ib_seleccion ne null}"
+									value="#{apoderados.ib_seleccion}">
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column
+								headerText="#{txt_repositorioPoderes['usar.apoderados.nombre']}">
+								<h:outputText value="#{apoderados.is_nombre}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_repositorioPoderes['usar.apoderados.tipo.doc']}">
+								<h:outputText value="#{apoderados.is_tipoDocumento}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_repositorioPoderes['usar.apoderados.num.doc']}">
+								<h:outputText value="#{apoderados.is_numeroDocumento}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<ui:fragment rendered="#{beanUsarPoder.ib_mostrarBtnApoderado}">
+					<div class="row">
+						<div class="col-sm-4 col-sm-offset-8">
+							<p:commandButton action="#{beanUsarPoder.crearApoderado}"
+								onsuccess="PF('agregarApoderado').show();"
+								process="@this FormUsoPoder:listaApoderados"
+								styleClass="btn-rojo btn-gradiente"
+								value="#{txt_repositorioPoderes['btn.aporedado']}" />
+						</div>
+					</div>
+				</ui:fragment>
+			</p:outputPanel>
+			<p:accordionPanel id="accordionPanel" dynamic="true"
+				rendered="#{beanUsarPoder.ib_mostrarAnulacion}"
+				styleClass="space-row" onTabChange="PF('blockUI-Loading').show();"
+				onTabShow="PF('blockUI-Loading').hide();">>
+				<p:tab title="#{txt_repositorioPoderes['tab.poderantes']}"
+					styleClass="tab-personalizado tab-gradiente">
+					<p:outputPanel>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:dataTable var="poderdantes" styleClass="table-center"
+									id="listaPoderdantes"
+									value="#{beanUsarPoder.ip_poderDto.ilapa_listaPoderdantes}"
+									reflow="true"
+									emptyMessage="#{txt_repositorioPoderes['mensaje.vacio']}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									stickyHeader="false">
+									<p:column
+										headerText="#{txt_repositorioPoderes['usar.poderdantes.nombre']}">
+										<h:outputText value="#{poderdantes.is_nombre}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['usar.poderdantes.tipo.doc']}">
+										<h:outputText value="#{poderdantes.is_tipoDocumento}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['usar.poderdantes.num.doc']}">
+										<h:outputText value="#{poderdantes.is_numeroDocumento}" />
+									</p:column>
+									<p:column styleClass="centrar"
+										headerText="#{txt_repositorioPoderes['usar.poderdantes.reconocimiento']}">
+										<p:inputSwitch id="reconocimiento" required="true"
+											value="#{poderdantes.ib_reconocimiento}">
+										</p:inputSwitch>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="reconocimiento"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_repositorioPoderes['tooltip.reconocimiento']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="reconocimiento" />
+										</span>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</p:outputPanel>
+				</p:tab>
+				<p:tab title="#{txt_repositorioPoderes['tab.apoderados']}"
+					rendered="#{!beanUsarPoder.ib_revocatoria}"
+					styleClass="tab-personalizado tab-gradiente">
+					<p:outputPanel>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:dataTable var="apoderados" styleClass="table-center"
+									id="listaApoderados"
+									value="#{beanUsarPoder.ip_poderDto.ilapa_listaApoderados}"
+									reflow="true"
+									emptyMessage="#{txt_repositorioPoderes['mensaje.vacio']}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									stickyHeader="false">
+									<p:column
+										headerText="#{txt_repositorioPoderes['usar.apoderados.nombre']}">
+										<h:outputText value="#{apoderados.is_nombre}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['usar.apoderados.tipo.doc']}">
+										<h:outputText value="#{apoderados.is_tipoDocumento}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['usar.apoderados.num.doc']}">
+										<h:outputText value="#{apoderados.is_numeroDocumento}" />
+									</p:column>
+									<p:column styleClass="centrar"
+										headerText="#{txt_repositorioPoderes['usar.apoderados.solicitante']}">
+										<p:selectBooleanCheckbox value="#{apoderados.ib_solicitante}">
+										</p:selectBooleanCheckbox>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</p:outputPanel>
+				</p:tab>
+			</p:accordionPanel>
+			<div class="row">
+				<div class="col-sm-4 col-sm-offset-1 space-row">
+					<p:commandButton value="#{txt['boton.Cancelar.Upper']}"
+						immediate="true" required="true"
+						action="/pages/carguePoderes/consultarPoderCargado.jsf?faces-redirect=true"
+						process="@this"
+						styleClass="icon-btn pull-right btn-gris sinPadding" />
+				</div>
+				<div class="col-sm-4 col-sm-offset-2">
+					<p:commandButton value="#{txt['boton.Aceptar.Upper']}"
+						process="@form" class="btn-rojo btn-gradiente" update="@form"
+						onstart="PF('blockUI-Loading').show();"
+						oncomplete="PF('blockUI-Loading').hide();"
+						action="#{beanUsarPoder.terminarTransaccion}">
+						<p:confirm header="#{txt['titulo.modal.confirmacion']}"
+							message="#{txt_repositorioPoderes['modal.conmfirmar']}" />
+					</p:commandButton>
+				</div>
+			</div>
+		</h:form>
+
+		<!-- Modal confirmacion actualizacion poder -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmacionSolicitudCreada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario"
+				value="formModalConfirmacionSolicitudCreadaCreada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['confirmacion.modal.solicitud.creada']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton type="submit"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Entendido']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								action="/pages/carguePoderes/consultarPoderCargado.jsf?faces-redirect=true">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal agregar apoderado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="agregarApoderado" />
+			<ui:param name="tituloModal"
+				value="#{txt_repositorioPoderes['titulo.modal.informacion.add.apoderados']}" />
+			<ui:param name="formulario" value="formAgregarApoderado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:define name="body-modal">
+				<!-- Script que ejecuta el Keyfilter-->
+				<script type="text/javascript">
+					$(document).ready(function() {
+						cargarKeyfilters();
+					});
+				</script>
+				<!-- Script que ejecuta el Keyfilter-->
+				<div class="row">
+					<div class="col-xs-11 text-left">
+						<p:outputLabel
+							value="#{txt_repositorioPoderes['label.AgregarApoderado']}"
+							styleClass="titulo tamano-subtitulo" />
+						<p:separator />
+						<br />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<p:outputLabel id="labelTipoDoc" for="tipoDoc"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['usar.tipo.doc.apoderado']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<p:selectOneMenu id="tipoDoc"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true"
+							value="#{beanUsarPoder.iapa_agregarPoderdanteApoderadoDto.is_tipoDocumento}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}" />
+							<f:selectItems var="tipoDoc"
+								value="#{beanUsarPoder.cargarTipoDocumentos()}"
+								itemLabel="#{tipoDoc.is_nombre}"
+								itemValue="#{tipoDoc.is_nombre}" />
+							<p:ajax event="change" update="formAgregarApoderado" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelTipoDoc" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['usar.tipo.doc.apoderado']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="tipoDoc" />
+						</span>
+					</div>
+					<div class="col-sm-6">
+						<p:outputLabel id="labelNumDoc" for="numDoc"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['usar.num.doc.apoderado']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:inputText id="numDoc"
+								styleClass="text-input border-completo caja-completo mask-Numeric"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								required="true"
+								placeholder="#{txt_repositorioPoderes['usar.num.doc.apoderado']}"
+								value="#{beanUsarPoder.iapa_agregarPoderdanteApoderadoDto.is_numeroDocumento}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('formAgregarApoderado:numDoc', 'spanNumDoc');" />
+							</p:inputText>
+							<span id="spanNumDoc" class="ui-inputgroup-addon ocultar">
+								<p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('formAgregarApoderado:numDoc', 'spanNumDoc');" />
+								</p:commandLink>
+							</span>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelNumDoc" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['usar.num.doc.apoderado']}" />
+								</div>
+							</p:tooltip>
+						</div>
+						<span class="help-block"> <p:message for="numDoc" />
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:importEnum
+							type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTipoDocumento"
+							var="tipoDocumento" />
+						<p:outputLabel id="labelRazonSocial" for="primerNombre"
+							styleClass="label-form tresPuntos"
+							rendered="#{tipoDocumento.NIT.is_codigo eq beanUsarPoder.iapa_agregarPoderdanteApoderadoDto.is_tipoDocumento}"
+							value="#{txt_repositorioPoderes['razon.social.apoderado']}" />
+						<p:outputLabel id="labelPrimerNombre" for="primerNombre"
+							styleClass="label-form tresPuntos"
+							rendered="#{tipoDocumento.NIT.is_codigo ne beanUsarPoder.iapa_agregarPoderdanteApoderadoDto.is_tipoDocumento}"
+							value="#{txt_repositorioPoderes['primer.nombre.apoderado']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:inputText id="primerNombre"
+								styleClass="text-input border-completo caja-completo mask-AlphaNumeric"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								required="true"
+								placeholder="#{tipoDocumento.NIT.is_codigo ne beanUsarPoder.iapa_agregarPoderdanteApoderadoDto.is_tipoDocumento? txt_repositorioPoderes['primer.nombre.apoderado']: txt_repositorioPoderes['razon.social.apoderado']}"
+								value="#{beanUsarPoder.iapa_agregarPoderdanteApoderadoDto.is_nombre}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('formAgregarApoderado:primerNombre', 'spanPrimerNombre');" />
+							</p:inputText>
+							<span id="spanPrimerNombre" class="ui-inputgroup-addon ocultar">
+								<p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('formAgregarApoderado:primerNombre', 'spanPrimerNombre');" />
+								</p:commandLink>
+							</span>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelPrimerNombre"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['primer.nombre.apoderado']}" />
+								</div>
+							</p:tooltip>
+						</div>
+						<span class="help-block"> <p:message for="primerNombre" />
+						</span>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-sm-4 col-sm-offset-1 space-row">
+						<p:commandButton value="#{txt['boton.volver']}" class="btn-gris"
+							oncomplete="PF('#{modalId}').hide()" />
+					</div>
+					<div class="col-sm-4 col-sm-offset-2">
+						<p:commandButton value="#{txt['boton.Guardar.Upper']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();"
+							class="btn-rojo btn-gradiente"
+							update="FormUsoPoder:listaApoderados @form"
+							action="#{beanUsarPoder.cargarApoderado}">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- modal confirmacion -->
+		<p:confirmDialog
+			styleClass="box-solid box-danger text-center cerrarModal"
+			global="true" width="400" showEffect="fade" hideEffect="fade"
+			responsive="true">
+			<div class="row">
+				<div class="col-xs-5 col-xs-offset-1">
+					<p:commandButton immediate="true"
+						styleClass="ui-confirmdialog-no pull-right btn-gris"
+						value="#{txt['boton.Cancelar.Upper']}" />
+				</div>
+				<div class="col-xs-5 col-xs-offset-0">
+					<p:commandButton
+						styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+						value="#{txt['boton.Aceptar']}">
+					</p:commandButton>
+				</div>
+			</div>
+		</p:confirmDialog>
+		<!-- Modal de confirmacion al cargar Documentos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarCargueDocumento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmarCargueDocumento" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.SubirArchivo']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_repositorioPoderes['boton.Cancelar']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton
+								disabled="#{cargaDocumentoPoder.ib_desactivarBotonesCarga}"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Aceptar']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+								<p:ajax listener="#{beanUsarPoder.servicioFirmaDigital}"
+									update="FormUsoPoder:cargarPoder" />
+								<f:attribute name="foo" value="${cargaDocumentoPoder}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/template-base.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags-faces">
+	<ui:param name="editarUsuario"
+		value="#{sec:isAllowed('/pages/personas/editarUsuario.jsf', 'POST')}" />
+	<ui:define name="title">
+		<title>#{txt_persona['PerfilUsuario']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_persona['PerfilUsuario.Upper']}" />
+			<ui:param name="imagen" value="img-editarPerfil" />
+			<ui:param name="subtitulo"
+				value="#{(beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.ic_catalogoDto.is_id eq beanPersona.is_tipoUsuarioNatural) ? txt_persona['PersonaNatural.Upper'] : txt_persona['PersonaJuridica.Upper']}" />
+			<ui:param name="urlVista" value="/pages/personas/perfilUsuario.jsf" />
+		</ui:include>
+		<div class="container-fluid">
+			<div class="row">
+				<div id="section">
+					<h:form id="formEditarPersona">
+						<p:panel styleClass="panel-content no-border ancho-panel">
+							<div class="row">
+								<div
+									class="col-xs-12 col-sm-4 col-md-4 col-md-offset-2 col-lg-4">
+									<p:outputLabel styleClass="label-form" for="tipoPersona"
+										value="#{txt_persona['label.TipoPersona']}" />
+									<div class="ui-inputgroup">
+										<h:outputText id="tipoPersona" widgetVar="tipoPersonaSelect"
+											value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.ic_catalogoDto.is_nombre}" />
+									</div>
+								</div>
+								<p:outputPanel id="panelTipoDocumento"
+									rendered="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.ic_catalogoDto.is_id eq beanPersona.is_tipoUsuarioNatural}">
+									<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+										<p:outputLabel styleClass="label-form" for="tipoDocumento"
+											value="#{txt_persona['label.TipoDocumento']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="tipoDocumento"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.itd_tipoDocumentoDto.is_nombre}" />
+										</div>
+									</div>
+								</p:outputPanel>
+								<p:outputPanel id="panelNitEmpresa"
+									rendered="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.ic_catalogoDto.is_id eq beanPersona.is_tipoUsuarioJuridica}">
+									<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+										<p:outputLabel styleClass="label-form" for="nit"
+											value="#{txt_persona['label.NumeroNit']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="nit"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.is_numeroDocumento}" />
+										</div>
+									</div>
+								</p:outputPanel>
+							</div>
+							<p:separator styleClass="separador" />
+							<p:outputPanel id="panelPersonaNatural"
+								rendered="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.ic_catalogoDto.is_id eq beanPersona.is_tipoUsuarioNatural}">
+								<div class="row row-special">
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="numeroDocumento"
+											value="#{txt_persona['label.NumeroDocumento']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="numeroDocumento"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.is_numeroDocumento}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="fechaNacimiento"
+											value="#{txt_persona['label.FechaNacimiento']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="fechaNacimiento"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.id_fechaNacimiento}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="fechaExpedicion"
+											value="#{txt_persona['label.FechaExpedicionDocumento']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="fechaExpedicion"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.id_fechaExpedicion}">
+												<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="numeroCelular"
+											value="#{txt_persona['label.NumeroCelular']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="numeroCelular"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_celular}" />
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row row-special">
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="primerNombre"
+											value="#{txt_persona['label.PrimerNombre']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="primerNombre"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.is_primerNombre}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="segundoNombre"
+											value="#{txt_persona['label.SegundoNombre']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="segundoNombre"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.is_segundoNombre}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="primerApellido"
+											value="#{txt_persona['label.PrimerApellido']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="primerApellido"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.is_primerApellido}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="segundoApellido"
+											value="#{txt_persona['label.SegundoApellido']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="segundoApellido"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.is_segundoApellido}" />
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row row-special">
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="telefonoFijo"
+											value="#{txt_persona['label.TelefonoFijo']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="telefonoFijo"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.is_telefono}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="departamento"
+											value="#{txt_persona['label.Departamento']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="departamento"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDireccionDto.id_departamentoDto.is_nombre}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="municipio"
+											value="#{txt_persona['label.Municipio']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="municipio"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDireccionDto.im_municipioDto.is_nombre}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form"
+											for="direccionResidencia"
+											value="#{txt_persona['label.DireccionResidencia']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="direccionResidencia"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDireccionDto.is_direccionCompleta}" />
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row row-special">
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="correo"
+											value="#{txt_persona['label.CorreoElectronico']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="correo"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_correoElectronico}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="genero"
+											value="#{txt_persona['label.Genero']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="genero"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipnd_personaNaturalDto.ic_catalogoTipoGenero.is_nombre}" />
+										</div>
+									</div>
+								</div>
+								<br />
+							</p:outputPanel>
+							<p:outputPanel id="panelPersonaJuridica"
+								rendered="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDto.ic_catalogoDto.is_id eq beanPersona.is_tipoUsuarioJuridica}">
+								<div class="row row-special">
+									<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+										<p:outputLabel styleClass="label-form" for="razonSocial"
+											value="#{txt_persona['label.RazonSocial']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="razonSocial"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipjd_personaJuridicaDto.is_razonSocial}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="tipoOrganiz"
+											value="#{txt_persona['label.TipoOrganizacion']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="tipoOrganiz"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipjd_personaJuridicaDto.ic_tipoCatalogoTipoOrganizacion.is_nombre}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="celularJuridica"
+											value="#{txt_persona['label.NumeroCelular']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="celularJuridica"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_celular}" />
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row row-special">
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form"
+											for="telefonoFijoJuridica"
+											value="#{txt_persona['label.TelefonoFijo']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="telefonoFijoJuridica"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipjd_personaJuridicaDto.is_telefono}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form"
+											for="departamentoJuridica"
+											value="#{txt_persona['label.Departamento']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="departamentoJuridica"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDireccionDto.id_departamentoDto.is_nombre}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="municipioJuridica"
+											value="#{txt_persona['label.Municipio']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="municipioJuridica"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDireccionDto.im_municipioDto.is_nombre}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form"
+											for="direccionResidenciaJuridica"
+											value="#{txt_persona['label.DireccionResidencia']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="direccionResidenciaJuridica"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipd_personaDireccionDto.is_complementoDireccion}" />
+										</div>
+									</div>
+								</div>
+								<br />
+								<div class="row row-special">
+									<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+										<p:outputLabel styleClass="label-form" for="representante"
+											value="#{txt_persona['label.RepresentanteLegal']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="representante"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.ipjd_personaJuridicaDto.getNombreRepresentanteLegal()}" />
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+										<p:outputLabel styleClass="label-form" for="correoJuridica"
+											value="#{txt_persona['label.CorreoElectronico']}" />
+										<div class="ui-inputgroup">
+											<h:outputText id="correoJuridica"
+												value="#{beanPersonaModificar.ipcd_personaCompleta.iud_usuarioDto.is_correoElectronico}" />
+										</div>
+									</div>
+								</div>
+								<br />
+							</p:outputPanel>
+							<br />
+							<p:messages id="messages" showDetail="true" closable="true">
+								<p:autoUpdate />
+							</p:messages>
+						</p:panel>
+					</h:form>
+					<p:outputPanel rendered="#{editarUsuario}">
+						<h:form>
+							<div class="row">
+								<div class="col-xs-4 col-xs-offset-4">
+									<p:commandButton id="btn-editar" icon="icon-flecha-blanca"
+										iconPos="right"
+										styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+										value="#{txt_persona['boton.EditarUsuario.Upper']}"
+										action="#{beanPersonaModificar.editarPersona()}" />
+								</div>
+							</div>
+						</h:form>
+					</p:outputPanel>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

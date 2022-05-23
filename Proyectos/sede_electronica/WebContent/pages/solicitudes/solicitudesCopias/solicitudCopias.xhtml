@@ -1,0 +1,1019 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-solicitudcopias.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-correcciones.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_copias['titulo']} - #{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_copias['titulo']}"></ui:param>
+			<ui:param name="imagen" value="img-solicitudcopias"></ui:param>
+			<ui:param name="subtitulo" value="#{txt_copias['subtitulo']}"></ui:param>
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/solicitudesCopias/solicitudCopias.jsf" />
+		</ui:include>
+		<f:metadata>
+			<f:viewParam name="as_id"
+				value="#{beanCopias.is_codigoUruidCarritoId}"></f:viewParam>
+			<f:event listener="#{beanCopias.valorParametro}" type="preRenderView"></f:event>
+		</f:metadata>
+		<SCRIPT type="text/javascript">
+			function ocultarMenu() {
+				document.getElementById('hide_menu').click();
+			}
+		</SCRIPT>
+		<p:panel>
+			<h:form id="formCopias">
+				<div class="text-center">
+					<p:outputLabel styleClass="label-form"
+						value="#{txt_copias['comentario.titulo']}"></p:outputLabel>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-9">
+						<p:outputLabel id="labelCorreoEnvio" styleClass="label-form"
+							for="correoEnvio" value="#{txt_copias['correoEnvio']}"></p:outputLabel>
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:inputText id="correoEnvio"
+								styleClass="border-completo mask-Correo"
+								placeholder="#{txt_copias['correoEnvio.placeholder']}"
+								maxlength="100" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								value="#{beanCopias.itc_transaccionCopiasDto.is_correoEnvio}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('formCopias:correoEnvio','spanCorreoEnvio');"></p:ajax>
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="correoEnvio" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_copias['correoEnvio.tooltip']}"></p:outputLabel>
+								</div>
+							</p:tooltip>
+							<span id="spanCorreoEnvio" class="ui-inputgroup-addon ocultar">
+								<p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png"></p:graphicImage>
+									<p:ajax event="click"
+										onstart="limpiarCampo('formCopias:correoEnvio','spanCorreoEnvio');"></p:ajax>
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message for="correoEnvio" />
+						</span>
+						<p:outputLabel value="#{txt_copias['comentario.ayuda']}"></p:outputLabel>
+						<p:outputPanel id="panelCriteriosBusqueda">
+							<ui:fragment rendered="#{!beanCopias.ib_busquedaCriterios}">
+								<p:selectOneButton id="criteriosBusqueda" styleClass="oneButton"
+									layout="responsive" columns="1"
+									value="#{beanCopias.is_tipoBusqueda}">
+									<p:ajax listener="#{beanCopias.setIb_busquedaCriterios(true)}"
+										onstart="PF('blockUI-Loading').show();"
+										onsuccess="ocultarMenu(); cargarKeyfilters(); PF('blockUI-Loading').hide();"
+										update="panelCriteriosBusqueda" process="@all"></p:ajax>
+									<f:selectItem itemLabel="#{txt_copias['criterios.nir']}"
+										itemValue="#{beanCopias.getCsNir()}"></f:selectItem>
+									<f:selectItem itemLabel="#{txt_copias['criterios.matricula']}"
+										itemValue="#{beanCopias.getCsMatricula()}"></f:selectItem>
+									<f:selectItem itemLabel="#{txt_copias['criterios.turno']}"
+										itemValue="#{beanCopias.getCsTurno()}"></f:selectItem>
+									<f:selectItem itemLabel="#{txt_copias['criterios.documento']}"
+										itemValue="#{beanCopias.getCsDocumento()}"></f:selectItem>
+								</p:selectOneButton>
+							</ui:fragment>
+							<ui:fragment rendered="#{beanCopias.ib_busquedaCriterios}">
+								<p:outputPanel>
+									<!-- Busqueda Nir -->
+									<ui:fragment
+										rendered="#{beanCopias.is_tipoBusqueda.equals(beanCopias.getCsNir())}">
+										<div class="gradiente subtitulosCriterios">
+											<p:outputLabel value="#{txt_copias['criterios.nir']}" />
+										</div>
+										<br />
+										<p:outputLabel id="labelNumeroNir" styleClass="label-form"
+											for="numeroNir" value="#{txt_copias['criterios.nir.campo']}"></p:outputLabel>
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<div class="ui-inputgroup">
+											<p:inputText id="numeroNir"
+												placeholder="#{txt_copias['criterios.nir.placeholder']}"
+												maxlength="20" required="true"
+												styleClass="border-completo mask-AlphaNum"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												value="#{beanCopias.is_nir}">
+												<p:ajax event="change"
+													onstart="mostrarLimpiar('formCopias:numeroNir','spanNumeroNir');"></p:ajax>
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="numeroNir" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_copias['criterios.nir.tooltip']}"></p:outputLabel>
+												</div>
+											</p:tooltip>
+											<span id="spanNumeroNir" class="ui-inputgroup-addon ocultar">
+												<p:commandLink>
+													<p:graphicImage styleClass="img-x-size"
+														name="/img/x-roja.png"></p:graphicImage>
+													<p:ajax event="click"
+														onstart="limpiarCampo('formCopias:numeroNir','spanNumeroNir');"></p:ajax>
+												</p:commandLink>
+											</span>
+										</div>
+										<span class="help-block"> <p:message for="numeroNir" />
+										</span>
+									</ui:fragment>
+									<!-- FIN Busqueda Nir -->
+
+									<!-- Busqueda Matricula -->
+									<ui:fragment
+										rendered="#{beanCopias.is_tipoBusqueda.equals(beanCopias.getCsMatricula())}">
+										<div class="gradiente subtitulosCriterios">
+											<p:outputLabel value="#{txt_copias['criterios.matricula']}" />
+										</div>
+										<br />
+										<div class="row">
+											<div class="col-xs-12 col-sm-8">
+												<p:outputLabel styleClass="label-form"
+													id="labelOficinaRegistro" for="oficinaRegistro"
+													value="#{txt_copias['criterios.matricula.orip']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+												<p:selectOneMenu id="oficinaRegistro" filter="true"
+													widgetVar="oficinaRegistro" filterMatchMode="contains"
+													required="true" converter="selectOneMenuConverter"
+													requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+													filterPlaceholder="#{txt_copias['criterios.matricula.orip.placeholder']}"
+													value="#{beanCopias.icr_circuloRegistralSeleccionadoDto}">
+													<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+														itemValue="" />
+													<f:selectItems
+														value="#{beanCopias.ilcr_listaCirculoRegistralDto}"
+														var="circuloRegistral"
+														itemLabel="#{circuloRegistral.is_nombre} - (#{circuloRegistral.is_id})"
+														itemValue="#{circuloRegistral}" />
+													<p:ajax update="numeroOficinaRegistro" />
+												</p:selectOneMenu>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelOficinaRegistro"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_copias['criterios.matricula.orip.tooltip']}" />
+													</div>
+												</p:tooltip>
+												<span class="help-block"> <p:message
+														for="oficinaRegistro" />
+												</span>
+											</div>
+											<div class="col-xs-12 col-sm-4">
+												<p:outputLabel id="labelNumeroOficinaRegistro"
+													for="numeroOficinaRegistro"
+													styleClass="label-form tresPuntos"
+													value="#{txt_copias['criterios.matricula.numeroOrip']}" />
+												<div class="ui-inputgroup">
+													<p:inputText id="numeroOficinaRegistro" readonly="true"
+														styleClass="block border-completo"
+														value="#{beanCopias.icr_circuloRegistralSeleccionadoDto.getIs_id()}" />
+												</div>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral"
+													for="labelNumeroOficinaRegistro" position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_copias['criterios.matricula.numeroOrip.tooltip']}" />
+													</div>
+												</p:tooltip>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel id="labelNumeroMatricula"
+													for="numeroMatricula" styleClass="label-form"
+													value="#{txt_copias['criterios.matricula.numero']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+												<div class="ui-inputgroup">
+
+													<p:inputText id="numeroMatricula" autocomplete="off"
+														maxlength="10" styleClass="mask-Numeric border-completo"
+														placeholder="#{txt_copias['criterios.matricula.numero.placeholder']}"
+														requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+														required="true" value="#{beanCopias.is_numeroMatricula}">
+														<p:ajax event="change"
+															onstart="mostrarLimpiar('formCopias:numeroMatricula', 'spanNumeroMatricula');" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral" for="labelNumeroMatricula"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_copias['criterios.matricula.numero.tooltip']}" />
+														</div>
+													</p:tooltip>
+													<span id="spanNumeroMatricula"
+														class="ui-inputgroup-addon ocultar"> <p:commandLink>
+															<p:graphicImage styleClass="img-x-size"
+																name="/img/x-roja.png" />
+															<p:ajax event="click"
+																onstart="limpiarCampo('formCopias:numeroMatricula', 'spanNumeroMatricula');" />
+														</p:commandLink>
+													</span>
+												</div>
+												<span class="help-block"> <p:message
+														for="numeroMatricula" />
+												</span>
+											</div>
+										</div>
+									</ui:fragment>
+									<!-- FIN Busqueda Matricula -->
+
+									<!-- Busqueda Turno -->
+									<ui:fragment
+										rendered="#{beanCopias.is_tipoBusqueda.equals(beanCopias.getCsTurno())}">
+										<div class="gradiente subtitulosCriterios">
+											<p:outputLabel value="#{txt_copias['criterios.turno']}" />
+										</div>
+										<br />
+										<p:outputLabel id="labelTurno" styleClass="label-form"
+											for="turno" value="#{txt_copias['criterios.turno.campo']}"></p:outputLabel>
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<div class="ui-inputgroup">
+											<p:inputText id="turno"
+												styleClass="border-completo mask-AlphaNumGuion"
+												placeholder="#{txt_copias['criterios.turno.placeholder']}"
+												maxlength="20" required="true"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												value="#{beanCopias.is_turno}">
+												<p:ajax event="change"
+													onstart="mostrarLimpiar('formCopias:turno','spanTurno');"></p:ajax>
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="turno" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_copias['criterios.turno.tooltip']}"></p:outputLabel>
+												</div>
+											</p:tooltip>
+											<span id="spanTurno" class="ui-inputgroup-addon ocultar">
+												<p:commandLink>
+													<p:graphicImage styleClass="img-x-size"
+														name="/img/x-roja.png"></p:graphicImage>
+													<p:ajax event="click"
+														onstart="limpiarCampo('formCopias:turno','spanTurno');"></p:ajax>
+												</p:commandLink>
+											</span>
+										</div>
+										<span class="help-block"> <p:message for="turno" />
+										</span>
+									</ui:fragment>
+									<!-- FIN Busqueda Turno -->
+
+									<!-- Datos documento -->
+									<ui:fragment
+										rendered="#{beanCopias.is_tipoBusqueda.equals(beanCopias.getCsDocumento())}">
+										<div class="gradiente subtitulosCriterios">
+											<p:outputLabel value="#{txt_copias['criterios.documento']}" />
+										</div>
+										<br />
+										<div class="row">
+											<div class="col-xs-12 col-md-4">
+												<p:outputLabel id="labelPais" styleClass="label-form"
+													for="pais"
+													value="#{txt_copias['criterios.documento.pais']}" />
+												<p:selectOneMenu id="pais"
+													converter="selectOneMenuConverter" filter="true"
+													filterMatchMode="startsWith" style="width:100%"
+													value="#{beanCopias.ip_paisDto}">
+													<p:ajax listener="#{beanCopias.validarPais}"
+														update="formCopias:departamento" />
+													<f:selectItem
+														itemLabel="#{txt['label.SeleccioneComboBox']}"
+														itemValue="" noSelectionOption="true" />
+													<f:selectItems value="#{beanCopias.cargarPais()}"
+														var="pais" itemLabel="#{pais.is_nombre}"
+														itemValue="#{pais}" />
+												</p:selectOneMenu>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelPais" position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_copias['criterios.documento.pais.tooltip']}" />
+													</div>
+												</p:tooltip>
+											</div>
+											<div class="col-xs-12 col-md-4">
+												<p:outputLabel id="labelDepartamento"
+													styleClass="label-form" for="departamento"
+													value="#{txt_copias['criterios.documento.departamento']}" />
+												<p:selectOneMenu id="departamento"
+													converter="selectOneMenuConverter" filter="true"
+													filterMatchMode="startsWith"
+													value="#{beanCopias.id_departamentoDto}">
+													<p:ajax
+														listener="#{beanCopias.cargarMunicipiosPorDepartamento}"
+														update="formCopias:municipio" />
+													<f:selectItem
+														itemLabel="#{txt['label.SeleccioneComboBox']}"
+														itemValue="" noSelectionOption="true" />
+													<f:selectItems
+														value="#{beanCopias.ild_listaDepartamentosDto}"
+														var="departamento" itemLabel="#{departamento.is_nombre}"
+														itemValue="#{departamento}" />
+												</p:selectOneMenu>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelDepartamento"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_copias['criterios.documento.departamento.tooltip']}" />
+													</div>
+												</p:tooltip>
+											</div>
+											<div class="col-xs-12 col-md-4">
+												<p:outputLabel id="labelMunicipio" styleClass="label-form"
+													for="municipio"
+													value="#{txt_copias['criterios.documento.municipio']}" />
+												<p:selectOneMenu id="municipio"
+													converter="selectOneMenuConverter" filter="true"
+													filterMatchMode="startsWith"
+													value="#{beanCopias.im_municipioDto}">
+													<f:selectItem
+														itemLabel="#{txt['label.SeleccioneComboBox']}"
+														itemValue="" noSelectionOption="true" />
+													<f:selectItems value="#{beanCopias.ilm_listaMunicipiosDto}"
+														var="municipio" itemLabel="#{municipio.is_nombre}"
+														itemValue="#{municipio}" />
+												</p:selectOneMenu>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelMunicipio"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_copias['criterios.documento.municipio.tooltip']}" />
+													</div>
+												</p:tooltip>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-12 col-md-4">
+												<p:outputLabel id="labelOficina" styleClass="label-form"
+													for="oficina"
+													value="#{txt_copias['criterios.documento.oficina']}" />
+												<p:selectOneMenu id="oficina" filter="true"
+													filterMatchMode="startsWith"
+													converter="selectOneMenuConverter"
+													value="#{beanCopias.iloo_oficinaSeleccionado}">
+													<f:selectItem
+														itemLabel="#{txt['label.SeleccioneComboBox']}"
+														itemValue="" noSelectionOption="true" />
+													<f:selectItems
+														value="#{beanCopias.consultarTiposOficinaOrigen()}"
+														var="oficina" itemLabel="#{oficina.is_oficinaOrigen}"
+														itemValue="#{oficina}" />
+													<p:ajax onstart="PF('blockUI-Loading').show()"
+														oncomplete="PF('blockUI-Loading').hide()"
+														update="formCopias:origen" />
+												</p:selectOneMenu>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelOficina"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_copias['criterios.documento.oficina.tooltip']}" />
+													</div>
+												</p:tooltip>
+											</div>
+											<div class="col-xs-12 col-md-4">
+												<p:outputLabel id="labelOrigen" styleClass="label-form"
+													for="origen"
+													value="#{txt_copias['criterios.documento.origen']}" />
+												<div class="ui-inputgroup">
+													<p:inputText id="origen" styleClass="block" readonly="true"
+														placeholder="#{txt_alertaTierras['placeholder.NombrOficinaOrigenTipo']}"
+														value="#{beanCopias.iloo_oficinaSeleccionado}">
+													</p:inputText>
+												</div>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelOrigen"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_copias['criterios.documento.origen.tooltip']}" />
+													</div>
+												</p:tooltip>
+											</div>
+											<div class="col-xs-12 col-md-4">
+												<p:outputLabel id="labelEntidad" styleClass="label-form"
+													for="entidad"
+													value="#{txt_copias['criterios.documento.entidad']}" />
+												<p:selectOneMenu id="entidad" filter="true"
+													filterMatchMode="startsWith"
+													converter="selectOneMenuConverter"
+													value="#{beanCopias.is_entidadSeleccionado}">
+													<f:selectItem
+														itemLabel="#{txt['label.SeleccioneComboBox']}"
+														itemValue="" noSelectionOption="true" />
+													<f:selectItems
+														value="#{beanCopias.servicioConsultarEntidadesJA()}"
+														var="entidad" itemLabel="#{entidad.is_nombreAutoridad}"
+														itemValue="#{entidad.is_nombreAutoridad}" />
+												</p:selectOneMenu>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelEntidad"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_copias['criterios.documento.entidad.tooltip']}" />
+													</div>
+												</p:tooltip>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-12 col-md-4">
+												<p:outputLabel id="labelRegistro" styleClass="label-form"
+													for="registro"
+													value="#{txt_copias['criterios.documento.registro']}" />
+												<p:outputLabel styleClass="required-field" value="*" />
+												<p:selectOneMenu id="registro" filter="true"
+													filterMatchMode="contains"
+													value="#{beanCopias.is_registroSeleccionado}">
+													<f:selectItem
+														itemLabel="#{txt['label.SeleccioneComboBox']}"
+														itemValue="" noSelectionOption="true" />
+													<f:selectItems var="registro"
+														itemLabel="#{registro.is_nombre} - (#{registro.is_id})"
+														itemValue="#{registro.is_nombre}"
+														value="#{beanCopias.ilcr_listaCirculoRegistralDto}" />
+												</p:selectOneMenu>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelRegistro"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_copias['criterios.documento.registro.tooltip']}" />
+													</div>
+												</p:tooltip>
+												<span class="help-block"> <p:message for="registro" />
+												</span>
+											</div>
+											<div class="col-xs-12 col-md-4">
+												<p:outputLabel id="labelTipoDocumento"
+													styleClass="label-form" for="tipoDocumento"
+													value="#{txt_copias['criterios.documento.tipoDocumento']}" />
+												<p:outputLabel styleClass="required-field" value="*" />
+												<p:selectOneMenu id="tipoDocumento" filter="true"
+													filterMatchMode="startsWith" styleClass="tamanoSelect"
+													value="#{beanCopias.is_tipoDocumentoDto}">
+													<f:selectItem
+														itemLabel="#{txt['label.SeleccioneComboBox']}"
+														itemValue="" noSelectionOption="true" />
+													<f:selectItems
+														value="#{beanCopias.consultarTipoDocumental()}"
+														var="tipoDocumento" itemLabel="#{tipoDocumento.is_nombre}"
+														itemValue="#{tipoDocumento.is_codigoValor}" />
+												</p:selectOneMenu>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelTipoDocumento"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_copias['criterios.documento.tipoDocumento.tooltip']}" />
+													</div>
+												</p:tooltip>
+												<span class="help-block"> <p:message
+														for="tipoDocumento" />
+												</span>
+											</div>
+											<div class="col-xs-12 col-md-4">
+												<p:outputLabel id="labelNumeroDocumento"
+													styleClass="label-form" for="numeroDocumento"
+													value="#{txt_copias['criterios.documento.numeroDocumento']}" />
+												<p:outputLabel styleClass="required-field" value="*" />
+												<div class="ui-inputgroup">
+													<p:inputText id="numeroDocumento"
+														styleClass="text-input border-completo mask-AlphaNumGuion"
+														maxlength="30"
+														requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+														required="true"
+														placeholder="#{txt_copias['criterios.documento.numeroDocumento.placeholder']}"
+														value="#{beanCopias.is_documento}">
+														<p:ajax event="change"
+															onstart="mostrarLimpiar('formCopias:numeroDocumento', 'spanNumeroDocumento');" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral" for="labelEntidad"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_copias['criterios.documento.numeroDocumento.tooltip']}" />
+														</div>
+													</p:tooltip>
+													<span id="spanNumeroDocumento"
+														class="ui-inputgroup-addon ocultar"> <p:commandLink>
+															<p:graphicImage styleClass="img-x-size"
+																name="/img/x-roja.png" />
+															<p:ajax event="click"
+																onstart="limpiarCampo('formCopias:numeroDocumento', 'spanNumeroDocumento');" />
+														</p:commandLink>
+													</span>
+												</div>
+												<span class="help-block"> <p:message
+														for="numeroDocumento" />
+												</span>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-12 col-md-4">
+												<p:outputLabel id="labelFechaDocumento"
+													styleClass="label-form" for="fechaDocumento"
+													value="#{txt_copias['criterios.documento.fechaDocumento']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+												<p:calendar id="fechaDocumento" readonlyInput="true"
+													binding="#{fechaDocumento}" pattern="dd/MM/yyyy"
+													maxlength="10" locale="es" yearRange="1900:2200"
+													navigator="true"
+													placeholder="#{txt['placeholder.FormatoFecha']}"
+													styleClass="text-input-calendar" required="true"
+													requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+													showOn="button" value="#{beanCopias.id_fechaDocumento}" />
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelFechaDocumento"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_copias['criterios.documento.fechaDocumento.tooltip']}" />
+													</div>
+												</p:tooltip>
+												<span class="help-block"> <p:message
+														for="fechaDocumento" />
+												</span>
+											</div>
+										</div>
+									</ui:fragment>
+									<!-- FIN Datos documento -->
+									<br />
+									<div class="row">
+										<div class="col-xs-12 col-md-4 col-md-offset-1 space-row">
+											<p:commandButton styleClass="btn-gris"
+												value="#{txt_copias['criterios.boton.volver']}">
+												<p:ajax listener="#{beanCopias.volverCriterios}"
+													update="panelCriteriosBusqueda" onsuccess="ocultarMenu()"></p:ajax>
+											</p:commandButton>
+										</div>
+										<div class="col-xs-12 col-md-4 col-md-offset-2">
+											<p:commandButton styleClass="btn-rojo btn-gradiente"
+												value="#{txt_copias['criterios.boton.buscar']}">
+												<p:ajax listener="#{beanCopias.consultar}" process="@form"
+													update="panelCriteriosBusqueda"
+													onstart="PF('blockUI-Loading').show()"
+													oncomplete="PF('blockUI-Loading').hide()"></p:ajax>
+											</p:commandButton>
+										</div>
+									</div>
+									<br />
+									<div class="scroll-politicas">
+										<p:dataTable var="documentosEncontrados"
+											value="#{beanCopias.ilc_listaCopiasDto}" responsive="true"
+											styleClass="centrar-img tabla-fija-copias" rowIndexVar="true"
+											reflow="true"
+											paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+											currentPageReportTemplate="{currentPage} / {totalPages}"
+											emptyMessage="#{txt_copias['tabla.vacio']}" paginator="true"
+											rows="10" paginatorPosition="bottom" rowsPerPageTemplate="10">
+											<f:facet name="header">
+												<p:outputLabel value="#{txt_copias['tabla']}" />
+												<br />
+												<p:outputLabel styleClass="label-form"
+													value="#{txt_copias['tabla.subtitulo1']}" />
+												<h:outputText styleClass="fa fa-cloud-upload" />
+												<p:outputLabel styleClass="label-form"
+													value="#{txt_copias['tabla.subtitulo2']}" />
+											</f:facet>
+											<p:column headerText="#{txt_copias['tabla.boton']}"
+												styleClass="columnaChiqui">
+												<p:commandLink styleClass="colorRojo fa fa-cloud-upload"
+													onsuccess="PF('agregarCopia').show();"
+													actionListener="#{beanCopias.setIc_copiasDto(documentosEncontrados)}">
+												</p:commandLink>
+											</p:column>
+											<p:column headerText="#{txt_copias['tabla.nir']}">
+												<p:outputLabel id="tablaNir"
+													value="#{documentosEncontrados.is_nir}"
+													styleClass="tresPuntos" />
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="tablaNir" position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel value="#{documentosEncontrados.is_nir}"></p:outputLabel>
+													</div>
+												</p:tooltip>
+											</p:column>
+											<p:column headerText="#{txt_copias['tabla.turno']}">
+												<p:outputLabel id="tablaTurno"
+													value="#{documentosEncontrados.is_turno}"
+													styleClass="tresPuntos" />
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="tablaTurno" position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel value="#{documentosEncontrados.is_turno}"></p:outputLabel>
+													</div>
+												</p:tooltip>
+											</p:column>
+											<p:column headerText="#{txt_copias['tabla.matricula']}">
+												<p:outputLabel id="tablaMatricula"
+													value="#{documentosEncontrados.is_matricula}"
+													styleClass="tresPuntos" />
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="tablaMatricula"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{documentosEncontrados.is_matricula}"></p:outputLabel>
+													</div>
+												</p:tooltip>
+											</p:column>
+											<p:column headerText="#{txt_copias['tabla.registro']}"
+												styleClass="columnaChiqui">
+												<p:outputLabel
+													value="#{documentosEncontrados.icr_circuloRegistral.is_nombre}"
+													styleClass="tresPuntos" />
+											</p:column>
+											<p:column headerText="#{txt_copias['tabla.tipoDocumento']}">
+												<p:outputLabel id="tablaTipo"
+													value="#{documentosEncontrados.is_tipoDocumento}"
+													styleClass="tresPuntos" />
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="tablaTipo" position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{documentosEncontrados.is_tipoDocumento}"></p:outputLabel>
+													</div>
+												</p:tooltip>
+											</p:column>
+											<p:column headerText="#{txt_copias['tabla.fechaDocumento']}">
+												<p:outputLabel
+													value="#{documentosEncontrados.id_fechaDocumento}">
+													<f:convertDateTime pattern="dd/MM/yyyy" />
+												</p:outputLabel>
+											</p:column>
+											<p:column headerText="#{txt_copias['tabla.documento']}">
+												<p:outputLabel id="tablaNombre"
+													value="#{documentosEncontrados.is_numeroDocumento}"
+													styleClass="tresPuntos" />
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="tablaNombre"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{documentosEncontrados.is_numeroDocumento}"></p:outputLabel>
+													</div>
+												</p:tooltip>
+											</p:column>
+											<p:column styleClass="columnaChiqui"
+												headerText="#{txt_copias['tabla.folios']}">
+												<p:outputLabel
+													value="#{documentosEncontrados.ii_cantidadFolios}" />
+											</p:column>
+										</p:dataTable>
+									</div>
+								</p:outputPanel>
+							</ui:fragment>
+						</p:outputPanel>
+					</div>
+					<div class="col-md-3">
+						<p:dataList id="resumenSolicitud"
+							value="#{beanCopias.itc_transaccionCopiasDto.ilc_listaCopiasDto}"
+							paginator="true" var="copia" type="ordered"
+							emptyMessage="#{txt_copias['preResumen.empty']}"
+							rows="4" styleClass="paginated"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							currentPageReportTemplate="{currentPage} / {totalPages}">
+							<f:facet name="header">
+								<p:outputLabel value="#{txt_copias['preResumen.titulo']}"></p:outputLabel>
+							</f:facet>
+
+							<div class="row certificadoItem">
+								<div class="col-xs-10 maxTexto">
+									<p:outputLabel value="#{txt_copias['preResumen.doc']} "></p:outputLabel>
+									<p:outputLabel value="#{copia.is_documentoNombre}"></p:outputLabel>
+								</div>
+								<div class="col-xs-2 text-center">
+									<p:commandLink title="#{txt_copias['preResumen.descartar']}"
+										class="descartarCertificado"
+										update="formCopias:resumenSolicitud formCopias:botonSolicitar"
+										styleClass="fa fa-times-circle imagenTamano"
+										oncomplete="PF('descartarCopia').show()"
+										action="#{beanCopias.setIc_copiasDto(copia)}">
+									</p:commandLink>
+								</div>
+							</div>
+							<div class="row direccionItem">
+								<div class="col-xs-8 maxTexto">
+									<p:outputLabel value="#{txt_copias['preResumen.folios']} "></p:outputLabel>
+									<p:outputLabel value="#{copia.ii_cantidadFolios}"></p:outputLabel>
+								</div>
+							</div>
+
+						</p:dataList>
+						<br />
+						<p:commandButton styleClass="btn-rojo btn-gradiente"
+							id="botonSolicitar" value="#{txt_copias['solicitar.boton']}"
+							disabled="#{beanCopias.itc_transaccionCopiasDto.ilc_listaCopiasDto.isEmpty()}"
+							update="formGenerarSolicitud"
+							onsuccess="PF('generarSolicitud').show()">
+						</p:commandButton>
+					</div>
+				</div>
+				<br />
+			</h:form>
+		</p:panel>
+		<!-- 		MODALES -->
+		<!-- 		agregar copia -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="agregarCopia" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formAgregarCopia" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_copias['modal.aceptar.pregunta']}" />
+				<br />
+				<br />
+				<h:outputText styleClass="label-form"
+					value="#{txt_copias['modal.aceptar.carrito']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-1 space-row">
+						<p:commandButton styleClass="btn-gris"
+							onsuccess="PF('agregarCopia').hide()"
+							value="#{txt['boton.Cancelar.Upper']}"
+							action="#{beanCopias.setIc_copiasDto(null)}" />
+					</div>
+					<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+						<p:commandButton styleClass="btn-rojo btn-gradiente"
+							onsuccess="PF('agregarCopia').hide()"
+							update="formCopias:resumenSolicitud formCopias:botonSolicitar"
+							value="#{txt['boton.Aceptar']}"
+							action="#{beanCopias.guardarTransaccion(true)}" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 		FIN agregar copia -->
+		<!-- 		transaccion sin folios -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="transaccionSinFolios" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formTransaccionSinFolios" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{beanCopias.mensajeSinFolios()}" />
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:link class="btn-rojo redireccion"
+							value="#{txt_copias['boton.entendido']}"
+							outcome="#{beanCopias.is_redireccionResumenPago}">
+						</p:link>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 		FIN transaccion sin folios -->
+		<!-- 		pasarResumen -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="pasarResumen" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formPasarResumen" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{beanCopias.mensajeSinFolios()}" />
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:link class="btn-rojo redireccion"
+							value="#{txt_copias['boton.entendido']}"
+							outcome="#{beanCopias.is_redireccionResumenPago}">
+						</p:link>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 		FIN pasarResumen -->
+		<!-- 		descartar copia -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="descartarCopia" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />>
+			<ui:param name="tituloModal"
+				value="#{txt_copias['modal.advertencia']}" />
+			<ui:param name="formulario" value="formDescartarCopia" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_copias['modal.quitarCopia.pregunta']}" />
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-1">
+						<p:commandButton styleClass="btn-gris"
+							onsuccess="PF('descartarCopia').hide()"
+							value="#{txt['boton.Cancelar.Upper']}"
+							action="#{beanCopias.setIc_copiasDto(null)}" />
+					</div>
+					<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+						<p:commandButton styleClass="btn-rojo btn-gradiente"
+							onsuccess="PF('descartarCopia').hide()"
+							update="formCopias:resumenSolicitud formCopias:botonSolicitar"
+							value="#{txt['boton.Aceptar']}"
+							action="#{beanCopias.guardarTransaccion(false)}" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 		FIN descartar copia -->
+		<!-- 		INformacion Erronea -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="informacionErronea" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formInformacionErronea" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_copias['modal.informacionErronea']}" />
+				<br />
+				<h:outputText styleClass="label-form"
+					value="#{txt_copias['modal.informacionErronea.uno']}" />
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+						<p:commandButton styleClass="btn-rojo btn-gradiente"
+							onsuccess="PF('informacionErronea').hide()"
+							value="#{txt_copias['boton.entendido']}" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 		FIN informacion Erronea -->
+		<!-- Transaccion encontrada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="transaccionEncontrada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalTransaccionEncontrada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_copias['modal.retomarTransaccion']}" />
+						<br />
+						<h:outputText
+							value="#{txt_copias['modal.retomarTransaccion.pregunta']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-1">
+						<p:commandButton styleClass="btn-gris"
+							onsuccess="PF('transaccionEncontrada').hide()"
+							value="#{txt['boton.Cancelar.Upper']}">
+							<p:confirm header="#{txt['titulo.modal.confirmacion']}"
+								message="#{txt_copias['modal.retomarTransaccion.cancelar']}" />
+						</p:commandButton>
+						<p:confirmDialog
+							styleClass="box-solid box-danger text-center cerrarModal"
+							global="true" width="400" showEffect="fade" hideEffect="fade"
+							responsive="true">
+							<div class="row">
+								<div class="col-xs-5 col-xs-offset-1">
+									<p:commandButton immediate="true"
+										styleClass="ui-confirmdialog-no pull-right btn-gris"
+										value="#{txt_cuentaCupo['boton.Cancelar']}"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();">
+									</p:commandButton>
+								</div>
+								<div class="col-xs-5 col-xs-offset-0">
+									<p:commandButton
+										styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+										value="#{txt_cuentaCupo['boton.Aceptar']}">
+										<p:ajax listener="#{beanCopias.cancelarTransaccion}"
+											onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('blockUI-Loading').hide(); PF('transaccionEncontrada').hide();" />
+									</p:commandButton>
+								</div>
+							</div>
+						</p:confirmDialog>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+						<h:outputLink class="btn-rojo redireccion"
+							value="#{beanCopias.is_redireccion}">
+							<span class="icon-btn">#{txt['boton.Aceptar']}</span>
+						</h:outputLink>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Transaccion encontrada -->
+		<!-- 		generar solicitud -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="generarSolicitud" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formGenerarSolicitud" />
+			<ui:define name="body-modal">
+				<div class="text-center">
+					<h:outputText styleClass="label-form"
+						value="#{txt_copias['modal.generarSolicitud.titulo']}" />
+				</div>
+				<div class="text-center">
+					<h:outputText
+						value="#{txt_copias['modal.generarSolicitud.subtitulo']}" />
+					<h:outputText
+						value="#{beanCopias.ibd_valorPorFolio} " />
+					<h:outputText
+						value=" #{txt_copias['modal.generarSolicitud.subtitulo2']}" />
+				</div>
+				<div class="text-center">
+					<h:outputText
+						value="#{txt_copias['modal.generarSolicitud.correo']}" />
+					<h:outputText
+						value="#{beanCopias.itc_transaccionCopiasDto.is_correoEnvio}" />
+				</div>
+				<p:dataTable var="copiasGenerar"
+					value="#{beanCopias.itc_transaccionCopiasDto.ilc_listaCopiasDto}"
+					responsive="true" reflow="true" styleClass="tabla-gris"
+					emptyMessage="#{txt_registrar_alerta_masiva['tablaRangoAlertas.vacia']}"
+					paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+					currentPageReportTemplate="{currentPage} / {totalPages}"
+					paginator="true" rows="4" paginatorPosition="bottom"
+					rowsPerPageTemplate="4">
+					<f:facet name="header">
+						<h:outputText
+							value="#{txt_copias['modal.generarSolicitud.tabla']}" />
+					</f:facet>
+					<p:column
+						headerText="#{txt_copias['modal.generarSolicitud.tabla.nir']}">
+						<h:outputText value="#{copiasGenerar.is_nir}" />
+					</p:column>
+					<p:column
+						headerText="#{txt_copias['modal.generarSolicitud.tabla.turno']}">
+						<h:outputText value="#{copiasGenerar.is_turno}" />
+					</p:column>
+					<p:column
+						headerText="#{txt_copias['modal.generarSolicitud.tabla.matricula']}">
+						<h:outputText value="#{copiasGenerar.is_matricula}" />
+					</p:column>
+					<p:column
+						headerText="#{txt_copias['modal.generarSolicitud.tabla.documento']}">
+						<h:outputText value="#{copiasGenerar.is_numeroDocumento}" />
+					</p:column>
+					<p:column styleClass="columnaChiqui"
+						headerText="#{txt_copias['modal.generarSolicitud.tabla.cantidad']}">
+						<h:outputText value="#{copiasGenerar.ii_cantidadFolios}" />
+					</p:column>
+				</p:dataTable>
+				<h:outputText styleClass="label-form"
+					value="#{txt_copias['modal.generarSolicitud']}" />
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-1 space-row">
+						<p:commandButton styleClass="btn-gris"
+							onsuccess="PF('generarSolicitud').hide()"
+							value="#{txt['boton.Cancelar.Upper']}" />
+					</div>
+					<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+						<p:commandButton styleClass="btn-rojo btn-gradiente"
+							value="#{txt['boton.Aceptar.Upper']}">
+							<p:ajax listener="#{beanCopias.generarSolicitud()}"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide(); PF('generarSolicitud').hide()"
+								update="transaccionSinFolios pasarResumen" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 		FIN generar solicitud -->
+	</ui:define>
+</ui:composition>

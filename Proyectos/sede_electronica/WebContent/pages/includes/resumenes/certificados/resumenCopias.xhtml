@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<h:outputText class="text-title"
+				value="#{txt_certificados['wizardCertificados.resumen.tabla.titulo']} " />
+			<p:outputLabel class="text-title" value=" #{listaDocumentos.size()}" />
+		</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-xs-12 contenidoModal scrollVertical">
+			<p:dataTable var="documentosEscontrados" styleClass="text-center"
+				id="tablaResumenCopias" rowIndexVar="rowIndex"
+				widgetVar="tablaConfirmacionDatosMatricula"
+				value="#{listaDocumentos}">
+				<p:column
+					headerText="#{txt_certificados['wizardCertificado.resumen.tabla.numero']}">
+					<h:outputText value="#{rowIndex + 1}" />
+				</p:column>
+				<p:column headerText="#{txt_copias['tabla.tipoDocumento']}">
+					<p:outputLabel value="#{documentosEscontrados.is_tipoDocumento}" />
+				</p:column>
+				<p:column headerText="#{txt_copias['tabla.documento']}">
+					<p:outputLabel value="#{documentosEscontrados.is_numeroDocumento}" />
+				</p:column>
+				<p:column headerText="#{txt_copias['tabla.folios']}">
+					<p:outputLabel value="#{documentosEscontrados.ii_cantidadFolios}" />
+				</p:column>
+				<ui:fragment rendered="#{certificado.ibd_valorUnitario != null}">
+					<p:column
+						headerText="#{txt_certificados['wizardCertificado.resumen.tabla.valorUnitario']}">
+						<h:outputText class="colorVerde"
+							value=" $#{certificado.ibd_valorUnitario}" />
+					</p:column>
+				</ui:fragment>
+			</p:dataTable>
+		</div>
+	</div>
+	<br />
+	<ui:fragment rendered="#{referenciaPago != null and referenciaPago}">
+		<div class="row">
+			<div class="col-xs-12 resumen_transaccion_valor_pagado">
+				<h:outputText class="text-title"
+					value="#{txt_certificados['wizardCertificado.resumen.valorTotal']} " />
+				<h:outputText class="colorVerde" value="#{valorTotal}">
+					<f:convertNumber type="currency" currencySymbol="$"
+						maxFractionDigits="0" />
+				</h:outputText>
+			</div>
+		</div>
+	</ui:fragment>
+</ui:composition>

@@ -1,0 +1,48 @@
+.titulo-resumen{
+	font-weight: bold;
+	padding-bottom: 15px;
+	padding-top: 15px;
+}
+
+.panelGrid{
+	width: -webkit-fill-available;
+}
+
+.titulo-snr{
+	padding-top: 15px;
+}
+
+.celda-roja{
+		background: linear-gradient(180deg, rgba(235, 31, 40, 1) 0%,
+		rgba(70, 26, 19, 1) 100%) !important;
+	color: white;
+	font-weight: bold;
+}
+
+.celda-general{
+	background-color: #cac7c7; 
+	font-weight: bold;
+}
+
+.negrilla{
+	font-weight: bold;
+}
+
+.padding-resumen{
+	padding-top: 10px;
+}
+.receiver-mensaje{
+	padding-top: 15px;
+	font-weight: bold;
+	padding-bottom: 15px;
+}
+
+
+.titulo-inferior {
+    padding: 12px;
+}
+
+.table-full {
+    width: 100%;
+}
+

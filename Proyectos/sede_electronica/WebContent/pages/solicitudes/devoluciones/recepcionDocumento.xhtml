@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-recepcionDocumentos.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_recepcionDocumento['head.titulo.recepcionDocumentos']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_recepcionDocumento['banner']}" />
+			<ui:param name="imagen" value="img-solicitudCertificados" />
+			<ui:param name="subtitulo"
+				value="#{txt_recepcionDocumento['head.titulo.recepcionDocumentos']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/devoluciones/recepcionDocumentos.jsf" />
+		</ui:include>
+		<f:metadata>
+			<f:viewParam name="is_proceso"
+				value="#{beanRecepcionDocumentos.is_proceso}" />
+			<f:event type="preRenderView"
+				listener="#{beanRecepcionDocumentos.valorParametro}" />
+		</f:metadata>
+		<h:form id="formRecepcionDocumentos">
+			<p:panel id="panelSeleccion" styleClass="no-border"
+				rendered="#{beanRecepcionDocumentos.ii_paso eq 1}">
+				<div class="row espacio">
+					<div class="col-xs-12 text-center">
+						<p:outputLabel styleClass="label-form text-center tamano-titulo"
+							value="#{txt_recepcionDocumento['head.titulo.recepcionDocumentos']}" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel id="lblNir" styleClass="label-form" for="nir"
+							value="#{txt_recepcionDocumento['label.nir']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="nir" maxlength="100"
+								value="#{beanRecepcionDocumentos.is_nir}"
+								placeholder="#{txt_recepcionDocumento['placeHolder.nir']}"
+								styleClass="text-input border-completo inputDes">
+								<p:ajax listener="#{beanRecepcionDocumentos.capturarTurno()}"
+									update="turno" onstart="PF('blockUI-Loading').show();"
+									onsuccess="PF('blockUI-Loading').hide();" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="lblNir" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_recepcionDocumento['tooltip.label.nir']}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel id="lblTurno" styleClass="label-form" for="turno"
+							value="#{txt_recepcionDocumento['label.turno']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="turno" autocomplete="off" maxlength="100"
+								value="#{beanRecepcionDocumentos.is_turno}"
+								styleClass="text-input border-completo inputDes"
+								placeholder="#{txt_recepcionDocumento['placeHolder.turno']}" />
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="lblTurno" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_recepcionDocumento['tooltip.label.turno']}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel id="lblTramite" styleClass="label-form"
+							for="tramite"
+							value="#{txt_recepcionDocumento['label.tipoTramite']}" />
+						<p:selectOneMenu id="tramite" filterMatchMode="contains"
+							widgetVar="tramite" value="#{beanRecepcionDocumentos.is_tramite}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{beanRecepcionDocumentos.cargarListaTipoTramite()}"
+								var="tramite" itemValue="#{tramite.is_codigo}"
+								itemLabel="#{tramite.is_nombre}" />
+							<p:ajax update="formRecepcionDocumentos" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="lblTramite" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_recepcionDocumento['tooltip.tipoTramite']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<ui:fragment
+						rendered="#{beanRecepcionDocumentos.is_tramite eq 'SOLICITUD_PRORROGA'}">
+						<div class="col-xs-12 col-md-4">
+							<p:outputLabel id="lblApoderado" styleClass="label-form"
+								for="tramite"
+								value="#{txt_recepcionDocumento['label.apoderado']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="lblApoderado" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_recepcionDocumento['tooltip.apoderado']}" />
+								</div>
+							</p:tooltip>
+						</div>
+						<span class="help-block"> <p:message for="lblApoderado" />
+						</span>
+
+						<div class="col-xs-12 col-md-5">
+							<h:panelGrid columns="2" cellpadding="5">
+								<p:selectOneRadio id="preguntaApoderado" required="true"
+									value="#{beanRecepcionDocumentos.ib_apoderado}"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									unselectable="true">
+									<f:selectItem itemLabel="#{txt_recepcionDocumento['si']}"
+										itemValue="true" />
+									<f:selectItem itemLabel="#{txt_recepcionDocumento['no']}"
+										itemValue="false" />
+								</p:selectOneRadio>
+								<span class="help-block"> <p:message
+										for="preguntaApoderado" />
+								</span>
+							</h:panelGrid>
+						</div>
+					</ui:fragment>
+				</div>
+				<br />
+				<div id="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-4">
+						<p:commandButton id="btnBuscar" type="submit"
+							styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_recepcionDocumento['boton.continuar']}">
+							<p:ajax listener="#{beanRecepcionDocumentos.validarTramite()}"
+								process="formRecepcionDocumentos"
+								update="formRecepcionDocumentos"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();" />
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+			<p:panel id="panelBancaria" styleClass="no-border"
+				rendered="#{beanRecepcionDocumentos.ii_paso eq 2}">
+				<div class="row">
+					<div class="col-xs-12 col-md-10 col-md-offset-2">
+						<p:outputLabel styleClass="label-form tituloGrande"
+							value="#{txt_recepcionDocumento['texto.info.formulario']}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel id="lblTipoDoc" styleClass="label-form"
+							for="tipoDoc" value="#{txt_recepcionDocumento['label.tipoDoc']}" />
+						<p:outputLabel styleClass="required-field" value="*" />
+						<p:selectOneMenu id="tipoDoc" filterMatchMode="contains"
+							widgetVar="tipoDoc"
+							value="#{beanRecepcionDocumentos.itd_tipoDocumentoDto}"
+							converter="selectOneMenuConverter">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{beanRecepcionDocumentos.iltd_tiposDocumento}"
+								var="tipoDoc" itemValue="#{tipoDoc}"
+								itemLabel="#{tipoDoc.is_nombre}" />
+							<p:ajax update="panelBancaria" process="@this"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="lblTipoDoc" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_recepcionDocumento['tooltip.tipoDoc']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel id="lblNumDoc" styleClass="label-form" for="numDoc"
+							value="#{txt_recepcionDocumento['label.numDoc']}" />
+						<p:outputLabel styleClass="required-field" value="*" />
+						<div class="ui-inputgroup">
+							<p:inputText id="numDoc" maxlength="20"
+								value="#{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.is_numDoc}"
+								styleClass="text-input border-completo inputDes"
+								placeholder="#{txt_recepcionDocumento['tooltip.numDoc']}">
+								<p:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="lblNumDoc" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_recepcionDocumento['tooltip.numDoc']}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+					<ui:fragment
+						rendered="#{beanRecepcionDocumentos.itd_tipoDocumentoDto.is_id eq 'NIT'}">
+						<div class="row">
+							<div class="col-xs-12 col-md-4">
+								<p:outputLabel id="lblRazonSocial" styleClass="label-form"
+									for="razonSocial"
+									value="#{txt_recepcionDocumento['label.razonSocial']}" />
+								<p:outputLabel styleClass="required-field" value="*" />
+								<div class="ui-inputgroup">
+									<p:inputText id="razonSocial" maxlength="50"
+										value="#{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.is_razonSocial}"
+										styleClass="text-input border-completo inputDes"
+										placeholder="#{txt_recepcionDocumento['tooltip.razonSocial']}">
+										<p:keyFilter regEx="/[a-zA-Z]/i" />
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="lblRazonSocial"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_recepcionDocumento['tooltip.razonSocial']}" />
+										</div>
+									</p:tooltip>
+								</div>
+							</div>
+						</div>
+					</ui:fragment>
+				</div>
+				<br />
+				<ui:fragment
+					rendered="#{beanRecepcionDocumentos.itd_tipoDocumentoDto.is_id ne 'NIT'}">
+					<div class="row">
+						<div class="col-xs-12 col-md-3">
+							<p:outputLabel id="lblPrimerNombre" styleClass="label-form"
+								for="primerNombre"
+								value="#{txt_recepcionDocumento['label.primerNombre']}" />
+							<p:outputLabel styleClass="required-field" value="*" />
+							<div class="ui-inputgroup">
+								<p:inputText id="primerNombre" maxlength="50"
+									value="#{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.is_primerNombre}"
+									styleClass="text-input border-completo inputDes"
+									placeholder="#{txt_recepcionDocumento['tooltip.primerNombre']}">
+									<p:keyFilter regEx="/[a-zA-Z]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="lblPrimerNombre"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_recepcionDocumento['tooltip.primerNombre']}" />
+									</div>
+								</p:tooltip>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-3">
+							<p:outputLabel id="lblSegundoNombre" styleClass="label-form"
+								for="segundoNombre"
+								value="#{txt_recepcionDocumento['label.segundoNombre']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="segundoNombre" maxlength="50"
+									value="#{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.is_segundoNombre}"
+									styleClass="text-input border-completo inputDes"
+									placeholder="#{txt_recepcionDocumento['tooltip.segundoNombre']}">
+									<p:keyFilter regEx="/[a-zA-Z]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="lblSegundoNombre"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_recepcionDocumento['tooltip.segundo.nombre']}" />
+									</div>
+								</p:tooltip>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-3">
+							<p:outputLabel id="lblPrimerApellido" styleClass="label-form"
+								for="primerApellido"
+								value="#{txt_recepcionDocumento['label.primerApellido']}" />
+							<p:outputLabel styleClass="required-field" value="*" />
+							<div class="ui-inputgroup">
+								<p:inputText id="primerApellido" maxlength="50"
+									value="#{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.is_primerApellido}"
+									styleClass="text-input border-completo inputDes"
+									placeholder="#{txt_recepcionDocumento['tooltip.primerApellido']}">
+									<p:keyFilter regEx="/[a-zA-Z]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="lblPrimerApellido"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_recepcionDocumento['tooltip.primerApellido']}" />
+									</div>
+								</p:tooltip>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-3">
+							<p:outputLabel id="lblSegundoApellido" styleClass="label-form"
+								for="segundoApellido"
+								value="#{txt_recepcionDocumento['label.segundoApellido']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="segundoApellido" maxlength="50"
+									value="#{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.is_segundoApellido}"
+									styleClass="text-input border-completo inputDes"
+									placeholder="#{txt_recepcionDocumento['tooltip.segundoApellido']}">
+									<p:keyFilter regEx="/[a-zA-Z]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="lblSegundoApellido"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_recepcionDocumento['tooltip.segundoApellido']}" />
+									</div>
+								</p:tooltip>
+							</div>
+						</div>
+					</div>
+					<br />
+				</ui:fragment>
+				<div class="row">
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel id="lblEntidad" styleClass="label-form"
+							for="entidad"
+							value="#{txt_recepcionDocumento['label.entidadFinan']}" />
+						<p:outputLabel styleClass="required-field" value="*" />
+						<p:selectOneMenu id="entidad" filterMatchMode="contains"
+							widgetVar="entidad"
+							value="#{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.is_entidadBancaria}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{beanRecepcionDocumentos.illeb_entidadBancaria}"
+								var="entidadBancaria"
+								itemValue="#{entidadBancaria.getIs_nombreEntidad()}"
+								itemLabel="#{entidadBancaria.getIs_nombreEntidad()}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="lblEntidad" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_recepcionDocumento['tooltip.entidadFinan']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel id="lblTipoCuenta" styleClass="label-form"
+							for="tipoCuenta"
+							value="#{txt_recepcionDocumento['label.tipoCuenta']}" />
+						<p:outputLabel styleClass="required-field" value="*" />
+						<p:selectOneMenu id="tipoCuenta" filterMatchMode="contains"
+							widgetVar="tipoCuenta"
+							value="#{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.is_tipoCuenta}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{beanRecepcionDocumentos.cargarListaTipoCuenta()}"
+								var="cuenta" itemValue="#{cuenta.is_codigo}"
+								itemLabel="#{cuenta.is_nombre}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="lblTipoCuenta" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_recepcionDocumento['tooltip.tipoCuenta']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel id="lblNumCuenta" styleClass="label-form"
+							for="segundoNombre"
+							value="#{txt_recepcionDocumento['label.numCuenta']}" />
+						<p:outputLabel styleClass="required-field" value="*" />
+						<div class="ui-inputgroup">
+							<p:inputText id="numCuenta" maxlength="20"
+								value="#{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.is_numCuenta}"
+								styleClass="text-input border-completo inputDes"
+								placeholder="#{txt_recepcionDocumento['tooltip.numCuenta']}">
+								<p:keyFilter regEx="/[A-Za-z0-9\-\s]/i" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="lblNumCuenta" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_recepcionDocumento['tooltip.numCuenta']}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel id="lblMotivo" styleClass="label-form" for="motivo"
+							value="#{txt_recepcionDocumento['label.motivoSol']}" />
+						<p:outputLabel styleClass="required-field" value="*" />
+						<div class="ui-inputgroup">
+							<p:inputTextarea id="motivo" maxlength="1000"
+								styleClass="text-input text-area-alto border-completo mask-AlphaNumEsp"
+								rows="3" cols="40" counter="mostrarContador" autoResize="false"
+								placeholder="#{txt_recepcionDocumento['tooltip.motivoSol']}"
+								value="#{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.is_motivo}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('formRecepcionDocumentos:motivo', 'spanMotivo');" />
+							</p:inputTextarea>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="lblMotivo" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_recepcionDocumento['tooltip.motivoSol']}" />
+								</div>
+							</p:tooltip>
+							<h:outputText id="mostrarContador" />
+							<span id="spanMotivo" class="ui-inputgroup-addon ocultar">
+								<p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('formRecepcionDocumentos:motivo', 'spanMotivo');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message for="motivo" />
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-md-7">
+						<p:outputLabel value="#{txt_recepcionDocumento['texto.pregunta']}" />
+						<p:outputLabel styleClass="required-field" value="*" />
+					</div>
+					<div class="col-xs-12 col-md-5">
+						<h:panelGrid columns="2" cellpadding="5">
+							<p:selectOneRadio id="pregunta"
+								value="#{beanRecepcionDocumentos.ib_pregunta}"
+								unselectable="true">
+								<f:selectItem itemLabel="#{txt_recepcionDocumento['si']}"
+									itemValue="true" />
+								<f:selectItem itemLabel="#{txt_recepcionDocumento['no']}"
+									itemValue="false" />
+							</p:selectOneRadio>
+						</h:panelGrid>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-4">
+						<p:commandButton id="btnContinuar" type="submit"
+							styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_recepcionDocumento['boton.continuar']}">
+							<p:ajax process="@form" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								update="formRecepcionDocumentos formRecepcionDocumentos:formCargarSoporte"
+								listener="#{beanRecepcionDocumentos.validarRecepcion()}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</p:panel>
+			<h:form id="formCargarSoporte"
+				rendered="#{beanRecepcionDocumentos.ii_paso eq 3}">
+				<p:panel id="adjuntarDocumentos">
+					<div class="row espacio">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelTipoDocumental"
+								for="tipoDocumental"
+								value="#{txt_recepcionDocumento['label.adjuntar.tipoDocumental']}" />
+							<p:outputLabel styleClass="required-field" value="*" />
+							<p:selectOneMenu id="tipoDocumental" widgetVar="tipoDocumental"
+								converter="selectOneMenuConverter"
+								value="#{beanRecepcionDocumentos.ist_soporteTransaccionDto.icd_catalogoDocumentoDto}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" noSelectionOption="true" />
+								<f:selectItems
+									value="#{beanRecepcionDocumentos.ilcd_tipoDocumental}"
+									var="tipoDocumental" itemLabel="#{tipoDocumental.is_nombre}"
+									itemValue="#{tipoDocumental}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTipoDocumental"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_desistimiento['tooltip.adjuntar.tipoDocumental']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="labelTipoDocumental" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelArchivo"
+								for="cargaDocumentos"
+								value="#{txt_recepcionDocumento['label.adjuntar.archivo']}" />
+							<p:outputLabel styleClass="required-field" value="*" />
+							<p:fileUpload id="cargaDocumentos" styleClass="cargar-archivo"
+								fileUploadListener="#{beanRecepcionDocumentos.cargarArchivo}"
+								showButtons="false"
+								sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+								allowTypes="/(\.|\/)(pdf|PDF)$/" auto="true"
+								label="#{txt_persona['label.ExaminarArchivo']}" process="@this"
+								update="textoSalidaArchivo"
+								invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+								invalidFileMessage="#{txt_recepcionDocumento['Mensaje.archivo.formatoInvalido']}">
+								<div class="col-xs-12 tamano-examinar">
+									<br />
+									<h:outputText id="textoSalidaArchivo" styleClass="text-input"
+										value="#{beanRecepcionDocumentos.ist_soporteTransaccionDto.ia_archivoDto.is_nombreArchivo}" />
+								</div>
+							</p:fileUpload>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelArchivo" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_recepcionDocumento['tooltip.adjuntar.archivo']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="labelArchivo" />
+							</span>
+						</div>
+					</div>
+					<div class="row space-row">
+						<div
+							class="col-xs-10 col-sm-4 col-xs-offset-1 col-sm-offset-4 space-row">
+							<p:commandButton
+								value="#{txt_recepcionDocumento['boton.agregar']}"
+								actionListener="#{beanRecepcionDocumentos.agregarTipoDocumental}"
+								styleClass="btn-gradiente btn-rojo" type="submit"
+								process="formCargarSoporte"
+								update="formRecepcionDocumentos:formCargarSoporte:adjuntarDocumentos"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();">
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="row espacio">
+						<div class="col-xs-12  align-center">
+							<p:dataTable var="documento" styleClass="centrar"
+								value="#{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.ilst_soportesTransaccionCargadosDto}"
+								widgetVar="listaDocumentos" id="listaDocumentos" reflow="true"
+								rowIndexVar="index"
+								emptyMessage="#{txt_recepcionDocumento['tabla.vacia.soporte']}"
+								stickyHeader="false">
+								<p:column
+									headerText="#{txt_recepcionDocumento['label.adjuntar.tipoDocumental']}">
+									<h:outputText
+										value="#{documento.icd_catalogoDocumentoDto.is_nombre}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_recepcionDocumento['label.nombreArchivo']}">
+									<h:outputText
+										value="#{documento.ia_archivoDto.is_nombreArchivo}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_recepcionDocumento['tabla.header.subir']}">
+									<p:commandLink
+										styleClass="#{documento.ib_desactivarBotonesCarga ? 'fa fa-check colorVerde' : 'fa fa-cloud-upload colorRojo' }"
+										disabled="#{documento.ib_desactivarBotonesCarga}">
+										<p:ajax
+											listener="#{beanRecepcionDocumentos.cargarSeleccion(true,index)}"
+											update="formAccionArchivo"
+											onsuccess="PF('accionArchivo').show();" />
+									</p:commandLink>
+								</p:column>
+								<p:column
+									headerText="#{txt_recepcionDocumento['tabla.header.eliminar']}"
+									styleClass="text-center">
+									<p:commandLink styleClass="fa fa-trash-o colorRojo"
+										disabled="#{documento.ib_desactivarBotonesCarga}">
+										<p:ajax
+											listener="#{beanRecepcionDocumentos.cargarSeleccion(false,index)}"
+											update="formAccionArchivo"
+											onsuccess="PF('accionArchivo').show();" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+							<br /> <br />
+						</div>
+					</div>
+
+					<div class="row">
+						<div
+							class="col-xs-10 col-sm-4 col-xs-offset-1 col-sm-offset-4 space-row">
+							<p:commandButton
+								value="#{txt_correccion['tabs.boton.enviarSolicitud']}"
+								disabled="#{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.getSize() lt 1}"
+								styleClass="btn-gradiente btn-rojo"
+								onstart="PF('preguntarFinalizacion').show();">
+							</p:commandButton>
+						</div>
+					</div>
+				</p:panel>
+			</h:form>
+		</h:form>
+		<!-- Modal de informacion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalNoValidado" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalNoValidado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:define name="body-modal">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 textoLey">
+							<p:outputLabel
+								value="#{txt_recepcionDocumento['texto.info.error']}" />
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton styleClass="btn-rojo btn-gradiente"
+							oncomplete="PF('modalNoValidado').hide();"
+							value="#{txt_recepcionDocumento['boton.entendido']}">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 	accion archivo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="accionArchivo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_desistimiento['label.titulo']}" />
+			<ui:param name="formulario" value="formAccionArchivo" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_desistimiento['label.carga1']}" />
+				<h:outputText
+					value=" #{beanRecepcionDocumentos.ib_cargar ? txt_recepcionDocumento['label.carga.subir'] : txt_recepcionDocumento['label.carga.eliminar']}" />
+				<h:outputText value=" #{txt_recepcionDocumento['label.carga2']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							onsuccess="PF('blockUI-Loading').hide();"
+							oncomplete="PF('accionArchivo').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							actionListener="#{beanRecepcionDocumentos.accionArchivo}"
+							update="formRecepcionDocumentos:formCargarSoporte:adjuntarDocumentos"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();"
+							oncomplete="PF('accionArchivo').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- pregunta finalizar solicitud -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="preguntarFinalizacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_desistimiento['label.titulo']}" />
+			<ui:param name="formulario" value="formPreguntarFinalizacion" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_recepcionDocumento['label.pregunta']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							onsuccess="PF('preguntarFinalizacion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							actionListener="#{beanRecepcionDocumentos.finalizarTransaccion}"
+							onsuccess="PF('preguntarFinalizacion').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 	PODER no cargado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="poderNoCargado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formPoderNoCargado" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_recepcionDocumento['modal.noPoder']}" />
+				<br />
+				<h:outputText styleClass="label-form"
+					value="#{beanRecepcionDocumentos.is_documentosFaltantes}" />
+				<br />
+				<h:outputText
+					value="#{txt_recepcionDocumento['modal.noPoder.pregunta']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.entendido']}"
+							onclick="PF('poderNoCargado').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 	Finalizar proceso -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="finalizarProceso" />
+			<ui:param name="clasesEstilo" value="cerrarModal" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formFinalizarProceso" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_recepcionDocumento['label.envio1']}" />
+				<h:outputText
+					value=" #{beanRecepcionDocumentos.itrd_transaccionRecepcionDocumentoDto.is_nir}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.entendido']}"
+							action="/pages/personas/inicio.jsf?faces-redirect=true" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

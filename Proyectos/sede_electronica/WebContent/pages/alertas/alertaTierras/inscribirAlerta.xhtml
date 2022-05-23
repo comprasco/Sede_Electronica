@@ -1,0 +1,2353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-inscribirAlerta.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputScript library="js" name="archivo.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_alertaTierras['InscribirAlerta']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_alertaTierras['InscribirAlerta.Titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_alertaTierras['InscribirAlerta.Subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/alertas/alertaTierras/inscribirAlerta.jsf" />
+		</ui:include>
+		<!-- Inscribir Alerta -->
+		<p:panel id="panelInscribirAlertaTierras" styleClass="no-border">
+			<h:form id="formInscribirAlertaTierras">
+				<p:outputPanel id="formularioInscribirAlerta">
+					<h:form id="seccionA">
+						<div class="col-xs-12">
+							<div class="col-xs-12 text-center">
+								<p:outputLabel id="labelCarguePoderes"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_alertaTierras['InscribirAlerta.Upper']}" />
+							</div>
+							<br /> <br />
+							<div class="col-xs-11 text-left">
+								<p:outputLabel value="#{txt_alertaTierras['Seccion.A']}"
+									styleClass="titulo tamano-subtitulo" />
+								<p:separator />
+								<br />
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<div class="title">
+										<div>
+											<p:outputLabel id="labelTipoAlerta" styleClass="label-form"
+												for="tipoAlerta"
+												value="#{txt_alertaTierras['label.TipoAlerta']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										</div>
+									</div>
+									<p:selectOneMenu id="tipoAlerta" required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										converter="selectOneMenuConverter" styleClass=""
+										disabled="#{beanInscribirAlerta.ib_desactivarSeccionA}"
+										editable="false"
+										value="#{beanInscribirAlerta.icat_cargueAlertaTierrasDto.is_tipoAlerta}">
+										<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanInscribirAlerta.illta_tipoAlertaDto}"
+											var="tipoAlerta" itemLabel="#{tipoAlerta.is_nombre}"
+											itemValue="#{tipoAlerta}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelTipoAlerta"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_alertaTierras['label.TipoAlerta']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="tipoAlerta" />
+									</span>
+								</div>
+								<ui:fragment
+									rendered="#{beanInscribirAlerta.ib_entidadEspecial}">
+									<div class="col-xs-12 col-sm-8">
+										<div class="title">
+											<div>
+												<p:outputLabel id="labelCodigoEntidad"
+													styleClass="label-form" for="codigoEntidad"
+													value="#{txt_alertaTierras['label.CodigoEntidad']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											</div>
+										</div>
+										<p:selectOneMenu id="codigoEntidad" required="true"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											converter="selectOneMenuConverter"
+											disabled="#{beanInscribirAlerta.ib_desactivarSeccionA}"
+											value="#{beanInscribirAlerta.icat_cargueAlertaTierrasDto.is_codigoEntidad}">
+											<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+												itemValue="" />
+											<f:selectItems
+												value="#{beanInscribirAlerta.illaja_listaAutoridadesJADto}"
+												var="codigoEntidad"
+												itemLabel="#{codigoEntidad.is_nombreAutoridad}"
+												itemValue="#{codigoEntidad}" />
+										</p:selectOneMenu>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCodigoEntidad"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_alertaTierras['label.CodigoEntidad']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="codigoEntidad" />
+										</span>
+									</div>
+								</ui:fragment>
+								<ui:fragment
+									rendered="#{beanInscribirAlerta.ib_adminEntidadEspecial}">
+									<div class="col-xs-12 col-sm-8">
+										<div class="title">
+											<div>
+												<p:outputLabel id="labelAdminCodigoEntidad"
+													styleClass="label-form" for="codigoAdminEntidad"
+													value="#{txt_alertaTierras['label.CodigoEntidad']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											</div>
+										</div>
+										<p:inputText id="codigoAdminEntidad" required="true"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											styleClass="text-input border-completo disable"
+											readonly="true"
+											disabled="#{beanInscribirAlerta.ib_desactivarSeccionA}"
+											value="#{beanInscribirAlerta.icat_cargueAlertaTierrasDto.is_codigoEntidad}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelAdminCodigoEntidad"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_alertaTierras['label.CodigoEntidad']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="codigoAdminEntidad" />
+										</span>
+									</div>
+								</ui:fragment>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<div class="title">
+										<div>
+											<p:outputLabel id="labelTipoOficina" styleClass="label-form"
+												for="tipoOficina"
+												value="#{txt_alertaTierras['label.TipoOficina']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										</div>
+									</div>
+									<p:selectOneMenu id="tipoOficina" required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										disabled="#{beanInscribirAlerta.ib_desactivarSeccionA}"
+										value="#{beanInscribirAlerta.icat_cargueAlertaTierrasDto.is_tipoOficina}">
+										<p:ajax
+											listener="#{beanInscribirAlerta.actualizarNombreOficinaOrigen}"
+											update="formInscribirAlertaTierras:seccionA:nombreOficina"
+											process="@this" />
+										<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanInscribirAlerta.illoo_listaOficinasOrigenDto}"
+											var="tipoOficina" itemLabel="#{tipoOficina.is_oficinaOrigen}"
+											itemValue="#{tipoOficina.is_oficinaOrigen}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelTipoOficina"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_alertaTierras['label.TipoOficina']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="tipoOficina" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<div class="title">
+										<div>
+											<p:outputLabel id="labelNombreOficina"
+												styleClass="label-form" for="nombreOficina"
+												value="#{txt_alertaTierras['label.NombreOficina']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										</div>
+									</div>
+									<div class="ui-inputgroup">
+										<p:inputText id="nombreOficina" styleClass="tamano"
+											readonly="true" required="true"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											placeholder="#{txt_alertaTierras['placeholder.NombrOficinaOrigenTipo']}"
+											disabled="#{beanInscribirAlerta.ib_desactivarSeccionA}"
+											value="#{beanInscribirAlerta.icat_cargueAlertaTierrasDto.is_nombreOficinaOrigen}">
+										</p:inputText>
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelNombreOficina"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_alertaTierras['label.NombreOficina']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="nombreOficina" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<div class="title">
+										<div>
+											<p:outputLabel id="labelTipoDocumentoAlerta"
+												styleClass="label-form" for="tipoDocumentoAlerta"
+												value="#{txt_alertaTierras['label.TipoDocumentoAlerta']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										</div>
+									</div>
+									<p:selectOneMenu id="tipoDocumentoAlerta" required="true" styleClass="tamano"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										disabled="#{beanInscribirAlerta.ib_desactivarSeccionA}"
+										value="#{beanInscribirAlerta.icat_cargueAlertaTierrasDto.is_tipoDocumentoAlerta}">
+										<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanInscribirAlerta.ilcd_tipoDocumental}"
+											var="tipoDocumentoAlerta"
+											itemLabel="#{tipoDocumentoAlerta.is_nombre}"
+											itemValue="#{tipoDocumentoAlerta.is_codigoValor}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelTipoDocumentoAlerta"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_alertaTierras['label.TipoDocumentoAlerta']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="tipoDocumentoAlerta" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<div class="title">
+										<div>
+											<p:outputLabel id="labelNumeroDocumentoArchivo"
+												styleClass="label-form" for="numeroDocumentoArchivo"
+												value="#{txt_alertaTierras['label.NumeroDocumentoArchivo']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										</div>
+									</div>
+									<p:inputText id="numeroDocumentoArchivo" required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										styleClass="text-input border-completo disable" maxlength="20"
+										disabled="#{beanInscribirAlerta.ib_desactivarSeccionA}"
+										placeholder="#{txt_alertaTierras['placeholder.NumeroDocumento']}"
+										value="#{beanInscribirAlerta.icat_cargueAlertaTierrasDto.is_numeroDocumentoAlerta}">
+										<p:keyFilter regEx="/[0-9\a-z]/i" />
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelNumeroDocumentoArchivo"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_alertaTierras['label.NumeroDocumentoArchivo']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="numeroDocumentoArchivo" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<div class="title">
+										<div>
+											<p:outputLabel id="labelFechaDocumento"
+												styleClass="label-form" for="fechaDocumento"
+												value="#{txt_alertaTierras['label.FechaDocumento']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										</div>
+									</div>
+									<p:calendar id="fechaDocumento" readonlyInput="true"
+										pattern="dd/MM/yyyy" locale="es"
+										disabled="#{beanInscribirAlerta.ib_desactivarSeccionA}"
+										yearRange="1900:2200" navigator="true" maxdate="0"
+										placeholder="#{txt['placeholder.FormatoFecha']}"
+										styleClass="text-input-calendar"
+										value="#{beanInscribirAlerta.icat_cargueAlertaTierrasDto.id_fechaDocumento}"
+										required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										showOn="button">
+									</p:calendar>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelFechaDocumento"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_alertaTierras['label.FechaDocumento']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="fechaDocumento" />
+									</span>
+								</div>
+
+								<div class="col-xs-12 col-sm-4">
+									<div class="title">
+										<div>
+											<p:outputLabel id="labelComunidadEtnica"
+												styleClass="label-form" for="comunidadEtnica"
+												value="#{txt_alertaTierras['label.ComunidadEtnica']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										</div>
+									</div>
+									<p:selectOneMenu id="comunidadEtnica" required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										converter="selectOneMenuConverter" styleClass="pais-nat"
+										disabled="#{beanInscribirAlerta.ib_desactivarSeccionA}"
+										value="#{beanInscribirAlerta.icat_cargueAlertaTierrasDto.is_comunidadEtnica}">
+										<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanInscribirAlerta.illce_coumunidadEtnicaDto}"
+											var="comunidadEtnica"
+											itemLabel="#{comunidadEtnica.is_nombre}"
+											itemValue="#{comunidadEtnica}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelComunidadEtnica"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_alertaTierras['label.ComunidadEtnica']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="comunidadEtnica" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-6">
+									<div class="title">
+										<div>
+											<p:outputLabel id="labelNumeroRadicado"
+												styleClass="label-form" for="numeroRadicado"
+												value="#{txt_alertaTierras['label.NumeroRadicado']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										</div>
+									</div>
+									<p:inputText id="numeroRadicado" required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										styleClass="text-input border-completo" maxlength="30"
+										disabled="#{beanInscribirAlerta.ib_desactivarSeccionA}"
+										placeholder="#{txt_alertaTierras['placeholder.NumeroRadicadoProceso']}"
+										value="#{beanInscribirAlerta.icat_cargueAlertaTierrasDto.is_numeroRadicadoProceso}">
+										<p:keyFilter regEx="/[0-9\a-z\s]/i" />
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelNumeroRadicado"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_alertaTierras['label.NumeroRadicado']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="numeroRadicado" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-6">
+									<div class="title">
+										<div>
+											<p:outputLabel id="labelFechaProceso" styleClass="label-form"
+												for="fechaProceso"
+												value="#{txt_alertaTierras['label.FechaProceso']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										</div>
+									</div>
+									<p:calendar id="fechaProceso" readonlyInput="true"
+										pattern="dd/MM/yyyy" locale="es"
+										disabled="#{beanInscribirAlerta.ib_desactivarSeccionA}"
+										yearRange="1900:2200" navigator="true" maxdate="0"
+										placeholder="#{txt['placeholder.FormatoFecha']}"
+										styleClass="text-input-calendar"
+										value="#{beanInscribirAlerta.icat_cargueAlertaTierrasDto.id_fechaProceso}"
+										required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										showOn="button">
+									</p:calendar>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelFechaProceso"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_alertaTierras['label.FechaProceso']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="fechaProceso" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4 col-sm-offset-1 space-row">
+									<p:commandButton id="botonCargarArchivo"
+										icon="icon-flecha-blanca" iconPos="right" type="submit"
+										styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+										value="#{txt_alertaTierras['boton.CargarArchivo']}">
+										<p:ajax ignoreAutoUpdate="true"
+											process="@all formInscribirAlertaTierras seccionA"
+											update="formInscribirAlerta:opcionesRender formInscribirAlertaTierras"
+											onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('blockUI-Loading').hide(); if(args &amp;&amp; args.validationFailed) validarFormulario('#{txt_cuentaCupo['campos.obligatorios']}');"
+											listener="#{beanInscribirAlerta.validarCargarDocumentoAlerta()}" />
+									</p:commandButton>
+								</div>
+								<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+									<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+										type="submit"
+										styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+										value="#{txt_alertaTierras['boton.CrearAlerta']}">
+										<p:ajax ignoreAutoUpdate="true"
+											process="@all formInscribirAlertaTierras seccionA"
+											update="formInscribirAlerta:opcionesRender formInscribirAlertaTierras"
+											onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('blockUI-Loading').hide(); if(args &amp;&amp; args.validationFailed) validarFormulario('#{txt_cuentaCupo['campos.obligatorios']}');"
+											listener="#{beanInscribirAlerta.validarAlerta()}" />
+									</p:commandButton>
+								</div>
+							</div>
+							<br />
+						</div>
+					</h:form>
+				</p:outputPanel>
+			</h:form>
+		</p:panel>
+		<p:panel id="panelInscribirAlerta" styleClass="no-border">
+			<h:form id="formInscribirAlerta">
+				<!-- Renderizar si se carga el documento -->
+				<p:outputPanel id="opcionesRender">
+					<div class="row">
+						<ui:fragment
+							rendered="#{beanInscribirAlerta.mostrarNombreDocumentoCargado()}">
+							<div class="col-xs-12 col-sm-6 text-center">
+								<p:outputPanel id="nombreDocumentoCargado">
+									<div>
+										<p:outputLabel id="labelNombreArchivo" styleClass="label-form"
+											value="#{txt_alertaTierras['label.nombreArchivo']}" />
+										<p:outputLabel>: </p:outputLabel>
+										<h:outputText id="nombreArchivo" styleClass="text-input"
+											value="#{beanInscribirAlerta.icdf_cargarDocumentoAlertaTierrasDto.ia_archivoDto.is_nombreArchivo}" />
+									</div>
+								</p:outputPanel>
+								<br />
+							</div>
+						</ui:fragment>
+						<ui:fragment
+							rendered="#{beanInscribirAlerta.mostrarNumeroAlerta()}">
+							<div class="col-xs-12 col-sm-6 text-center">
+								<p:outputPanel id="matriculaNumero">
+									<div>
+										<p:outputLabel id="labelNumeroMatricula"
+											styleClass="label-form"
+											value="#{txt_alertaTierras['label.numeroAlerta']}" />
+										<p:outputLabel>: </p:outputLabel>
+										<h:outputText id="numeroMatricula" styleClass="text-input"
+											value="#{beanInscribirAlerta.itsiac_tipoSalidaInscribirAlertaCabeceraWsDto.ii_idAlerta}" />
+									</div>
+								</p:outputPanel>
+								<br /> <br />
+							</div>
+						</ui:fragment>
+					</div>
+				</p:outputPanel>
+
+				<!-- Seccion de Busquedas -->
+				<p:outputPanel id="seccionB"
+					rendered="#{beanInscribirAlerta.activarSeccionB()}"
+					styleClass="no-border">
+					<div class="col-xs-11 text-left">
+						<p:outputLabel value="#{txt_alertaTierras['Seccion.B']}"
+							styleClass="titulo tamano-subtitulo" />
+						<p:separator />
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<br />
+							<div class="col-xs-2 text-center">
+								<h:outputText id="nuevaSolicitud"
+									class="fa fa-exclamation-circle fa-4x cursor-pointer"
+									title="#{txt_cuentaCupo['title.NotaImportante']}">
+								</h:outputText>
+							</div>
+							<div class="col-xs-10 pad-text">
+								<p:outputLabel styleClass="titulo"
+									value="#{txt_alertaTierras['Mensaje.NotaBusquedas']}" />
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-sm-4 space-row">
+							<p:commandButton type="submit"
+								disabled="#{beanInscribirAlerta.ib_botonBusquedaMatricula}"
+								styleClass="btn-gradiente icon-btn btn-rojo"
+								value="#{txt_alertaTierras['boton.BusquedaMatricula']}"
+								oncomplete="PF('busquedaOpcionUno').show();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-12 col-sm-4 space-row">
+							<p:commandButton
+								disabled="#{beanInscribirAlerta.ib_botonBusquedaDatosPredio}"
+								type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo"
+								value="#{txt_alertaTierras['boton.BusquedaDatosPredio']}"
+								oncomplete="PF('busquedaOpcionDos').show();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:commandButton
+								disabled="#{beanInscribirAlerta.ib_botonBusquedaDatosCatastrales}"
+								type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo"
+								value="#{txt_alertaTierras['boton.BusquedaDatosCatastrales']}"
+								oncomplete="PF('busquedaOpcionTres').show();">
+							</p:commandButton>
+							<br /> <br />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-offset-2 col-sm-4 space-row">
+							<p:commandButton
+								disabled="#{beanInscribirAlerta.ib_botonBusquedaCargandoArchivo}"
+								type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo"
+								value="#{txt_alertaTierras['boton.BusquedaCargandoArchivo']}"
+								oncomplete="PF('busquedaOpcionCuatro').show();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:commandButton
+								disabled="#{beanInscribirAlerta.ib_botonBusquedaAntiguoSistema}"
+								type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo"
+								value="#{txt_alertaTierras['boton.AntiguoSistema']}"
+								oncomplete="PF('busquedaOpcionCinco').show();">
+							</p:commandButton>
+						</div>
+					</div>
+					<br />
+				</p:outputPanel>
+
+				<!-- Tabla Matricula -->
+				<p:outputPanel id="seccionC"
+					rendered="#{beanInscribirAlerta.ib_seccionC}">
+					<div class="col-xs-11 text-left">
+						<p:outputLabel value="#{txt_alertaTierras['Seccion.C']}"
+							styleClass="titulo tamano-subtitulo" />
+						<p:separator />
+						<br />
+					</div>
+					<br />
+					<div class="col-xs-12">
+						<p:dataTable var="seccionCMatriculas"
+							value="#{beanInscribirAlerta.iltmat_tablaMatriculaAlertaTierrasDto}"
+							styleClass="centrar" widgetVar="paramsSeccionCMatriculas"
+							id="matriculasSeccionC" reflow="true" rowIndexVar="index"
+							paginator="true" rows="5" paginatorPosition="bottom"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							currentPageReportTemplate="{currentPage} / {totalPages}"
+							emptyMessage="#{txt_alertaTierras['Tabla.vacia.Matricula']}"
+							stickyHeader="false">
+							<p:column headerText="#{txt_alertaTierras['Modal.titulo.orip']}"
+								styleClass="documento-medio">
+								<h:outputText value="#{seccionCMatriculas.is_orip}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_alertaTierras['Modal.titulo.numeroMatricula']}"
+								styleClass="documento-medio">
+								<h:outputText value="#{seccionCMatriculas.is_numeroMatricula}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_alertaTierras['Modal.titulo.numeroCatastral']}"
+								styleClass="documento-medio">
+								<h:outputText value="#{seccionCMatriculas.is_numeroCatastral}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_alertaTierras['Modal.titulo.matriculaDerivada']}"
+								styleClass="documento-medio">
+								<h:outputText value="#{seccionCMatriculas.is_matriculaDerivada}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_alertaTierras['Modal.titulo.verMapa']}"
+								styleClass="tamanoBotonTabla documento-medio">
+								<p:commandButton id="verMapa" class="btn-rojo btn-gradiente"
+									disabled="#{seccionCMatriculas.ib_desactivarBotones}"
+									icon="fa fa-map-marker" iconPos="right"
+									value="#{txt_alertaTierras['Modal.Boton.VerMapa']}">
+									<p:ajax
+										listener="#{beanInscribirAlerta.verMapa(seccionCMatriculas)}"
+										update="formModalVerMapa"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();" />
+								</p:commandButton>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="verMapa" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_alertaTierras['tooltip.VerMapa']}" />
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_alertaTierras['Modal.titulo.incluir']}"
+								styleClass="tamanoBotonTabla documento-medio">
+								<p:commandButton id="incluirMatricula"
+									class="btn-rojo btn-gradiente" icon="fa fa-plus-circle"
+									iconPos="right"
+									disabled="#{seccionCMatriculas.ib_desactivarBotones}"
+									value="#{txt_alertaTierras['Modal.Boton.Incluir']}">
+									<p:ajax oncomplete="PF('confirmarIncluirMatricula').show();"
+										listener="#{beanInscribirAlerta.cargarIdIncluirMatricula(seccionCMatriculas)}" />
+									<f:setPropertyActionListener value="#{seccionCMatriculas}"
+										target="#{beanInscribirAlerta.itmat_tablaMatriculaAlertaTierrasDto}" />
+								</p:commandButton>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="incluirMatricula"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_alertaTierras['tooltip.Incluir']}" />
+									</div>
+								</p:tooltip>
+							</p:column>
+						</p:dataTable>
+						<br /> <br />
+						<div class="col-xs-offset-1 col-sm-offset-4 col-xs-10 col-sm-4">
+							<p:commandButton id="incluirTodo" class="btn-rojo btn-gradiente"
+								icon="fa fa-plus" iconPos="right"
+								value="#{txt_alertaTierras['Modal.Boton.IncluirTodas']}">
+								<p:ajax
+									oncomplete="PF('confirmarIncluirTodasMatricula').show();" />
+							</p:commandButton>
+							<br /> <br />
+						</div>
+					</div>
+					<br />
+				</p:outputPanel>
+
+				<!-- Tabla Matriculas Incluidas -->
+				<p:outputPanel id="seccionD"
+					rendered="#{beanInscribirAlerta.ib_seccionD}">
+					<div class="col-xs-11 text-left">
+						<p:outputLabel value="#{txt_alertaTierras['Seccion.D']}"
+							styleClass="titulo tamano-subtitulo" />
+						<p:separator />
+						<br />
+					</div>
+					<br />
+					<div class="col-xs-12">
+						<p:dataTable var="seccionDMatriculasIncluidas"
+							styleClass="centrar" widgetVar="paramsSeccionDMatriculas"
+							id="matriculasIncluidasSeccionD" reflow="true"
+							rowIndexVar="index" paginator="true" rows="5"
+							paginatorPosition="bottom"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							currentPageReportTemplate="{currentPage} / {totalPages}"
+							value="#{beanInscribirAlerta.iltmat_tablaMatriculasIncluidasAlertaTierrasDto}"
+							emptyMessage="#{txt_alertaTierras['Tabla.vacia.MatriculasIncluidas']}"
+							stickyHeader="false">
+							<p:column headerText="#{txt_alertaTierras['Modal.titulo.orip']}"
+								styleClass="documento-medio">
+								<h:outputText value="#{seccionDMatriculasIncluidas.is_orip}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_alertaTierras['Modal.titulo.numeroMatricula']}"
+								styleClass="documento-medio">
+								<h:outputText
+									value="#{seccionDMatriculasIncluidas.is_numeroMatricula}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_alertaTierras['Modal.titulo.numeroCatastral']}"
+								styleClass="documento-medio">
+								<h:outputText
+									value="#{seccionDMatriculasIncluidas.is_numeroCatastral}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_alertaTierras['Modal.titulo.verMapa']}"
+								styleClass="tamanoBotonTabla documento-medio">
+								<p:commandButton id="verMapa" class="btn-rojo btn-gradiente"
+									icon="fa fa-map-marker" iconPos="right"
+									value="#{txt_alertaTierras['Modal.Boton.VerMapa']}">
+									<p:ajax
+										listener="#{beanInscribirAlerta.verMapa(seccionDMatriculasIncluidas)}"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();" />
+								</p:commandButton>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="verMapa" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_alertaTierras['tooltip.VerMapa']}" />
+									</div>
+								</p:tooltip>
+							</p:column>
+							<p:column
+								headerText="#{txt_alertaTierras['Modal.titulo.excluir']}"
+								styleClass="tamanoBotonTabla documento-medio">
+								<p:commandButton id="incluir" class="btn-rojo btn-gradiente"
+									icon="fa fa-minus-circle" iconPos="right"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									value="#{txt_alertaTierras['Modal.Boton.Excluir']}">
+									<p:ajax oncomplete="PF('confirmarExcluirMatricula').show();"
+										listener="#{beanInscribirAlerta.cargarIdMatricula(seccionDMatriculasIncluidas)}" />
+									<f:setPropertyActionListener
+										value="#{seccionDMatriculasIncluidas}"
+										target="#{beanInscribirAlerta.itmat_tablaMatriculasIncluidasAlertaTierrasDto}" />
+								</p:commandButton>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="incluir" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_alertaTierras['tooltip.Excluir']}" />
+									</div>
+								</p:tooltip>
+							</p:column>
+						</p:dataTable>
+						<br />
+					</div>
+					<br />
+				</p:outputPanel>
+
+				<!-- Tabla Matriculas Proceso Antiguo Sistema -->
+				<p:outputPanel id="antiguoSistema"
+					rendered="#{beanInscribirAlerta.ib_seccionAS}">
+					<div class="col-xs-11 text-left">
+						<p:outputLabel
+							value="#{txt_alertaTierras['title.ProcesoAntiguoSistema']}"
+							styleClass="titulo tamano-subtitulo" />
+						<p:separator />
+						<br />
+					</div>
+					<br />
+					<div class="col-xs-12">
+						<p:dataTable id="antiguoSistemaSeccionD"
+							var="seccionDAntiguoSistema"
+							widgetVar="paramsSeccionDAntiguoSistema" reflow="true"
+							rowIndexVar="index" paginator="true" rows="5"
+							paginatorPosition="bottom"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							currentPageReportTemplate="{currentPage} / {totalPages}"
+							styleClass="tamanoTablaAS tablaAntiguoSistema"
+							value="#{beanInscribirAlerta.ilatas_alertaTierrasAntiguoSistemaDto}"
+							emptyMessage="#{txt_alertaTierras['Tabla.vacia.MatriculasIncluidas']}"
+							stickyHeader="false">
+							<p:column
+								headerText="#{txt_alertaTierras['label.Circulo.Registral']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText
+									value="#{seccionDAntiguoSistema.is_nomCirculoRegistral}" />
+							</p:column>
+							<p:column headerText="#{txt_alertaTierras['label.Libro']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText value="#{seccionDAntiguoSistema.ii_numLibro}" />
+							</p:column>
+							<p:column headerText="#{txt_alertaTierras['label.Tomo']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText value="#{seccionDAntiguoSistema.ii_numTomo}" />
+							</p:column>
+							<p:column headerText="#{txt_alertaTierras['label.TipoPartida']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText value="#{seccionDAntiguoSistema.is_idTipoPartida}" />
+							</p:column>
+							<p:column headerText="#{txt_alertaTierras['label.TipoPredio']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText value="#{seccionDAntiguoSistema.is_tipoPredio}" />
+							</p:column>
+							<p:column headerText="#{txt_alertaTierras['label.Folio']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText value="#{seccionDAntiguoSistema.ii_numFolio}" />
+							</p:column>
+							<p:column headerText="#{txt_alertaTierras['label.Anio']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText value="#{seccionDAntiguoSistema.ii_anio}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_alertaTierras['label.NumeroPartida']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText value="#{seccionDAntiguoSistema.ii_numPartida}" />
+							</p:column>
+							<p:column headerText="#{txt_alertaTierras['label.NombrePredio']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText value="#{seccionDAntiguoSistema.is_nomPredio}" />
+							</p:column>
+							<p:column headerText="#{txt_alertaTierras['label.NumeroPredio']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText value="#{seccionDAntiguoSistema.ii_numPredio}" />
+							</p:column>
+							<p:column headerText="#{txt_alertaTierras['label.Pais']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText value="#{seccionDAntiguoSistema.is_nomPais}" />
+							</p:column>
+							<p:column headerText="#{txt_alertaTierras['label.Departamento']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText
+									value="#{seccionDAntiguoSistema.is_nomDepartamento}" />
+							</p:column>
+							<p:column headerText="#{txt_alertaTierras['label.Municipio']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<h:outputText value="#{seccionDAntiguoSistema.is_nomMunicipio}" />
+							</p:column>
+							<p:column headerText="#{txt_alertaTierras['label.Excluir']}"
+								styleClass="tablaAntiguoSistema documento-medio">
+								<p:commandButton id="excluir" class="btn-rojo btn-gradiente"
+									icon="fa fa-minus-circle" iconPos="right"
+									value="#{txt_alertaTierras['Modal.Boton.Excluir']}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();">
+									<p:ajax
+										oncomplete="PF('confirmarExcluirMatriculaAntiguoSistema').show();"
+										listener="#{beanInscribirAlerta.cargarIdMatriculaAntiguoSistema(seccionDAntiguoSistema)}" />
+									<f:setPropertyActionListener value="#{seccionDAntiguoSistema}"
+										target="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto}" />
+								</p:commandButton>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="excluir" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_alertaTierras['tooltip.Excluir']}" />
+									</div>
+								</p:tooltip>
+							</p:column>
+						</p:dataTable>
+					</div>
+					<br />
+				</p:outputPanel>
+
+				<p:outputPanel id="finTransaccion"
+					rendered="#{beanInscribirAlerta.habilitarBotones()}"
+					styleClass="no-border">
+					<div class="row">
+						<div class="col-xs-12 col-sm-4 col-sm-offset-1">
+							<br />
+							<p:commandButton icon="icon-flecha-gris" iconPos="right"
+								styleClass="icon-btn btn-gris " type="submit"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								value="#{txt_alertaTierras['boton.CancelarInscripcion']}">
+								<p:ajax oncomplete="PF('cancelarInscripcion').show();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+							<br />
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+								value="#{txt_alertaTierras['boton.RealizarCargueAlerta']}">
+								<p:ajax listener="#{beanInscribirAlerta.validarActivarAlerta()}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</p:outputPanel>
+			</h:form>
+		</p:panel>
+
+		<!-- Modal Cargar Documento Alerta -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="cargarArchivo" />
+			<ui:param name="formulario" value="formCargarArchivo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_alertaTierras['Modal.Header.CargarDocumento']}" />
+			<ui:define name="body-modal">
+				<div class="row ui-g">
+					<div class="col-xs-11 text-left">
+						<p:outputLabel
+							value="#{txt_alertaTierras['Mensaje.cargarDocumentoAlerta']}"
+							styleClass="titulo tamano-subtitulo" />
+						<br />
+					</div>
+					<div class="col-xs-11 text-left">
+						<p:outputLabel>- </p:outputLabel>
+						<p:outputLabel
+							value="#{txt_alertaTierras['Mensaje.archivo.limiteTamano']}" />
+					</div>
+					<div class="col-xs-11 text-left">
+						<p:outputLabel>- </p:outputLabel>
+						<p:outputLabel
+							value="#{txt_alertaTierras['Mensaje.archivo.formatoInvalido']}" />
+						<br />
+					</div>
+					<div class="col-xs-11 text-left">
+						<p:outputLabel>- </p:outputLabel>
+						<p:outputLabel
+							value="#{txt_alertaTierras['Mensaje.DespuesModificar']}" />
+						<br />
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<p:outputLabel id="labelCargarArchivos" styleClass="label-form"
+							value="#{txt_alertaTierras['label.archivoAlerta']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<div class="ui-inputgroup">
+							<p:fileUpload id="documentoAlerta" styleClass="cargar-archivo"
+								showButtons="false" sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+								allowTypes="/(\.|\/)(pdf|PDF)$/" auto="true"
+								fileUploadListener="#{beanInscribirAlerta.generarArchivoAlertaTierras}"
+								label="#{txt_persona['label.ExaminarArchivo']}" process="@this"
+								invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+								invalidFileMessage="#{txt_alertaTierras['Mensaje.archivo.formatoInvalido']}"
+								update=":formCargarArchivo:textoSalidaArchivoAlerta formCargarArchivo:textoSalidaArchivoAlerta">
+								<div class="col-xs-12">
+									<br />
+									<h:outputText id="textoSalidaArchivoAlerta"
+										styleClass="text-input"
+										value="#{beanInscribirAlerta.icdf_cargarDocumentoAlertaTierrasDto.ia_archivoDto.is_nombreArchivo}" />
+								</div>
+							</p:fileUpload>
+						</div>
+					</div>
+				</div>
+				<p:separator />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-atras" icon="icon-flecha-gris"
+							iconPos="right" styleClass="icon-btn pull-right btn-gris"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();"
+							value="#{txt_minuta['boton.volver.upper']}">
+							<p:ajax oncomplete="PF('cargarArchivo').hide();" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-4 col-xs-offset-0">
+						<p:commandButton id="botonGuardar"
+							value="#{txt_minuta['boton.guardar.upper']}"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							type="submit" ignoreAutoUpdate="true">
+							<p:ajax
+								process="formCargarArchivo formInscribirAlertaTierras:seccionA"
+								update="panelInscribirAlerta formInscribirAlerta:opcionesRender formInscribirAlerta:nombreDocumentoCargado"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								listener="#{beanInscribirAlerta.cargarDocumentoAlertaTierras}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal informativo documento valido -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="documentoValido" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_alertaTierras['Modal.Header.Informacion']}" />
+			<ui:param name="formulario" value="formModalDocumentoValido" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_alertaTierras['Mensaje.Documento.Valido']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton immediate="true"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_alertaTierras['Modal.Boton.Entendido']}">
+								<p:ajax
+									process="formModalDocumentoValido formInscribirAlertaTierras:seccionA"
+									update="panelInscribirAlerta formInscribirAlerta:opcionesRender :formInscribirAlerta:seccionB"
+									oncomplete="PF('documentoValido').hide();"
+									listener="#{beanInscribirAlerta.inscribirAlerta()}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal informativo documento no valido -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="documentoNoValido" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_alertaTierras['Modal.Header.Informacion']}" />
+			<ui:param name="formulario" value="formModalDocumentoNoValido" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_alertaTierras['Mensaje.Documento.No.Valido']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton immediate="true"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_alertaTierras['Modal.Boton.Entendido']}">
+								<p:ajax oncomplete="PF('documentoNoValido').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al incluir una alerta -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarIncluirMatricula" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_repositorioPoderes['Advertencia']}" />
+			<ui:param name="formulario"
+				value="formModalConfirmarIncluirMatricula" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_alertaTierras['Mensaje.Confirmar.Incluir']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_alertaTierras['boton.No']}"
+								oncomplete="PF('confirmarIncluirMatricula').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								value="#{txt_alertaTierras['boton.Si']}">
+								<p:ajax
+									update="panelInscribirAlerta formInscribirAlerta:matriculasIncluidasSeccionD"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();PF('confirmarIncluirMatricula').hide();"
+									listener="#{beanInscribirAlerta.agregarMatriculaAlerta}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al incluir una alerta -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarIncluirTodasMatricula" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_repositorioPoderes['Advertencia']}" />
+			<ui:param name="formulario"
+				value="formModalConfirmarIncluirTodasMatricula" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_alertaTierras['Mensaje.Confirmar.IncluirTodas']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_alertaTierras['boton.No']}"
+								oncomplete="PF('confirmarIncluirTodasMatricula').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								value="#{txt_alertaTierras['boton.Si']}">
+								<p:ajax
+									update="panelInscribirAlerta formInscribirAlerta:matriculasIncluidasSeccionD formInscribirAlerta:matriculasSeccionC"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();PF('confirmarIncluirTodasMatricula').hide();"
+									listener="#{beanInscribirAlerta.agregarListaMatriculasAlerta}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al excluir una alerta -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarExcluirMatricula" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_repositorioPoderes['Advertencia']}" />
+			<ui:param name="formulario"
+				value="formModalConfirmarExcluirMatricula" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_alertaTierras['Mensaje.SeguroEliminarPredioSinMatricula']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_alertaTierras['boton.No']}"
+								oncomplete="PF('confirmarExcluirMatricula').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								value="#{txt_alertaTierras['boton.Si']}"
+								update="panelInscribirAlerta formInscribirAlerta:seccionD formInscribirAlerta:seccionC formInscribirAlerta:matriculasSeccionC">
+								<f:ajax listener="#{beanInscribirAlerta.excluirMatricula}"
+									oncomplete="PF('confirmarExcluirMatricula').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al excluir una alerta antiguo sistema -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId"
+				value="confirmarExcluirMatriculaAntiguoSistema" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_repositorioPoderes['Advertencia']}" />
+			<ui:param name="formulario"
+				value="formModalConfirmarExcluirMatriculaAntiguoSistema" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_alertaTierras['Mensaje.SeguroEliminarAntiguoSistema']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_alertaTierras['boton.No']}"
+								oncomplete="PF('confirmarExcluirMatriculaAntiguoSistema').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								value="#{txt_alertaTierras['boton.Si']}"
+								update="panelInscribirAlerta formInscribirAlerta:antiguoSistema formInscribirAlerta:antiguoSistemaSeccionD">
+								<f:ajax
+									listener="#{beanInscribirAlerta.excluirMatriculaAntiguoSistema}"
+									oncomplete="PF('confirmarExcluirMatriculaAntiguoSistema').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al realizar cargue de alerta sin matriculas incluidas -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="alertaSinMatriculasIncluidas" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_repositorioPoderes['Advertencia']}" />
+			<ui:param name="formulario" value="formAlertaSinMatriculasIncluidas" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="title">
+							<p:outputLabel id="labelTextoAlertaSinMatricula"
+								styleClass="label-form" for="textoAlertaSinMatricula"
+								value="#{txt_alertaTierras['label.TextoAlertaSinMatricula']}" />
+						</div>
+						<div class="ui-inputgroup">
+							<p:inputTextarea id="textoAlertaSinMatricula" rows="6" cols="40"
+								counter="mostrarContadorTextoAlertaSinMatricula"
+								maxlength="1000"
+								placeholder="#{txt_alertaTierras['placeholder.TextoAlertaSinMatricula']}"
+								counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+								autoResize="false">
+								<p:keyFilter regEx="/[a-z\s]/i" />
+							</p:inputTextarea>
+							<br />
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								for="labelTextoAlertaSinMatricula" position="top"
+								value="#{txt_alertaTierras['label.TextoAlertaSinMatricula']}">
+							</p:tooltip>
+						</div>
+						<h:outputText id="mostrarContadorTextoAlertaSinMatricula" />
+						<span class="help-block"> <p:message
+								for="textoAlertaSinMatricula" />
+						</span>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_alertaTierras['boton.No']}"
+								oncomplete="PF('alertaSinMatriculasIncluidas').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+								value="#{txt_alertaTierras['boton.Si']}"
+								action="#{beanInscribirAlerta.activarAlertaTierras()}">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal Busqueda Opcion #1 -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="busquedaOpcionUno" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_alertaTierras['title.BusquedaMatricula']}" />
+			<ui:param name="formulario" value="formModalBusquedaOpcionUno" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12">
+					<div class="row">
+						<ui:decorate template="/pages/includes/numeroMatricula.xhtml">
+							<ui:param name="numCol" value="6" />
+							<ui:param name="bean" value="${beanInscribirAlerta}" />
+							<ui:param name="oficinaRegistroSeleccionado"
+								value="icr_circuloRegistralSeleccionadoDto" />
+							<ui:param name="listaOficinaRegistro"
+								value="ilcr_listaCirculoRegistralDto" />
+							<ui:param name="numeroMatricula" value="is_numeroMatricula" />
+							<ui:param name="requerido" value="true" />
+							<ui:param name="panelAnterior" value="formModalBusquedaOpcionUno" />
+							<ui:param name="mostrarNupre" value="false" />
+						</ui:decorate>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-atras"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_alertaTierras['boton.Volver']}" immediate="true"
+							process="@this" oncomplete="PF('busquedaOpcionUno').hide();">
+							<p:ajax onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								listener="#{beanInscribirAlerta.limpiarTablasOpcionUno}" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-4 col-xs-offset-0">
+						<p:commandButton id="btnValidarCrear"
+							value="#{txt_alertaTierras['boton.Buscar']}"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();" type="submit">
+							<p:ajax process="formModalBusquedaOpcionUno"
+								update="panelInscribirAlerta formInscribirAlerta:seccionC formModalBusquedaOpcionUno busquedaOpcionUno"
+								listener="#{beanInscribirAlerta.busquedaMatriculaOpcionUno}"
+								oncomplete="if(args &amp;&amp; args.validationFailed){ PF('busquedaOpcionUno').jq.effect('shake', {times: 3}, 100);}else{PF('busquedaOpcionUno').hide()}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal Busqueda Opcion #2 -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="busquedaOpcionDos" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_alertaTierras['title.BusquedaDatosPredio']}" />
+			<ui:param name="formulario" value="formModalBusquedaOpcionDos" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12 center-component">
+					<div class="row">
+						<div class="col-xs-12 col-lg-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelDepartamento" styleClass="label-form"
+										for="departamento"
+										value="#{txt_alertaTierras['label.Departamento']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<p:selectOneMenu id="departamento" required="true"
+								converter="selectOneMenuConverter" styleClass="pais-nat"
+								value="#{beanInscribirAlerta.iu_ubicacionDto.id_departamentoSeleccionado}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}">
+								<p:ajax listener="#{beanInscribirAlerta.cargarMunicipios()}"
+									update="municipio" process="@this" />
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems var="departamento"
+									value="#{beanInscribirAlerta.ild_listaDepartamentosDTO}"
+									itemLabel="#{departamento.is_nombre}"
+									itemValue="#{departamento}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelDepartamento"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_alertaTierras['label.TipoAlerta']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="departamento" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-lg-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelMunicipio" styleClass="label-form"
+										for="municipio"
+										value="#{txt_alertaTierras['label.Municipio']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<p:selectOneMenu id="municipio" required="true"
+								styleClass="pais-nat" converter="selectOneMenuConverter"
+								value="#{beanInscribirAlerta.iu_ubicacionDto.im_municipioSeleccionado}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}">
+								<p:ajax listener="#{beanInscribirAlerta.cargarVeredas()}"
+									update="vereda" process="@this" />
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems var="municipio"
+									value="#{beanInscribirAlerta.ilm_listaMunicipiosDTO}"
+									itemLabel="#{municipio.is_nombre}" itemValue="#{municipio}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelMunicipio" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_alertaTierras['label.TipoAlerta']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="municipio" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-lg-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelVereda" styleClass="label-form"
+										for="vereda" value="#{txt_alertaTierras['label.Vereda']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<p:selectOneMenu id="vereda" converter="selectOneMenuConverter"
+								value="#{beanInscribirAlerta.iu_ubicacionDto.iv_veredaSeleccionado}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems var="vereda"
+									value="#{beanInscribirAlerta.ilv_listaVeredasDTO}"
+									itemLabel="#{vereda.is_nombre}" itemValue="#{vereda}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelVereda" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_alertaTierras['label.TipoAlerta']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="vereda" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelNombrePredio" styleClass="label-form"
+										for="nombrePredio"
+										value="#{txt_alertaTierras['label.NombrePredio']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<div class="ui-inputgroup">
+								<p:inputText id="nombrePredio" autocomplete="off"
+									value="#{beanInscribirAlerta.ibdp_busquedaDatosPredioDto.is_nombrePredio}"
+									styleClass="text-input border-completo" maxlength="50"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_alertaTierras['placeholder.NombrePredio']}"
+									required="true">
+									<p:keyFilter regEx="/[0-9\a-z\#\-\s]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="nombrePredio" position="top">
+									<div>
+										<p:outputLabel
+											value="#{txt_alertaTierras['ayuda.NombrePredio']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="nombrePredio" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelAreaPredio" styleClass="label-form"
+										for="areaPredio"
+										value="#{txt_alertaTierras['label.AreaPredio']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<div class="ui-inputgroup">
+								<p:inputText id="areaPredio" autocomplete="off"
+									value="#{beanInscribirAlerta.ibdp_busquedaDatosPredioDto.is_areaPredio}"
+									styleClass="text-input border-completo" maxlength="15"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_alertaTierras['placeholder.AreaPredio']}"
+									required="true">
+									<p:keyFilter regEx="/[0-9]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="areaPredio" position="top">
+									<div>
+										<p:outputLabel
+											value="#{txt_alertaTierras['ayuda.NombrePredio']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="areaPredio" />
+							</span>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-atras"
+							styleClass="icon-btn btn-gris"
+							value="#{txt_alertaTierras['boton.Volver']}" immediate="true"
+							process="@this" oncomplete="PF('busquedaOpcionDos').hide();">
+							<p:ajax onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								listener="#{beanInscribirAlerta.limpiarTablasOpcionDos}" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-4 col-xs-offset-0">
+						<p:commandButton id="btnValidarCrear"
+							value="#{txt_alertaTierras['boton.Buscar']}"
+							styleClass="btn-gradiente icon-btn btn-rojo"
+							type="submit" onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();">
+							<p:ajax process="formModalBusquedaOpcionDos"
+								update="panelInscribirAlerta formInscribirAlerta:seccionC formModalBusquedaOpcionDos busquedaOpcionDos"
+								listener="#{beanInscribirAlerta.busquedaDatosPredioOpcionDos()}"
+								oncomplete="if(args &amp;&amp; args.validationFailed){ PF('busquedaOpcionDos').jq.effect('shake', {times: 3}, 100);}else{PF('busquedaOpcionDos').hide()}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal Busqueda Opcion #3 -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="busquedaOpcionTres" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_alertaTierras['title.BusquedaDatosCatastrales']}" />
+			<ui:param name="formulario" value="formModalBusquedaOpcionTres" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12 center-component">
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelNumeroPredial" styleClass="label-form"
+										for="numeroPredial"
+										value="#{txt_alertaTierras['label.NumeroPredial']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<div class="ui-inputgroup">
+								<p:inputText id="numeroPredial" autocomplete="off"
+									styleClass="text-input border-completo" maxlength="30"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_alertaTierras['placeholder.NumeroCatrastal']}"
+									value="#{beanInscribirAlerta.ibdc_busquedaDatosCatastralesDto.is_cedulaCatastral}"
+									required="true">
+									<p:keyFilter regEx="/[0-9\a-z\#\-]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="numeroPredial" position="top">
+									<div>
+										<p:outputLabel
+											value="#{txt_alertaTierras['ayuda.NumeroCatrastal']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="numeroPredial" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelNupre" styleClass="label-form"
+										for="nupre" value="#{txt_alertaTierras['label.Nupre']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<div class="ui-inputgroup">
+								<p:inputText id="nupre" autocomplete="off"
+									styleClass="text-input border-completo" maxlength="50"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_alertaTierras['placeholder.Nupre']}"
+									value="#{beanInscribirAlerta.ibdc_busquedaDatosCatastralesDto.is_nupre}"
+									required="true">
+									<p:keyFilter regEx="/[0-9\a-z]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="nupre" position="top">
+									<div>
+										<p:outputLabel value="#{txt_alertaTierras['ayuda.Nupre']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="nupre" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelChip" styleClass="label-form"
+										for="chip" value="#{txt_alertaTierras['label.Chip']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<div class="ui-inputgroup">
+								<p:inputText id="chip" autocomplete="off"
+									styleClass="text-input border-completo" maxlength="30"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_alertaTierras['placeholder.Chip']}"
+									value="#{beanInscribirAlerta.ibdc_busquedaDatosCatastralesDto.is_chip}"
+									required="true">
+									<p:keyFilter regEx="/[0-9\a-z\#\-]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout" for="chip"
+									position="top">
+									<div>
+										<p:outputLabel value="#{txt_alertaTierras['ayuda.Chip']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="chip" />
+							</span>
+						</div>
+					</div>
+					<br />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-atras"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_alertaTierras['boton.Volver']}" immediate="true"
+							process="@this" oncomplete="PF('busquedaOpcionTres').hide();">
+							<p:ajax onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								listener="#{beanInscribirAlerta.limpiarTablasOpcionTres}" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-4 col-xs-offset-0">
+						<p:commandButton id="btnValidarCrear"
+							value="#{txt_alertaTierras['boton.Buscar']}"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();" type="submit">
+							<p:ajax process="formModalBusquedaOpcionTres"
+								update="panelInscribirAlerta formInscribirAlerta:seccionC formModalBusquedaOpcionTres busquedaOpcionTres"
+								listener="#{beanInscribirAlerta.busquedaDatosCatastralesOpcionTres()}"
+								oncomplete="if(args &amp;&amp; args.validationFailed){ PF('busquedaOpcionTres').jq.effect('shake', {times: 3}, 100);}else{PF('busquedaOpcionTres').hide()}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal Busqueda Opcion #4 -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="busquedaOpcionCuatro" />
+			<ui:param name="formulario" value="formModalBusquedaOpcionCuatro" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_alertaTierras['title.BusquedaCargandoArchivo']}" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12 center-component">
+					<div class="row ui-g">
+						<div class="col-xs-11 text-left">
+							<p:outputLabel
+								value="#{txt_alertaTierras['Mensaje.cargarDocumentoCuatro']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br />
+						</div>
+						<div class="col-xs-11 text-left">
+							<p:outputLabel>- </p:outputLabel>
+							<p:outputLabel
+								value="#{txt_alertaTierras['Mensaje.archivo.limiteTamano']}" />
+						</div>
+						<div class="col-xs-11 text-left">
+							<p:outputLabel>- </p:outputLabel>
+							<p:outputLabel
+								value="#{txt_alertaTierras['Mensaje.archivo.formatoTxtInvalido']}" />
+							<br />
+						</div>
+					</div>
+					<br />
+					<p:separator />
+					<br />
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelBusquedaMatriculasDoc"
+								styleClass="label-form"
+								value="#{txt_alertaTierras['label.CargueArchivoBusqueda']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:fileUpload styleClass="busquedaMatriculaDocumento"
+									fileUploadListener="#{beanInscribirAlerta.cargarArchivo}"
+									mode="advanced" auto="false" allowTypes="/(\.|\/)(txt)$/"
+									invalidSizeMessage="#{beanArchivo.validarTamanoArchivoTXTError()}"
+									invalidFileMessage="#{txt_registrar_alerta_masiva['archivo.error.extension']}"
+									fileLimitMessage="#{txt_registrar_alerta_masiva['archivo.error.archivo']}"
+									label="#{txt_persona['label.ExaminarArchivo']}"
+									uploadLabel="#{txt_persona['label.Cargar']}"
+									cancelLabel="#{txt_persona['label.Cancelar']}"
+									sizeLimit="#{beanArchivo.validarTamanoArchivoTXT()}" fileLimit="1" required="true"
+									update="@this ">
+									<p:outputLabel styleClass="label-form"
+										rendered="#{beanInscribirAlerta.getItm_transaccionMasivaDto().getIs_archivoCargado() != null}"
+										value="#{beanInscribirAlerta.getItm_transaccionMasivaDto().getIs_archivoCargado()} - #{beanInscribirAlerta.getItm_transaccionMasivaDto().getIlm_listaMatriculaDto().size()} matriculas" />
+								</p:fileUpload>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelBusquedaMatriculasDoc"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_registrar_alerta_masiva['archivo.tooltip']}" />
+									</div>
+								</p:tooltip>
+							</div>
+						</div>
+						<br />
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+							<p:commandButton value="#{txt_registrar_alerta_masiva['boton']}"
+								styleClass="btn-rojo btn-gradiente">
+								<p:ajax listener="#{beanInscribirAlerta.validarRegistroAlerta}"
+									update="formModalBusquedaOpcionCuatro:resultadoBusquedaDocumento :formModalBusquedaOpcionCuatro:resultadoBusquedaDocumento" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+				<p:outputPanel id="resultadoBusquedaDocumento">
+					<ui:fragment
+						rendered="#{beanInscribirAlerta.resultadoBusquedaDocumento()}">
+						<p:importEnum
+							type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTiposMIME"
+							var="EnumTiposMIME" />
+						<br />
+						<p:separator />
+						<div class="row text-left">
+							<div class="col-xs-12">
+								<h:outputText
+									value="#{txt_registrar_alerta_masiva['modal.validacion.contenido']}" />
+								<h:outputText
+									value="#{beanInscribirAlerta.ii_matriculasValidadas}" />
+							</div>
+							<br /> <br />
+							<div class="col-xs-12">
+								<h:outputText
+									value="#{beanInscribirAlerta.is_lineasArchivo[0]} " />
+								<h:outputText
+									value=" #{txt_registrar_alerta_masiva['modal.validacion.contenido.primer']}" />
+							</div>
+							<br />
+							<div class="col-xs-12">
+								<p:outputLabel
+									value="#{beanInscribirAlerta.is_lineasArchivo[1]} " />
+								<h:outputText
+									value=" #{txt_registrar_alerta_masiva['modal.validacion.contenido.segundo']}" />
+							</div>
+							<br />
+							<div class="col-xs-12">
+								<p:outputLabel
+									value="#{beanInscribirAlerta.is_lineasArchivo[2]} " />
+								<h:outputText
+									value=" #{txt_registrar_alerta_masiva['modal.validacion.contenido.tercero']}" />
+							</div>
+							<br />
+							<div class="col-xs-12">
+								<p:outputLabel
+									value="#{beanInscribirAlerta.is_lineasArchivo[3]} " />
+								<h:outputText
+									value=" #{txt_registrar_alerta_masiva['modal.validacion.contenido.cuarto']}" />
+							</div>
+							<br />
+						</div>
+					</ui:fragment>
+				</p:outputPanel>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-atras"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_alertaTierras['boton.Volver']}" immediate="true"
+							process="@this" oncomplete="PF('busquedaOpcionCuatro').hide();">
+							<p:ajax onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								listener="#{beanInscribirAlerta.limpiarTablasOpcionCuatro}" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-4 col-xs-offset-0">
+						<p:commandButton id="btnValidarCrear"
+							value="#{txt_alertaTierras['boton.Buscar']}"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							type="submit" onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();">
+							<p:ajax process="formModalBusquedaOpcionCuatro"
+								update="panelInscribirAlerta formInscribirAlerta:seccionC formModalBusquedaOpcionCuatro busquedaOpcionCuatro"
+								listener="#{beanInscribirAlerta.busquedaCargandoArchivoOpcionCuatro()}"
+								oncomplete="if(args &amp;&amp; args.validationFailed){ PF('busquedaOpcionCuatro').jq.effect('shake', {times: 3}, 100);}else{PF('busquedaOpcionCuatro').hide()}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal Busqueda Opcion #5 -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="busquedaOpcionCinco" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_alertaTierras['title.SolicitarProcesoAntiguoSistema']}" />
+			<ui:param name="formulario" value="formModalBusquedaOpcionCinco" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12 center-component">
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelCirculoRegistralUno"
+										styleClass="label-form" for="circuloRegistralUno"
+										value="#{txt_alertaTierras['label.CircduloResgitral']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<p:selectOneMenu id="circuloRegistralUno" required="true"
+								value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.is_nomCirculoRegistral}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems var="circuloRegistralUno"
+									value="#{beanInscribirAlerta.ilcr_listaCirculoRegistralDto}"
+									itemLabel="#{circuloRegistralUno.is_nombre}"
+									itemValue="#{circuloRegistralUno.is_nombre}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelCirculoRegistralUno"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_alertaTierras['label.TipoAlerta']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="circuloRegistralUno" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelTipoPredio" styleClass="label-form"
+										for="tipoPredio"
+										value="#{txt_alertaTierras['label.TipoPredio']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<p:selectOneMenu id="tipoPredio" required="true"
+								value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.is_tipoPredio}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems var="tipoPredio"
+									value="#{beanInscribirAlerta.ilc_listaTipoPredioDTO}"
+									itemLabel="#{tipoPredio.is_nombre}"
+									itemValue="#{tipoPredio.is_nombre}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTipoPredio" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_alertaTierras['label.TipoAlerta']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="tipoPredio" />
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelNombrePredioUno"
+										styleClass="label-form" for="nombrePredioUno"
+										value="#{txt_alertaTierras['label.NombrePredio']}" />
+								</div>
+							</div>
+							<div class="ui-inputgroup">
+								<p:inputText id="nombrePredioUno" autocomplete="off"
+									styleClass="text-input border-completo" maxlength="50"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.is_nomPredio}"
+									placeholder="#{txt_alertaTierras['placeholder.NombrePredioProcesoAntiguo']}"
+									required="true">
+									<p:keyFilter regEx="/[0-9\a-z\#\-\s]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="nombrePredioUno" position="top">
+									<div>
+										<p:outputLabel
+											value="#{txt_alertaTierras['ayuda.NombrePredio']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="nombrePredioUno" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelNumeroPredioUno"
+										styleClass="label-form" for="numeroPredioUno"
+										value="#{txt_alertaTierras['label.NumeroPredio']}" />
+								</div>
+							</div>
+							<div class="ui-inputgroup">
+								<p:inputText id="numeroPredioUno" autocomplete="off"
+									styleClass="text-input border-completo" maxlength="50"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.ii_numPredio}"
+									placeholder="#{txt_alertaTierras['placeholder.NumeroPredioProcesoAntiguo']}"
+									required="true">
+									<p:keyFilter regEx="/[0-9\a-z\#\-]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="numeroPredioUno" position="top">
+									<div>
+										<p:outputLabel value="#{txt_cuentaCupo['ayuda.NumeroPredio']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="numeroPredioUno" />
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelPais" styleClass="label-form"
+										for="pais" value="#{txt_alertaTierras['label.Pais']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<p:selectOneMenu id="pais" required="true" styleClass="pais-nat"
+								value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.is_nomPais}">
+								<p:ajax event="change" process="@this"
+									listener="#{beanInscribirAlerta.cargarDepartamentos}"
+									update="formModalBusquedaOpcionCinco:departamentoUno departamentoUno" />
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems value="#{beanInscribirAlerta.ilp_listaPaises}"
+									var="pais" itemLabel="#{pais.is_nombre}"
+									itemValue="#{pais.is_nombre}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelPais" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_alertaTierras['label.TipoAlerta']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="pais" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelDepartamentoUno"
+										styleClass="label-form" for="departamentoUno"
+										value="#{txt_alertaTierras['label.Departamento']}" />
+									<p:outputLabel
+										rendered="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.is_nomPais.equals('COLOMBIA')}"
+										styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<p:selectOneMenu id="departamentoUno" required="true"
+								styleClass="pais-nat"
+								disabled="#{!beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.is_nomPais.equals('COLOMBIA')}"
+								value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.is_nomDepartamento}">
+								<p:ajax event="change" process="@this"
+									listener="#{beanInscribirAlerta.cambiarMunicipios()}"
+									update="formModalBusquedaOpcionCinco:municipioUno municipioUno" />
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems var="departamentoUno"
+									value="#{beanInscribirAlerta.ild_listaDepartamentosDTO}"
+									itemLabel="#{departamentoUno.is_nombre}"
+									itemValue="#{departamentoUno.is_nombre}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelDepartamentoUno"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_alertaTierras['label.TipoAlerta']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="departamentoUno" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelMunicipioUno" styleClass="label-form"
+										for="municipioUno"
+										value="#{txt_alertaTierras['label.Municipio']}" />
+									<p:outputLabel
+										rendered="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.is_nomPais.equals('COLOMBIA')}"
+										styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<p:selectOneMenu id="municipioUno" required="false"
+								disabled="#{!beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.is_nomPais.equals('COLOMBIA')}"
+								value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.is_nomMunicipio}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems var="municipioUno"
+									value="#{beanInscribirAlerta.ilm_listaMunicipiosDTO}"
+									itemLabel="#{municipio.is_nombre}" itemValue="#{municipio}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelMunicipioUno"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_alertaTierras['label.TipoAlerta']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="municipioUno" />
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelLibro" styleClass="label-form"
+										for="libro" value="#{txt_alertaTierras['label.Libro']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<p:selectOneMenu id="libro" required="true" styleClass="pais-nat"
+								value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.ii_numLibro}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems var="libro"
+									value="#{beanInscribirAlerta.ii_listaLibro}"
+									itemLabel="#{libro}" itemValue="#{libro}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelLibro" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_alertaTierras['label.TipoAlerta']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="libro" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelTomo" styleClass="label-form"
+										for="tomo" value="#{txt_alertaTierras['label.Tomo']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<p:selectOneMenu id="tomo" required="true"
+								value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.ii_numTomo}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems var="tomo"
+									value="#{beanInscribirAlerta.ii_listaTomo}" itemLabel="#{tomo}"
+									itemValue="#{tomo}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTomo" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_alertaTierras['label.TipoAlerta']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="tomo" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelFolio" styleClass="label-form"
+										for="folio" value="#{txt_alertaTierras['label.Folio']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<p:selectOneMenu id="folio" required="true"
+								value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.ii_numFolio}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems var="folio"
+									value="#{beanInscribirAlerta.ii_listaFolio}"
+									itemLabel="#{folio}" itemValue="#{folio}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelFolio" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_alertaTierras['label.TipoAlerta']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="folio" />
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelNumeroPartida" styleClass="label-form"
+										for="numeroPartida"
+										value="#{txt_alertaTierras['label.NumeroPartida']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<div class="ui-inputgroup">
+								<p:inputText id="numeroPartida" autocomplete="off"
+									styleClass="text-input border-completo" maxlength="10"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.ii_numPartida}"
+									placeholder="#{txt_alertaTierras['placeholder.NumeroPartidaProcesoAntiguo']}"
+									required="true">
+									<p:keyFilter regEx="/[0-9]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="numeroPartida" styleClass="tooltipGeneral" position="top">
+									<div>
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_alertaTierras['tooltip.NumeroPartida']}" />
+										</div>
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="numeroPartida" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelTipoPartida" styleClass="label-form"
+										for="tipoPartida"
+										value="#{txt_alertaTierras['label.TipoPartida']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<p:selectOneMenu id="tipoPartida" required="true"
+								value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.is_idTipoPartida}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems var="tipoPartida"
+									value="#{beanInscribirAlerta.ilc_listaTipoPartida}"
+									itemLabel="#{tipoPartida.is_nombre}"
+									itemValue="#{tipoPartida.is_nombre}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTipoPartida"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_alertaTierras['label.TipoAlerta']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="tipoPartida" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<div class="title">
+								<div>
+									<p:outputLabel id="labelAnioUno" styleClass="label-form"
+										for="anioUno" value="#{txt_alertaTierras['label.Anio']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								</div>
+							</div>
+							<div class="ui-inputgroup">
+								<p:selectOneMenu id="anioUno" required="true"
+									value="#{beanInscribirAlerta.iatas_alertaTierrasAntiguoSistemaDto.ii_anio}"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}">
+									<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+										itemValue="" />
+									<f:selectItems var="anioUno"
+										value="#{beanInscribirAlerta.ii_listaAnios}"
+										itemLabel="#{anioUno}" itemValue="#{anioUno}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="anioUno" position="top">
+									<div>
+										<p:outputLabel
+											value="#{txt_cuentaCupo['ayuda.NumeroDocumento']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="anioUno" />
+							</span>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-atras"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_alertaTierras['boton.Volver']}" immediate="true"
+							process="@this" oncomplete="PF('busquedaOpcionCinco').hide();">
+							<p:ajax onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								listener="#{beanInscribirAlerta.limpiarTablasOpcionCinco}" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-4 col-xs-offset-0">
+						<p:commandButton id="botonOpCinco"
+							value="#{txt_alertaTierras['boton.Buscar']}"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();" type="submit">
+							<p:ajax process="formModalBusquedaOpcionCinco"
+								update="panelInscribirAlerta formInscribirAlerta:antiguoSistema formModalBusquedaOpcionCinco busquedaOpcionCinco"
+								oncomplete="if(args &amp;&amp; args.validationFailed){ PF('busquedaOpcionCinco').jq.effect('shake', {times: 3}, 100);}else{PF('busquedaOpcionCinco').hide()}"
+								listener="#{beanInscribirAlerta.busquedaAntiguoSistemaOpcionCinco()}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal Falla De Busqueda -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="fallaBusqueda" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalFallaBusqueda" />
+			<ui:define name="body-modal">
+				<div class="row ui-g">
+					<div class="col-xs-12 text-center">
+						<p:outputLabel
+							value="#{txt_alertaTierras['mensaje.informacionSistema']}"
+							styleClass="titulo tamano-subtitulo" />
+						<br />
+					</div>
+				</div>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:commandButton id="btn-atras" icon="icon-flecha-blanca"
+							iconPos="right"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_alertaTierras['Modal.Boton.Entendido']}"
+							immediate="true" process="@this"
+							oncomplete="PF('fallaBusqueda').hide();">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal Ver Mapa -->
+
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="verMapa" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalVerMapa" />
+			<ui:define name="body-modal">
+				<div class="row ui-g">
+					<div class="col-xs-12 text-center">
+						<div class="img-left">
+							<img src="data:image/png;base64, #{beanInscribirAlerta.is_mapa}"
+								alt="" class="imgMapa" />
+						</div>
+						<br />
+					</div>
+				</div>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton id="boton-aceptar"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_alertaTierras['Modal.Boton.Entendido']}"
+							immediate="true" process="@this"
+							oncomplete="PF('verMapa').hide();">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal de confirmacion al cancelar  -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="cancelarInscripcion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalCancelarInscripcion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_alertaTierras['Mensaje.CancelarInscripcion']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_cuentaCupo['boton.No']}"
+								oncomplete="PF('cancelarInscripcion').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+								value="#{txt_cuentaCupo['boton.Si']}"
+								action="#{beanInscribirAlerta.cancelarInscripcion()}">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al inscribir alerta  -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="activarAlertaTierras" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="clasePersonalizada" value="ui-blockui-content"></ui:param>
+			<ui:param name="tituloModal"
+				value="#{txt_alertaTierras['Modal.Header.Confirmacion']}" />
+			<ui:param name="formulario" value="formModalActivarAlertaTierras" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_alertaTierras['Mensaje.ActivarAlertaTierras']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_alertaTierras['boton.No']}"
+								oncomplete="PF('activarAlertaTierras').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+								value="#{txt_alertaTierras['boton.Si']}"
+								action="#{beanInscribirAlerta.activarAlertaTierras()}">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+	</ui:define>
+</ui:composition>

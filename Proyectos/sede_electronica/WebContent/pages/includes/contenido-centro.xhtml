@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags-faces">
+	<ui:param name="registroAlertaIndividual"
+		value="#{sec:isAllowed('/pages/alertas/registroAlertas/registroAlertaIndividual.jsf', 'POST')}" />
+	<ui:param name="solicitudCertificados"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudesCertificados/certificadosIndividuales.jsf', 'POST')}" />
+	<ui:param name="seguimientoSolicitudes"
+		value="#{sec:isAllowed('/pages/solicitudes/seguimientoSolicitudes.jsf', 'POST')}" />
+	<ui:param name="alertaTierras"
+		value="#{sec:isAllowed('/pages/alertas/alertaTierras/alertaDeTierras.jsf', 'POST')}" />
+	<ui:param name="solicitudRues"
+		value="#{sec:isAllowed('/pages/solicitudes/paginaRues.jsf','POST')}" />
+	<ui:param name="solicitarConsultas"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudConsultas/solicitarConsultas.jsf', 'POST')}" />
+	<ui:param name="suspensionTemporal"
+		value="#{sec:isAllowed('/pages/solicitudes/suspensionTemporal.jsf', 'POST')}" />
+	<ui:param name="solicitudInterposicionRecursos"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudInterposicionRecursos/solicitudInterposicionRecursos.jsf', 'POST')}" />
+	<ui:param name="solicitudDesistimiento"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudDesistimiento.jsf', 'POST')}" />
+	<p:importEnum
+		type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTipoServicio"
+		var="EnumTipoServicio" />
+	<!-- Opcion consulta drr -->
+	<ui:param name="consultaDrr"
+		value="#{sec:isAllowed('/pages/consultas/drr/condiciones.jsf', 'POST')}" />
+	<p:importEnum
+		type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumModoTipoServicio"
+		var="EnumModoTipoServicio" />
+	<!-- LISTAS MENUS FIN -->
+	<!-- OPCION DE MENU SEGUIMIENTO DE SOLICITUDES -->
+	<p:outputPanel rendered="#{seguimientoSolicitudes}">
+		<div class="opciones_box_pequeno opciones_background">
+			<div class="opciones_fondo_img"
+				style="background-image: url('#{resource['img/09-seguimiento-solicititud.jpg']}');"></div>
+			<div class="shadow_Container"></div>
+			<div class="outer row h-100">
+				<div class="middle">
+					<div class="mx-auto">
+						<h2 class="opciones_titles">#{txt_menu['menu.seguimientoSolicitudes']}</h2>
+						<div class="opciones_flecha_box">
+							<p:link styleClass="opciones_box_links"
+								outcome="/pages/solicitudes/seguimientoSolicitudes.jsf"
+								value="#{txt_menu['menu.ir']}">
+							</p:link>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</p:outputPanel>
+	<!-- OPCION DE MENU REGISTRAR ALERTAS INDIVIDUALES -->
+	<p:outputPanel rendered="#{registroAlertaIndividual}">
+		<div class="opciones_box_pequeno opciones_background">
+			<div class="opciones_fondo_img"
+				style="background-image: url('#{resource['img/05-registro-alertas.jpg']}');"></div>
+			<div class="shadow_Container"></div>
+			<div class="outer row h-100">
+				<div class="middle">
+					<div class="mx-auto">
+						<h2 class="opciones_titles">#{txt_menu['menu.registrarAlerta']}</h2>
+						<div class="opciones_flecha_box">
+							<p:commandLink value="#{txt_menu['menu.ir']}"
+								styleClass="opciones_box_links"
+								oncomplete="PF('dialogConfirmacionRedireccionRegistro').show();">
+								<f:setPropertyActionListener
+									value="#{EnumTipoServicio.ALERTA.is_codigo}"
+									target="#{beanContenidoCentro.is_tipoServicioSeleccionado}" />
+							</p:commandLink>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</p:outputPanel>
+
+	<!-- OPCION DE MENU SOLICITUD DE CERTIFICADOS -->
+	<p:outputPanel rendered="#{solicitudCertificados}">
+		<div
+			class="opciones_background pequeno_grande_1024 opciones_box_grande high">
+			<div class="opciones_fondo_img"
+				style="background-image: url('#{resource['img/08-solicitud-certificados.jpg']}');"></div>
+			<div class="shadow_Container"></div>
+			<div class="outer row h-100">
+				<div class="middle">
+					<div class="row text-center">
+						<div class="col-xs-12">
+							<h2 class="opciones_titles">#{txt_menu['menu.solicitudCertificados']}</h2>
+						</div>
+					</div>
+					<div class="row text-center">
+						<ui:repeat
+							value="#{beanContenidoCentro.ildc_listaDetalleCatalogoInmediatosDto}"
+							var="tipoCertificado">
+							<div class="col-xs-12 col-sm-6 col-md-4 maxTexto">
+								<h2 class="opciones_titles">#{tipoCertificado.ic_catalogoDto.is_nombre}</h2>
+								<div class="opciones_flecha_box">
+									<p:commandLink styleClass="opciones_box_links"
+										value="#{txt_menu['menu.ir']}"
+										oncomplete="PF('dialogConfirmacionRedireccion').show();">
+										<f:setPropertyActionListener
+											value="#{tipoCertificado.is_codigoSubServicio}"
+											target="#{beanContenidoCentro.is_tipoServicioSeleccionado}" />
+									</p:commandLink>
+								</div>
+							</div>
+						</ui:repeat>
+						<div class="col-xs-12 col-md-4">
+							<h2 class="opciones_titles">#{txt_menu['menu.solicitudCertificados.certificadosEspeciales']}</h2>
+							<div class="opciones_flecha_box">
+								<p:link styleClass="opciones_box_links"
+									outcome="/pages/solicitudes/solicitudesCertificados/certificadosEspeciales.jsf"
+									value="#{txt_menu['menu.ir']}">
+								</p:link>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</p:outputPanel>
+	<!-- OPCION DE MENU SOLICITUD DE CONSULTAS -->
+	<p:outputPanel rendered="#{solicitarConsultas}">
+		<div class="opciones_box_pequeno opciones_background">
+			<div class="opciones_fondo_img"
+				style="background-image: url('#{resource['img/09-seguimiento-solicititud.jpg']}');"></div>
+			<div class="shadow_Container"></div>
+			<div class="outer row h-100">
+				<div class="middle">
+					<div class="mx-auto">
+						<h2 class="opciones_titles">#{txt_menu['menu.solicitudConsultas']}</h2>
+						<div class="opciones_flecha_box">
+							<p:commandLink styleClass="opciones_box_links"
+								value="#{txt_menu['menu.ir']}">
+								<p:ajax oncomplete="PF('modalInformativo').show();" />
+							</p:commandLink>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</p:outputPanel>
+
+	<!-- OPCION DE MENU SUSPENSION TEMPORAL -->
+	<p:outputPanel rendered="#{suspensionTemporal}">
+		<div class="opciones_box_pequeno opciones_background">
+			<div class="opciones_fondo_img"
+				style="background-image: url('#{resource['img/09-seguimiento-solicititud.jpg']}');"></div>
+			<div class="shadow_Container"></div>
+			<div class="outer row h-100">
+				<div class="middle">
+					<div class="mx-auto">
+						<h2 class="opciones_titles">#{txt_menu['menu.suspensionTemporal']}</h2>
+						<div class="opciones_flecha_box">
+							<p:link styleClass="opciones_box_links"
+								outcome="/pages/solicitudes/suspensionTemporal.jsf"
+								value="#{txt_menu['menu.ir']}">
+							</p:link>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</p:outputPanel>
+
+	<!-- OPCION DE MENU SOLICITUD DE DESISTIMIENTO -->
+	<p:outputPanel rendered="#{solicitudDesistimiento}">
+		<div class="opciones_box_pequeno opciones_background">
+			<div class="opciones_fondo_img"
+				style="background-image: url('#{resource['img/05-registro-alertas.jpg']}');"></div>
+			<div class="shadow_Container"></div>
+			<div class="outer row h-100">
+				<div class="middle">
+					<div class="mx-auto">
+						<h2 class="opciones_titles">#{txt_menu['menu.solicitarDesistimiento']}</h2>
+						<div class="opciones_flecha_box">
+							<p:link styleClass="opciones_box_links"
+								outcome="/pages/solicitudes/solicitudDesistimiento.jsf"
+								value="#{txt_menu['menu.ir']}">
+							</p:link>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</p:outputPanel>
+	<!-- OPCION DE MENU BANDEJA DE ALERTAS -->
+	<p:outputPanel rendered="#{alertaTierras}">
+		<div class="opciones_box_pequeno opciones_background">
+			<div class="opciones_fondo_img"
+				style="background-image: url('#{resource['img/09-seguimiento-solicititud.jpg']}');"></div>
+			<div class="shadow_Container"></div>
+			<div class="outer row h-100">
+				<div class="middle">
+					<div class="mx-auto">
+						<h2 class="opciones_titles">#{txt_menu['menu.alertaTierras']}</h2>
+						<div class="opciones_flecha_box">
+							<p:link styleClass="opciones_box_links"
+								outcome="/pages/alertas/alertaTierras/alertaDeTierras.jsf"
+								value="#{txt_menu['menu.ir']}">
+							</p:link>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</p:outputPanel>
+	<!-- OPCION DE CONSULTA DRR-->
+	<p:outputPanel rendered="#{consultaDrr}">
+		<div class="opciones_box_pequeno opciones_background">
+			<div class="opciones_fondo_img"
+				style="background-image: url('#{resource['img/09-seguimiento-solicititud.jpg']}');"></div>
+			<div class="shadow_Container"></div>
+			<div class="outer row h-100">
+				<div class="middle">
+					<div class="mx-auto">
+						<h2 class="opciones_titles">#{txt_menu['menu.consultaDrr']}</h2>
+						<div class="opciones_flecha_box">
+							<p:link styleClass="opciones_box_links"
+								outcome="/pages/consultas/drr/condiciones.jsf"
+								value="#{txt_menu['menu.ir']}">
+							</p:link>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</p:outputPanel>
+	<!-- OPCION DE MENU RUES -->
+	<p:outputPanel rendered="#{solicitudRues}">
+		<div class="opciones_box_pequeno opciones_background">
+			<div class="opciones_fondo_img"
+				style="background-image: url('#{resource['img/09-seguimiento-solicititud.jpg']}');"></div>
+			<div class="shadow_Container"></div>
+			<div class="outer row h-100">
+				<div class="middle">
+					<div class="mx-auto">
+						<h2 class="opciones_titles">#{txt_menu['menu.rues']}</h2>
+						<div class="opciones_flecha_box">
+							<p:commandLink value="#{txt_menu['menu.ir']}"
+								styleClass="opciones_box_links"
+								action="#{beanContenidoCentro.redirigirRues}">
+							</p:commandLink>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</p:outputPanel>
+	<!-- OPCION DE MENU INTERPOSICION RECURSOS -->
+	<p:outputPanel rendered="#{solicitudInterposicionRecursos}">
+		<div class="opciones_box_pequeno opciones_background">
+			<div class="opciones_fondo_img"
+				style="background-image: url('#{resource['img/09-seguimiento-solicititud.jpg']}');"></div>
+			<div class="shadow_Container"></div>
+			<div class="outer row h-100">
+				<div class="middle">
+					<div class="mx-auto">
+						<h2 class="opciones_titles">#{txt_menu['menu.interposicionRecursos']}</h2>
+						<div class="opciones_flecha_box">
+							<p:link styleClass="opciones_box_links"
+								outcome="/pages/solicitudes/solicitudInterposicionRecursos/solicitudInterposicionRecursos.jsf"
+								value="#{txt_menu['menu.ir']}">
+							</p:link>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</p:outputPanel>
+	<!-- LISTAS MENUS FIN -->
+
+	<!-- Modal para confirmar la redireccion certificados-->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="dialogConfirmacionRedireccion" />
+		<ui:param name="clasesEstilo" value="modal-mediano" />
+		<ui:param name="tituloModal"
+			value="#{txt['titulo.modal.redireccion']}" />
+		<ui:param name="formulario" value="formModalContenidoCentro" />
+		<ui:define name="body-modal">
+			<div class="row">
+				<div class="col-xs-12">
+					<h:outputText value="#{txt_menu['menu.modalCertificados.texto1']} " />
+					<h:outputText class="label-form"
+						value="#{txt_menu['menu.modal.boton.individual1']}" />
+					<h:outputText value="#{txt_menu['menu.modalCertificados.texto2']} " />
+					<h:outputText class="label-form"
+						value="#{txt_menu['menu.modal.boton.masivo']}" />
+				</div>
+			</div>
+			<br />
+		</ui:define>
+		<hr />
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-10 col-md-5 col-xs-offset-1 space-row">
+					<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+						value="#{txt_menu['menu.modal.boton.individual']}"
+						actionListener="#{beanContenidoCentro.cargarCatalogo}"
+						onstart="PF('blockUI-Loading').show();"
+						oncomplete="PF('#{modalId}').hide();">
+						<f:attribute name="tipoServicio"
+							value="#{EnumTipoServicio.CERTIFICADO.is_codigo}" />
+						<f:attribute name="modoTipoServicio"
+							value="#{EnumModoTipoServicio.INDIVIDUAL.is_codigo}" />
+					</p:commandButton>
+				</div>
+				<div class="col-xs-10 col-md-5 col-xs-offset-1 col-md-offset-0">
+					<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+						value="#{txt_menu['menu.modal.boton.masivo']}"
+						onstart="PF('blockUI-Loading').show();"
+						actionListener="#{beanContenidoCentro.cargarCatalogo}"
+						oncomplete="PF('#{modalId}').hide();">
+						<f:attribute name="tipoServicio"
+							value="#{EnumTipoServicio.CERTIFICADO.is_codigo}" />
+						<f:attribute name="modoTipoServicio"
+							value="#{EnumModoTipoServicio.MASIVO.is_codigo}" />
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+	<!-- Modal para confirmar la redireccion certificados-->
+	<!-- Modal para confirmar la redireccion registro alertas-->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="dialogConfirmacionRedireccionRegistro" />
+		<ui:param name="clasesEstilo" value="modal-mediano" />
+		<ui:param name="tituloModal"
+			value="#{txt['titulo.modal.redireccion']}" />
+		<ui:param name="formulario" value="formModalContenidoCentroRegistro" />
+		<ui:define name="body-modal">
+			<div class="row">
+				<div class="col-xs-12">
+					<h:outputText
+						value="#{txt_menu['menu.modalRegistroAlertas.texto1']} " />
+					<h:outputText class="label-form"
+						value="#{txt_menu['menu.modal.boton.individual']} " />
+					<h:outputText
+						value="#{txt_menu['menu.modalRegistroAlertas.texto2']} " />
+					<h:outputText class="label-form"
+						value="#{txt_menu['menu.modal.boton.masivo']}" />
+				</div>
+			</div>
+			<br />
+		</ui:define>
+		<hr />
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-10 col-md-5 col-xs-offset-1 space-row">
+					<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+						value="#{txt_menu['menu.modal.boton.individual']}"
+						onstart="PF('blockUI-Loading').show();"
+						actionListener="#{beanContenidoCentro.cargarCatalogo}"
+						oncomplete="PF('#{modalId}').hide();">
+						<f:attribute name="tipoServicio"
+							value="#{EnumTipoServicio.ALERTA.is_codigo}" />
+						<f:attribute name="modoTipoServicio"
+							value="#{EnumModoTipoServicio.INDIVIDUAL.is_codigo}" />
+					</p:commandButton>
+				</div>
+				<div class="col-xs-10 col-md-5 col-xs-offset-1 col-md-offset-0">
+					<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+						value="#{txt_menu['menu.modal.boton.masivo']}"
+						onstart="PF('blockUI-Loading').show();"
+						actionListener="#{beanContenidoCentro.cargarCatalogo}"
+						oncomplete="PF('#{modalId}').hide();">
+						<f:attribute name="tipoServicio"
+							value="#{EnumTipoServicio.ALERTA.is_codigo}" />
+						<f:attribute name="modoTipoServicio"
+							value="#{EnumModoTipoServicio.MASIVO.is_codigo}" />
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+	<!-- Modal para confirmar la redireccion registro alertas-->
+</ui:composition>

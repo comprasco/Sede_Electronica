@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_alcaldia['titulo.modificar.alcaldia']}</title>
+	</ui:define>
+	<ui:define name="body">
+
+		<div class="row">
+			<div class="col-xs-12 align-center"
+				style="padding-bottom: 10px; padding-top: 10px;">
+				<h:outputText styleClass="tituloParametrizacion"
+					value="#{txt_alcaldia['titulo.modificar.alcaldia']}" />
+			</div>
+		</div>
+
+		<h:form id="formularioAlcaldia">
+			<div class="row space-row">
+				<div class="col-xs-6 col-md-6">
+					<p:outputLabel id="labelDepartamento" styleClass="label-form"
+						for="departamento" value="#{txt_alcaldia['departamento']}" />
+					<div class="ui-inputgroup">
+						<p:inputText id="departamento" styleClass="tamano pais-nat"
+							placeholder="#{txt_alcaldia['titulo.departamento.alcaldia']}"
+							value="#{BeanModificarAlcaldia.iap_alcaldiaParametrizada.is_departamento}"
+							required="true" disabled="true" readonly="true">
+						</p:inputText>
+						<p:tooltip for="departamento"
+							value="#{txt_alcaldia['departamento.tooltip']}"></p:tooltip>
+					</div>
+				</div>
+				<div class="col-xs-6 col-md-6">
+					<p:outputLabel id="labelMunicipio" styleClass="label-form"
+						for="municipio" value="#{txt_alcaldia['municipio']}" />
+					<div class="ui-inputgroup">
+						<p:inputText id="municipio" styleClass="tamano pais-nat"
+							placeholder="#{txt_alcaldia['municipio']}"
+							value="#{BeanModificarAlcaldia.iap_alcaldiaParametrizada.im_municipio.is_nombre}"
+							required="true" disabled="true" readonly="true">
+						</p:inputText>
+						<p:tooltip for="municipio"
+							value="#{txt_alcaldia['municipio.tooltip']}"></p:tooltip>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="row space-row">
+				<div class="col-xs-8 col-md-6 col-md-offset-3">
+					<p:outputLabel id="labelListaTipoParametro" styleClass="label-form"
+						for="listaTipoParametro"
+						value="#{txt_alcaldia['tipo.parametrizacion']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<p:selectOneMenu id="listaTipoParametro"
+						widgetVar="listaEntidadSelect" required="true"
+						value="#{BeanModificarAlcaldia.iap_alcaldiaParametrizada.is_tipoParametrizacion}">
+						<f:selectItems
+							value="#{BeanModificarAlcaldia.ilc_listaTipoParametrizacion}"
+							var="entidad" itemValue="#{entidad.is_codigoValor}"
+							itemLabel="#{entidad.is_nombre}" />
+
+						<p:ajax update="formularioAlcaldia:panelTipoServicio formularioAlcaldia:tituloParametrizacion"
+							listener="#{BeanModificarAlcaldia.seleccionarTipoPagina}" />
+					</p:selectOneMenu>
+					<p:tooltip styleClass="tooltipGeneral"
+						for="labelListaTipoParametro" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_alcaldia['lista.tipo.parametrizacion']}" />
+						</div>
+					</p:tooltip>
+					<span class="help-block"> <p:message
+							for="listaTipoParametro" />
+					</span>
+				</div>
+			</div>
+			<p:separator />
+			<div class="row">
+				<div class="col-xs-12 align-center consultarUsuarioPad padBotton">
+					<h:outputText styleClass="tituloParametrizacion" id="tituloParametrizacion"
+						value="#{txt_alcaldia['seccion.parametrizacion']} #{BeanModificarAlcaldia.is_tituloParametrizacion}" />
+				</div>
+			</div>
+			<p:panel id="panelTipoServicio" styleClass="no-border ">
+				<p:outputPanel
+					rendered="#{BeanModificarAlcaldia.lb_formularioTipoParametrizacion}">
+					<div class="row space-row">
+						<div class="col-xs-12 col-md-6 col-md-offset-3">
+							<p:outputLabel id="labelPaginaWeb" styleClass="label-form"
+								for="PaginaWeb" value="#{txt_alcaldia['url.pag']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="PaginaWeb" styleClass="tamano"
+									placeholder="#{txt_alcaldia['pagina.web']}"
+									value="#{BeanModificarAlcaldia.iap_alcaldiaParametrizada.is_url}"
+									required="true" maxlength="500">
+								</p:inputText>
+								<p:tooltip for="PaginaWeb"
+									value="#{txt_alcaldia['url.paz.salvo']}"></p:tooltip>
+							</div>
+						</div>
+					</div>
+				</p:outputPanel>
+
+				<p:outputPanel
+					rendered="#{!BeanModificarAlcaldia.lb_formularioTipoParametrizacion}">
+
+					<div class="row">
+						<div class="col-xs-12 col-md-4">
+							<p:outputLabel styleClass="tituloParametrizacion"
+								value="#{txt_alcaldia['constante']}" />
+						</div>
+					</div>
+
+					<ui:repeat
+						value="#{BeanModificarAlcaldia.iap_alcaldiaParametrizada.ilpda_parametrosDinamicos}"
+						var="parametrosDinamicos">
+						<p:outputPanel styleClass="no-border"
+							rendered="#{parametrosDinamicos.is_constante eq 'S'}">
+							<div class="row space-row">
+								<div class="col-xs-12 col-md-6 col-md-offset-3">
+									<p:outputLabel styleClass="label-form"
+										value="#{parametrosDinamicos.is_nombreUi} "
+										title="#{parametrosDinamicos.is_descripcionUi}" />
+									<p:inputText styleClass="tamano" maxlength="200"
+										value="#{parametrosDinamicos.is_valor}"
+										readonly="#{parametrosDinamicos.is_constante eq 'S'}"
+										disabled="#{parametrosDinamicos.is_constante eq 'S'}">
+									</p:inputText>
+								</div>
+							</div>
+						</p:outputPanel>
+					</ui:repeat>
+
+					<p:separator />
+
+					<div class="row">
+						<div class="col-xs-12 col-md-4">
+							<p:outputLabel styleClass="tituloParametrizacion"
+								value="#{txt_alcaldia['administrables']}" />
+						</div>
+					</div>
+
+					<p:tooltip />
+
+					<ui:repeat
+						value="#{BeanModificarAlcaldia.iap_alcaldiaParametrizada.ilpda_parametrosDinamicos}"
+						var="parametrosDinamicos" varStatus="valorStatus">
+						<p:outputPanel styleClass="no-border"
+							rendered="#{parametrosDinamicos.is_administrable eq 'S'}">
+							<div class="row space-row">
+								<div class="col-xs-12 col-md-6 col-md-offset-3">
+									<p:outputLabel styleClass="label-form"
+										value="#{parametrosDinamicos.is_nombreUi}"
+										title="#{parametrosDinamicos.is_descripcionUi}" />
+									<p:inputText styleClass="tamano" maxlength="200"
+										value="#{parametrosDinamicos.is_valor}"
+										readonly="#{parametrosDinamicos.is_constante eq 'S'}"
+										disabled="#{parametrosDinamicos.is_constante eq 'S'}">
+									</p:inputText>
+								</div>
+							</div>
+						</p:outputPanel>
+					</ui:repeat>
+
+					<p:separator />
+
+					<div class="row">
+						<div class="col-xs-12 col-md-4">
+							<p:outputLabel styleClass="tituloParametrizacion"
+								value="#{txt_alcaldia['aplicacion']}" />
+						</div>
+					</div>
+
+					<ui:repeat
+						value="#{BeanModificarAlcaldia.iap_alcaldiaParametrizada.ilpda_parametrosDinamicos}"
+						var="parametrosDinamicos">
+						<p:outputPanel styleClass="no-border"
+							rendered="#{parametrosDinamicos.is_parametroAplicacion eq 'S'}">
+							<div class="row space-row">
+								<div class="col-xs-12 col-md-6 col-md-offset-3">
+									<p:outputLabel styleClass="label-form"
+										value="#{parametrosDinamicos.is_nombreUi} "
+										title="#{parametrosDinamicos.is_descripcionUi}" />
+								</div>
+							</div>
+						</p:outputPanel>
+					</ui:repeat>
+				</p:outputPanel>
+			</p:panel>
+
+			<div class="row">
+				<div class="col-xs-12 col-sm-4 align-center pad col-md-offset-2">
+					<p:commandButton id="volver" value="#{txt_alcaldia['regresar']}"
+						styleClass="btn-gris" proccess="@this" immediate="true"
+						ajax="false"
+						action="consultaAlcadiasParametrizadas?faces-redirect=true">
+					</p:commandButton>
+				</div>
+				<div class="col-xs-12 col-sm-4 align-center" style="padding: 15px">
+					<p:commandButton id="editarModal"
+						value="#{txt_alcaldia['guardar']}"
+						styleClass="btn-gradiente btn-rojo"
+						onclick="PF('confirmarSolicitud').show();">
+					</p:commandButton>
+				</div>
+			</div>
+		</h:form>
+		<!-- Modal confirmacion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarSolicitud" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_alcaldia['titulo']}" />
+			<ui:param name="formulario" value="modalConfirmarSolicitud" />
+			<ui:define name="body-modal">
+				<div class="row space-row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_alcaldia['confirmacion.edicion']}" />
+					</div>
+				</div>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-10 col-sm-5 col-xs-offset-1">
+						<p:commandButton id="btn-regresar"
+							oncomplete="PF('confirmarSolicitud').hide();"
+							styleClass="btn-gris" value="#{txt_alcaldia['cancelar']}" />
+					</div>
+					<div class="col-xs-10 col-sm-5 col-xs-offset-1 col-sm-offset-0">
+						<p:commandButton id="btn-guardar"
+							styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_alcaldia['aceptar']}"
+							action="#{BeanModificarAlcaldia.modificarAlcadia}"
+							onsuccess="PF('confirmarSolicitud').hide();">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

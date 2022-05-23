@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+
+	<!-- 	Encabezado y exportacion de documentos -->
+
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-pagoPasarela.css" />
+		<h:outputScript library="js" name="archivo.js" />
+	</ui:define>
+
+	<!-- Apartado Titulo -->
+	<ui:define name="title">
+		<title>#{txt_pasarela['pasarela.titulo']}</title>
+	</ui:define>
+
+	<ui:define name="body">
+		<div class="row">
+			<div class="col-xs-8  col-xs-offset-2 align-center titulo-resumen">
+				<h:outputText styleClass="titulo-resumen"
+					value="#{txt_pasarela['pasarela.resultado.pago']}"
+					rendered="#{BeanResumenTransaccion.ib_renderResumen}" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-8 col-sm-offset-2 align-center">
+
+				<!-- 				PanelGrid permite crear tablas estaticas eficientemente con prime, resumen pago pasarela -->
+
+				<p:panelGrid styleClass="panelGrid table-full"
+					rendered="#{BeanResumenTransaccion.ib_renderResumen}">
+
+					<!-- 					Encabezado tabla estatica resumen pago pasarela -->
+
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="7" styleClass="celda-roja">#{txt_pasarela['pasarela.pago.linea']}</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column colspan="7" styleClass="celda-general">#{txt_pasarela['pasarela.datos.cliente']}</p:column>
+						</p:row>
+					</f:facet>
+
+					<!--  Informacion especifica del cliente -->
+
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.nombre']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_nombre}</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.apellido']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_apellido}</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.numero.documento']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_numeroDocumento}</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.numero.telefono']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_numeroTelefono}</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.correo.electronico']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_correoElectronico}</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.ip']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_ip}</p:column>
+					</p:row>
+
+					<!-- 					Encabezado e inicio de los datos pagados en pasarela -->
+
+					<p:row>
+						<p:column colspan="7" styleClass="celda-roja">#{txt_pasarela['pasarela.datos.pago']}</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.pago.destino']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_receptorPago}</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.codigo.operacion']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_codigoOperacion}</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.resultado.operacion']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_resultadoTransaccion}</p:column>
+					</p:row>
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.fecha.hora']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_fecha}</p:column>
+					</p:row>
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.numero.producto']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_numeroProducto}</p:column>
+					</p:row>
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.cus']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_cus}</p:column>
+					</p:row>
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.total.pagado']}</p:column>
+						<p:column>
+							<h:outputText class="colorVerde"
+								value="#{BeanResumenTransaccion.irpp_resumenPagoPasarela.obtenerValorPagado()}">
+								<f:convertNumber type="currency" currencySymbol="$"
+									maxFractionDigits="0" />
+							</h:outputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column styleClass="negrilla">#{txt_pasarela['pasarela.estado']}</p:column>
+						<p:column>#{BeanResumenTransaccion.irpp_resumenPagoPasarela.is_estado}</p:column>
+					</p:row>
+
+				</p:panelGrid>
+				<p:row class="row">
+					<div class="col-xs-6 col-xs-offset-3 titulo-inferior">
+						<h:outputText id="mensajeDetalleTransaccion"
+							value="#{BeanResumenTransaccion.is_detalleTransaccion}" />
+					</div>
+				</p:row>
+			</div>
+		</div>
+
+		<!-- 		Panel que contiene los botones para salir del resumen o imprimir el comprobante  -->
+
+		<p:panel rendered="#{BeanResumenTransaccion.ib_renderResumen}">
+			<div class="row">
+				<div class="col-xs-3  col-xs-offset-3" style="padding-top: 10px;">
+					<p:commandButton styleClass="btn-gradiente btn-rojo"
+						value="#{txt_pasarela['pasarela.imprimir.comprobante']}"
+						disabled="#{!BeanResumenTransaccion.ib_estadoImpresion}"
+						id="botonImprimir"
+						action="#{BeanResumenTransaccion.consultarComprobante}">
+					</p:commandButton>
+				</div>
+				<div class="col-xs-3" style="padding-top: 10px;">
+					<p:commandButton styleClass="btn-gradiente btn-rojo"
+						value="#{txt_pasarela['pasarela.salir']}" iconPos="right"
+						id="botonSalir"
+						action="/pages/personas/inicio.jsf?faces-redirect=true">
+					</p:commandButton>
+				</div>
+			</div>
+		</p:panel>
+
+		<!-- 	Modal verificacion de la transaccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml"
+			rendered="#{BeanResumenTransaccion.ib_renderResumen}">
+			<ui:param name="modalId" value="modalVerificacionEstado" />
+			<ui:param name="formulario" value="formConfirmacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:define name="body-modal">
+				<p:row class="row">
+					<div class="col-xs-12">
+						<h:outputText id="mensajeTransaccion"
+							value="#{BeanResumenTransaccion.is_mensaje} :"
+							style="font-weight: bold;" />
+						<h:outputText id="mensajeTransaccionEspecifico"
+							value="#{BeanResumenTransaccion.is_mensajeEspecifico}" />
+					</div>
+				</p:row>
+			</ui:define>
+
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:outputPanel id="aceptarEstado">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" oncomplete="PF('modalVerificacionEstado').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_pasarela['pasarela.aceptar']}" id="botonAceptar">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+
+		<!-- 	Modal transaccion no encontrada  -->
+		<ui:decorate template="/pages/includes/modal.xhtml"
+			rendered="#{!BeanResumenTransaccion.ib_renderResumen}">
+			<ui:param name="modalId" value="modalVerificacionFallida" />
+			<ui:param name="formulario" value="formVerificacionFallida" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:define name="body-modal">
+				<p:row class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<h:outputText id="mensajeTransaccionNoDisponible"
+							value="#{BeanResumenTransaccion.is_mensajeEspecifico}" />
+					</div>
+				</p:row>
+			</ui:define>
+
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:outputPanel id="aceptarEstadoTransaccionNoDisponible">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit"
+								action="/pages/personas/inicio.jsf?faces-redirect=true"
+								oncomplete="PF('modalVerificacionEstado').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_pasarela['pasarela.aceptar']}"
+								id="botonAceptarTransaccionNoDisponible">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+	</ui:define>
+</ui:composition>

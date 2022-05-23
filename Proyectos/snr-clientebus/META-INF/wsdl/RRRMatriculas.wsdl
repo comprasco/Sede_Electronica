@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions targetNamespace="https://www.supernotariado.gov.co/services/bachue/ee/RRRMatriculas/v1" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="https://www.supernotariado.gov.co/schemas/bachue/ee/RRRMatriculas/consultarRRRMatriculas/v1" xmlns:WL5G3N2="https://www.supernotariado.gov.co/services/bachue/ee/RRRMatriculas/v1" xmlns:WL5G3N3="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <WL5G3N0:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bachue="https://www.supernotariado.gov.co/services/bachue/ee/RRRMatriculas/v1" xmlns:bachue5="https://www.supernotariado.gov.co/schemas/bachue/ee/RRRMatriculas/consultarRRRMatriculas/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/RRRMatriculas/consultarRRRMatriculas/v1" schemaLocation="http://52.170.212.47:7016/services/ee/RRRMatriculas/v1?SCHEMA%2FExpuestosExternamente%2FRRRMatriculas%2FResources%2FSchemas%2FLegacy%2FEE_CC_ConsultarRRRMatriculas"/>
+    </schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="ConsultarRRRMatriculas_Request">
+    <WL5G3N0:part element="WL5G3N1:entradaConsultarRRRMatriculas" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarRRRMatriculas_Response">
+    <WL5G3N0:part element="WL5G3N1:salidaConsultarRRRMatriculas" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="SBB_EE_RRRMatriculas">
+    <WL5G3N0:operation name="ConsultarRRRMatriculas">
+      <WL5G3N0:input message="WL5G3N2:ConsultarRRRMatriculas_Request"/>
+      <WL5G3N0:output message="WL5G3N2:ConsultarRRRMatriculas_Response"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="SBB_EE_RRRMatriculas" type="WL5G3N2:SBB_EE_RRRMatriculas">
+    <WL5G3N3:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="ConsultarRRRMatriculas">
+      <WL5G3N3:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/RRRMatriculas/v1/ConsultarRRRMatriculas" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N3:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N3:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="SBB_EE_RRRMatriculasQSService">
+    <WL5G3N0:documentation>OSB Service</WL5G3N0:documentation>
+    <WL5G3N0:port binding="WL5G3N2:SBB_EE_RRRMatriculas" name="SBB_EE_RRRMatriculasQSPort">
+      <WL5G3N3:address location="http://10.0.0.27:7016/services/ee/RRRMatriculas/v1"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

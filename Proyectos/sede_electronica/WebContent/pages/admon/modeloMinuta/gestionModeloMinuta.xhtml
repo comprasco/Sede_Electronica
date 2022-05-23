@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-modeloMinuta.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_minuta['MinutaVirtual']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_minuta['MinutaVirtual.Upper']}" />
+			<ui:param name="imagen" value="img-modeloMinutaVirtual" />
+			<ui:param name="subtitulo"
+				value="#{txt_minuta['MinutaVirtual.Gestion']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/modeloMinuta/gestionModeloMinuta.jsf" />
+		</ui:include>
+		<div class="container-fluid-special">
+			<div class="row">
+				<div id="section">
+					<h:form id="formModeloMinuta">
+						<p:panel id="panelModeloMinuta"
+							styleClass="panel-content no-border">
+							<div class="row ui-g">
+								<div class="col-xs-12 col-sm-12 align-center">
+									<p:dataTable var="modelo" styleClass="centrar"
+										widgetVar="paramsTable" id="modelosMinutaDataTable"
+										reflow="true"
+										value="#{beanGestionModeloMinuta.ilmm_lstModeloMinutaDto}"
+										emptyMessage="#{txt_minuta['mensaje.tabla.vacia']}"
+										paginator="true" rows="5" paginatorPosition="bottom"
+										paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+										currentPageReportTemplate="{currentPage} / {totalPages}"
+										stickyHeader="false"
+										filteredValue="#{beanModeloMinuta.il_filtroMinuta}">
+										<f:facet name="header">
+											<p:outputPanel>
+												<p:spacer height="5" />
+												<p:inputText id="globalFilter"
+													onkeyup="PF('paramsTable').filter()"
+													styleClass="tamanoTabla"
+													placeholder="#{txt_minuta['tabla.filtro.placeholder']}"
+													maxlength="100" />
+											</p:outputPanel>
+										</f:facet>
+										<p:column filterBy="#{modelo.is_nombre}"
+											filterStyle="display:none"
+											headerText="#{txt_minuta['tabla.encabezado.nombreMinuta']}">
+											<h:outputText value="#{modelo.is_nombre}" id="nombreMinuta" />
+										</p:column>
+										<p:column
+											headerText="#{txt_minuta['tabla.encabezado.estadoMinuta']}">
+											<h:outputText value="#{modelo.is_estado}" id="estadoMinuta" />
+										</p:column>
+										<p:column
+											headerText="#{txt_minuta['tabla.encabezado.asociarActo']}">
+											<p:commandButton
+												value="#{txt_minuta['boton.tabla.asociarActo']}"
+												update="@(div[id$=panelAsociarActo])"
+												oncomplete="PF('dlgAsociarActo').show()"
+												action="#{beanGestionModeloMinuta.consultarTipoActa()}">
+												<f:setPropertyActionListener value="#{modelo}"
+													target="#{beanGestionModeloMinuta.imm_modeloMinutaSeleccionadaDto}" />
+											</p:commandButton>
+										</p:column>
+										<p:column
+											headerText="#{txt_minuta['tabla.encabezado.modificarMinuta']}">
+											<p:commandButton
+												value="#{txt_minuta['boton.tabla.modificarMinuta']}"
+												update="formModificarMinuta:panelModificar"
+												oncomplete="PF('dlgModificar').show()">
+												<f:setPropertyActionListener value="#{modelo}"
+													target="#{beanGestionModeloMinuta.imm_modeloMinutaSeleccionadaDto}" />
+											</p:commandButton>
+										</p:column>
+										<p:column
+											headerText="#{txt_minuta['tabla.encabezado.descargar']}">
+											<p:commandButton styleClass="boton-descarga fa fa-download"
+												title=" " ajax="false"
+												onclick="Primefaces.monitorDownload(start,stop)">
+												<p:fileDownload value="#{modelo.isc_archivoADescargar}" />
+											</p:commandButton>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+							<br />
+							<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+								<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+									type="submit"
+									styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+									value="#{txt_minuta['boton.crear.upper']}"
+									actionListener="#{beanGestionModeloMinuta.limpiarModalCrear()}"
+									onclick="PF('dlgCrear').show();" />
+							</div>
+						</p:panel>
+					</h:form>
+				</div>
+			</div>
+		</div>
+		<!-- Modal Crear Minuta -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgCrear" />
+			<ui:param name="formulario" value="crearModeloMinuta" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_minuta['modal.crearMinuta']}" />
+			<ui:define name="body-modal">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12">
+						<p:outputLabel id="labelNombreMinuta" styleClass="label-form"
+							for="nombreMinuta" value="#{txt_minuta['label.nombreMinuta']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:inputText id="nombreMinuta" autocomplete="off"
+								styleClass="text-input border-completo" maxlength="100"
+								requiredMessage="#{txt_minuta['mensaje.campo.obligatorio']}"
+								placeholder="#{txt_minuta['placeholder.nombreMinuta']}"
+								required="true"
+								value="#{beanGestionModeloMinuta.imm_modeloMinutaCreacionDto.is_nombre}">
+								<p:keyFilter regEx="/[0-9a-z\s]/i" />
+							</p:inputText>
+							<span id="spanNombreMinuta" class="ui-inputgroup-addon ocultar">
+								<p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+								</p:commandLink>
+							</span>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelNombreMinuta"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_minuta['tooltip.nombreMinuta']}" />
+								</div>
+							</p:tooltip>
+						</div>
+						<span class="help-block"> <p:message for="nombreMinuta" />
+						</span>
+					</div>
+				</div>
+				<br />
+				<p:separator />
+				<br />
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<p:outputLabel id="labelCargarArchivos" styleClass="label-form"
+							value="#{txt_minuta['label.archivoMinuta']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<div class="ui-inputgroup">
+							<p:fileUpload id="archivoMinuta" styleClass="cargar-archivo"
+								showButtons="false" required="true"
+								sizeLimit="#{beanArchivo.validarTamanoArchivoDOC()}"
+								allowTypes="/(\.|\/)(docx|doc)$/"
+								fileUploadListener="#{beanGestionModeloMinuta.generarArchivoModeloMinuta}"
+								auto="true" label="#{txt_persona['label.ExaminarArchivo']}"
+								process="@this"
+								requiredMessage="#{txt_minuta['mensaje.campo.obligatorio']}"
+								invalidSizeMessage="#{beanArchivo.validarTamanoArchivoDOCError()}"
+								invalidFileMessage="#{txt_minuta['mensaje.archivo.formatoInvalido']}"
+								update=":crearModeloMinuta:textoSalidaArchivoCrear crearModeloMinuta:textoSalidaArchivoCrear">
+								<div class="col-xs-12">
+									<br />
+									<h:outputText id="textoSalidaArchivoCrear"
+										styleClass="text-input"
+										value="#{beanGestionModeloMinuta.is_nombreArchivo}" />
+								</div>
+							</p:fileUpload>
+							<span class="help-block"> <p:message for="archivoMinuta" />
+							</span>
+						</div>
+					</div>
+				</div>
+				<p:separator />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-atras"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_minuta['boton.volver.upper']}" immediate="true"
+							actionListener="#{beanGestionModeloMinuta.limpiarModalCrear()}"
+							action="/pages/admon/modeloMinuta/gestionModeloMinuta.jsf?faces-redirect=true"
+							process="@this" />
+					</div>
+					<div class="col-xs-4 col-xs-offset-0">
+						<p:commandButton id="btnValidarCrear"
+							value="#{txt_minuta['boton.guardar.upper']}"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							type="submit" process="@form"
+							update="@form :formModeloMinuta:modelosMinutaDataTable , @form:crearModeloMinuta:textoSalidaArchivoCrear"
+							action="#{beanGestionModeloMinuta.crearModeloMinuta()}"
+							ignoreAutoUpdate="true">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal Modificar Minuta -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgModificar" />
+			<ui:param name="formulario" value="formModificarMinuta" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal" value="#{txt_minuta['modal.modificar']}" />
+			<ui:define name="body-modal">
+				<p:panel id="panelModificar" styleClass="panel-min">
+					<div class="row ui-g">
+						<div class="col-xs-12 col-sm-12">
+							<p:outputLabel id="labelNombreMinutaMod" styleClass="label-form"
+								for="nombreMinutaMod"
+								value="#{txt_minuta['label.nombreMinuta']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:inputText id="nombreMinutaMod" autocomplete="off"
+									styleClass="text-input border-completo" maxlength="100"
+									requiredMessage="#{txt_minuta['mensaje.campo.obligatorio']}"
+									placeholder="#{txt_minuta['placeholder.nombreMinuta']}"
+									required="true"
+									value="#{beanGestionModeloMinuta.imm_modeloMinutaSeleccionadaDto.is_nombre}">
+									<p:keyFilter regEx="/[0-9a-z\s]/i" />
+								</p:inputText>
+								<span id="spanNombreMinutaMod"
+									class="ui-inputgroup-addon ocultar"> <p:commandLink>
+										<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									</p:commandLink>
+								</span>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNombreMinutaMod"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_minuta['tooltip.nombreMinuta']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="nombreMinutaMod" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<p:separator />
+					<br />
+					<div class="row text-center">
+						<div class="col-xs-6">
+							<p:outputLabel id="labelEstado" styleClass="label-form"
+								for="estadoMinuta" value="#{txt_minuta['label.estadoMinuta']}" />
+							<div class="ui-inputgroup">
+								<p:selectOneMenu id="estadoMinuta"
+									requiredMessage="#{txt_minuta['mensaje.campo.obligatorio']}"
+									required="true"
+									value="#{beanGestionModeloMinuta.imm_modeloMinutaSeleccionadaDto.is_estado}"
+									styleClass="checkBoxTipoActo">
+									<f:selectItems
+										value="#{beanGestionModeloMinuta.ileem_enumEstadoModeloMinuta}"
+										var="enum" itemLabel="#{enum.is_valorString}"
+										itemValue="#{enum.is_valorString}" />
+								</p:selectOneMenu>
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel id="labelNombreArchivo" styleClass="label-form"
+										value="#{txt_minuta['label.nombre.archivo']}" />
+								</div>
+								<div class="col-xs-12">
+									<h:outputText id="nombreArchivo" styleClass="text-input"
+										value="#{beanGestionModeloMinuta.imm_modeloMinutaSeleccionadaDto.is_nombreDocumento}" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<br />
+					<p:separator />
+					<br />
+					<div class="row space-row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelCambiarArchivos" styleClass="label-form"
+								value="#{txt_minuta['mensaje.cambio.archivo']}" />
+						</div>
+					</div>
+					<p:outputPanel id="modificarArchivo">
+						<div class="row">
+							<div
+								class="#{beanGestionModeloMinuta.getFile() == null ? 'col-xs-12' :'col-xs-6'}">
+								<p:commandButton
+									value="#{txt_minuta['modal.modificar.archivo']}"
+									update="formModificarArchivo:panelModificarArchivo"
+									oncomplete="PF('dlgModificarArchivo').show()">
+								</p:commandButton>
+							</div>
+							<div
+								class="#{beanGestionModeloMinuta.getFile() == null ? 'displayNone' :'col-xs-6'}">
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel id="labelCargarArchivos"
+											styleClass="label-form"
+											value="#{txt_minuta['label.nombre.archivo.nuevo']}" />
+									</div>
+									<div class="col-xs-12">
+										<p:outputLabel id="labelNuevoArchivos"
+											value="#{beanGestionModeloMinuta.is_nombreArchivo}" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</p:outputPanel>
+				</p:panel>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-atras"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_minuta['boton.volver.upper']}" immediate="true"
+							action="/pages/admon/modeloMinuta/gestionModeloMinuta.jsf?faces-redirect=true"
+							process="@this" />
+					</div>
+					<div class="col-xs-4 col-xs-offset-0">
+						<p:outputPanel id="botonConfirmar">
+							<p:commandButton id="btnValidarModificar"
+								value="#{txt_minuta['boton.guardar.upper']}"
+								styleClass="btn-gradiente icon-btn btn-rojo pull-left">
+								<p:ajax
+									listener="#{beanGestionModeloMinuta.modificarModeloMinuta()}"
+									update="@form :formModeloMinuta:modelosMinutaDataTable"
+									process="@this :formModificarMinuta formModificarMinuta" />
+								<p:confirm header="#{txt_minuta['modal.confirmarQuitar']}"
+									message="#{txt_minuta['mensaje.confirmar.proceso']}" />
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal Modificar Minuta -->
+		<!-- Modal para modificar archivo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgModificarArchivo" />
+			<ui:param name="formulario" value="formModificarArchivo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_minuta['modal.modificar.documento']}" />
+			<ui:define name="body-modal">
+				<p:panel id="panelModificarArchivo" styleClass="panel-min">
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelCargarArchivos" styleClass="label-form"
+								value="#{txt_minuta['label.archivoMinuta']}" />
+						</div>
+						<div class="col-xs-12">
+							<div class="ui-inputgroup">
+								<p:fileUpload id="archivoMinuta" styleClass="cargar-archivo"
+									showButtons="false"
+									sizeLimit="#{beanArchivo.validarTamanoArchivoDOC()}"
+									allowTypes="/(\.|\/)(docx|doc)$/" process="@this"
+									fileUploadListener="#{beanGestionModeloMinuta.generarArchivoModeloMinuta}"
+									auto="true" label="#{txt_persona['label.ExaminarArchivo']}"
+									invalidSizeMessage="#{beanArchivo.validarTamanoArchivoDOCError()}"
+									invalidFileMessage="#{txt_minuta['mensaje.archivo.formatoInvalido']}"
+									update="formModificarArchivo:textoSalidaArchivoModificar :formModificarArchivo:textoSalidaArchivoModificar formModificarArchivo:btns"
+									required="true" skinSimple="true">
+									<div class="col-xs-12">
+										<br />
+										<h:outputText id="textoSalidaArchivoModificar"
+											styleClass="text-input"
+											value="#{beanGestionModeloMinuta.is_nombreArchivo}" />
+										<h:outputText value="#{modelo.isc_archivoADescargar}" />
+									</div>
+								</p:fileUpload>
+							</div>
+						</div>
+					</div>
+				</p:panel>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="regresar"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_minuta['boton.volver.upper']}" immediate="true"
+							oncomplete="PF('dlgModificarArchivo').hide()" process="@this" />
+					</div>
+					<p:outputPanel id="btns">
+						<div class="col-xs-4 col-xs-offset-0">
+							<p:commandButton id="btnValidarModificar"
+								value="#{txt_minuta['boton.guardar.upper']}"
+								styleClass="btn-gradiente icon-btn btn-rojo pull-left">
+								<p:ajax
+									listener="#{beanGestionModeloMinuta.validarArchivoParaRemplazar()}"
+									oncomplete="if(#{beanGestionModeloMinuta.getFile() == null}){PF('dlgModificarArchivo').jq.effect('shake', {times: 3}, 100)}else{PF('dlgModificarArchivo').hide()}"
+									update="formModificarArchivo:textoSalidaArchivoModificar formModificarMinuta:modificarArchivo" />
+							</p:commandButton>
+						</div>
+					</p:outputPanel>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal para modificar archivo -->
+		<!-- Modal para asociar acto a minuta -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgAsociarActo" />
+			<ui:param name="formulario" value="formTipoActo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_minuta['modal.asociarActo']}" />
+			<ui:define name="body-modal">
+				<p:panel id="panelAsociarActo" styleClass="panel-min">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel id="labelNombreMinuta" styleClass="label-form"
+								for="nombreMinuta" value="#{txt_minuta['label.nombreMinuta']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="nombreMinuta" autocomplete="off"
+									styleClass="text-input border-completo" readonly="true"
+									required="true"
+									value="#{beanGestionModeloMinuta.imm_modeloMinutaSeleccionadaDto.is_nombre}">
+									<p:keyFilter regEx="/[0-9a-z\s]/i" />
+								</p:inputText>
+								<span id="spanNombreMinuta" class="ui-inputgroup-addon ocultar">
+									<p:commandLink>
+										<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									</p:commandLink>
+								</span>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNombreMinuta"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_minuta['tooltip.nombreMinuta']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="nombreMinuta" />
+							</span>
+						</div>
+						<p:panel id="panelAgregarActo" styleClass="panel-min">
+							<div class="col-xs-12 col-sm-8">
+								<p:outputLabel id="labelActoMinuta" styleClass="label-form"
+									for="actoMinuta" value="#{txt_minuta['label.actoAsociado']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<div class="ui-inputgroup">
+									<span id="spanActoMinuta" class="ui-inputgroup-addon ocultar">
+										<p:commandLink>
+											<p:graphicImage styleClass="img-x-size"
+												name="/img/x-roja.png" />
+										</p:commandLink>
+									</span>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelActoMinuta"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel value="#{txt_minuta['tooltip.actoMinuta']}" />
+										</div>
+									</p:tooltip>
+									<p:selectOneMenu id="actoMinuta" styleClass="checkBoxTipoActo"
+										converter="selectOneMenuConverter" filter="true"
+										filterMatchMode="contains" widgetVar="tipoActSelect"
+										requiredMessage="#{txt_minuta['mensaje.campo.obligatorioActo']}"
+										required="true"
+										value="#{beanGestionModeloMinuta.ita_tipoActoSeleccionado}">
+										<f:selectItem itemLabel="#{txt_minuta['select.acto']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanGestionModeloMinuta.ilta_listTipoActo}"
+											var="acto" itemValue="#{acto}"
+											itemLabel="(#{acto.is_id}) - #{acto.is_nombre}" />
+									</p:selectOneMenu>
+								</div>
+								<span class="help-block"> <p:message for="actoMinuta" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:commandButton type="submit" ajax="true"
+									styleClass="btn-gradiente icon-btn btn-rojo pull-left botonBuscar"
+									value="#{txt_minuta['boton.guardar.upper']}"
+									action="#{beanGestionModeloMinuta.asociarActoMinuta(beanGestionModeloMinuta.ita_tipoActoSeleccionado)}"
+									update=":formTipoActo:infoTipoActo , panelAgregarActo">
+								</p:commandButton>
+							</div>
+						</p:panel>
+					</div>
+					<br />
+					<p:separator />
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 align-center">
+							<p:dataTable var="tipoActo" styleClass="centrar"
+								id="infoTipoActo"
+								value="#{beanGestionModeloMinuta.ilmma_listMinutaActoDto}"
+								emptyMessage="#{txt_minuta['mensaje.tabla.vacia']}"
+								paginator="true" rows="5" paginatorPosition="bottom"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}">
+								<p:column
+									headerText="#{txt_minuta['tabla.encabezado.idTipoActo']}"
+									styleClass="idColumnDataTable">
+									<h:outputText value="#{tipoActo.getIta_tipoActo().getIs_id()}"
+										id="idTipoActo" />
+									<p:tooltip for="idTipoActo"
+										value="#{txt_minuta['tabla.encabezado.idTipoActo']}"
+										position="bottom" />
+								</p:column>
+								<p:column
+									headerText="#{txt_minuta['tabla.encabezado.nombreActo']}"
+									styleClass="nombreActoColumnDataTable">
+									<h:outputText
+										value="#{tipoActo.getIta_tipoActo().getIs_nombre()}"
+										id="nombreActo" />
+									<p:tooltip for="nombreActo"
+										value="#{txt_minuta['tabla.encabezado.nombreActo']}"
+										position="bottom" />
+								</p:column>
+								<p:column>
+									<p:growl id="growl-base" showDetail="true" life="6000"
+										sticky="false" severity="info, fatal, warn"
+										widgetVar="growl-base">
+										<p:autoUpdate />
+									</p:growl>
+									<p:commandButton
+										value="#{txt_minuta['boton.tabla.quitarActo']}"
+										update="growl-base">
+										<p:ajax
+											immediate="true"
+											listener="#{beanGestionModeloMinuta.quitarAsociarActo(tipoActo)}"
+											update="infoTipoActo" />
+										<p:confirm header="#{txt_minuta['modal.confirmarQuitar']}"
+											message="#{txt_minuta['mensaje.confirmar.proceso']}" />
+									</p:commandButton>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</p:panel>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-2">
+						<p:commandButton id="btn-atras" styleClass="pull-right btn-gris"
+							value="#{txt_minuta['boton.volver.upper']}" immediate="true"
+							action="/pages/admon/modeloMinuta/gestionModeloMinuta.jsf?faces-redirect=true"
+							process="@this" />
+					</div>
+					<div class="col-xs-4 col-xs-offset-0">
+						<p:commandButton
+							value="#{txt_certificados['wizard.seleccion.modal.aceptar']}"
+							class="btn-rojo btn-gradiente"
+							oncomplete="PF('dlgAsociarActo').hide()">
+							<f:ajax listener="#{accionBotonBean[accionBotonMetodo]}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal para asociar acto a minuta -->
+		<p:confirmDialog styleClass="box-solid box-danger cerrarModal" global="true"
+			showEffect="fade" hideEffect="fade" responsive="true">
+			<div class="row">
+				<div class="col-xs-5 col-xs-offset-1">
+					<p:commandButton immediate="true"
+						styleClass="ui-confirmdialog-no pull-right btn-gris"
+						value="#{txt_minuta['boton.cancelar.upper']}" />
+				</div>
+				<div class="col-xs-5 col-xs-offset-0">
+					<p:commandButton
+						styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+						value="#{txt_minuta['boton.aceptar.upper']}">
+					</p:commandButton>
+				</div>
+			</div>
+		</p:confirmDialog>
+	</ui:define>
+</ui:composition>

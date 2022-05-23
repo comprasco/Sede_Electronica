@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:view locale="#{lenguajeSelector.locale}">
+	<h:head>
+		<meta name="HandheldFriendly" content="true" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="viewport" content="width=device-width" />
+
+		<h:outputScript library="js" name="snr-se.js" />
+		<h:outputScript library="js" name="config-calendar-language.js" />
+		<h:outputScript library="js" name="popper.min.js" />
+		<h:outputScript library="js" name="bootstrap.min.js" />
+		<h:outputScript library="js" name="script.js?v=3" />
+		<h:outputScript library="js" name="refrescoCierreSesion.js" />
+		<h:outputScript library="js" name="alertas.js" />
+		<h:outputScript library="js" name="alertify.js" />
+		<h:outputScript library="js" name="keyfilter.js" />
+		<h:outputStylesheet library="css" name="snr-se.css" />
+		<h:outputStylesheet library="css" name="style.css" />
+		<h:outputStylesheet library="css" name="alertify.min.css" />
+		<h:outputStylesheet library="css" name="alertas.css" />
+		<ui:insert name="head" />
+		<ui:insert name="title">
+
+			<title>Sede Electronica</title>
+		</ui:insert>
+		<div>
+			<h:form>
+				<p:growl id="growl-base" showDetail="true" life="6000"
+					sticky="false" severity="info, fatal, warn" widgetVar="growl-base">
+					<p:autoUpdate />
+				</p:growl>
+			</h:form>
+		</div>
+	</h:head>
+	<h:body>
+		<input type="hidden" id="tiempoCierreSesion" name="tiempoCierreSesion"
+			value="#{beanInicio.ii_tiempoSesion}" />
+		<input type="hidden" id="nombreUsuario" name="nombreUsuario"
+			value="#{beanInicio.ius_usuarioSessionDto.is_nombreUsuario}" />
+		<input type="hidden" id="rolUsuario" name="rolUsuario"
+			value="#{beanInicio.ius_usuarioSessionDto.is_rol}" />
+		<div id="header-template">
+			<ui:insert name="header-body">
+				<ui:include src="/pages/includes/header-base.xhtml" />
+			</ui:insert>
+		</div>
+		<div id="wrapper_content_container">
+			<div id="menu-template">
+				<ui:insert name="menu">
+					<ui:include src="/pages/includes/menus-laterales.xhtml" />
+				</ui:insert>
+			</div>
+			<div id="body-template">
+				<div id="opciones_wrap_container" class="high">
+					<ui:insert name="body">
+						<ui:include src="/pages/includes/contenido-centro.xhtml" />
+					</ui:insert>
+				</div>
+			</div>
+			<!-- wrapper_content_container fin -->
+			<div class="row">
+				<div class="col-12">
+					<div id="footer-template">
+						<f:event type="preRenderView" listener="#{beanInicio.inicio}" />
+						<ui:insert name="footer">
+							<ui:include src="/pages/includes/footer.xhtml" />
+						</ui:insert>
+					</div>
+				</div>
+			</div>
+		</div>
+		<p:outputPanel id="contenedorBase">
+		</p:outputPanel>
+		<ui:include src="/pages/includes/panelBlock.xhtml">
+			<ui:param name="IdPanelBloqueado" value="contenedorBase" />
+		</ui:include>
+		<!-- Modal para no redireccion rues-->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalNoRues" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalNoRues" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{beanContenidoCentro.is_problemaRues}" />
+						<br />
+						<h:outputText value="#{txt_menu['modal.rues']}" />
+					</div>
+				</div>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-6 col-md-offset-3">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							oncomplete="PF('modalNoRues').hide();">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal para no redireccion rues-->
+		<!-- Modal de informacion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalInformativo" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalInformativo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:define name="body-modal">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel
+								value="#{txt_solicitud_consulta['modalInformativo.informacion']}" />
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:link styleClass="btn-rojo modalInformativo" outcome="/pages/solicitudes/solicitudConsultas/solicitarConsultas.jsf" value="#{txt_solicitud_consulta['boton.entendido']}">
+						</p:link>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</h:body>
+</f:view>
+</html>

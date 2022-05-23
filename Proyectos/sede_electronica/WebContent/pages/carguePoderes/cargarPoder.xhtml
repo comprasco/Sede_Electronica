@@ -1,0 +1,2106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-repositorioPoderes.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputScript library="js" name="archivo.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_repositorioPoderes['RepositorioPoderes']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_repositorioPoderes['RepositorioPoderes.Titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_repositorioPoderes['RepositorioPoderes.Subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/carguePoderes/cargarPoder.jsf" />
+		</ui:include>
+		<!-- Cargar Poder -->
+		<div class="container-fluid">
+			<p:panel id="panelCargarPoder" styleClass="panel-content no-border">
+				<h:form id="formFormularioCargarPoder">
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelCarguePoderes"
+								rendered="#{!beanCargarPoder.ib_correccionPoder}"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_repositorioPoderes['cargar.poder']}" />
+							<p:outputLabel id="labelCorreccionPoderes"
+								rendered="#{beanCargarPoder.ib_correccionPoder}"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_repositorioPoderes['correccion.poder']} #{beanCargarPoder.ispp_solicitudPoder.is_idPoder}" />
+						</div>
+					</div>
+					<br />
+					<br />
+					<div class="row">
+						<div class="col-xs-12 text-left">
+							<p:outputLabel
+								value="#{txt_repositorioPoderes['Seccion.DatosGenerales']}"
+								styleClass="titulo tamano-subtitulo" />
+							<p:separator />
+							<br />
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelTipoDocumento" styleClass="label-form"
+								for="tipoDocumento"
+								value="#{txt_repositorioPoderes['label.TipoDocumentos']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="tipoDocumento" required="true"
+								converter="selectOneMenuConverter"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								value="#{beanCargarPoder.ip_poderDto.ic_tipoDocumento}">
+								<p:ajax event="change"
+									update="formFormularioCargarPoder:opcionesRender" />
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems
+									value="#{beanCargarPoder.ilcd_listaCatalogoTipoDocumentoPoderDto}"
+									var="documentoTipo" itemLabel="#{documentoTipo.is_nombre}"
+									itemValue="#{documentoTipo}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTipoDocumento"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['label.TipoPoder']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="tipoDocumento" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelTipoPoder" styleClass="label-form"
+								for="tipoPoder"
+								value="#{txt_repositorioPoderes['label.TipoPoder']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="tipoPoder" required="true"
+								converter="selectOneMenuConverter"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								value="#{beanCargarPoder.ip_poderDto.ic_tipoPoder}">
+								<p:ajax event="change"
+									update="formFormularioCargarPoder:opcionesRender formFormularioCargarPoder:opcionesRenderDiligenciaReconocimiento" />
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems
+									value="#{beanCargarPoder.ilcd_listaCatalogoTipoPoderDto}"
+									var="poderTipo" itemLabel="#{poderTipo.is_nombre}"
+									itemValue="#{poderTipo}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTipoPoder" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['tooltip.TipoPoder']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="tipoPoder" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelFechaCargaPoder" styleClass="label-form"
+								for="fechaCargaPoder"
+								value="#{txt_repositorioPoderes['label.FechaCargaPoder']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="tipo-input-medium">
+								<h:outputText id="fechaCargaPoder"
+									value="#{beanCargarPoder.obtenerFecha()}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelFechaCargaPoder"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['tooltip.FechaCargarPoder']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="fechaCargaPoder" />
+							</span>
+						</div>
+						<div class="ol-xs-12 col-sm-6">
+							<p:outputLabel id="labelVigenciaPoder" styleClass="label-form"
+								for="vigenciaPoder"
+								value="#{txt_repositorioPoderes['label.VigenciaPoder']}" />
+							<p:calendar id="vigenciaPoder" readonlyInput="true"
+								pattern="dd/MM/yyyy" maxlength="10" locale="es"
+								yearRange="1900:2200" navigator="true" mindate="1"
+								placeholder="#{txt['placeholder.FormatoFecha']}"
+								styleClass="text-input-calendar" 
+								value="#{beanCargarPoder.ip_poderDto.id_fechaVencimiento}"
+								showOn="button" />
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelVigenciaPoder"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['tooltip.fechaVigenciaPoder']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="vigenciaPoder" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<!-- Renderizar segun validacion -->
+					<p:outputPanel id="opcionesRender">
+						<ui:fragment
+							rendered="#{beanCargarPoder.validarTipoPoderTipoDocumento()}">
+							<div class="row">
+								<div class="col-xs-12 col-sm-6">
+									<p:outputLabel id="labelNumeroEscritura"
+										styleClass="label-form" for="numeroEscritura"
+										value="#{txt_repositorioPoderes['label.NumeroEscritura']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<div class="ui-inputgroup">
+										<p:inputText id="numeroEscritura" maxlength="50"
+											styleClass="text-input border-completo" required="true"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											value="#{beanCargarPoder.ip_poderDto.is_numEscritura}"
+											placeholder="#{txt_repositorioPoderes['placeholder.NumeroEscritura']}">
+											<p:keyFilter regEx="/[0-9\a-z\s]/i" />
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelNumeroEscritura"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_repositorioPoderes['tooltip.NumeroEscritura']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="numeroEscritura" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-6">
+									<p:outputLabel id="labelFechaEscritura" styleClass="label-form"
+										for="fechaEscritura"
+										value="#{txt_repositorioPoderes['label.FechaEscritura']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:calendar id="fechaEscritura" readonlyInput="true"
+										pattern="dd/MM/yyyy" maxlength="10" locale="es"
+										yearRange="1900:2200" navigator="true" maxdate="0"
+										placeholder="#{txt['placeholder.FormatoFecha']}"
+										styleClass="text-input-calendar" required="true"
+										value="#{beanCargarPoder.ip_poderDto.id_fechaEscritura}"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										showOn="button" />
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelFechaEscritura"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_repositorioPoderes['tooltip.FechaEscritura']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="fechaEscritura" />
+									</span>
+								</div>
+							</div>
+						</ui:fragment>
+					</p:outputPanel>
+					<!-- Renderizar segun validacion -->
+					<p:outputPanel id="opcionesRenderDiligenciaReconocimiento">
+						<ui:fragment
+							rendered="#{beanCargarPoder.validarDiligenciaReconocimiento()}">
+							<div class="row">
+								<div class="col-xs-12 col-sm-4 text-center">
+									<p:outputLabel id="labelDiligenciaReconocimiento"
+										styleClass="label-form"
+										value="#{txt_repositorioPoderes['label.DiligenciaReconocimiento']}" />
+									<p:outputLabel styleClass="required-field"> *</p:outputLabel>
+									<br /> <br />
+									<div class="col-xs-12 text-center">
+										<p:outputPanel id="panelSwitch">
+											<h:outputText id="spanNo"
+												value="#{txt_repositorioPoderes['boton.No']}"
+												class="#{!beanCargarPoder.ip_poderDto.ib_diligenciaReconocimiento ? 'textoRojo' : 'textoGris' }" />
+											<p:inputSwitch
+												value="#{beanCargarPoder.ip_poderDto.ib_diligenciaReconocimiento}">
+												<f:ajax
+													render="spanNo spanSi panelSwitch modalConfirmarSolicitud" />
+											</p:inputSwitch>
+											<h:outputText id="spanSi"
+												value="#{txt_repositorioPoderes['boton.Si']}"
+												class="#{beanCargarPoder.ip_poderDto.ib_diligenciaReconocimiento ?  'textoRojo' : 'textoGris' }" />
+										</p:outputPanel>
+									</div>
+								</div>
+							</div>
+						</ui:fragment>
+					</p:outputPanel>
+					<!-- Renderizar segun validacion -->
+					<br />
+					<br />
+					<div class="row">
+						<div class="col-xs-12 text-left">
+							<p:outputLabel
+								value="#{txt_repositorioPoderes['Seccion.DetallePoder']}"
+								styleClass="titulo tamano-subtitulo" />
+							<p:separator />
+							<br />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-5">
+							<p:outputLabel id="labelAgregarPredio"
+								styleClass="text-center tamano-subtitulo"
+								value="#{txt_repositorioPoderes['label.Predio']}" />
+						</div>
+						<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_repositorioPoderes['boton.AgregarPredio']}">
+								<p:ajax listener="#{beanCargarPoder.agregarPredio()}"
+									process="@this" update="formularioAgregarPredio" />
+							</p:commandButton>
+							<br /> <br />
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputPanel id="predioConMatricula"
+								class="adjuntar-documentos">
+								<p:dataTable styleClass="centrar"
+									value="#{beanCargarPoder.ip_poderDto.ilapm_listaPredioConMatriculas}"
+									var="agregarPredioConMatricula"
+									widgetVar="paramsAgregarPredioConMatricula"
+									id="conMatriculaPredio" reflow="true" rowIndexVar="index"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									emptyMessage="#{txt_repositorioPoderes['Tabla.vacia.PredioConMatricula']}"
+									paginator="true" rows="5" paginatorPosition="bottom"
+									rowsPerPageTemplate="5">
+									<f:facet name="header">
+										<p:outputPanel styleClass="header">
+											<h:outputText
+												value="#{txt_repositorioPoderes['Header.Tabla.PredioConMatricula']}" />
+										</p:outputPanel>
+									</f:facet>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.NumeroMatricula']}"
+										styleClass="documento-medio">
+										<h:outputText
+											value="#{agregarPredioConMatricula.is_numeroMatriculaPredioEncontrado}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Nupre']}"
+										styleClass="documento-medio">
+										<h:outputText
+											value="#{agregarPredioConMatricula.is_numeroPredioEncontrado}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Departamento']}"
+										styleClass="documento-medio">
+										<h:outputText
+											value="#{agregarPredioConMatricula.id_departamentoDto.is_nombre}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Municipio']}"
+										styleClass="documento-medio">
+										<h:outputText
+											value="#{agregarPredioConMatricula.im_municipioDto.is_nombre}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Circulo']}"
+										styleClass="documento-medio">
+										<h:outputText value="#{agregarPredioConMatricula.is_circulo}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.CodigoCirculo']}"
+										styleClass="documento-medio">
+										<h:outputText
+											value="#{agregarPredioConMatricula.is_codigoCirculo}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Direccion']}"
+										styleClass="documento-medio">
+										<h:outputText
+											value="#{agregarPredioConMatricula.is_direccion}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Opciones']}"
+										styleClass="centrar38 documento-medio">
+										<p:commandButton id="eliminarConMatricula"
+											class="btn-rojo btn-gradiente btn-eliminar"
+											icon="fa fa-trash" iconPos="right" value=" ">
+											<p:ajax
+												oncomplete="PF('confirmarEliminarPredioConMatricula').show();"
+												process="@this"
+												listener="#{beanCargarPoder.cargarValorEliminarPredioConMatricula(agregarPredioConMatricula)}" />
+											<f:setPropertyActionListener
+												value="#{agregarPredioConMatricula}"
+												target="#{beanCargarPoder.iapm_agregarPredioMatriculaDto}" />
+										</p:commandButton>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="eliminarConMatricula"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_repositorioPoderes['tooltip.Eliminar']}" />
+											</div>
+										</p:tooltip>
+									</p:column>
+								</p:dataTable>
+							</p:outputPanel>
+						</div>
+					</div>
+					<br />
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputPanel id="predioSinMatricula"
+								class="adjuntar-documentos">
+								<p:dataTable
+									value="#{beanCargarPoder.ip_poderDto.ilapm_listaPredioSinMatriculas}"
+									var="agregarPredioSinMatricula" styleClass="centrar"
+									widgetVar="paramsAgregarPredioSinMatricula"
+									id="sinMatriculaPredio" reflow="true" rowIndexVar="index"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									emptyMessage="#{txt_repositorioPoderes['Tabla.vacia.PredioSinMatricula']}"
+									paginator="true" rows="5" paginatorPosition="bottom"
+									rowsPerPageTemplate="5">
+									<f:facet name="header">
+										<p:outputPanel styleClass="header">
+											<h:outputText
+												value="#{txt_repositorioPoderes['Header.Tabla.PredioSinMatricula']}" />
+										</p:outputPanel>
+									</f:facet>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Direccion']}"
+										styleClass="documento-medio">
+										<h:outputText
+											value="#{agregarPredioSinMatricula.is_direccion}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Departamento']}"
+										styleClass="documento-medio">
+										<h:outputText
+											value="#{agregarPredioSinMatricula.id_departamentoDto.is_nombre}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Municipio']}"
+										styleClass="documento-medio">
+										<h:outputText
+											value="#{agregarPredioSinMatricula.im_municipioDto.is_nombre}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Opciones']}"
+										styleClass="centrar38 documento-medio">
+										<p:commandButton id="eliminarSinMatricula"
+											class="btn-rojo btn-gradiente btn-eliminar"
+											icon="fa fa-trash" iconPos="right" value=" ">
+											<p:ajax
+												oncomplete="PF('confirmarEliminarPredioSinMatricula').show();"
+												process="@this"
+												listener="#{beanCargarPoder.cargarValorEliminarPredioSinMatricula(agregarPredioSinMatricula)}" />
+											<f:setPropertyActionListener
+												value="#{agregarPredioSinMatricula}"
+												target="#{beanCargarPoder.iapm_agregarPredioMatriculaDto}" />
+										</p:commandButton>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="eliminarSinMatricula"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_repositorioPoderes['tooltip.Eliminar']}" />
+											</div>
+										</p:tooltip>
+									</p:column>
+								</p:dataTable>
+							</p:outputPanel>
+						</div>
+					</div>
+					<br />
+					<br />
+					<div class="row">
+						<div class="col-xs-5">
+							<p:outputLabel id="labelAgregarPoderdante"
+								styleClass="text-center tamano-subtitulo"
+								value="#{txt_repositorioPoderes['label.Poderdantes']}" />
+						</div>
+						<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_repositorioPoderes['boton.AgregarPoderdante']}">
+								<p:ajax listener="#{beanCargarPoder.agregarPoderdante()}"
+									update="formularioAgregarPoderdante" process="@this" />
+							</p:commandButton>
+							<br /> <br />
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputPanel id="poderdante" class="adjuntar-documentos">
+								<p:dataTable
+									value="#{beanCargarPoder.ip_poderDto.ilapa_listaPoderdantes}"
+									var="agregarPoderdante" styleClass="centrar"
+									widgetVar="paramsAgregarPoderdante" id="poderdantes"
+									reflow="true" rowIndexVar="index"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									emptyMessage="#{txt_repositorioPoderes['Tabla.vacia.Poderdante']}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									rowsPerPageTemplate="10">
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.NombreCompleto']}"
+										styleClass="documento-medio">
+										<h:outputText value="#{agregarPoderdante.is_nombre}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.TipoDocumento']}"
+										styleClass="documento-medio">
+										<h:outputText value="#{agregarPoderdante.is_tipoDocumento}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.NumeroDocumento']}"
+										styleClass="documento-medio">
+										<h:outputText value="#{agregarPoderdante.is_numeroDocumento}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Opciones']}"
+										styleClass="centrar38 documento-medio">
+										<p:commandButton id="eliminarPoderdante"
+											class="btn-rojo btn-gradiente btn-eliminar"
+											icon="fa fa-trash" iconPos="right" value=" ">
+											<p:ajax
+												oncomplete="PF('confirmarEliminarPoderdante').show();"
+												process="@this"
+												listener="#{beanCargarPoder.cargarValorEliminarPoderdante(agregarPoderdante)}" />
+											<f:setPropertyActionListener value="#{agregarPoderdante}"
+												target="#{beanCargarPoder.iapa_agregarPoderdanteDto}" />
+										</p:commandButton>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="eliminarPoderdante"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_repositorioPoderes['tooltip.Eliminar']}" />
+											</div>
+										</p:tooltip>
+									</p:column>
+								</p:dataTable>
+							</p:outputPanel>
+						</div>
+					</div>
+					<br />
+					<br />
+					<div class="row">
+						<div class="col-xs-5">
+							<p:outputLabel id="labelAgregarApoderado"
+								styleClass="text-center tamano-subtitulo"
+								value="#{txt_repositorioPoderes['label.Apoderados']}" />
+						</div>
+						<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_repositorioPoderes['boton.AgregarApoderado']}">
+								<p:ajax listener="#{beanCargarPoder.agregarApoderado()}"
+									update="formularioAgregarApoderado" process="@this" />
+							</p:commandButton>
+							<br /> <br />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputPanel id="apoderado" class="adjuntar-documentos">
+								<p:dataTable
+									value="#{beanCargarPoder.ip_poderDto.ilapa_listaApoderados}"
+									var="agregarApoderado" styleClass="centrar"
+									widgetVar="paramsAgregarApoderado" id="apoderados"
+									reflow="true" rowIndexVar="index"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									emptyMessage="#{txt_repositorioPoderes['Tabla.vacia.Apoderado']}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									rowsPerPageTemplate="10">
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.NombreCompleto']}"
+										styleClass="documento-medio">
+										<h:outputText value="#{agregarApoderado.is_nombre}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.TipoDocumento']}"
+										styleClass="documento-medio">
+										<h:outputText value="#{agregarApoderado.is_tipoDocumento}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.NumeroDocumento']}"
+										styleClass="documento-medio">
+										<h:outputText value="#{agregarApoderado.is_numeroDocumento}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Opciones']}"
+										styleClass="centrar38 documento-medio">
+										<p:commandButton id="eliminarApoderado"
+											class="btn-rojo btn-gradiente btn-eliminar"
+											icon="fa fa-trash" iconPos="right" value=" ">
+											<p:ajax oncomplete="PF('confirmarEliminarApoderado').show();"
+												process="@this"
+												listener="#{beanCargarPoder.cargarValorEliminarApoderado(agregarApoderado)}" />
+											<f:setPropertyActionListener value="#{agregarApoderado}"
+												target="#{beanCargarPoder.iapa_agregarApoderadoDto}" />
+										</p:commandButton>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="eliminarApoderado"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_repositorioPoderes['tooltip.Eliminar']}" />
+											</div>
+										</p:tooltip>
+									</p:column>
+								</p:dataTable>
+							</p:outputPanel>
+						</div>
+					</div>
+					<br />
+					<br />
+					<div class="row">
+						<div class="col-xs-12 text-left">
+							<p:outputLabel
+								value="#{txt_repositorioPoderes['Seccion.CarguePoder']}"
+								styleClass="titulo tamano-subtitulo" />
+							<p:separator />
+							<br />
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<p:outputPanel id="cargaDePoder">
+							<div class="col-xs-12">
+								<p:dataTable var="cargaDocumentoPoder"
+									styleClass="adjuntar-documentos"
+									widgetVar="paramsCargaDocumentoPoder" id="cargarPoder"
+									emptyMessage="#{txt_repositorioPoderes['Tabla.vacia.DocumentoPoder']}"
+									value="#{beanCargarPoder.ilcdf_cargarDocumentoPoderDto}"
+									reflow="true" rowIndexVar="index" stickyHeader="false">
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.DocumentosSolicitados']}"
+										styleClass="centrar20 documento-medio">
+										<h:outputText
+											value="#{cargaDocumentoPoder.icd_catalogoDocumentoDto.is_nombre}" />
+										<p:fragment id="documentosObligatorios"
+											rendered="#{!beanCargarPoder.ib_correccionPoder}">
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										</p:fragment>
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Adjuntar']}"
+										styleClass="centrar35 documento-medio">
+										<div class="ui-inputgroup">
+											<h:form>
+												<p:fileUpload
+													id="certificado${cargaDocumentoPoder.icd_catalogoDocumentoDto.is_nombre}"
+													styleClass="cargar-archivo" showButtons="false"
+													sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+													allowTypes="/(\.|\/)(pdf|PDF)$/"
+													disabled="#{cargaDocumentoPoder.ib_desactivarBotonesCarga}"
+													fileUploadListener="#{beanCargarPoder.generarPoderCargado}"
+													auto="true"
+													label="#{txt_repositorioPoderes['boton.CargarArchivo']}"
+													process="@this"
+													invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+													invalidFileMessage="#{txt_cuentaCupo['Mensaje.archivo.formatoInvalido']}"
+													update="formFormularioCargarPoder:cargarPoder">
+													<f:attribute name="foo" value="${cargaDocumentoPoder}" />
+													<div class="col-xs-12 tamano-examinar">
+														<br />
+														<h:outputText id="textoSalidaArchivo"
+															styleClass="text-input"
+															value="#{cargaDocumentoPoder.ia_archivoDto.is_nombreArchivo}" />
+													</div>
+												</p:fileUpload>
+											</h:form>
+										</div>
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.CargarArchivos']}"
+										styleClass="centrar20 documento-medio">
+										<p:commandButton
+											value="#{txt_repositorioPoderes['boton.Validar']}"
+											disabled="#{cargaDocumentoPoder.ia_archivoDto eq null}"
+											styleClass="btn-gradiente btn-rojo">
+											<p:ajax listener="#{beanCargarPoder.validarArchivo}" />
+											<f:setPropertyActionListener value="#{cargaDocumentoPoder}"
+												target="#{beanCargarPoder.icdf_cargarDocumentoPoderDto}" />
+										</p:commandButton>
+									</p:column>
+									<p:column
+										headerText="#{txt_repositorioPoderes['header.Estado']}"
+										styleClass="centrar20 documento-medio">
+										<p:outputPanel
+											rendered="#{cargaDocumentoPoder.ib_desactivarBotonesCarga ne null and cargaDocumentoPoder.ib_desactivarBotonesCarga}">
+											<p:graphicImage name="/iconos/check-verde.png" />
+											<br />
+											<h:outputText
+												value="#{txt_repositorioPoderes['Mensaje.ArchivoListoCargarse']}" />
+										</p:outputPanel>
+										<p:outputPanel
+											rendered="#{cargaDocumentoPoder.ib_desactivarBotonesCarga ne null and !cargaDocumentoPoder.ib_desactivarBotonesCarga}">
+											<p:graphicImage name="/iconos/advertencia.png" />
+											<br />
+											<h:outputText
+												value="#{txt_repositorioPoderes['Mensaje.ArchivoNoCargado']}" />
+										</p:outputPanel>
+									</p:column>
+								</p:dataTable>
+								<br /> <br />
+							</div>
+							<br />
+						</p:outputPanel>
+					</div>
+					<ui:fragment rendered="#{beanCargarPoder.ib_correccionPoder}">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 text-left">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['mensaje.corregir.poder']}"
+									styleClass="titulo tamano-subtitulo" />
+							</div>
+						</div>
+						<p:separator />
+					</ui:fragment>
+
+					<ui:fragment rendered="#{!beanCargarPoder.ib_correccionPoder}">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel id="labelObservaciones" styleClass="label-form"
+									for="observaciones"
+									value="#{txt_repositorioPoderes['label.Observaciones']}" />
+								<div class="ui-inputgroup">
+									<p:inputTextarea id="observaciones" rows="6" autocomplete="off"
+										cols="40" counter="mostrarContadorObervaciones"
+										counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+										autoResize="false"
+										styleClass="text-input border-completo tamano"
+										maxlength="2000"
+										placeholder="#{txt_repositorioPoderes['placeholder.Observaciones']}"
+										value="#{beanCargarPoder.ip_poderDto.is_observaciones}">
+										<p:keyFilter regEx="/[A-Za-z0-9\í\é\ó\.\,\:\;\(\)\s]/i" />
+									</p:inputTextarea>
+									<p:tooltip for="labelObservaciones"
+										value="#{txt_repositorioPoderes['placeholder.Observaciones']}" />
+								</div>
+								<h:outputText id="mostrarContadorObervaciones" />
+								<span class="help-block"> <p:message for="observaciones" />
+								</span> <br /> <br />
+							</div>
+						</div>
+					</ui:fragment>
+
+					<ui:fragment rendered="#{beanCargarPoder.ib_correccionPoder}">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel id="labelJustificacion" styleClass="label-form"
+									for="justificacion" value="Observaciones De la corrección" />
+								<div class="ui-inputgroup">
+									<p:inputTextarea id="justificacion" rows="6" autocomplete="off"
+										cols="40" counter="mostrarContadorJustificacion"
+										counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+										autoResize="false"
+										styleClass="text-input border-completo tamano"
+										maxlength="2000"
+										placeholder="#{txt_repositorioPoderes['placeholder.Observaciones']}"
+										value="#{beanCargarPoder.iop_justificacionUsoPoder.is_observaciones}">
+										<p:keyFilter regEx="/[A-Za-z0-9\.\,\:\;\(\)\s]/i" />
+									</p:inputTextarea>
+									<p:tooltip for="labelJustificacion"
+										value="#{txt_repositorioPoderes['placeholder.Observaciones']}" />
+								</div>
+								<h:outputText id="mostrarContadorJustificacion" />
+								<span class="help-block"> <p:message for="justificacion" />
+								</span> <br /> <br />
+							</div>
+						</div>
+					</ui:fragment>
+
+					<div class="row">
+						<div class="col-xs-12 col-sm-4 col-sm-offset-1">
+							<p:commandButton icon="icon-flecha-gris" iconPos="right"
+								styleClass="icon-btn btn-gris " type="submit"
+								value="#{txt_repositorioPoderes['boton.Salir']}">
+								<p:ajax oncomplete="PF('confirmarSalirInicio').show();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+								rendered="#{!beanCargarPoder.ib_correccionPoder}"
+								value="#{txt_repositorioPoderes['boton.GuardarDocumento']}">
+								<p:ajax process="formFormularioCargarPoder"
+									oncomplete="if (args &amp;&amp; args.validationFailed) irArriba();"
+									listener="#{beanCargarPoder.validarFirmaDigitalParaCargarPoder}"
+									update="formResumenPoderCargado:poderResumen panelCargarPoder" />
+							</p:commandButton>
+
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								rendered="#{beanCargarPoder.ib_correccionPoder}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+								value="#{txt_repositorioPoderes['boton.GuardarDocumento']}">
+								<p:confirm header="#{txt['titulo.modal.confirmacion']}"
+									message="#{txt_repositorioPoderes['modal.conmfirmar']}" />
+								<p:ajax process="formFormularioCargarPoder"
+									listener="#{beanCargarPoder.corregirPoder}"
+									update="formResumenPoderCargado:poderResumen panelCargarPoder" />
+							</p:commandButton>
+						</div>
+					</div>
+					<br />
+				</h:form>
+			</p:panel>
+		</div>
+		<!-- Formulario Agregar Predio -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="formularioAgregarPredio" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_repositorioPoderes['Formulario.AgregarPredio']}" />
+			<ui:param name="formulario" value="formAgregarPredio" />
+			<ui:define name="body-modal">
+				<div class="text-left">
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelTipoPredio" styleClass="label-form"
+								for="tipoPredio"
+								value="#{txt_repositorioPoderes['label.AgregarPredio']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="tipoPredio" required="true"
+								converter="selectOneMenuConverter"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								value="#{beanCargarPoder.ic_tipoMatriculaDto}">
+								<p:ajax event="change" update="formularioAgregarPredio"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();PF('formularioAgregarPredio').show();"
+									listener="#{beanCargarPoder.validarPredioConSinMatricula}" />
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems
+									value="#{beanCargarPoder.ilcd_listaCatalogoTipoPredioDto}"
+									var="predioTipo" itemLabel="#{predioTipo.is_nombre}"
+									itemValue="#{predioTipo}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTipoPredio" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['tooltip.TipoPredio']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="tipoPredio" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<p:outputPanel id="opcionesConSinMatricula">
+
+						<!-- Panel Con matricula -->
+						<p:outputPanel id="agregarPredioConMatricula"
+							rendered="#{beanCargarPoder.ib_estadoFormularioAgregarPredio != null}">
+							<div class="row">
+								<div class="col-xs-12 text-left">
+									<ui:fragment
+										rendered="#{beanCargarPoder.ib_estadoFormularioAgregarPredio}">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['AgregarPredioMatricula']}"
+											styleClass="titulo tamano-subtitulo" />
+									</ui:fragment>
+									<ui:fragment
+										rendered="#{!beanCargarPoder.ib_estadoFormularioAgregarPredio}">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['AgregarPredioSinMatricula']}"
+											styleClass="titulo tamano-subtitulo" />
+									</ui:fragment>
+									<p:separator />
+									<br />
+								</div>
+							</div>
+							<p:outputPanel id="opcionesConMatricula"
+								rendered="#{beanCargarPoder.ib_estadoFormularioAgregarPredio}">
+								<div class="row">
+									<div class="col-xs-12 col-sm-6">
+										<p:outputLabel styleClass="label-form"
+											id="labelCriterioBusqueda" for="criterioBusqueda"
+											value="#{txt_datosBasicos['label.criterio']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<p:selectOneMenu id="criterioBusqueda" filter="true"
+											filterMatchMode="contains" required="true"
+											converter="selectOneMenuConverter"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											value="#{beanCargarPoder.iedb_entradaDatosBasicosDto.ic_catalogoCriterioDatosBasicos}">
+											<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+												itemValue="" />
+											<f:selectItems
+												value="#{beanCargarPoder.ilc_listaCatalogoCriterioBusqueda}"
+												var="tipoIdentificacionPredio"
+												itemLabel="#{tipoIdentificacionPredio.is_nombre}"
+												itemValue="#{tipoIdentificacionPredio}" />
+											<p:ajax event="change"
+												update="formAgregarPredio:agregarPredioConMatricula" />
+										</p:selectOneMenu>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCriterioBusqueda"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_datosBasicos['tooltip.criterioBusqueda']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="criterioBusqueda" />
+										</span>
+									</div>
+									<div class="col-xs-12 col-sm-6">
+										<p:outputLabel id="labelValor" styleClass="label-form"
+											for="valor"
+											value="#{txt_datosBasicos['label.valorCriterio']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<div class="ui-inputgroup">
+											<p:inputText id="valor"
+												styleClass="text-input border-completo" maxlength="30"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												required="true"
+												placeholder="#{txt_datosBasicos['valor.Criterio']}"
+												value="#{beanCargarPoder.iedb_entradaDatosBasicosDto.is_valor}">
+												<p:ajax event="change"
+													update="formAgregarPredio:agregarPredioConMatricula" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelValor" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_datosBasicos['tooltip.valorCriterio']}" />
+												</div>
+											</p:tooltip>
+										</div>
+										<span class="help-block"> <p:message for="valor" />
+										</span>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-xs-12 col-sm-6">
+										<p:outputLabel id="labelDepartamentoConMatricula"
+											styleClass="label-form" for="departamentoConMatricula"
+											value="#{txt_persona['label.Departamento']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<p:selectOneMenu id="departamentoConMatricula"
+											converter="selectOneMenuConverter"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											required="true"
+											value="#{beanCargarPoder.iedb_entradaDatosBasicosDto.id_departamentoDto}">
+											<p:ajax process="@this"
+												update="formAgregarPredio:opcionesConMatricula"
+												listener="#{beanCargarPoder.cambiarMunicipios}" />
+											<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+												itemValue="" />
+											<f:selectItems
+												value="#{beanCargarPoder.ild_listaDepartamentoDto}"
+												var="departamentoConMatricula"
+												itemLabel="#{departamentoConMatricula.is_nombre}"
+												itemValue="#{departamentoConMatricula}" />
+										</p:selectOneMenu>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral"
+											for="labelDepartamentoConMatricula" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_persona['tooltip.Departamento']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="departamentoConMatricula" />
+										</span>
+									</div>
+									<div class="col-xs-12 col-sm-6">
+										<p:outputLabel id="labelMunicipioConMatricula"
+											styleClass="label-form" for="municipioConMatricula"
+											value="#{txt_persona['label.Municipio']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<p:selectOneMenu id="municipioConMatricula"
+											styleClass="tamanoSelect"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											converter="selectOneMenuConverter" required="true"
+											value="#{beanCargarPoder.iedb_entradaDatosBasicosDto.im_municipioDto}">
+											<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+												itemValue="" />
+											<p:ajax event="change"
+												update="formAgregarPredio:circuloCodigo direccionMatricula"
+												listener="#{beanCargarPoder.servicioConsultaMatricula}" />
+											<f:selectItems
+												value="#{beanCargarPoder.ilm_listaMunicipioDto}"
+												var="municipioConMatricula"
+												itemLabel="#{municipioConMatricula.is_nombre}"
+												itemValue="#{municipioConMatricula}" />
+										</p:selectOneMenu>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelMunicipioConMatricula"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel value="#{txt_persona['tooltip.Municipio']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="municipioConMatricula" />
+										</span>
+									</div>
+								</div>
+							</p:outputPanel>
+							<br />
+							<p:outputPanel id="opcionesSinMatricula"
+								rendered="#{!beanCargarPoder.ib_estadoFormularioAgregarPredio}">
+								<div class="row">
+									<div class="col-xs-12 col-sm-6">
+										<p:outputLabel id="labelDepartamentoSinMatricula"
+											styleClass="label-form" for="departamentoSinMatricula"
+											value="#{txt_persona['label.Departamento']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<p:selectOneMenu id="departamentoSinMatricula"
+											converter="selectOneMenuConverter"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											required="true"
+											value="#{beanCargarPoder.iedb_entradaDatosBasicosDto.id_departamentoDto}">
+											<p:ajax process="@this"
+												update="formAgregarPredio:opcionesSinMatricula"
+												listener="#{beanCargarPoder.cambiarMunicipios}" />
+											<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+												itemValue="" />
+											<f:selectItems
+												value="#{beanCargarPoder.ild_listaDepartamentoDto}"
+												var="departamentoConMatricula"
+												itemLabel="#{departamentoConMatricula.is_nombre}"
+												itemValue="#{departamentoConMatricula}" />
+										</p:selectOneMenu>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral"
+											for="labelDepartamentoSinMatricula" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_persona['tooltip.Departamento']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="departamentoSinMatricula" />
+										</span>
+									</div>
+									<div class="col-xs-12 col-sm-6">
+										<p:outputLabel id="labelMunicipioSinMatricula"
+											styleClass="label-form" for="municipioSinMatricula"
+											value="#{txt_persona['label.Municipio']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<p:selectOneMenu id="municipioSinMatricula"
+											styleClass="tamanoSelect"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											converter="selectOneMenuConverter" required="true"
+											value="#{beanCargarPoder.iedb_entradaDatosBasicosDto.im_municipioDto}">
+											<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+												itemValue="" />
+											<p:ajax event="change"
+												update="formAgregarPredio:circuloCodigo direccionMatricula"
+												listener="#{beanCargarPoder.servicioConsultaMatricula}" />
+											<f:selectItems
+												value="#{beanCargarPoder.ilm_listaMunicipioDto}"
+												var="municipioSinMatricula"
+												itemLabel="#{municipioSinMatricula.is_nombre}"
+												itemValue="#{municipioSinMatricula}" />
+										</p:selectOneMenu>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelMunicipioSinMatricula"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel value="#{txt_persona['tooltip.Municipio']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="municipioSinMatricula" />
+										</span>
+									</div>
+								</div>
+							</p:outputPanel>
+							<br />
+							<ui:fragment
+								rendered="#{beanCargarPoder.ib_estadoFormularioAgregarPredio}">
+								<p:outputPanel id="circuloCodigo">
+									<div class="row">
+										<div class="col-xs-12 col-sm-6">
+											<p:outputLabel id="labelCirculo" styleClass="label-form"
+												for="circulo"
+												value="#{txt_repositorioPoderes['label.Circulo']}" />
+											<div class="ui-inputgroup">
+												<p:inputText id="circulo" autocomplete="off"
+													styleClass="text-input border-completo" maxlength="20"
+													requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+													placeholder="#{txt_repositorioPoderes['placeholder.Circulo']}"
+													required="true" readonly="true"
+													value="#{beanCargarPoder.iapm_agregarPredioMatriculaDto.is_circulo}">
+													<p:keyFilter regEx="/[0-9]/i" />
+												</p:inputText>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelCirculo"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_repositorioPoderes['tooltip.CirculoRegistral']}" />
+													</div>
+												</p:tooltip>
+											</div>
+											<span class="help-block"> <p:message for="circulo" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-sm-6">
+											<p:outputLabel id="labelCodigoCirculo"
+												styleClass="label-form" for="codigoCirculo"
+												value="#{txt_repositorioPoderes['label.CodigoCirculo']}" />
+											<div class="ui-inputgroup">
+												<p:inputText id="codigoCirculo" autocomplete="off"
+													styleClass="text-input border-completo" maxlength="20"
+													requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+													placeholder="#{txt_repositorioPoderes['placeholder.CodigoCirculo']}"
+													required="true" readonly="true"
+													value="#{beanCargarPoder.iapm_agregarPredioMatriculaDto.is_codigoCirculo}">
+													<p:keyFilter regEx="/[0-9]/i" />
+												</p:inputText>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelCodigoCirculo"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_repositorioPoderes['tooltip.CodigoCirculoRegistral']}" />
+													</div>
+												</p:tooltip>
+											</div>
+											<span class="help-block"> <p:message
+													for="codigoCirculo" />
+											</span>
+										</div>
+									</div>
+								</p:outputPanel>
+							</ui:fragment>
+							<br />
+							<ui:fragment
+								rendered="#{beanCargarPoder.ib_estadoFormularioAgregarPredio != null}">
+								<p:outputPanel id="direccionMatricula">
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel id="labelDireccionConMatricula"
+												styleClass="label-form" for="direccionConMatricula"
+												value="#{txt_repositorioPoderes['label.DireccionPredio']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											<div class="ui-inputgroup">
+												<p:inputText id="direccionConMatricula"
+													styleClass="text-input dir" required="true" maxlength="50"
+													requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+													placeholder="#{txt_repositorioPoderes['placeholder.IngreseDireccionPredio']}"
+													value="#{beanCargarPoder.iapm_agregarPredioMatriculaDto.is_direccion}"
+													readonly="#{beanCargarPoder.ib_estadoFormularioAgregarPredio}">
+													<p:keyFilter regEx="/[A-Za-z0-9\-\/\#\°\s]/i" />
+												</p:inputText>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral"
+													for="labelDireccionConMatricula" position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_repositorioPoderes['tooltip.DireccionPredio']}" />
+													</div>
+												</p:tooltip>
+											</div>
+											<span class="help-block"> <p:message
+													for="direccionConMatricula" />
+											</span>
+										</div>
+									</div>
+								</p:outputPanel>
+							</ui:fragment>
+							<br />
+							<br />
+						</p:outputPanel>
+					</p:outputPanel>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+						<p:commandButton styleClass="icon-btn btn-gris " type="submit"
+							value="#{txt_repositorioPoderes['boton.Volver']}">
+							<p:ajax listener="#{beanCargarPoder.limpiarTablas()}" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:commandButton
+							value="#{txt_repositorioPoderes['boton.Guardar']}" type="submit"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							process="formAgregarPredio"
+							update="formFormularioCargarPoder:sinMatriculaPredio formFormularioCargarPoder:conMatriculaPredio formModalPredioEncontrado:matriculaEncontrada formAgregarPredio"
+							action="#{beanCargarPoder.confirmacionAgregarPredio}"
+							oncomplete="if(args.validationFailed){PF('formularioAgregarPredio').jq.effect('shake', {times: 3}, 100);}else{return true;}" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal confirmacion -->
+		<p:confirmDialog
+			styleClass="box-solid box-danger text-center cerrarModal"
+			global="true" width="400" showEffect="fade" hideEffect="fade"
+			responsive="true">
+			<div class="row">
+				<div class="col-xs-5 col-xs-offset-1">
+					<p:commandButton immediate="true"
+						styleClass="ui-confirmdialog-no pull-right btn-gris"
+						value="#{txt['boton.Cancelar.Upper']}" />
+				</div>
+				<div class="col-xs-5 col-xs-offset-0">
+					<p:commandButton
+						styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+						value="#{txt['boton.Aceptar']}">
+					</p:commandButton>
+				</div>
+			</div>
+		</p:confirmDialog>
+
+		<!-- Modal confirmacion actualizacion poder -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmacionActualizacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario"
+				value="formModalConfirmacionActualizacion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['mensaje.confirmacion.correccion']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton type="submit"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Entendido']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								action="#{beanCargarPoder.redireccionarPagina}">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal predio con matricula encontrado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="predioEncontrado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalPredioEncontrado" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12">
+					<br />
+					<p:outputLabel id="solicitudAprobada"
+						value="#{txt_repositorioPoderes['Mesanje.PredioTienePoder']}" />
+					<br /> <br /> <br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:outputPanel id="matriculaEncontrada">
+						<p:panelGrid>
+							<p:row>
+								<p:column>
+									<p:outputLabel id="labelNumeroMatriculaPredioEncontrado"
+										styleClass="label-form" for="numeroMatriculaPredioEncontrado"
+										value="#{txt_repositorioPoderes['label.NumeroMatricula']}" />
+								</p:column>
+								<p:column styleClass="text-center">
+									<h:outputText styleClass="text-input"
+										value="#{beanCargarPoder.is_numeroMatriculaPredioEncontrado}"
+										id="numeroMatriculaPredioEncontrado" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:outputLabel id="labelNumeroPredioEncontrado"
+										styleClass="label-form" for="numeroPredioEncontrado"
+										value="#{txt_repositorioPoderes['label.numero']}" />
+								</p:column>
+								<p:column styleClass="text-center">
+									<h:outputText styleClass="text-input"
+										value="#{beanCargarPoder.is_numeroPredioEncontrado}"
+										id="numeroPredioEncontrado" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:outputLabel id="labelFechaRegistroPredioEncontrado"
+										styleClass="label-form" for="fechaRegistroPredioEncontrado"
+										value="#{txt_repositorioPoderes['label.FechaRegistroMatricula']}" />
+								</p:column>
+								<p:column styleClass="text-center">
+									<h:outputText styleClass="text-input"
+										value="#{beanCargarPoder.id_fechaRegistroPredioEncontrado}"
+										id="fechaRegistroPredioEncontrado">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:outputPanel>
+					<br /> <br />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:outputPanel id="entendidoAprobada">
+							<p:commandButton action="#{beanCargarPoder.cargarMatriculas}"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								update="formFormularioCargarPoder:conMatriculaPredio"
+								value="#{txt_repositorioPoderes['boton.Entendido']}"
+								oncomplete="if(args.validationFailed){PF('predioEncontrado').jq.effect('shake', {times: 3}, 100);}else{PF('predioEncontrado').hide();return true;}" />
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal predio con matricula no encontrado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="predioNoEncontrado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalPredioNoEncontrado" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.MatriculaPoderes']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton immediate="true"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Entendido']}">
+								<p:ajax oncomplete="PF('predioNoEncontrado').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Formulario Agregar Poderdante -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="formularioAgregarPoderdante" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_repositorioPoderes['FormalarioAgregarPoderdante']}" />
+			<ui:param name="formulario" value="formAgregarPoderdante" />
+			<ui:define name="body-modal">
+				<div class="text-left">
+					<div class="col-xs-11 text-left">
+						<p:outputLabel
+							value="#{txt_repositorioPoderes['label.AgregarPoderdante']}"
+							styleClass="titulo tamano-subtitulo" />
+						<p:separator />
+						<br />
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<div>
+								<p:outputLabel id="labelTipoDocumentoPoderdante"
+									styleClass="label-form" for="tipoDocumentoPoderdante"
+									value="#{txt_repositorioPoderes['label.TipoDocumentos']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							</div>
+							<p:selectOneMenu id="tipoDocumentoPoderdante"
+								widgetVar="tipoDocumentoPoderdanteSelect"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								required="true"
+								value="#{beanCargarPoder.iapa_agregarPoderdanteDto.is_tipoDocumento}">
+								<f:selectItem itemValue=""
+									itemLabel="#{txt['label.SeleccioneComboBox']}" />
+								<f:selectItems value="#{beanCargarPoder.iltd_tiposDocumento}"
+									var="tipoDocumentoPoderdante"
+									itemValue="#{tipoDocumentoPoderdante.getIs_id()}"
+									itemLabel="#{tipoDocumentoPoderdante.getIs_nombre()}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTipoDocumentoPoderdante"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['label.TipoDocumento']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="tipoDocumentoPoderdante" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelNumeroDocumentoPoderdante"
+								styleClass="label-form" for="numeroDocumentoPoderdante"
+								value="#{txt_repositorioPoderes['label.NumeroDocumento']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:inputText id="numeroDocumentoPoderdante" autocomplete="off"
+									styleClass="text-input border-completo" maxlength="20"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_repositorioPoderes['placeholder.IngreseNumeroDocumento']}"
+									required="true"
+									value="#{beanCargarPoder.iapa_agregarPoderdanteDto.is_numeroDocumento}">
+									<p:keyFilter regEx="/[0-9]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral"
+									for="labelNumeroDocumentoPoderdante" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['tooltip.NumeroDocumento']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message
+									for="numeroDocumentoPoderdante" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel id="labelNombrePoderdante" styleClass="label-form"
+								for="nombrePoderdante"
+								value="#{txt_repositorioPoderes['label.nombre']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:inputText id="nombrePoderdante" autocomplete="off"
+									styleClass="text-input border-completo" maxlength="30"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_repositorioPoderes['Placeholder.IngreseNombre']}"
+									required="true"
+									value="#{beanCargarPoder.iapa_agregarPoderdanteDto.is_nombre}">
+									<p:keyFilter regEx="/[a-z\A-Z\0-9]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNombrePoderdante"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['tooltip.nombre']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message
+									for="nombrePoderdante" />
+							</span>
+						</div>
+					</div>
+					<br />
+				</div>
+			</ui:define>
+			<br />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+						<p:commandButton styleClass="icon-btn btn-gris " type="submit"
+							value="#{txt_repositorioPoderes['boton.Volver']}">
+							<p:ajax listener="#{beanCargarPoder.limpiarPoderdantes()}" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-sm-offset-0">
+						<p:commandButton id="btn-editar" type="submit"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_repositorioPoderes['boton.Guardar']}"
+							action="#{beanCargarPoder.validacionNumeroDocumentoPoderdante()}"
+							process="formAgregarPoderdante"
+							update="formFormularioCargarPoder:poderdante formAgregarPoderdante"
+							oncomplete="if(args.validationFailed){PF('formularioAgregarPoderdante').jq.effect('shake', {times: 3}, 100);}else{PF('formularioAgregarPoderdante').hide();return true;}" />
+					</div>
+				</div>
+				<br />
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Formulario Agregar Apoderado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="formularioAgregarApoderado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_repositorioPoderes['FormularioAgregarApoderado']}" />
+			<ui:param name="formulario" value="formAgregarApoderado" />
+			<ui:define name="body-modal">
+				<div class="text-left">
+					<div class="col-xs-11 text-left">
+						<p:outputLabel
+							value="#{txt_repositorioPoderes['label.AgregarApoderado']}"
+							styleClass="titulo tamano-subtitulo" />
+						<p:separator />
+						<br />
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<div>
+								<p:outputLabel id="labelTipoDocumentoApoderadoAgregar"
+									styleClass="label-form" for="tipoDocumentoApoderadoAgregar"
+									value="#{txt_repositorioPoderes['label.TipoDocumentos']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							</div>
+							<p:selectOneMenu id="tipoDocumentoApoderadoAgregar"
+								widgetVar="tipoDocumentoApoderadoSelectAgregar"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								required="true"
+								value="#{beanCargarPoder.iapa_agregarApoderadoDto.is_tipoDocumento}">
+								<f:selectItem itemValue=""
+									itemLabel="#{txt['label.SeleccioneComboBox']}" />
+								<f:selectItems value="#{beanCargarPoder.iltd_tiposDocumento}"
+									var="tipoDocumentoAgregar"
+									itemValue="#{tipoDocumentoAgregar.getIs_id()}"
+									itemLabel="#{tipoDocumentoAgregar.getIs_nombre()}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral"
+								for="labelTipoDocumentoApoderadoAgregar" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['tooltip.TipoDocumento']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="tipoDocumentoApoderadoAgregar" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel id="labelNumeroDocumentoApoderadoAgregar"
+								styleClass="label-form" for="numeroDocumentoApoderadoAgregar"
+								value="#{txt_repositorioPoderes['label.NumeroDocumento']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:inputText id="numeroDocumentoApoderadoAgregar"
+									autocomplete="off" styleClass="text-input border-completo"
+									maxlength="20"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_repositorioPoderes['placeholder.IngreseNumeroDocumento']}"
+									required="true"
+									value="#{beanCargarPoder.iapa_agregarApoderadoDto.is_numeroDocumento}">
+									<p:keyFilter regEx="/[0-9]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral"
+									for="labelNumeroDocumentoApoderadoAgregar" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['tooltip.NumeroDocumento']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message
+									for="numeroDocumentoApoderadoAgregar" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel id="labelNombreApoderado" styleClass="label-form"
+								for="nombreApoderado"
+								value="#{txt_repositorioPoderes['label.nombre']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:inputText id="nombreApoderado" autocomplete="off"
+									styleClass="text-input border-completo" maxlength="20"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_repositorioPoderes['Placeholder.IngreseNombre']}"
+									required="true"
+									value="#{beanCargarPoder.iapa_agregarApoderadoDto.is_nombre}">
+									<p:keyFilter regEx="/[a-z\A-Z\0-9\.\s]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNombreApoderado"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_repositorioPoderes['tooltip.nombre']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="nombreApoderado" />
+							</span>
+						</div>
+					</div>
+					<br />
+				</div>
+			</ui:define>
+			<br />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+						<p:commandButton styleClass="icon-btn btn-gris " type="submit"
+							value="#{txt_repositorioPoderes['boton.Volver']}">
+							<p:ajax listener="#{beanCargarPoder.limpiarAponderados()}" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-sm-offset-0">
+						<p:commandButton id="btn-editar" type="submit"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_repositorioPoderes['boton.Guardar']}"
+							action="#{beanCargarPoder.validacionNumeroDocumentoApoderado()}"
+							process="formAgregarApoderado"
+							update="formFormularioCargarPoder:apoderado formAgregarApoderado"
+							oncomplete="if(args.validationFailed){PF('formularioAgregarApoderado').jq.effect('shake', {times: 3}, 100);}else{PF('formularioAgregarApoderado').hide();return true;}" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al eliminar predio con matricula -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarEliminarPredioConMatricula" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalConfirmarEliminarPredioConMatricula" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.SeguroEliminarPredioConMatricula']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_repositorioPoderes['boton.Cancelar']}"
+								oncomplete="PF('confirmarEliminarPredioConMatricula').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Aceptar']}"
+								update="formFormularioCargarPoder:conMatriculaPredio formFormularioCargarPoder:predioConMatricula">
+								<f:ajax listener="#{beanCargarPoder.eliminarPredioConMatricula}"
+									oncomplete="PF('confirmarEliminarPredioConMatricula').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al eliminar predio sin matricula -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarEliminarPredioSinMatricula" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalConfirmarEliminarPredioSinMatricula" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.SeguroEliminarPredioSinMatricula']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_repositorioPoderes['boton.Cancelar']}"
+								oncomplete="PF('confirmarEliminarPredioSinMatricula').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Aceptar']}"
+								update="formFormularioCargarPoder:sinMatriculaPredio">
+								<f:ajax listener="#{beanCargarPoder.eliminarPredioSinMatricula}"
+									oncomplete="PF('confirmarEliminarPredioSinMatricula').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al eliminar poderdante -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarEliminarPoderdante" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalConfirmarEliminarPoderdante" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.SeguroEliminarPoderdante']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_repositorioPoderes['boton.Cancelar']}"
+								oncomplete="PF('confirmarEliminarPoderdante').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Aceptar']}"
+								update="formFormularioCargarPoder:poderdantes formFormularioCargarPoder:poderdante">
+								<f:ajax listener="#{beanCargarPoder.eliminarPoderdante}"
+									oncomplete="PF('confirmarEliminarPoderdante').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al eliminar apoderado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarEliminarApoderado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalConfirmarEliminarApoderado" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.SeguroEliminarApoderado']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_repositorioPoderes['boton.Cancelar']}"
+								oncomplete="PF('confirmarEliminarApoderado').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Aceptar']}"
+								update="formFormularioCargarPoder:apoderados formFormularioCargarPoder:apoderado">
+								<f:ajax listener="#{beanCargarPoder.eliminarApoderado}"
+									oncomplete="PF('confirmarEliminarApoderado').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al salir -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarSalir" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmarSalir" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.SeguroSalir']}" />
+						<br /> <br />
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.SeguroSalir1']}" />
+						<br /> <br />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_repositorioPoderes['boton.Cancelar']}"
+								oncomplete="PF('confirmarSalir').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Aceptar']}">
+								<p:ajax oncomplete="PF('confirmarSalir').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al salir para Finalizar Cargue de documentos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarSalirInicio" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmarSalirInicio" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.SeguroSalir']}" />
+						<br /> <br />
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.SeguroSalir2']}" />
+						<br /> <br />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_repositorioPoderes['boton.Cancelar']}"
+								oncomplete="PF('confirmarSalirInicio').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Aceptar']}"
+								oncomplete="PF('confirmarSalirInicio').hide();"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+
+		<!-- Modal de confirmacion al cargar Documentos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarCargueDocumento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmarCargueDocumento" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.SubirArchivo']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_repositorioPoderes['boton.Cancelar']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton
+								disabled="#{cargaDocumentoPoder.ib_desactivarBotonesCarga}"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Aceptar']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+								<p:ajax listener="#{beanCargarPoder.servicioFirmaDigital}"
+									update="formFormularioCargarPoder:cargarPoder" />
+								<f:attribute name="foo" value="${cargaDocumentoPoder}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal cargue invalido -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="caguePoderdanteInvalido" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalCaguePoderdanteInvalido" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.CargueInvalido']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton immediate="true"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Entendido']}">
+								<p:ajax oncomplete="PF('caguePoderdanteInvalido').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal validacion numero documento apoderado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="validacionApoderadoNumeroDocumento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario"
+				value="formModalValidacionApoderadoNumeroDocumento" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.ValidacionApoderadoNumeroDocumento']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton immediate="true"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Entendido']}">
+								<p:ajax
+									oncomplete="PF('validacionApoderadoNumeroDocumento').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal validacion numero documento poderdante -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="validacionPoderdanteNumeroDocumento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_repositorioPoderes['Informacion']}" />
+			<ui:param name="formulario"
+				value="formModalValidacionPoderdanteNumeroDocumento" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.ValidacionPoderdanteNumeroDocumento']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton immediate="true"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Entendido']}">
+								<p:ajax
+									oncomplete="PF('validacionPoderdanteNumeroDocumento').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal seleccion tipo documento -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="seleccionTipoDocumento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalSeleccionTipoDocumento" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_repositorioPoderes['Mensaje.SeleccioneTipoDocumento']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton immediate="true"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_repositorioPoderes['boton.Entendido']}">
+								<p:ajax oncomplete="PF('seleccionTipoDocumento').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Resumen Poder Cargado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="resumenPoderCargado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_repositorioPoderes['Modal.Header']}" />
+			<ui:param name="formulario" value="formResumenPoderCargado" />
+			<ui:define name="body-modal">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelResumenPoder"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_repositorioPoderes['title.ResumenSolicitud']}" />
+							<br /> <br />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="resumen" styleClass="tamano-subtitulo"
+						value="#{txt_repositorioPoderes['Mensaje.GuardoExito']}" />
+					<br /> <br /> <br />
+				</div>
+				<div class="col-xs-12 resumenPoder">
+					<p:outputPanel id="poderResumen">
+						<p:panelGrid>
+							<p:row>
+								<p:column>
+									<p:outputLabel id="labelIdPoder" styleClass="label-form"
+										for="idPoder" value="#{txt_repositorioPoderes['label.ID']}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="text-input"
+										value="#{beanCargarPoder.is_idSolicitud}" id="idPoder">
+									</h:outputText>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:outputLabel id="labelNombreArchivo" styleClass="label-form"
+										for="nombreArchivo"
+										value="#{txt_repositorioPoderes['label.NombreArchivo']}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="text-input"
+										value="#{beanCargarPoder.icdf_cargarDocumentoPoderDto.ia_archivoDto.is_nombreArchivo}"
+										id="nombreArchivo" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:outputLabel id="labelEstado" styleClass="label-form"
+										for="estado"
+										value="#{txt_repositorioPoderes['label.EstadoCargo']}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="text-input"
+										value="#{beanCargarPoder.is_estado}" id="estado" />
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										for="estado" position="left">
+										<div>
+											<p:outputLabel
+												value="#{txt_repositorioPoderes['label.ActivoInactivo']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="estado" />
+									</span>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:outputPanel>
+					<br />
+				</div>
+				<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="ui-inputgroup">
+								<p:commandButton id="documentoPoder"
+									styleClass="btn-gradiente icon-btn btn-rojo downloadAp"
+									icon="fa fa-download" iconPos="right"
+									value="#{txt_repositorioPoderes['label.DescargarDocumento']}"
+									actionListener="#{beanCargarPoder.descargarPoder}" />
+							</div>
+						</div>
+					</div>
+					<br />
+				</div>
+				<br />
+				<br />
+			</ui:define>
+			<br />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-4">
+						<p:outputPanel id="entendido">
+							<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_repositorioPoderes['Modal.Boton.Entendido']}"
+								action="/pages/carguePoderes/cargarPoder.jsf?faces-redirect=true">
+								<p:ajax
+									oncomplete="PF('resumenPoderCargado').hide();irArriba();" />
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

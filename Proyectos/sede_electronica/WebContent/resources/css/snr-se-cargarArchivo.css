@@ -1,0 +1,100 @@
+div.cargaArchivo {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: center;
+	max-width: 100%;
+}
+div.cargaArchivo > label{
+	margin:10px 0 !important;
+	text-align:center;
+}
+
+div.ui-fileupload-buttonbar {
+	display: flex;
+	align-items: stretch;
+	justify-content: center;
+}
+
+div.ui-fileupload-buttonbar>.ui-button {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+div.ui-fileupload-content {
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: stretch;
+	justify-content: center;
+}
+
+div.ui-fileupload-content>div.ui-fileupload-files {
+	display: flex;
+	align-items: stretch;
+	justify-content: center;
+	width: 100%;
+}
+
+div.ui-fileupload-content>div.ui-fileupload-files>div {
+	width: 100%;
+}
+
+div.ui-fileupload-content>div.ui-fileupload-files>div>div.ui-fileupload-row
+	{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+}
+
+div.ui-fileupload-content>div.ui-fileupload-files>div>div.ui-fileupload-row>div:nth-child(2)
+	{
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+span.ui-button-icon-left span.ui-icon ui-c {
+	padding: 0;
+	margin: 0;
+}
+
+div.ui-fileupload .ui-fileupload-buttonbar span.ui-fileupload-choose {
+	color: #fff;
+	background-image: linear-gradient(#EB1F28, #461A13) !important;
+}
+
+div.ui-fileupload .ui-fileupload-buttonbar button.ui-fileupload-upload {
+	color: #fff;
+	background-image: linear-gradient(#EB1F28, #461A13) !important;
+}
+
+div.ui-fileupload .ui-fileupload-buttonbar button.ui-fileupload-cancel {
+	color: #fff;
+	background-image: linear-gradient(#c0c0c0, #000000) !important;
+}
+
+.ui-fileupload-content .ui-progressbar {
+	min-width: 100px !important;
+	width: 100px !important;
+}
+
+.ui-progressbar .ui-progressbar-value {
+	border: 1px solid #800040;
+	background-image: linear-gradient(#EB1F28, #461A13) !important;
+}
+
+.maximoModal {
+	max-height: 70vh;
+}
+
+.datosCentros{
+	vertical-align: middle;
+}
+
+@media only screen and (max-width: 425px) {
+	div.ui-fileupload-content>div.ui-fileupload-files>div>div.ui-fileupload-row{
+		display: block;
+	}
+}

@@ -1,0 +1,63 @@
+table.tableRadio > tbody {
+    display: flex;
+}
+
+.fila {
+	width: 31%;
+    border: 1px solid #c0c0c047;
+    margin-right: 25px;
+    box-shadow: 2px 2px 14px 2px #c0c0c047;
+}
+
+.imgPago {
+    width: 50px;
+}
+
+.columna {
+	border-right: 1px solid #c0c0c046;
+    padding-right: 10px;
+    height: 58px;
+}
+
+tr.fila > td {
+    vertical-align: middle;
+    padding-left: 15px;
+}
+
+td > label {
+    font-weight: bold !important;
+}
+
+body .ui-radiobutton .ui-radiobutton-box.ui-state-active span.ui-radiobutton-icon {
+    background-color: #eb1f28 !important;
+}
+
+body .ui-radiobutton .ui-radiobutton-box.ui-state-active {
+    border: 1px solid #eb1f28;
+}
+
+table.tableRadio {
+    margin-top: 10px;
+}
+
+.span-pagar {
+	border: 1px solid #0c0c0c46;
+    display: inline-block;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 55px;
+    padding-right: 55px;
+    margin-top: 10px;
+    background-color: #c0c0c046;
+}
+
+@media only screen and (min-width: 200px) and (max-width: 769px) {
+	table.tableRadio > tbody {
+   	 	display: grid;
+	}
+	
+	table.tableRadio > tbody > tr {
+   	 	width: 100% !important;
+   	 	margin-bottom: 10px;
+	}
+} 

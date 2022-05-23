@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_consulta_drr['titulo.drr']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-consultaDrr.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="body">
+
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_consulta_drr['titulo.drr']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo"
+				value="#{txt_consulta_drr['subtitulo.drr']}" />
+		</ui:include>
+
+
+		<!-- Formulario de consulta DRR -->
+		<h:form id="formularioConsultaDrr">
+			<div class="row padding-general-bottom">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+
+						<!-- Importancion de tipos de criterios de busqueda-->
+						<p:importEnum
+							type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumCriterioConsultaDrr"
+							var="enumCriterioBusqueda" />
+
+						<!-- Select de criterio de busqeda -->
+						<div class="col-xs-12 col-sm-7">
+
+							<p:outputLabel styleClass="label-form" id="labelCriterioBusqueda"
+								for="criterioBusqueda"
+								value="#{txt_datosBasicos['label.criterio']}" />
+
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+
+							<p:selectOneMenu id="criterioBusqueda" filter="true"
+								filterMatchMode="contains" required="false"
+								converter="selectOneMenuConverter"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								value="#{beanConsultaDrr.ic_catalogoCriterio}">
+								<f:selectItems
+									value="#{beanConsultaDrr.ilc_listaCatalogoCriterioBusqueda}"
+									var="tipoIdentificacionPredio"
+									itemLabel="#{tipoIdentificacionPredio.is_nombre}"
+									itemValue="#{tipoIdentificacionPredio}" />
+								<p:ajax event="change" update="@form"
+									onstart="PF('blockUI-Loading').show();"
+									onsuccess="PF('blockUI-Loading').hide(); cargarKeyfilters();" />
+							</p:selectOneMenu>
+
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelCriterioBusqueda"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_datosBasicos['tooltip.criterioBusqueda']}" />
+								</div>
+							</p:tooltip>
+
+							<span class="help-block"> <p:message
+									for="criterioBusqueda" />
+							</span>
+						</div>
+
+						<!-- Input Criterio búsqueda -->
+						<ui:fragment>
+
+							<div class="col-xs-12 col-sm-5">
+
+								<p:outputLabel id="labelValorCriterioBusqueda"
+									styleClass="label-form" for="criterio"
+									value="#{beanConsultaDrr.ic_catalogoCriterio.is_nombre}" />
+
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+
+								<div class="ui-inputgroup">
+									<ui:fragment id="criterio">
+										<ui:fragment
+											rendered="#{beanConsultaDrr.ic_catalogoCriterio.is_codigoValor eq enumCriterioBusqueda.NUMERO_MATRICULA.is_criterio}">
+											<p:inputText id="valorCriterioBusquedaMatricula"
+												styleClass="mask-Numeric" maxlength="30" required="false"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{beanConsultaDrr.ic_catalogoCriterio.is_nombre}"
+												value="#{beanConsultaDrr.is_numeroBusqueda}">
+											</p:inputText>
+										</ui:fragment>
+										<ui:fragment
+											rendered="#{beanConsultaDrr.ic_catalogoCriterio.is_codigoValor eq enumCriterioBusqueda.NUMERO_PREDIAL.is_criterio}">
+											<p:inputText id="valorCriterioBusquedaPredial"
+												styleClass="mask-Alpha" maxlength="50" required="false"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{beanConsultaDrr.ic_catalogoCriterio.is_nombre}"
+												value="#{beanConsultaDrr.is_numeroBusqueda}">
+											</p:inputText>
+										</ui:fragment>
+										<ui:fragment
+											rendered="#{beanConsultaDrr.ic_catalogoCriterio.is_codigoValor eq enumCriterioBusqueda.NUMERO_PREDIAL_ANTERIOR.is_criterio}">
+											<p:inputText id="valorCriterioBusquedaPredialAnt"
+												 maxlength="50" required="true"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{beanConsultaDrr.ic_catalogoCriterio.is_nombre}"
+												value="#{beanConsultaDrr.is_numeroBusqueda}">
+												<p:keyFilter regEx="/[0-9]/i" />
+											</p:inputText>
+										</ui:fragment>
+
+										<ui:fragment
+											rendered="#{beanConsultaDrr.ic_catalogoCriterio.is_codigoValor eq enumCriterioBusqueda.NUPRE.is_criterio}">
+											<p:inputText id="valorCriterioBusquedaNupre"
+												styleClass="mask-Alpha" maxlength="50" required="false"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{beanConsultaDrr.ic_catalogoCriterio.is_nombre}"
+												value="#{beanConsultaDrr.is_numeroBusqueda}">
+											</p:inputText>
+										</ui:fragment>
+
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelValorCriterioBusqueda"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{beanConsultaDrr.ic_catalogoCriterio.is_descripcion}" />
+											</div>
+										</p:tooltip>
+									</ui:fragment>
+								</div>
+
+								<span class="help-block"> <p:message for="criterio" /></span>
+
+							</div>
+
+						</ui:fragment>
+
+						<ui:fragment
+							rendered="#{beanConsultaDrr.ic_catalogoCriterio.is_codigoValor eq enumCriterioBusqueda.NUMERO_MATRICULA.is_criterio}">
+							<!-- Select Oficina Registro -->
+							<div class="col-xs-12 col-sm-7">
+
+								<p:outputLabel styleClass="label-form" id="labelOficinaRegistro"
+									for="oficinaRegistro"
+									value="#{txt_consulta_drr['oficina.registro']}" />
+
+								<p:selectOneMenu id="oficinaRegistro" filter="true"
+									widgetVar="oficinaRegistro" filterMatchMode="contains"
+									required="false" converter="selectOneMenuConverter"
+									filterPlaceholder="#{txt_consulta_drr['oficina.registro']}"
+									value="#{beanConsultaDrr.icr_circuloRegistralDto}">
+
+									<f:selectItem itemLabel="#{txt_consulta_drr['seleccione']}"
+										itemValue="" />
+
+									<f:selectItems
+										value="#{beanConsultaDrr.ilcr_listaCirculoRegistralDto}"
+										var="circuloRegistral"
+										itemLabel="#{circuloRegistral.is_nombre} - (#{circuloRegistral.is_id})"
+										itemValue="#{circuloRegistral}" />
+									<p:ajax event="change"
+										update="formularioConsultaDrr:codigoOficinaRegistro"
+										onstart="PF('blockUI-Loading').show();"
+										onsuccess="PF('blockUI-Loading').hide();" />
+								</p:selectOneMenu>
+
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelOficinaRegistro"
+									position="top">
+
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_consulta_drr['oficina.registro']}" />
+									</div>
+
+								</p:tooltip>
+
+								<span class="help-block"> <p:message
+										for="oficinaRegistro" />
+								</span>
+
+							</div>
+
+							<!-- Input Codigo Oficina Registro -->
+							<div class="col-xs-12 col-sm-5">
+								<p:outputLabel id="labelCodigoOficinaRegistro"
+									styleClass="label-form" for="codigoOficinaRegistro"
+									value="#{txt_consulta_drr['codigo.oficina.registro']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<div class="ui-inputgroup">
+									<p:inputText id="codigoOficinaRegistro" styleClass="mask-Alpha"
+										maxlength="50" required="false"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										placeholder="#{txt_consulta_drr['codigo.oficina.registro']}"
+										readonly="true"
+										value="#{beanConsultaDrr.icr_circuloRegistralDto.is_id}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelCodigoOficinaRegistro"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_consulta_drr['codigo.oficina.registro']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="codigoOficinaRegistro" />
+								</span>
+							</div>
+						</ui:fragment>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-6 text-justify">
+					<h:outputText id="mensajeInformativo" class="label-form"
+						value="#{txt_consulta_drr['mensaje.ingreso.criterios']}">
+					</h:outputText>
+				</div>
+
+			</div>
+
+			<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+				<p:commandButton value="Buscar" icon="icon-flecha-blanca"
+					iconPos="right" styleClass="btn-gradiente icon-btn btn-rojo"
+					onstart="PF('blockUI-Loading').show();"
+					onsuccess="PF('blockUI-Loading').hide();"
+					action="#{beanConsultaDrr.consultarDrr()}">
+				</p:commandButton>
+			</div>
+
+		</h:form>
+
+
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();
+			});
+		</script>
+
+	</ui:define>
+</ui:composition>

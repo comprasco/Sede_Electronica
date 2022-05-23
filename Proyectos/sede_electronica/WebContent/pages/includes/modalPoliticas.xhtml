@@ -1,0 +1,87 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="dialog-politicas" />
+		<ui:param name="tituloModal"
+			value="#{txt_persona['label.AceptoPoliticas.Header']}" />
+		<ui:param name="formulario" value="formPoliticas" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+		<ui:define name="body-modal">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="scroll-politicas dflex modalPoliticas">
+						<p:outputLabel styleClass="tituloPoliticas"
+							value="#{txt_persona['texto.politicas.titulo']}" />
+						<br />
+						<p:outputLabel styleClass="subTituloPoliticas"
+							value="#{txt_persona['texto.politicas.subTitulo']}" />
+						<p:outputLabel styleClass="subTituloParrafo"
+							value="#{txt_persona['texto.politicas.tituloUno']}" />
+						<p:outputLabel styleClass="parrafosPoliticas"
+							value="#{txt_persona['texto.politicas.parrafoUno']}" />
+						<br />
+						<p:outputLabel styleClass="subTituloParrafo"
+							value="#{txt_persona['texto.politicas.tituloDos']}" />
+						<p:outputLabel styleClass="parrafosPoliticas"
+							value="#{txt_persona['texto.politicas.parrafoDos']}" />
+						<br />
+						<p:outputLabel styleClass="subTituloParrafo"
+							value="#{txt_persona['texto.politicas.tituloTres']}" />
+						<p:outputLabel styleClass="parrafosPoliticas"
+							value="#{txt_persona['texto.politicas.parrafoTres']}" />
+						<br />
+						<div class="col-xs-12">
+							<p:outputLabel styleClass="tituloParrafo"
+								value="#{txt_persona['texto.politicas.subParrafoTresUno']}" />
+							<p:outputLabel styleClass="parrafosPoliticas"
+								value="#{txt_persona['texto.politicas.parrafoTresUno']}" />
+							<p:outputLabel styleClass="tituloParrafo"
+								value="#{txt_persona['texto.politicas.subParrafoTresDos']}" />
+							<p:outputLabel styleClass="parrafosPoliticas"
+								value="#{txt_persona['texto.politicas.parrafoTresDos']}" />
+							<p:outputLabel styleClass="tituloParrafo"
+								value="#{txt_persona['texto.politicas.subParrafoTresTres']}" />
+							<p:outputLabel styleClass="parrafosPoliticas"
+								value="#{txt_persona['texto.politicas.parrafoTresTres']}" />
+						</div>
+						<br />
+						<p:outputLabel styleClass="subTituloParrafo"
+							value="#{txt_persona['texto.politicas.tituloCuatro']}" />
+						<p:outputLabel styleClass="parrafosPoliticas"
+							value="#{txt_persona['texto.politicas.parrafoCuatro']}" />
+						<br />
+						<div class="col-xs-12">
+							<p:outputLabel styleClass="tituloParrafo"
+								value="#{txt_persona['texto.politicas.parrafoArticulo']}" />
+							<p:outputLabel styleClass="parrafosPoliticas"
+								value="#{txt_persona['texto.politicas.parrafoCinco']}" />
+							<p:outputLabel styleClass="parrafosPoliticas"
+								value="#{txt_persona['texto.politicas.parrafoSeis']}" />
+						</div>
+						<br /> <br />
+					</div>
+				</div>
+			</div>
+		</ui:define>
+		<ui:define name="accion-modal">
+			<p:separator />
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<p:commandButton id="btn-volver-formulario" styleClass="btn-gris pull-right"
+						value="#{txt_persona['boton.LeidoNoAcepto.Upper']}"
+						onclick="PF('#{modalId}').hide()" />
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<p:commandButton id="btn-acepto" styleClass="btn-rojo pull-left btn-gradiente"
+						value="#{txt_persona['boton.LeidoAcepto.Upper']}"
+						update="#{update}" oncomplete="PF('#{modalId}').hide()">
+						<p:ajax listener="#{bean[accionAceptar]()}" update="#{update}" />
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+</ui:composition>

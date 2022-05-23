@@ -1,0 +1,32 @@
+.centrar-elementos-tabla-solicitudes{
+	text-align: center;
+}
+
+.text-area-observaciones-existentes{
+width: 100%;
+height: 20em;
+overflow-y: scroll;
+resize: none;
+}
+
+.espaciado-superior{
+	padding-top: 0.5em;
+}
+
+.titulo{
+	font-size: 20px !important;
+	color: #572218 !important;
+	font-weight: bold !important;
+}
+
+.center{
+	text-align: center;
+}
+
+.titulo-observaciones{
+padding-left: 1em;
+}
+
+.tamanio-tabla{
+	height: 15em !important;
+}

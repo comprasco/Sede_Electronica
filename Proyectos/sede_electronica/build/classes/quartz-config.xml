@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<job-scheduling-data
+	xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData 
+	http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+	version="1.8">
+
+	<schedule>
+		<job>
+			<name>actualizacionCache</name>
+			<group>AGroup</group>
+			<description>Actualizacion Cache Catalogos</description>
+			<job-class>co.gov.supernotariado.bachue.sedeelectronica.servlet.context.TareaProgramadaCacheQuartz</job-class>
+		</job>
+		<job>
+			<name>eliminacionCarrito</name>
+			<group>AGroup</group>
+			<description>Eliminacion Carrito</description>
+			<job-class>co.gov.supernotariado.bachue.sedeelectronica.servlet.context.TareaProgramadaCarritoQuartz</job-class>
+		</job>
+		<job>
+			<name>actualizacionTransaccionesPagadas</name>
+			<group>BGroup</group>
+			<description>Actualiza transacciones pagadas</description>
+			<job-class>co.gov.supernotariado.bachue.sedeelectronica.servlet.context.TareaProgramadaTransaccionesPagadasQuartz</job-class>
+		</job>
+		<job>
+			<name>gestionCorreosPendientes</name>
+			<group>BGroup</group>
+			<description>Actualiza transacciones pagadas</description>
+			<job-class>co.gov.supernotariado.bachue.sedeelectronica.servlet.context.TareaProgramadaGestionColaCorreosQuartz</job-class>
+		</job>
+		<job>
+			<name>validacionTransaccionesPasarela</name>
+			<group>CGroup</group>
+			<description>Actualiza transacciones pasarela</description>
+			<job-class>co.gov.supernotariado.bachue.sedeelectronica.servlet.context.TareaProgramadaTransaccionesPasarelaQuartz</job-class>
+		</job>
+		<job>
+			<name>validacionUsuariosRegistrados</name>
+			<group>AGroup</group>
+			<description>Valida usuarios registrados con vigencia vencida</description>
+			<job-class>co.gov.supernotariado.bachue.sedeelectronica.servlet.context.TareaProgramadaEliminacionUsuarioRegistradosQuartz</job-class>
+		</job>
+		
+		<trigger>
+			<cron>
+				<name>actualizacionCacheTrigger</name>
+				<job-name>actualizacionCache</job-name>
+				<job-group>CGroup</job-group>
+				<!-- Se ejecuta cada hora -->
+				<cron-expression>0 0 */1 ? * *</cron-expression>
+			</cron>
+		</trigger>
+		<trigger>
+			<cron>
+				<name>eliminacionCarritoTrigger</name>
+				<job-name>eliminacionCarrito</job-name>
+				<job-group>EGroup</job-group>
+				<!-- Se ejecuta una vez al dia a la media noche -->
+				<cron-expression>0 0 0 * * ?</cron-expression>
+			</cron>
+		</trigger>
+		<trigger>
+			<cron>
+				<name>actualizacionTransaccionesPagadasTrigger</name>
+				<job-name>actualizacionTransaccionesPagadas</job-name>
+				<job-group>EGroup</job-group>
+				<!-- Se ejecuta cada minuto -->
+				<cron-expression>0 */1 * ? * *</cron-expression>
+			</cron>
+		</trigger>
+		<trigger>
+			<cron>
+				<name>validacionTransaccionesPasarelaTrigger</name>
+				<job-name>validacionTransaccionesPasarela</job-name>
+				<job-group>FGroup</job-group>
+				<!-- Se ejecuta cada 10 minutos -->
+				<cron-expression>0 */10 * ? * *</cron-expression>
+			</cron>
+		</trigger>
+				<trigger>
+			<cron>
+				<name>gestionCorreosPendientes</name>
+				<job-name>gestionCorreosPendientes</job-name>
+				<job-group>FGroup</job-group>
+				<!-- Se ejecuta cada 10 minutos -->
+				<cron-expression>0 */10 * ? * *</cron-expression>
+			</cron>
+		</trigger>
+				<trigger>
+			<cron>
+				<name>validacionUsuariosRegistradosTrigger</name>
+				<job-name>validacionUsuariosRegistrados</job-name>
+				<job-group>AGroup</job-group>
+				<!-- Se ejecuta cada minuto -->
+				<cron-expression>0 */1 * ? * *</cron-expression>
+			</cron>
+		</trigger>
+	</schedule>
+</job-scheduling-data>

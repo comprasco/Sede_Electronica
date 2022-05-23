@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-simple.xhtml">
+	<ui:define name="head">
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_validacion_documentos['titulo.ValidacionDocumentos']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css"
+			name="snr-se-validacionDocumentos.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_validacion_documentos['banner.TitulovalidacionDocumentos']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="urlVista"
+				value="/pages/personas/validacionDocumentos.jsf" />
+		</ui:include>
+		<h:form id="validacionDocumentos">
+			<p:panel>
+				<p:outputPanel id="seccionConsulta">
+					<div class="row">
+						<br />
+						<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+							<p:outputLabel id="labelValidacionDocumentos"
+								styleClass="label-form tamano-titulo"
+								value="#{txt_validacion_documentos['label.Titulo']}" />
+							<br />
+							<br />
+
+							<p:outputLabel id="labelCodVerificacion" styleClass="label-form"
+								for="codVerificacion"
+								value="#{txt_validacion_documentos['label.CodigoVerificacion']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:inputText id="codVerificacion" styleClass="mask-Num"
+									maxlength="100"
+									placeholder="#{txt_validacion_documentos['placeholder.CodigoVerificacion']}"
+									onkeypress="if( (event.which &lt; 48 || event.which &gt; 57) ) return false;"
+									value="#{beanValidacionDocumentos.is_codVerificacion}"
+									required="true">
+									<p:keyFilter regEx="/[0-9]/i"/>
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelCodVerificacion"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_validacion_documentos['tooltip.CodigoVerificacion']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="codVerificacion" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:captcha label="Captcha" id="captcha" tabindex="3"
+								theme="clean" language="es"
+								validatorMessage="#{txt_validacion_documentos['validar.Captcha']}"
+								required="true"
+								requiredMessage="#{txt_validacion_documentos['validar.Captcha']}">
+
+							</p:captcha>
+							<span class="help-block"> <p:message for="captcha" />
+							</span>
+						</div>
+
+						<f:metadata>
+							<f:viewParam name="parvr"
+								value="#{beanValidacionDocumentos.is_codVerificacion}" />
+							<f:viewParam name="partn"
+								value="#{beanValidacionDocumentos.is_numeroTurno}" />
+						</f:metadata>
+						<f:event type="preRenderView"
+							listener="#{beanValidacionDocumentos.valorParametro}" />
+					</div>
+					<br />
+
+					<div class="row">
+
+						<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+							<p:outputPanel id="mensaje">
+								<p:outputLabel value="#{beanValidacionDocumentos.is_respuesta}"
+									lang="es" style="font-size: 20px"></p:outputLabel>
+							</p:outputPanel>
+						</div>
+
+					</div>
+					<br />
+					<br />
+					<br />
+					<div class="row">
+						<div class="col-sm-3 col-sm-offset-3 space-row">
+							<p:commandButton icon="icon-flecha-gris" iconPos="right"
+								immediate="true" styleClass="icon-btn  btn-gris"
+								value="#{txt_validacion_documentos['label.VolverInicio.Upper']}"
+								action="/pages/personas/inicioSesion/ciudadanos.jsf?faces-redirect=true"
+								process="@this" />
+						</div>
+						<div class="col-xs-12 col-sm-3 col-sm-offset-0">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								id="consultar" process="@form validacionDocumentos"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_seguimiento['boton.Consultar']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								action="#{beanValidacionDocumentos.validacionDocumento}"
+								update="mensaje validacionDocumentos" />
+						</div>
+					</div>
+
+				</p:outputPanel>
+			</p:panel>
+		</h:form>
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();	
+			});
+		</script>
+		<!-- Script que ejecuta el Keyfilter-->
+	</ui:define>
+</ui:composition>

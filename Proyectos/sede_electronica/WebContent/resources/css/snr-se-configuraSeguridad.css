@@ -1,0 +1,28 @@
+/*  */
+.header {
+	background-image: linear-gradient(#EB1F28, #461A13) !important;
+	color: white;
+	font-size: 18px;
+	height: 35px;
+}
+
+.panel-center {
+	margin: 0 auto;
+}
+
+.label-gris {
+	background-color: #dfdfdf;
+}
+
+.tamano-titulo {
+    font-size: 20px !important;
+}
+.ui-widget-header{
+	color: white !important;
+	background-image: linear-gradient(#EB1F28, #461A13) !important;
+}
+
+.campo{
+	align-items: center;
+    justify-content: space-between;
+}

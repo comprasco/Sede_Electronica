@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<footer id="snr_footer_out">
+		<div id="snr_footer">
+			<div class="outer" id="footer_outer">
+				<div class="middle" id="footer_middle">
+					<div id="footer_container">
+						<a id="snr_logo_footer" class="margenFooter"> <img
+							src="#{resource['img/logo-snr-60.png']}" class="custom-size-logo"
+							alt="" />
+						</a>
+						<div id="footer_text_container">
+							<div id="footer_text_container_left">
+								<h3 class="footer_info">
+									<span class="footer_span">#{txt_footer['label.footer.nit']}</span>#{txt_footer['label.footer.nit.value']}
+								</h3>
+								<h3 class="footer_info">
+									<span class="footer_span">#{txt_footer['label.footer.direccion']}</span>#{txt_footer['label.footer.direccion.value']}
+								</h3>
+								<h3 class="footer_info">
+									<span class="footer_span">#{txt_footer['label.footer.conmutador']}</span>#{txt_footer['label.footer.conmutador.value']}
+								</h3>
+								<h3 class="footer_info">
+									<span class="footer_span">#{txt_footer['label.footer.mesa.ayuda']}</span>#{txt_footer['label.footer.mesa.ayuda.value']}
+								</h3>
+							</div>
+							<div id="footer_linea"></div>
+							<div id="footer_text_container_right">
+								<h3 class="footer_info">
+									<span class="footer_span">#{txt_footer['label.footer.horarios']}</span>#{txt_footer['label.footer.horarios.value']}
+								</h3>
+								<h3 class="footer_info">
+									<span class="footer_span">#{txt_footer['label.footer.atencion.ciudadano']}</span>#{txt_footer['label.footer.atencion.ciudadano.value']}
+								</h3>
+								<h3 class="footer_info">
+									<span class="footer_span">#{txt_footer['label.footer.atencion.correspondiencia']}</span>#{txt_footer['label.footer.atencion.correspondiencia.value']}
+								</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+</ui:composition>

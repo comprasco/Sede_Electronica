@@ -1,0 +1,440 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<p:panel id="panelInactivacion">
+		<div class="row text-center">
+			<h3 class="label-form">#{txt_bandejaAlertas['header.titulo.inactivacion']}</h3>
+		</div>
+		<hr />
+		<div class="row">
+			<div class="col-xs-12 col-md-5">
+				<p:outputLabel styleClass="label-form" id="labelIdAlerta#{vista}"
+					value="#{txt_bandejaAlertas['column.header.idAlerta']}" />
+				<p:inputText disabled="true" id="idAlerta#{vista}"
+					value="#{bean[dto][idAlerta]}" />
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelIdAlerta#{vista}"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel
+							value="#{txt_bandejaAlertas['tooltips.inactivar.idAlerta']}" />
+					</div>
+				</p:tooltip>
+			</div>
+			<div class="col-xs-12 col-md-7">
+				<p:outputLabel styleClass="label-form" id="labelIdMotivo"
+					value="#{txt_bandejaAlertas['label.text.idMotivo']}" />
+				<p:outputLabel styleClass="required-field">*</p:outputLabel>
+				<div class="row">
+					<div class="col-xs-10">
+						<p:selectOneMenu required="true"
+							requiredMessage="#{txt_bandejaAlertas['requerido.inactivar.idMotivo']}"
+							id="idMotivoi" widgetVar="idMotivoi"
+							value="#{bean[dto][idMotivoi]}">
+							<p:ajax event="change"
+								listener="#{beanBandejaAlertas.cargarMotivo}" process="@this"
+								update="#{actualizar}" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();" />
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemValue="" />
+							<f:selectItems value="#{bean[listaMotivos]}" var="motivo"
+								itemLabel="#{motivo.is_estado}" itemValue="#{motivo.is_estado}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelIdMotivo" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_bandejaAlertas['tooltips.inactivar.idMotivo']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="idMotivoi" />
+						</span>
+					</div>
+					<div class="col-xs-2">
+						<p:commandButton id="infoFormMatricula" icon="icon-contrasena"
+							styleClass="icon-input btn-gradiente icono_boton" />
+					</div>
+					<p:tooltip widgetVar="tooltipMsg" showEvent="mouseover"
+						myPosition="top, right" hideEvent="mouseout"
+						atPosition="bottom center" styleClass="tooltip-contrasena"
+						for="infoFormMatricula">
+						<div id="content-tooltip-msg">
+							<p:outputLabel
+								value="#{txt_bandejaAlertas['Mensaje.info.motivo']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<br />
+				<!-- 			Revisar boton aparece arriba -->
+			</div>
+		</div>
+		<br />
+		<p:outputPanel rendered="#{!beanBandejaAlertas.ib_motivo}">
+			<div class="row">
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel id="labeltipoOficina#{vista}"
+						for="tipoOficina#{vista}" styleClass="label-form"
+						value="#{txt_bandejaAlertas['label.text.tipo.oficina']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<p:selectOneMenu required="true"
+						requiredMessage="#{txt_bandejaAlertas['requerido.inactivar.tipoOficina']}"
+						id="tipoOficina#{vista}" value="#{bean[tipoOficina][oficina]}">
+						<p:ajax
+							listener="#{beanBandejaAlertas.actualizarNombreOficinaOrigen}"
+							update="nombreOficina#{vista}" process="@this" />
+						<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+							itemValue="" />
+						<f:selectItems
+							value="#{beanBandejaAlertas.illoo_listaOficinasOrigenDto}"
+							var="tipoOficinad" itemValue="#{tipoOficinad.is_oficinaOrigen}"
+							itemLabel="#{tipoOficinad.is_oficinaOrigen}" />
+					</p:selectOneMenu>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labeltipoOficina#{vista}"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_bandejaAlertas['tooltips.inactivar.tipoOficina']}" />
+						</div>
+					</p:tooltip>
+					<span class="help-block"> <p:message
+							for="tipoOficina#{vista}" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel id="labelnombreOficina#{vista}"
+						for="nombreOficina#{vista}" styleClass="label-form"
+						value="#{txt_bandejaAlertas['label.text.nombre.oficina.origen']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<div class="ui-inputgroup">
+						<p:inputText id="nombreOficina#{vista}" styleClass="tamano"
+							readonly="true" required="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							placeholder="#{txt_alertaTierras['placeholder.NombrOficinaOrigenTipo']}"
+							value="#{bean[nombreOficina][nombreOficinaOrigen]}">
+						</p:inputText>
+					</div>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelnombreOficina#{vista}"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_bandejaAlertas['tooltips.inactivar.nombreOficinaOrigen']}" />
+						</div>
+					</p:tooltip>
+					<span class="help-block"> <p:message
+							for="nombreOficina#{vista}" />
+					</span>
+				</div>
+
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel styleClass="label-form" id="labelfecha#{vista}"
+						value="#{txt_bandejaAlertas['label.text.fecha']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<p:calendar id="fechaDocumental" readonlyInput="true"
+						pattern="dd/MM/yyyy" maxlength="10" locale="es"
+						yearRange="1900:2200" navigator="true" value="#{bean[dto][fecha]}"
+						maxdate="#{beanBandejaAlertas.id_fechaActual}"
+						placeholder="#{txt['placeholder.FormatoFecha']}"
+						styleClass="text-input-calendar" required="true"
+						requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+						showOn="button">
+					</p:calendar>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelfecha#{vista}"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_bandejaAlertas['tooltips.inactivar.fechaDoc']}" />
+						</div>
+					</p:tooltip>
+					<span class="help-block"> <p:message for="fechaDocumental" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel styleClass="label-form"
+						id="labeltipoDocumento#{vista}" for="tipoDocumento#{vista}"
+						value="#{txt_bandejaAlertas['label.text.tipo.documento.inactivacion']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<p:selectOneMenu id="tipoDocumento#{vista}" required="true"
+						requiredMessage="#{txt_bandejaAlertas['requerido.inactivar.tipoDocInactivacion']}"
+						value="#{bean[tipoDocumento]}" widgetVar="tipoDocumento#{vista}">
+						<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+							itemValue="" />
+						<f:selectItems value="#{bean[listTipoDocumento]}"
+							var="tipoDocumentod" itemLabel="#{tipoDocumentod.is_nombre}"
+							itemValue="#{tipoDocumentod.is_codigoValor}" />
+					</p:selectOneMenu>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labeltipoDocumento#{vista}"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_bandejaAlertas['tooltips.inactivar.tipoDocInactivacion']}" />
+						</div>
+					</p:tooltip>
+					<span class="help-block"> <p:message
+							for="tipoDocumento#{vista}" />
+					</span>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel styleClass="label-form"
+						id="labelnumDocumento#{vista}"
+						value="#{txt_bandejaAlertas['label.text.numermo.documento.inactivacion']}" />
+					<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					<p:inputText id="numDocumento#{vista}" required="true"
+						requiredMessage="#{txt_bandejaAlertas['requerido.inactivar.numDocInactivacion']}"
+						value="#{bean[dto][numDocumento]}" autocomplete="off"
+						maxlength="30"
+						placeholder="#{txt_bandejaAlertas['placeholder.numero.documento.inactivacion']}" />
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelnumDocumento#{vista}"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_bandejaAlertas['tooltips.inactivar.numDocInactivacion']}" />
+						</div>
+					</p:tooltip>
+					<span class="help-block"> <p:message
+							for="numDocumento#{vista}" />
+					</span>
+				</div>
+			</div>
+		</p:outputPanel>
+		<br />
+		<div class="row">
+			<div class="col-xs-12">
+				<p:outputLabel styleClass="label-form"
+					id="labelTxtInactivacion#{vista}" for="txtInactivacion#{vista}"
+					value="#{txt_bandejaAlertas['label.textArea.textoInactivacion']}" />
+				<p:outputLabel styleClass="required-field">*</p:outputLabel>
+				<p:inputTextarea id="txtInactivacion#{vista}"
+					value="#{bean[dto][txtInactivacion]}" rows="5" required="true"
+					autoResize="true" styleClass="text-input border-completo tamano"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+					editable="false" maxlength="1000" />
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelTxtInactivacion#{vista}"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel
+							value="#{txt_bandejaAlertas['tooltips.inactivar.txtInactivacion']}" />
+					</div>
+				</p:tooltip>
+				<span class="help-block"> <p:message
+						for="txtInactivacion#{vista}" />
+				</span>
+			</div>
+		</div>
+		<p:outputPanel rendered="#{!beanBandejaAlertas.ib_motivo}">
+			<br />
+			<p:separator />
+			<div class="row">
+				<div class="col-xs-12 col-md-4 col-sm-offset-4">
+					<p:commandButton id="botonCargarArchivo" icon="icon-flecha-blanca"
+						iconPos="right"
+						styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+						value="#{txt_bandejaAlertas['boton.CargarArchivo']}">
+						<p:ajax listener="#{bean[validarCargarDocumentoAlerta]}" />
+					</p:commandButton>
+				</div>
+				<br /> <br />
+				<p:panel id="documentoNombre" class="noBorde">
+					<p:outputPanel id="nombreDocumentoCargado"
+						rendered="#{bean[mostrarNombreDocumentoCargado]()}">
+						<div class="col-xs-12 text-center">
+							<div>
+								<p:outputLabel id="labelNombreArchivo" styleClass="label-form"
+									value="#{txt_alertaTierras['label.nombreArchivo']}" />
+								<p:outputLabel>: </p:outputLabel>
+								<h:outputText id="nombreArchivo" styleClass="text-input"
+									value="#{bean[documentoSoporte]['is_nombreArchivoCargado']}" />
+							</div>
+							<br />
+						</div>
+					</p:outputPanel>
+				</p:panel>
+			</div>
+		</p:outputPanel>
+		<br />
+		<p:separator />
+		<div class="row">
+			<div class="col-xs-12 col-md-3 space-row">
+				<p:commandButton styleClass="btn-gris" process="@this"
+					value="#{txt_bandejaAlertas['tabla.boton.regresar']}"
+					onstart="PF('blockUI-Loading').show();"
+					oncomplete="PF('blockUI-Loading').hide();"
+					action="#{beanBandejaAlertas.redireccionBandeja()}">
+				</p:commandButton>
+			</div>
+			<div class="col-xs-12 col-md-offset-6 col-md-3">
+				<p:commandButton styleClass="btn-gradiente btn-rojo"
+					id="btnInactivar#{vista}" type="submit"
+					value="#{txt_bandejaAlertas['boton.inactivarAlerta']}"
+					onstart="PF('blockUI-Loading').show();"
+					oncomplete="PF('blockUI-Loading').hide(); if(args &amp;&amp; args.validationFailed) validarFormulario('#{txt_cuentaCupo['campos.obligatorios']}');">
+					<p:ajax update="formBandejaAlertas"
+						process="@all formBandejaAlertas"
+						listener="#{beanBandejaAlertas.confirmarInactivarAlerta()}" />
+				</p:commandButton>
+			</div>
+		</div>
+
+		<!-- Modal Cargar Documento Alerta -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="cargarArchivo" />
+			<ui:param name="formulario" value="formCargarArchivo" />
+			<ui:param name="clasesEstilo" value="cerrarModal tamano-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_alertaTierras['Modal.Header.CargarDocumentoInactivar']}" />
+			<ui:define name="body-modal">
+				<div class="row ui-g">
+					<div class="col-xs-11 text-left">
+						<p:outputLabel
+							value="#{txt_alertaTierras['Mensaje.cargarDocumentoInactivarAlerta']}"
+							styleClass="titulo tamano-subtitulo" />
+						<br />
+					</div>
+					<div class="col-xs-11 text-left">
+						<p:outputLabel>- </p:outputLabel>
+						<p:outputLabel
+							value="#{txt_alertaTierras['Mensaje.archivo.limiteTamano']}" />
+					</div>
+					<div class="col-xs-11 text-left">
+						<p:outputLabel>- </p:outputLabel>
+						<p:outputLabel
+							value="#{txt_alertaTierras['Mensaje.archivo.formatoInvalido']}" />
+						<br />
+					</div>
+				</div>
+				<br />
+				<p:separator />
+				<br />
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<p:outputLabel id="labelCargarArchivos" styleClass="label-form"
+							value="#{txt_alertaTierras['label.archivoAlerta']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<p:fileUpload id="documentoSoporte" styleClass="cargar-archivo"
+							showButtons="false" sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+							allowTypes="/(\.|\/)(pdf|PDF)$/" auto="true"
+							fileUploadListener="#{bean[metodoDocumento]}"
+							label="#{txt_persona['label.ExaminarArchivo']}" process="@this"
+							invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+							invalidFileMessage="#{txt_bandejaAlertas['Mensaje.archivo.formatoInvalido']}"
+							fileLimitMessage="#{txt_bandejaAlertas['Mensaje.archivo.limiteArchivo']}"
+							update="textoSalidaArchivoAlerta textoSalidaArchivoAlerta">
+							<div class="col-xs-12">
+								<br />
+								<h:outputText id="textoSalidaArchivoAlerta"
+									styleClass="text-input"
+									value="#{bean[documentoSoporte]['is_nombreArchivoCargado']}" />
+							</div>
+						</p:fileUpload>
+					</div>
+				</div>
+				<p:separator />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+						<p:commandButton id="btn-atras" icon="icon-flecha-gris"
+							iconPos="right" styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_minuta['boton.volver.upper']}">
+							<p:ajax oncomplete="PF('cargarArchivo').hide();" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:commandButton id="botonGuardar" icon="icon-flecha-blanca"
+							iconPos="right" value="#{txt_minuta['boton.guardar.upper']}"
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							type="submit" ignoreAutoUpdate="true">
+							<p:ajax process="formCargarArchivo"
+								listener="#{bean[cargarDocumentoAlertaTierras]()}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								update="formBandejaAlertas:documentoNombre formBandejaAlertas:nombreDocumentoCargado formBandejaAlertas:nombreArchivo" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal informativo documento ya cargado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarFormularioDescargado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_cuentaCupo['header.Confirmar']}" />
+			<ui:param name="formulario"
+				value="formModalconfirmarFormularioDescargado" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_bandejaAlertas['Mensaje.modal.documento']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton immediate="true"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_cuentaCupo['Modal.Boton.Entendido']}">
+								<p:ajax oncomplete="PF('confirmarFormularioDescargado').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal informativo inactivar Alerta -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarInactivacionAlertaTierras" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_bandejaAlertas['modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalconfirmarInactivacion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_bandejaAlertas['Mensaje.modal.confirmarInactivar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-12 col-md-5 col-md-offset-1">
+							<p:commandButton immediate="true" styleClass="btn-gris"
+								value="#{txt_bandejaAlertas['boton.modal.no']}">
+								<p:ajax
+									oncomplete="PF('confirmarInactivacionAlertaTierras').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-12 col-md-5 col-md-offset-0">
+							<p:commandButton immediate="true"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_bandejaAlertas['boton.modal.si']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();">
+								<p:ajax listener="#{bean[confirmarInactivarAlerta]}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</p:panel>
+</ui:composition>

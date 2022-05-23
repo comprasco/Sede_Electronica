@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-modeloMinuta.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_minuta['MinutaVirtual']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_minuta['minutaVirtual.solicitudes']}" />
+			<ui:param name="imagen" value="img-modeloMinutaVirtual" />
+			<ui:param name="subtitulo"
+				value="#{txt_minuta['MinutaVirtual.Upper']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/modeloMinutaVirtual.jsf" />
+		</ui:include>
+		<div class="container-fluid-special">
+			<div id="section" class="espacio-abajo">
+				<h:form id="formModeloMinuta">
+					<p:panel id="panelTipoActo" styleClass="panel-content no-border">
+						<div class="row">
+							<div class="col-xs-12 col-sm-7">
+								<p:outputLabel id="labelTipoAct" styleClass="label-form"
+									for="tipoActt" value="#{txt_minuta['label.TipoAct']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="tipoActt" styleClass="checkBoxTipoActo"
+									converter="selectOneMenuConverter" filter="true"
+									requiredMessage="#{beanModeloMinutaActo.is_msgValidacion}"
+									required="true" filterMatchMode="contains"
+									widgetVar="tipoActSelect"
+									value="#{beanModeloMinutaActo.ita_tipoActoSeleccionado}">
+									<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+										itemValue="" />
+									<f:selectItems
+										value="#{beanModeloMinutaActo.ilta_listTipoActo}"
+										var="tipoActo" itemValue="#{tipoActo}"
+										itemLabel="(#{tipoActo.is_id}) - #{tipoActo.is_nombre}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelTipoAct" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_minuta['tooltip.TipoActo']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="tipoActt" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-5">
+								<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+									styleClass="btn-gradiente icon-btn btn-rojo botonBuscar"
+									value="#{txt_minuta['boton.Buscar.Upper']}"
+									action="#{beanModeloMinutaActo.consultarMinutaActos()}"
+									update="panelResultadoTipoAct">
+								</p:commandButton>
+							</div>
+						</div>
+						<p:separator styleClass="separador" />
+						<div class="row">
+							<div class="col-xs-12 align-center">
+								<p:panel id="panelResultadoTipoAct">
+									<p:dataTable var="tipoActs" styleClass="centrar"
+										id="verTipoAct"
+										value="#{beanModeloMinutaActo.ilmma_listMinutaActo}"
+										widgetVar="tipoActTable" reflow="true"
+										emptyMessage="#{txt_minuta['tabla.vacia']}" paginator="true"
+										rows="10" paginatorPosition="bottom"
+										paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+										currentPageReportTemplate="{currentPage} / {totalPages}">
+										<p:column
+											headerText="#{txt_minuta['tabla.encabezado.TipoAct']}">
+											<h:outputText value="#{tipoActs.ita_tipoActo.is_nombre}"
+												id="tipoAct" />
+										</p:column>
+										<p:column
+											headerText="#{txt_minuta['tabla.encabezado.ModeloMinuta']}">
+											<h:outputText
+												value="#{tipoActs.imm_modeloMinuta.getIs_nombre()}" />
+										</p:column>
+										<p:column
+											headerText="#{txt_minuta['tabla.encabezado.Descarga']}">
+											<p:commandButton styleClass="boton-descarga fa fa-download"
+												title=" " ajax="false"
+												onclick="Primefaces.monitorDownload(start,stop)">
+												<p:fileDownload
+													value="#{tipoActs.getImm_modeloMinuta().getIsc_archivoADescargar()}" />
+											</p:commandButton>
+										</p:column>
+									</p:dataTable>
+								</p:panel>
+							</div>
+						</div>
+					</p:panel>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

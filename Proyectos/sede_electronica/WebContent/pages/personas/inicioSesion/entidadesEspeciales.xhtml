@@ -1,0 +1,257 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/pages/includes/templateInicioSesion.xhtml">
+	<ui:define name="title-inicioSesion">
+		<title>#{txt_login['Login']} - #{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:param name="imagen" value="bg-ciudadanos" />
+	<ui:define name="templateSesion-body">
+		<!-- Autenticacion Entidad Especial -->
+		<p:panel id="panelAutenticacionEntidadesEspeciales"
+			styleClass="no-border">
+			<h:form prependId="false" id="formLoginEntidadEspecial" method="post"
+				onsubmit="generarSubmitEntidadEspecial('#{request.contextPath}',this);"
+				authentication-success-handler-ref="AuthenticationSuccessHandler">
+				<h:inputHidden
+					value="#{beanInicioSesionEntidadEspecial.is_nombreUsuario}"
+					id="username" />
+				<h:inputHidden
+					value="#{beanInicioSesionEntidadEspecial.is_contrasena}"
+					id="password" />
+				<h:inputHidden
+					value="#{beanInicioSesionEntidadEspecial.iee_entidadEspecialDto.is_id}"
+					id="listaEntidaEspecial" />
+				<h:inputHidden
+					value="#{beanInicioSesionEntidadEspecial.is_convenioSeleccionado}"
+					id="listaConvenio" />
+				<p:commandButton id="btnIngresar" icon="icon-flecha-blanca"
+					iconPos="right" type="submit" style="display: none"
+					styleClass="btn-gradiente icon-btn btn-rojo pull-left botonOculto" ajax="false"
+					value="#{txt_login['boton.Ingresar.Upper']}" process="@form"
+					update="@form" />
+				<input id="servicio" type="hidden" name="servicio"
+					value="#{EnumInicioSesion.INICIO_SESION_USUARIO_ENTIDAD_ESPECIAL.getIs_nombrePagInicio()}" />
+			</h:form>
+			<h:form id="formGeneral">
+				<p:outputPanel id="formularioAutenticacionEntidadesEspeciales"
+					rendered="#{beanInicioSesionEntidadEspecial.ib_autenticacionAdminEE}">
+					<p:importEnum
+						type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumInicioSesion"
+						var="EnumInicioSesion" />
+					<div class="row space-row">
+						<div class="col-xs-10 col-xs-offset-1">
+							<p:outputLabel id="labelNombreUsuario" styleClass="label-form"
+								for="nombreUsuario" value="#{txt_login['label.NombreUsuario']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:inputText id="nombreUsuario" autocomplete="off"
+									styleClass="text-input border-completo mask-NombreUsuario"
+									maxlength="20"
+									placeholder="#{txt_login['placeholder.NombreUsuario']}"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true" name="username"
+									value="#{beanInicioSesionEntidadEspecial.is_nombreUsuario}">
+									<p:ajax event="change"
+										onstart="mostrarLimpiar('formGeneral:nombreUsuario', 'spanUserName');" />
+								</p:inputText>
+								<span id="spanUserName" class="ui-inputgroup-addon ocultar">
+									<p:commandLink>
+										<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+										<p:ajax event="click"
+											onstart="limpiarCampo('formGeneral:nombreUsuario', 'spanUserName');" />
+									</p:commandLink>
+								</span>
+								<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+									for="labelNombreUsuario" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_login['tooltip.NombreUsuario']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="nombreUsuario" />
+							</span>
+						</div>
+					</div>
+					<div class="row space-row">
+						<div class="col-xs-10 col-xs-offset-1">
+							<p:outputLabel id="labelPassword" styleClass="label-form"
+								for="contrasenaUsuario" value="#{txt_login['label.Contrasena']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:password id="contrasenaUsuario"
+									styleClass="text-input border-completo" maxlength="15"
+									placeholder="#{txt_login['placeholder.Contrasena']}"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanInicioSesionEntidadEspecial.is_contrasena}">
+									<p:ajax event="change"
+										onstart="mostrarLimpiar('formGeneral:contrasenaUsuario', 'spanPassword');" />
+								</p:password>
+								<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+									for="labelPassword" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_login['tooltip.Contrasena']}" />
+									</div>
+								</p:tooltip>
+								<span id="spanPassword" class="ui-inputgroup-addon ocultar">
+									<p:commandLink styleClass="text-link-input"
+										value="#{txt['label.VerContrasena']}">
+										<p:ajax event="click"
+											onstart="verContrasena('formGeneral:contrasenaUsuario')" />
+									</p:commandLink>
+								</span>
+							</div>
+							<span class="help-block"> <p:message
+									for="contrasenaUsuario" />
+							</span>
+							<p:commandLink process="@this"
+								action="/pages/personas/restablecerClaveUsuario.jsf?faces-redirect=true"
+								styleClass="text-link">
+								<p:outputLabel id="labelRecordarClave"
+									styleClass="label-olvidar"
+									value="#{txt_login['label.RecordarClave']}" />
+							</p:commandLink>
+							<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+								for="labelRecordarClave" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_login['tooltip.RecordarClave']}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-10 col-xs-offset-1">
+							<p:separator styleClass="separador-small" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-10 col-sm-5 col-xs-offset-1 space-row">
+							<p:commandButton icon="icon-flecha-gris" iconPos="right"
+								immediate="true" styleClass="icon-btn pull-right btn-gris"
+								value="#{txt_login['boton.VolverLoginUsuario.Upper']}"
+								action="/pages/personas/inicioSesion/ciudadanos.jsf?faces-redirect=true"
+								process="@this" />
+						</div>
+						<div class="col-xs-10 col-sm-5 col-xs-offset-1 col-sm-offset-0">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" id="ingreso1"
+								styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+								value="#{txt_login['boton.Ingresar.Upper']}">
+								<p:ajax
+									listener="#{beanInicioSesionEntidadEspecial.validarIngresoEE}"
+									update="panelAutenticacionEntidadesEspeciales formGeneral:autenticacionUsuarioEntidadEspecial"
+									process="@form" />
+							</p:commandButton>
+						</div>
+					</div>
+				</p:outputPanel>
+
+				<p:outputPanel id="autenticacionUsuarioEntidadEspecial"
+					rendered="#{beanInicioSesionEntidadEspecial.ib_autenticacionUsuarioEE}">
+					<div class="row space-row">
+						<div class="col-xs-10 col-xs-offset-1">
+							<p:outputLabel id="labelListaEntidadlogin"
+								styleClass="label-form" for="listaEntidadSelect"
+								value="#{txt_login['label.listaEntidades']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="listaEntidadSelect" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								styleClass="pais-nat"
+								value="#{beanInicioSesionEntidadEspecial.is_entidadEspecialSeleccionado}">
+								<p:ajax
+									listener="#{beanInicioSesionEntidadEspecial.actualizarFormulario}"
+									update="listaConveniosSelect formLoginEntidadEspecial"
+									process="@this" />
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems
+									value="#{beanInicioSesionEntidadEspecial.ilee_listaEntidadesEspeciales}"
+									var="entidadEspecial"
+									itemLabel="#{entidadEspecial.is_nombreEntidadExterna}"
+									itemValue="#{entidadEspecial.is_nombreEntidadExterna}" />
+							</p:selectOneMenu>
+							<p:tooltip styleClass="tooltipGeneral"
+								for="labelListaEntidadlogin" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_login['tooltip.listaEntidades']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="listaEntidadSelect" />
+							</span>
+						</div>
+					</div>
+					<div class="row space-row">
+						<div class="col-xs-10 col-xs-offset-1">
+							<p:outputLabel id="labelListaConvenioslogin"
+								styleClass="label-form" for="listaConveniosSelect"
+								value="#{txt_login['label.listaConvenios']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="listaConveniosSelect"
+								widgetVar="listaConveniosSelect" filter="true"
+								filterMatchMode="contains"
+								disabled="#{!beanInicioSesionEntidadEspecial.ib_listaConvenios}"
+								filterPlaceholder="#{txt_login['placeholder.listaConvenio']}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								required="#{true}"
+								value="#{beanInicioSesionEntidadEspecial.is_convenioSeleccionado}">
+								<p:ajax event="change" update="formLoginEntidadEspecial" />
+								<f:selectItem itemValue=""
+									itemLabel="#{txt['label.SeleccioneComboBox']}" />
+								<f:selectItems
+									value="#{beanInicioSesionEntidadEspecial.ilcee_conveniosEntidadEspecialDto}"
+									var="entidad" itemValue="#{entidad.is_descripcionConvenio}"
+									itemLabel="#{entidad.is_descripcionConvenio}" />
+							</p:selectOneMenu>
+							<p:tooltip styleClass="tooltipGeneral"
+								for="labelListaConvenioslogin" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_login['tooltip.listaConvenios']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="listaConveniosSelect" />
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-10 col-xs-offset-1">
+							<p:separator styleClass="separador-small" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-10 col-sm-5 col-xs-offset-1 space-row">
+							<p:commandButton icon="icon-flecha-gris" iconPos="right"
+								immediate="true" styleClass="icon-btn pull-right btn-gris"
+								value="#{txt['boton.volver']}"
+								action="/pages/personas/inicioSesion/entidadesEspeciales.jsf?faces-redirect=true"
+								process="@this" />
+						</div>
+						<div class="col-xs-10 col-sm-5 col-xs-offset-1 col-sm-offset-0">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" id="ingreso2"
+								styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+								value="#{txt_login['boton.Ingresar.Upper']}"
+								action="#{beanInicioSesionEntidadEspecial.validarIngresoUsuarioEE}"
+								process="@form" update="@form" />
+						</div>
+					</div>
+				</p:outputPanel>
+			</h:form>
+		</p:panel>
+
+		<script>
+			$(document).ready(function() {
+				limpiarPath();
+				document.onkeypress = () =>{
+					if(event.keyCode == 13){						
+						$("#ingresar").click()
+					}
+				};
+			});
+		</script>
+	</ui:define>
+</ui:composition>

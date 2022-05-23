@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<p:tab id="resumen">
+		<f:facet name="title">
+			<span class="icono icono-resumen" />
+			<p:outputLabel class="tituloWizard"
+				value="#{txt_certificados['wizard.tab.resumen']}" />
+		</f:facet>
+		<p:panel>
+			<div class="container-fluid-special">
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<p:outputLabel value="#{titulo}" styleClass="label-form" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-md-4">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel id="labelTipoDocumento" styleClass="label-form"
+									for="tipoDocumento#{vista}"
+									value="#{txt_certificados['wizardCertificado.pago.tipoDocumento']}" />
+							</div>
+							<div class="col-xs-12">
+								<h:outputText id="tipoDocumento#{vista}"
+									value="#{tipoDocumento}" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6 col-md-4">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel id="labelNumeroDocumeto#{vista}"
+									styleClass="label-form" for="numeroDocumento#{vista}"
+									value="#{txt_certificados['wizardCertificado.pago.documento']}" />
+							</div>
+							<div class="col-xs-12">
+								<h:outputText id="numeroDocumento#{vista}"
+									value="#{numeroDocumento}" />
+							</div>
+						</div>
+					</div>
+					<ui:fragment rendered="#{mostrarFormaEnvio}">
+						<div class="col-xs-12 col-md-4">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel id="labelCorreo" styleClass="label-form"
+										for="correoEnvio#{vista}" value="#{formaEnvio}" />
+								</div>
+								<div class="col-xs-12">
+									<h:outputText id="correoEnvio#{vista}" value="#{correoEnvio}" />
+								</div>
+							</div>
+						</div>
+					</ui:fragment>
+				</div>
+				<br />
+				<p:separator />
+				<ui:insert name="contenidoResumen" />
+				<br />
+				<ui:insert name="botonResumen">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandLink class="btn-rojo redireccion"
+								value="#{txt_certificados['wizardCertificados.resumen.solicitar']}"
+								onclick="PF('modalConfirmacionGenerarLiquidacion').show()">
+							</p:commandLink>
+						</div>
+					</div>
+				</ui:insert>
+			</div>
+		</p:panel>
+	</p:tab>
+</ui:composition>

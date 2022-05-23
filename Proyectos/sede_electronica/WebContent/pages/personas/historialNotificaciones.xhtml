@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_historialNotificaciones['titulo.HistorialNotificaciones']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputScript library="js" name="archivo.js" />
+		<h:outputScript library="js" name="keyfilter.js" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-historialNotificaciones.css" />
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_historialNotificaciones['banner.TituloHistorialNotificaciones']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo"
+				value="#{txt_historialNotificaciones['banner.SubtituloHistorialNotificaciones']}" />
+			<ui:param name="urlVista"
+				value="/pages/personas/historialNotificaciones.jsf" />
+		</ui:include>
+		<p:panel id="panelHistorialNotificaciones"
+			styleClass="panel-content no-border">
+			<p:outputPanel
+				rendered="#{!beanHistorialNotificaciones.ib_consultado}">
+				<h:form id="formHistorialNotificaciones">
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelConsultaHistorial"
+								styleClass="label-form text-center tituloTamano"
+								value="#{txt_historialNotificaciones['titulo.cosultarHistorial']}" />
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-md-6">
+							<p:outputLabel id="labelFechaInicial" styleClass="label-form"
+								for="fechaInicial"
+								value="#{txt_historialNotificaciones['label.fechaInicial']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:calendar id="fechaInicial" readonlyInput="true"
+								pattern="dd/MM/yyyy" maxlength="10" maxdate="0" locale="es"
+								yearRange="1900:2200" navigator="true"
+								placeholder="#{txt['placeholder.FormatoFecha']}"
+								styleClass="text-input-calendar" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								showOn="button"
+								value="#{beanHistorialNotificaciones.ihn_historialNotificacionesDto.id_fechaInicial}">
+								<p:ajax event="dateSelect" process="@this"
+									update="formHistorialNotificaciones:fechaFinal"
+									listener="#{beanHistorialNotificaciones.fechaFinal()}"
+									onstart="PF('blockUI-Loading').show();"
+									onsuccess="PF('blockUI-Loading').hide();" />
+							</p:calendar>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelFechaInicial"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_historialNotificaciones['historialNotificaciones.fechaInicial.tooltip']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="fechaInicial" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-md-6">
+							<p:outputLabel id="labelFechaFinal" styleClass="label-form"
+								for="fechaFinal"
+								value="#{txt_historialNotificaciones['label.fechaFinal']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:calendar id="fechaFinal" readonlyInput="true"
+								pattern="dd/MM/yyyy" maxlength="10" locale="es"
+								yearRange="1900:2200" navigator="true"
+								disabled="#{beanHistorialNotificaciones.ib_fechaFinal}"
+								mindate="#{beanHistorialNotificaciones.ihn_historialNotificacionesDto.id_fechaInicial}"
+								maxdate="#{beanHistorialNotificaciones.id_fechaMaxima}"
+								placeholder="#{txt['placeholder.FormatoFecha']}"
+								styleClass="text-input-calendar" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								showOn="button"
+								value="#{beanHistorialNotificaciones.ihn_historialNotificacionesDto.id_fechaFinal}">
+							</p:calendar>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelFechaFinal" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_historialNotificaciones['historialNotificaciones.fechaFinal.tooltip']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="fechaFinal" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-md-6">
+							<p:outputLabel id="labelFiltro" styleClass="label-form"
+								for="filtro"
+								value="#{txt_historialNotificaciones['label.filtro']}" />
+							<p:selectOneMenu id="filtro"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								converter="selectOneMenuConverter" editable="false"
+								value="#{beanHistorialNotificaciones.ihn_historialNotificacionesDto.is_filtro}">
+								<p:ajax process="@this"
+									listener="#{beanHistorialNotificaciones.mostrarCampoNumero()}"
+									update="numero" />
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems
+									value="#{beanHistorialNotificaciones.ilec_filtro}" var="filtro"
+									itemLabel="#{filtro.is_criterio}" itemValue="#{filtro}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelFiltro" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_historialNotificaciones['historialNotificaciones.filtro.tooltip']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="filtro" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-md-6">
+							<p:outputLabel id="labelNumero" styleClass="label-form"
+								for="numero"
+								value="#{txt_historialNotificaciones['label.numero']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="numero" maxlength="50"
+									disabled="#{!beanHistorialNotificaciones.ib_campoNumero}"
+									styleClass="text-input border-completo"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									value="#{beanHistorialNotificaciones.ihn_historialNotificacionesDto.is_numero}"
+									placeholder="#{txt_historialNotificaciones['placeholder.Numero']}">
+									<p:keyFilter regEx="/[0-9\a-z\A-Z]/i" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNumero" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_historialNotificaciones['tooltip.Numero']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="numero" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+							<p:commandButton
+								value="#{txt_historialNotificaciones['boton.consultar']}"
+								styleClass="btn-gradiente btn-rojo consulta" type="submit"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();">
+								<p:ajax
+									listener="#{beanHistorialNotificaciones.consultarNotificaciones()}"
+									update="panelHistorialNotificaciones panelResultado"
+									process="@form @all" />
+							</p:commandButton>
+						</div>
+					</div>
+				</h:form>
+			</p:outputPanel>
+
+			<p:outputPanel id="panelResultado"
+				rendered="#{beanHistorialNotificaciones.ib_consultado}">
+				<br />
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<p:outputLabel id="labelResultadoConsulta"
+							styleClass="label-form text-center tamano-titulo"
+							value="#{txt_historialNotificaciones['label.ResultadoConsulta']}" />
+					</div>
+				</div>
+				<br />
+				<h:form id="formTabla">
+					<p:dataTable id="tablaHistorialNotificaciones"
+						widgetVar="tablaHistorialNotificaciones" reflow="true"
+						emptyMessage="#{txt_historialNotificaciones['tabla.texto.vacia']}"
+						rows="10"
+						value="#{beanHistorialNotificaciones.illn_listaNotificacionesDto}"
+						var="historialNotificaciones" stickyHeader="false" lazy="true"
+						styleClass="text-center">
+						<p:column id="fechaComunicacion" styleClass="centrar"
+							headerText="#{txt_historialNotificaciones['columna.fechaComunicacion']}">
+							<h:outputText styleClass="centrar"
+								value="#{historialNotificaciones.id_fechaComunicacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column id="turno" styleClass="centrar"
+							headerText="#{txt_historialNotificaciones['columna.turno']}">
+							<h:outputText value="#{historialNotificaciones.is_turno}">
+							</h:outputText>
+						</p:column>
+						<p:column id="nir" styleClass="centrar"
+							headerText="#{txt_historialNotificaciones['columna.nir']}">
+							<h:outputText value="#{historialNotificaciones.is_nir}">
+							</h:outputText>
+						</p:column>
+						<p:column id="tramite" styleClass="centrar"
+							headerText="#{txt_historialNotificaciones['columna.tramite']}">
+							<h:outputText value="#{historialNotificaciones.is_tramite}">
+							</h:outputText>
+						</p:column>
+						<p:column id="asunto" styleClass="estilo-boton-asunto"
+							headerText="#{txt_historialNotificaciones['columna.asunto']}">
+							<div class="col-xs-12">
+								<p:commandButton
+									styleClass="btn-rojo btn-gradiente fa fa-envelope btn-CargueDcmt botonAsunto"
+									title=" ">
+									<p:ajax oncomplete="PF('asunto').show();" process="@this"
+										update="formModalAsunto"
+										listener="#{beanHistorialNotificaciones.cargarIdAsunto(historialNotificaciones)}" />
+								</p:commandButton>
+							</div>
+						</p:column>
+					</p:dataTable>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-md-3">
+							<br />
+							<p:outputLabel id="labelPaginal" styleClass="label-form"
+								for="pagina"
+								value="#{txt_historialNotificaciones['pagina.actual']}" />
+							<p:outputLabel value="-" styleClass="espacio" />
+							<h:outputText id="pagina"
+								value="#{beanHistorialNotificaciones.ii_paginaActual}">
+							</h:outputText>
+							<p:outputLabel value="/" />
+							<h:outputText id="numeroPaginas"
+								value="#{beanHistorialNotificaciones.ii_numeroPagina}">
+							</h:outputText>
+						</div>
+						<div class="col-xs-12 col-md-6">
+							<br />
+							<div class="row">
+								<h:form id="formPaginador">
+									<div class="col-xs-4 col-md-4 col-xs-offset-1">
+										<p:commandButton onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('blockUI-Loading').hide();irArriba()"
+											value="#{txt_historialNotificaciones['boton.volver']}"
+											styleClass="consulta" type="submit">
+											<p:ajax
+												listener="#{beanHistorialNotificaciones.consultarNotificacionesVolver()}"
+												update="panelHistorialNotificaciones panelResultado"
+												process="@form @all" />
+										</p:commandButton>
+									</div>
+									<div class="col-xs-2 col-md-2">
+										<p:outputLabel id="labelPaginaActual" styleClass="numPagina"
+											value="#{beanHistorialNotificaciones.ii_paginaActual}" />
+									</div>
+									<div Class="col-xs-4 col-md-4">
+										<p:commandButton onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('blockUI-Loading').hide();irArriba()"
+											disabled="#{beanHistorialNotificaciones.ib_siguiente}"
+											value="#{txt_historialNotificaciones['boton.siguiente']}"
+											styleClass="consulta" type="submit">
+											<p:ajax
+												listener="#{beanHistorialNotificaciones.consultarNotificacionesSiguiente()}"
+												update="panelHistorialNotificaciones panelResultado"
+												process="@form @all" />
+										</p:commandButton>
+									</div>
+								</h:form>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+							<br />
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								update="panelHistorialNotificaciones"
+								actionListener="#{beanHistorialNotificaciones.setIb_consultado(false)}"
+								value="#{txt_historialNotificaciones['boton.salir']}">
+								<p:ajax
+									listener="#{beanHistorialNotificaciones.limpiarConsulta}"
+									onstart="PF('blockUI-Loading').show();"
+									onsuccess="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</h:form>
+			</p:outputPanel>
+		</p:panel>
+
+		<!-- Modal Asunto -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="asunto" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalAsunto" />
+			<ui:define name="body-modal">
+				<div class="row text-left pad-left">
+					<div class="col-xs-12">
+						<div>
+							<p:outputLabel id="labelDe" for="de" styleClass="tituloParrafo"
+								value="#{txt_historialNotificaciones['label.De']}" />
+							<p:outputLabel value="-" styleClass="espacio" />
+							<h:outputText id="de"
+								value="#{beanHistorialNotificaciones.iln_listaNotificacionesDto.is_de}">
+							</h:outputText>
+						</div>
+					</div>
+					<br /> <br />
+					<div class="col-xs-12">
+						<p:outputLabel id="labelPara" for="para"
+							styleClass="tituloParrafo"
+							value="#{txt_historialNotificaciones['label.Para']}" />
+						<p:outputLabel value="-" styleClass="espacio" />
+						<h:outputText id="para"
+							value="#{beanHistorialNotificaciones.iln_listaNotificacionesDto.is_para}">
+						</h:outputText>
+					</div>
+					<br /> <br />
+					<div class="col-xs-12">
+						<p:outputLabel id="labelAsunto" for="asunto"
+							styleClass="tituloParrafo"
+							value="#{txt_historialNotificaciones['label.Asunto']}" />
+						<p:outputLabel value="-" styleClass="espacio" />
+						<h:outputText id="asunto"
+							value="#{beanHistorialNotificaciones.iln_listaNotificacionesDto.is_asunto}">
+						</h:outputText>
+					</div>
+					<br /> <br />
+					<div class="col-xs-12">
+						<p:outputLabel id="labelFecha" for="fecha"
+							styleClass="tituloParrafo"
+							value="#{txt_historialNotificaciones['label.Fecha']}" />
+						<p:outputLabel value="-" styleClass="espacio" />
+						<h:outputText id="fecha"
+							value="#{beanHistorialNotificaciones.iln_listaNotificacionesDto.id_fechaAsunto}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</div>
+					<br /> <br />
+					<div class="col-xs-12">
+						<p:outputLabel id="labelAdjunto" for="adjunto"
+							styleClass="tituloParrafo"
+							value="#{txt_historialNotificaciones['label.Adjunto']}" />
+						<p:outputLabel value="-" styleClass="espacio" />
+						<h:outputText id="adjunto"
+							value="#{beanHistorialNotificaciones.iln_listaNotificacionesDto.is_adjunto}">
+						</h:outputText>
+					</div>
+					<br /> <br />
+					<div class="col-xs-12">
+						<p:outputLabel id="labelTexto" for="texto"
+							styleClass="tituloParrafo"
+							value="#{txt_historialNotificaciones['label.Texto']}" />
+						<p:outputLabel value="-" styleClass="espacio" />
+						<h:outputText id="texto"
+							value="#{beanHistorialNotificaciones.iln_listaNotificacionesDto.is_texto}">
+						</h:outputText>
+					</div>
+					<br /> <br />
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton styleClass="btn-gris"
+								value="#{txt_historialNotificaciones['boton.salir']}"
+								oncomplete="PF('asunto').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton immediate="true"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_historialNotificaciones['boton.descargar']}">
+								<p:ajax oncomplete="PF('confirmarDescargarAsunto').show();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal confirmación -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarDescargarAsunto" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_historialNotificaciones['Modal.Titulo.Confirmativo']}" />
+			<ui:param name="formulario" value="formModalConfirmarDescargarAsunto" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_historialNotificaciones['Mensaje.descargarAsunto']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_historialNotificaciones['boton.cancelar']}"
+								oncomplete="PF('confirmarDescargarAsunto').hide();">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton
+								styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+								value="#{txt_historialNotificaciones['boton.aceptar']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();PF('confirmarDescargarAsunto').hide();irArriba()"
+								update="formModalAsunto">
+								<p:ajax listener="#{beanHistorialNotificaciones.descargarPdf}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+	</ui:define>
+</ui:composition>

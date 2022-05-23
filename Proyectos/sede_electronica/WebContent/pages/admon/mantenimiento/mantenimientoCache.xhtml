@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-adminCache.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_mantenimientoCache['titulo']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_mantenimientoCache['banner.titulo']}" />
+			<ui:param name="imagen" value="img-inicioSesion" />
+			<ui:param name="subtitulo"
+				value="#{txt_mantenimientoCache['banner.subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/mantenimiento/mantenimientoCache.jsf" />
+		</ui:include>
+		<div class="container-fluid-special">
+			<p:panel id="panelPersonas" styleClass="panel-content no-border">
+				<h:form id="formGrupoCache">
+					<div class="row vcenter">
+						<div class="col-md-6">
+							<p:commandButton event="click" id="btn-actualizarCache"
+								icon="icon-flecha-blanca" iconPos="right"
+								styleClass="icon-btn btn-rojo-dialog pull-left btn-gradiente"
+								value="#{txt_mantenimientoCache['boton.ActualizarCache']}">
+								<f:ajax listener="#{beanCache.validarActualizacionCache}" />
+							</p:commandButton>
+						</div>
+						<div class="col-md-6">
+							<p>#{txt_mantenimientoCache['txt.mensajeAlertaActualizacionCache']}</p>
+						</div>
+					</div>
+					<div class="row">
+						<div
+							class="col-sm-offset-1-one col-xs-10 col-sm-10 col-sm-offset-1 col-md-10 col-lg-10">
+							<p:separator styleClass="separador-small" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<p:outputLabel id="labelTipoPersona" styleClass="label-form"
+								for="grupoCache"
+								value="#{txt_mantenimientoCache['label.consultarCache']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="grupoCache"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								required="true" value="#{beanCache.iec_enumCacheSeleccionado}">
+								<f:selectItems value="#{beanCache.il_listaEnumCache}" />
+								<p:ajax event="change" update="@this, :grupoCacheSeleccionado"
+									listener="#{beanCache.actualizarGruposCache}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<br />
+					<div class="row vcenter">
+						<div class="col-md-6">
+							<p:commandButton event="click" id="btn-actualizarGrupoCache"
+								icon="icon-flecha-blanca" iconPos="right"
+								styleClass="icon-btn btn-rojo-dialog pull-left btn-gradiente"
+								value="#{txt_mantenimientoCache['boton.ActualizarGrupoCache']}"
+								update="formActualizacionCacheGrupo">
+								<f:ajax listener="#{beanCache.validarActualizacionCacheGrupo}" />
+							</p:commandButton>
+						</div>
+						<div class="col-md-6">
+							<p>#{txt_mantenimientoCache['txt.mensajeAlertaActualizacionGrupoCache']}</p>
+						</div>
+					</div>
+					<div class="row">
+						<div
+							class="col-sm-offset-1-one col-xs-10 col-sm-10 col-sm-offset-1 col-md-10 col-lg-10">
+							<p:separator styleClass="separador-small" />
+						</div>
+					</div>
+					<div class="row">
+						<p:outputLabel id="labelInformacionGrupoCache"
+							styleClass="label-form" for="grupoCache"
+							value="#{txt_mantenimientoCache['label.informacionCache']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+					</div>
+					<br />
+				</h:form>
+				<h:inputTextarea id="grupoCacheSeleccionado" disabled="true"
+					value="#{beanCache.is_valorGrupoCache}"
+					styleClass="cache-grupoCacheSeleccionado" />
+			</p:panel>
+			<p:dialog id="dialog-validacionActualizacion"
+				header="#{txt_mantenimientoCache['label.header']}"
+				widgetVar="dialog-validacionActualizacion" resizable="false"
+				draggable="false" appendTo="@(body)" responsive="true" width="40%"
+				modal="true" positionType="fixed" styleClass="box-solid box-danger cerrarModal"
+				height="280" position="center,center">
+				<h:form id="formActualizacionCache">
+					<div class="scroll-contrasena container-fluid-scroll-contrasena">
+						<p:panel id="seguridadGrid" columns="1" cellpadding="5"
+							styleClass="no-border">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<p:outputLabel
+										value="#{txt_mantenimientoCache['label.ModalCache.TextoUno']}"
+										styleClass="text-contrasena-title" />
+								</div>
+							</div>
+							<div class="row">
+								<p:outputLabel
+									value="#{txt_mantenimientoCache['Label.mantenimientoGrupos']}" />
+							</div>
+							<div class="row">
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+									<p>#{beanCache.getNombreCaches()}"</p>
+								</div>
+							</div>
+						</p:panel>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<p:commandButton id="btn-cancel" icon="icon-flecha-gris" iconPos="right"
+								styleClass="icon-btn btn-gris"
+								value="#{txt['boton.Cancelar.Upper']}"
+								onclick="PF('dialog-validacionActualizacion').hide();return false" />
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:commandButton id="btn-finalizar" icon="icon-flecha-blanca"
+								iconPos="right"
+								styleClass="icon-btn btn-rojo btn-gradiente"
+								value="#{txt_persona['boton.Continuar.Upper']}"
+								process="@form :formActualizacionCache" type="submit"
+								oncomplete="return false; PF('dialog-validacionActualizacion').hide();"
+								action="#{beanCache.actualizarCache}"
+								update="@(div[id$=operacionGrid]),@(div[id$=seguridadGrid])" />
+						</div>
+					</div>
+				</h:form>
+			</p:dialog>
+			<p:dialog id="dialog-validacionActualizacionGrupo"
+				header="#{txt_mantenimientoCache['label.header']}"
+				widgetVar="dialog-validacionActualizacionGrupo" resizable="false"
+				draggable="false" appendTo="@(body)" responsive="true" width="40%"
+				modal="true" positionType="fixed" styleClass="box-solid box-danger cerrarModal"
+				height="280" position="center,center">
+				<h:form id="formActualizacionCacheGrupo">
+					<div class="scroll-contrasena container-fluid-scroll-contrasena">
+						<p:panel id="seguridadGrid" columns="1" cellpadding="5"
+							styleClass="no-border">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<p:outputLabel
+										value="#{txt_mantenimientoCache['label.ModalCache.TextoDos']}"
+										styleClass="text-contrasena-title" />
+									<br />
+									<p:outputLabel
+										value="#{txt_mantenimientoCache['Label.mantenimientoGrupo']}" />
+									<br />
+									<p:outputLabel
+										value="#{beanCache.getIec_enumCacheSeleccionado()}" />
+								</div>
+							</div>
+						</p:panel>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<p:commandButton id="btn-cancel" icon="icon-flecha-gris" iconPos="right"
+								styleClass="icon-btn btn-gris"
+								value="#{txt['boton.Cancelar.Upper']}"
+								onclick="PF('dialog-validacionActualizacionGrupo').hide();return false" />
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:commandButton id="btn-finalizar" icon="icon-flecha-blanca"
+								iconPos="right"
+								styleClass="icon-btn btn-rojo btn-gradiente"
+								value="#{txt_persona['boton.Continuar.Upper']}"
+								process="@form :formActualizacionCacheGrupo" type="submit"
+								oncomplete="return false; PF('dialog-validacionActualizacionGrupo').hide();"
+								action="#{beanCache.actualizarCacheGrupo}"
+								update="@(div[id$=operacionGrid]),@(div[id$=seguridadGrid])" />
+						</div>
+					</div>
+				</h:form>
+			</p:dialog>
+		</div>
+	</ui:define>
+</ui:composition>

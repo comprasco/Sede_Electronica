@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions targetNamespace="https://www.supernotariado.gov.co/services/bachue/co/busquedadocumentos/v1" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="https://www.supernotariado.gov.co/schemas/bachue/co/busquedadocumentos/consultar/v1" xmlns:WL5G3N2="https://www.supernotariado.gov.co/schemas/bachue/co/busquedadocumentos/obtenerarchivo/v1" xmlns:WL5G3N3="https://www.supernotariado.gov.co/services/bachue/co/busquedadocumentos/v1" xmlns:WL5G3N4="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <WL5G3N0:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bachue="https://www.supernotariado.gov.co/services/bachue/co/busquedadocumentos/v1" xmlns:bachue1="https://www.supernotariado.gov.co/schemas/bachue/co/busquedadocumentos/consultar/v1" xmlns:bachue2="https://www.supernotariado.gov.co/schemas/bachue/co/busquedadocumentos/obtenerarchivo/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/co/busquedadocumentos/consultar/v1" schemaLocation="http://13.90.249.221:7004/services/ci/busquedaDocumentos/v1?SCHEMA%2FConsumidosInternamente%2FBusquedaDocumentos%2FResources%2FSchemas%2FLegacy%2FCO_BD_Consultar"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/co/busquedadocumentos/obtenerarchivo/v1" schemaLocation="http://13.90.249.221:7004/services/ci/busquedaDocumentos/v1?SCHEMA%2FConsumidosInternamente%2FBusquedaDocumentos%2FResources%2FSchemas%2FLegacy%2FCO_BD_ObtenerArchivo"/>
+    </schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="Consultar_Request">
+    <WL5G3N0:part element="WL5G3N1:entradaConsultar" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="Consultar_Response">
+    <WL5G3N0:part element="WL5G3N1:salidaConsultar" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ObtenerArchivo_Request">
+    <WL5G3N0:part element="WL5G3N2:entradaObtenerArchivo" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ObtenerArchivo_Response">
+    <WL5G3N0:part element="WL5G3N2:salidaObtenerArchivo" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="SUT_CI_BusquedaDocumentos">
+    <WL5G3N0:operation name="Consultar">
+      <WL5G3N0:input message="WL5G3N3:Consultar_Request"/>
+      <WL5G3N0:output message="WL5G3N3:Consultar_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ObtenerArchivo">
+      <WL5G3N0:input message="WL5G3N3:ObtenerArchivo_Request"/>
+      <WL5G3N0:output message="WL5G3N3:ObtenerArchivo_Response"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="SUT_CI_BusquedaDocumentosSOAP12Binding" type="WL5G3N3:SUT_CI_BusquedaDocumentos">
+    <WL5G3N4:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="Consultar">
+      <WL5G3N4:operation soapAction="https://www.supernotariado.gov.co/services/bachue/co/busquedadocumentos/v1/Consultar" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N4:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N4:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ObtenerArchivo">
+      <WL5G3N4:operation soapAction="https://www.supernotariado.gov.co/services/bachue/co/busquedadocumentos/v1/ObtenerArchivo" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N4:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N4:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="SUT_CI_BusquedaDocumentosSOAP12BindingQSService">
+    <WL5G3N0:documentation>OSB Service</WL5G3N0:documentation>
+    <WL5G3N0:port binding="WL5G3N3:SUT_CI_BusquedaDocumentosSOAP12Binding" name="SUT_CI_BusquedaDocumentosSOAP12BindingQSPort">
+      <WL5G3N4:address location="http://snrappdev08.datatools.com.co:7004/services/ci/busquedaDocumentos/v1"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

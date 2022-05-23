@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="solicitudProrrogaNatural" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e63b0dbd-953e-4fb6-9927-0bb0bfc4294e">
+	<property name="ireport.zoom" value="1.1000000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="telefono" class="java.lang.String">
+		<fieldDescription><![CDATA[telefono]]></fieldDescription>
+	</field>
+	<field name="nit" class="java.lang.String">
+		<fieldDescription><![CDATA[nit]]></fieldDescription>
+	</field>
+	<field name="direccion" class="java.lang.String">
+		<fieldDescription><![CDATA[direccion]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[nombre]]></fieldDescription>
+	</field>
+	<field name="correo" class="java.lang.String">
+		<fieldDescription><![CDATA[correo]]></fieldDescription>
+	</field>
+	<field name="ano" class="java.lang.String">
+		<fieldDescription><![CDATA[ano]]></fieldDescription>
+	</field>
+	<field name="documento" class="java.lang.String">
+		<fieldDescription><![CDATA[documento]]></fieldDescription>
+	</field>
+	<field name="archivo" class="java.util.List">
+		<fieldDescription><![CDATA[archivo]]></fieldDescription>
+	</field>
+	<field name="mes" class="java.lang.String">
+		<fieldDescription><![CDATA[mes]]></fieldDescription>
+	</field>
+	<field name="dia" class="java.lang.String">
+		<fieldDescription><![CDATA[dia]]></fieldDescription>
+	</field>
+	<field name="ls_nombreFormulario" class="java.lang.String">
+		<fieldDescription><![CDATA[ls_nombreFormulario]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="76" splitType="Stretch">
+			<image>
+				<reportElement x="372" y="8" width="114" height="54" uuid="98af7a0d-440a-4458-b35f-9580c6bf89b9"/>
+				<imageExpression><![CDATA[$P{logonuevopais}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="12" y="9" width="150" height="43" uuid="1b01425a-fcf3-4810-a74c-c4a68fb9edfe"/>
+				<imageExpression><![CDATA[$P{minjusticialogo}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="218" y="9" width="140" height="48" uuid="7b640045-8286-428b-86cc-f33a4b2d6e9b"/>
+				<imageExpression><![CDATA[$P{snrlogo}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="491" splitType="Stretch">
+			<staticText>
+				<reportElement x="167" y="464" width="102" height="14" uuid="99958646-9cd3-4407-a00e-2def74d599f4"/>
+				<textElement markup="none"/>
+				<text><![CDATA[$F{telefono}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="422" width="153" height="14" uuid="9023e7f0-4b27-46f0-94c8-d263f4cc247f"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[NIT: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="129" y="29" width="263" height="16" uuid="864a3ddd-9f54-40ed-bf4f-b228a062032d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SOLICITUD DE PRORROGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="450" width="102" height="14" uuid="748bc383-ebc4-4dfd-808b-47497fddcd2a"/>
+				<textElement markup="none"/>
+				<text><![CDATA[$F{correo}]]></text>
+			</staticText>
+			<line>
+				<reportElement x="12" y="389" width="473" height="1" uuid="414d2468-8308-4e5f-88ac-f35fcbcef9cf"/>
+			</line>
+			<staticText>
+				<reportElement x="167" y="436" width="102" height="14" uuid="a2c297ef-fa84-467f-966b-0aebdd4e2aab"/>
+				<textElement markup="none"/>
+				<text><![CDATA[$F{direccion}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="176" width="289" height="14" uuid="4b10462d-6239-4dbe-82c5-12c7dacfa614"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[SUPERINTENDENCIA DE NOTARIADO Y REGISTRO – SNR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="130" width="289" height="16" uuid="34733779-771c-47e2-834e-b891126f70c3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="false"/>
+				</textElement>
+				<text><![CDATA["Bogotá D.C, " + $F{dia} + "/" + $F{mes} + "/" + $F{ano}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="190" width="182" height="14" uuid="b619b25b-58b7-47f3-9652-5403d2579618"/>
+				<textElement markup="none">
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[Calle 26 No.13-49 Interior 201]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="362" width="100" height="14" uuid="260efdb0-5e9e-470b-a80b-1018fcebecab"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Cordialmente,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="204" width="289" height="14" uuid="dd966f06-1bbc-4c8a-bffb-5a83048f6ecf"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA["Referencia: Solicitud de prórroga – NIR " + $F{nir}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="422" width="102" height="14" uuid="54cb68c8-29df-4f51-85d9-99462d3fc3de"/>
+				<textElement markup="none"/>
+				<text><![CDATA[$F{documento}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="291" width="538" height="54" uuid="40bc8055-9631-490f-a6b7-96213b79cf60"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA["De acuerdo con su requerimiento expresado mediante el comunicado "+ $F{nir} + "(correo electrónico / SMS) recibido el día" + $F{dia} + "/" + $F{mes} + "/" + $F{ano} + ", en el que se me solicita adjuntar documentación de una cuenta bancaria diferente a la que se hizo llegar inicialmente dentro del trámite de solicitud de Devolución de dinero, me permito solicitar prórroga por un término igual al concedido inicialmente por su despacho, de conformidad con lo estipulado en el artículo 17 de la ley 1755 del 2015.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="263" width="100" height="14" uuid="87d70029-e4dc-4fcc-8b05-0f388708d807"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Respetados señores:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="408" width="153" height="14" uuid="3aa27576-39b5-4a42-88e6-20061b6302e7"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[Nombre completo y firma: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="408" width="102" height="14" uuid="9015eb31-00c6-4360-a3b7-5ef848663d11"/>
+				<textElement markup="none"/>
+				<text><![CDATA[$F{nombre}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="146" width="87" height="14" uuid="3414fa69-922f-4320-aded-3705c5fe3335"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[Señores]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="450" width="153" height="14" uuid="cb4310d4-8351-4fb8-a1da-bb5d268082b1"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[Correo Electrónico: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="436" width="153" height="14" uuid="c4689b87-0da2-4842-aed4-d99652feb860"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[Dirección: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="464" width="153" height="14" uuid="46697c6e-2411-4c65-b395-c30af850444b"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[Teléfono: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="160" width="182" height="16" uuid="5a29e459-f428-4cf7-9d07-70047af79e18"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Dirección Administrativa Y Financiera]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="64" splitType="Stretch">
+			<image>
+				<reportElement x="7" y="1" width="85" height="40" uuid="9b60e8bd-c098-4739-8211-610510fc8cdb"/>
+				<imageExpression><![CDATA[$P{iso}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="218" y="0" width="283" height="42" uuid="b4e39cb2-adf8-4c19-9312-815272db6930"/>
+				<textElement textAlignment="Right">
+					<font fontName="Open Sans Light" size="8"/>
+				</textElement>
+				<text><![CDATA[Superintendencia de Notariado y Registro
+Calle 26 No. 13-49 Int. 201 – PBX (1)328-21- 21
+Bogotá D.C. - Colombia
+http://www.supernotariado.gov.co]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="devolucionCuentaCupos" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0dec6b23-377b-4dbc-8f4f-313d22ca1d0f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="288"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#D9C3C3">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFE6E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dataset1" uuid="78844228-1969-4d33-82e0-2e45cb873782">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="numeroNotaCredito" class="java.lang.String">
+			<fieldDescription><![CDATA[numeroNotaCredito]]></fieldDescription>
+		</field>
+		<field name="saldoDisponible" class="java.lang.String">
+			<fieldDescription><![CDATA[saldoDisponible]]></fieldDescription>
+		</field>
+		<field name="valorConsumido" class="java.lang.String">
+			<fieldDescription><![CDATA[valorConsumido]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="minjusticialogo" class="Object" isForPrompting="false">
+		<parameterDescription><![CDATA[minjusticialogo]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="logonuevopais" class="Object" isForPrompting="false">
+		<parameterDescription><![CDATA[logonuevopais]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="iso" class="Object" isForPrompting="false">
+		<parameterDescription><![CDATA[iso]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="snrlogo" class="Object" isForPrompting="false">
+		<parameterDescription><![CDATA[snrlogo]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="ano" class="java.lang.String">
+		<fieldDescription><![CDATA[ano]]></fieldDescription>
+	</field>
+	<field name="apellidoTitularCuentaBancaria" class="java.lang.String">
+		<fieldDescription><![CDATA[apellidoTitularCuentaBancaria]]></fieldDescription>
+	</field>
+	<field name="celular" class="java.lang.String">
+		<fieldDescription><![CDATA[celular]]></fieldDescription>
+	</field>
+	<field name="codigoCuentaCupo" class="java.lang.String">
+		<fieldDescription><![CDATA[codigoCuentaCupo]]></fieldDescription>
+	</field>
+	<field name="codigoNotaCredito" class="java.lang.String">
+		<fieldDescription><![CDATA[codigoNotaCredito]]></fieldDescription>
+	</field>
+	<field name="correo" class="java.lang.String">
+		<fieldDescription><![CDATA[correo]]></fieldDescription>
+	</field>
+	<field name="dia" class="java.lang.String">
+		<fieldDescription><![CDATA[dia]]></fieldDescription>
+	</field>
+	<field name="direccion" class="java.lang.String">
+		<fieldDescription><![CDATA[direccion]]></fieldDescription>
+	</field>
+	<field name="entidadFinanciera" class="java.lang.String">
+		<fieldDescription><![CDATA[entidadFinanciera]]></fieldDescription>
+	</field>
+	<field name="idCuentaCupo" class="java.lang.String">
+		<fieldDescription><![CDATA[idCuentaCupo]]></fieldDescription>
+	</field>
+	<field name="imagenes" class="java.util.List">
+		<fieldDescription><![CDATA[imagenes]]></fieldDescription>
+	</field>
+	<field name="ls_nombreFormulario" class="java.lang.String">
+		<fieldDescription><![CDATA[ls_nombreFormulario]]></fieldDescription>
+	</field>
+	<field name="mes" class="java.lang.String">
+		<fieldDescription><![CDATA[mes]]></fieldDescription>
+	</field>
+	<field name="motivosSolicitud" class="java.lang.String">
+		<fieldDescription><![CDATA[motivosSolicitud]]></fieldDescription>
+	</field>
+	<field name="nombreRepresentanteLegal" class="java.lang.String">
+		<fieldDescription><![CDATA[nombreRepresentanteLegal]]></fieldDescription>
+	</field>
+	<field name="nombreTitularCuentaBancaria" class="java.lang.String">
+		<fieldDescription><![CDATA[nombreTitularCuentaBancaria]]></fieldDescription>
+	</field>
+	<field name="notasCredito" class="java.util.List">
+		<fieldDescription><![CDATA[notasCredito]]></fieldDescription>
+	</field>
+	<field name="numeroCuenta" class="java.lang.String">
+		<fieldDescription><![CDATA[numeroCuenta]]></fieldDescription>
+	</field>
+	<field name="numeroDocumento" class="java.lang.String">
+		<fieldDescription><![CDATA[numeroDocumento]]></fieldDescription>
+	</field>
+	<field name="numeroDocumentoTitularCuentaBancaria" class="java.lang.String">
+		<fieldDescription><![CDATA[numeroDocumentoTitularCuentaBancaria]]></fieldDescription>
+	</field>
+	<field name="numeroIdentificacionRepresentanteLegal" class="java.lang.String">
+		<fieldDescription><![CDATA[numeroIdentificacionRepresentanteLegal]]></fieldDescription>
+	</field>
+	<field name="razonSocial" class="java.lang.String">
+		<fieldDescription><![CDATA[razonSocial]]></fieldDescription>
+	</field>
+	<field name="saldo" class="java.lang.String">
+		<fieldDescription><![CDATA[saldo]]></fieldDescription>
+	</field>
+	<field name="segundoApellidoTitularCuentaBancaria" class="java.lang.String">
+		<fieldDescription><![CDATA[segundoApellidoTitularCuentaBancaria]]></fieldDescription>
+	</field>
+	<field name="segundoNombreTitularCuentaBancaria" class="java.lang.String">
+		<fieldDescription><![CDATA[segundoNombreTitularCuentaBancaria]]></fieldDescription>
+	</field>
+	<field name="telefono" class="java.lang.String">
+		<fieldDescription><![CDATA[telefono]]></fieldDescription>
+	</field>
+	<field name="tipoCuenta" class="java.lang.String">
+		<fieldDescription><![CDATA[tipoCuenta]]></fieldDescription>
+	</field>
+	<field name="tipoDevolucion" class="java.lang.String">
+		<fieldDescription><![CDATA[tipoDevolucion]]></fieldDescription>
+	</field>
+	<field name="tipoDocumento" class="java.lang.String">
+		<fieldDescription><![CDATA[tipoDocumento]]></fieldDescription>
+	</field>
+	<field name="tipoDocumentoTitularCuentaBancaria" class="java.lang.String">
+		<fieldDescription><![CDATA[tipoDocumentoTitularCuentaBancaria]]></fieldDescription>
+	</field>
+	<field name="titularCuentaBancariaRazonSocial" class="java.lang.String">
+		<fieldDescription><![CDATA[titularCuentaBancariaRazonSocial]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<image>
+				<reportElement x="20" y="6" width="150" height="43" uuid="1143dfff-8669-41d3-8c4a-ba0b24e18de0"/>
+				<imageExpression><![CDATA[$P{minjusticialogo}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="217" y="6" width="140" height="48" uuid="334f2040-ce87-4fd3-8bfe-af0abd366b01"/>
+				<imageExpression><![CDATA[$P{snrlogo}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="380" y="2" width="114" height="54" uuid="8d3ab9e2-3574-4d58-a4f7-2e2556fe07de"/>
+				<imageExpression><![CDATA[$P{logonuevopais}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="396" y="2" width="100" height="20" uuid="53c766c5-a4ae-42c5-b4c3-e687bfa77098"/>
+				<text><![CDATA[codigoCuentaCupo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="509" splitType="Stretch">
+			<staticText>
+				<reportElement x="162" y="55" width="263" height="16" uuid="8a863c09-3f90-473f-aaea-2ce736bfd51d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUPERINTENDENCIA DE NOTARIADO Y  REGISTRO ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="71" width="263" height="16" uuid="33c9b5c7-f218-4906-a99e-c9de7dd5b937"/>
+				<text><![CDATA[SOLICITUD DE DEVOLUCIÓN CUENTA CUPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="87" width="263" height="16" uuid="a5572c76-c89f-4d42-98db-61105fa42c70"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TRAMITES REGISTRALES EN LÍNEA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="124" width="127" height="14" uuid="59a344c9-170c-498f-96ab-94c64d0a4c59"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[*Fecha de diligenciamiento: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="158" y="124" width="182" height="14" uuid="10ff6c24-5fa4-403a-9f0f-e303e47fd076"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dia} + "/" + $F{mes} + "/" + $F{ano}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="127" y="149" width="324" height="16" uuid="bd9268e1-555a-4be2-986b-95d542184471"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INFORMACIÓN BÁSICA]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement key="table 2" style="table 1" x="31" y="425" width="488" height="64" uuid="cc871082-9a95-41a8-b157-12410ef38b26"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dataset1" uuid="a2172d11-cde0-4523-ad4f-c4238a2281f0">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{notasCredito})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="168" uuid="e6584d46-e356-43c1-9460-5e0b433625d5">
+						<jr:columnHeader height="24" rowSpan="1">
+							<staticText>
+								<reportElement style="table" x="0" y="0" width="168" height="24" uuid="522e2d60-1e6a-4d24-b6e2-187e7f2e1f57"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Saldo]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="168" height="32" uuid="2444d0ec-f03c-4631-87c6-3a9dccf55424"/>
+								<textElement verticalAlignment="Middle"/>
+								<text><![CDATA[Cuenta Cupo]]></text>
+							</staticText>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="157" uuid="771eb3d8-0a91-4f5d-8a1a-026b3c663a1c">
+						<jr:columnHeader height="24" rowSpan="1">
+							<staticText>
+								<reportElement style="table" x="0" y="0" width="157" height="24" uuid="6ca4b20b-2e48-4643-b9f1-152477a4d67a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell height="32" rowSpan="1">
+							<textField>
+								<reportElement style="table" x="0" y="0" width="157" height="32" uuid="ea472adf-824c-44d9-a194-f469e851097e"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{saldoDisponible}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement x="42" y="226" width="100" height="20" uuid="9888e82a-e989-4ae7-a750-9df21a27f628"/>
+				<text><![CDATA[Tipo Documento: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="142" y="226" width="100" height="20" uuid="83fe1c0d-084e-4f4d-912e-121ba22ac866"/>
+				<textFieldExpression><![CDATA[$F{tipoDocumento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="226" width="100" height="20" uuid="fd170c6f-f5cf-4d32-8ae5-89318418944e"/>
+				<text><![CDATA[Numero Documento: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="380" y="226" width="100" height="20" uuid="d3254217-d4ca-479a-8ad2-34d21beef65f"/>
+				<textFieldExpression><![CDATA[$F{numeroDocumento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="43" y="192" width="100" height="20" uuid="f53c44ed-62a9-467a-a946-f2c841c5fe6c"/>
+				<text><![CDATA[Nombre Representante Legal:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="143" y="192" width="100" height="20" uuid="b0643029-11de-4fca-b608-a2585c4b397a"/>
+				<textFieldExpression><![CDATA[$F{nombreRepresentanteLegal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="192" width="100" height="20" uuid="7cb97ade-558a-4e48-9455-64eaf4a7da0f"/>
+				<text><![CDATA[Numero Representate Legal:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="380" y="192" width="100" height="20" uuid="23c01a23-6b45-4993-86af-1d76f2404f49"/>
+				<textFieldExpression><![CDATA[$F{numeroIdentificacionRepresentanteLegal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="42" y="260" width="100" height="20" uuid="f87d3cf5-0baf-43fa-a369-36e2dddd0829"/>
+				<text><![CDATA[Razón Social:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="143" y="260" width="100" height="20" uuid="c76daacb-485f-40df-baf3-0a34fb142b33"/>
+				<textFieldExpression><![CDATA[$F{razonSocial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="260" width="100" height="20" uuid="5dc59d6a-50d0-4f1b-84d8-37da188bab2b"/>
+				<text><![CDATA[Dirección: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="380" y="260" width="100" height="20" uuid="8e683a31-a121-4ba4-8f62-c33864b8fd86"/>
+				<textFieldExpression><![CDATA[$F{direccion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="43" y="296" width="73" height="20" uuid="c116cef2-33ca-4b9e-a191-800869d13e24"/>
+				<text><![CDATA[Teléfono: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="116" y="296" width="76" height="20" uuid="c06aa998-35dd-4760-a9a1-8200953eb239"/>
+				<textFieldExpression><![CDATA[$F{telefono}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="205" y="296" width="49" height="20" uuid="259a0fcc-afea-480f-b012-955ac8625889"/>
+				<text><![CDATA[Celular: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="254" y="296" width="72" height="20" uuid="691ce91f-5203-45db-80eb-9c54e030d290"/>
+				<textFieldExpression><![CDATA[$F{celular}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="344" y="296" width="48" height="20" uuid="87cf0f6d-9058-495a-b44a-97d22e162e56"/>
+				<text><![CDATA[Correo: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="392" y="296" width="88" height="20" uuid="e63fe87c-4439-44c7-bc73-0e95b971065c"/>
+				<textFieldExpression><![CDATA[$F{correo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="176" y="326" width="164" height="20" uuid="b612990d-4246-43f2-b985-bd62f71afe61"/>
+				<text><![CDATA[SOLICITUD DE DEVOLUCIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="37" y="358" width="100" height="20" uuid="21724afb-fa5f-4068-8405-de1b8543449c"/>
+				<text><![CDATA[Tipo Devolución]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="137" y="358" width="100" height="20" uuid="767f017a-06ed-4384-8ea9-502dcf4dd34a"/>
+				<textFieldExpression><![CDATA[$F{tipoDevolucion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="160" y="390" width="100" height="20" uuid="38f07b13-6aa7-4e31-9e65-f225213dc29a"/>
+				<text><![CDATA[id Cuenta Cupo:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="260" y="390" width="120" height="20" uuid="cf57c887-63e5-47e2-adef-4ce8f473fe2a"/>
+				<textFieldExpression><![CDATA[$F{codigoCuentaCupo}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="434">
+			<line>
+				<reportElement x="43" y="388" width="365" height="1" uuid="5bc730cf-233b-4a41-b48d-0f37384c330c"/>
+			</line>
+			<rectangle>
+				<reportElement x="438" y="313" width="75" height="76" uuid="1aee7028-c10d-4877-91ba-c14304b6b744"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="36" y="401" width="483" height="16" uuid="3a010a08-3bf8-4aec-886e-96c66cc95da5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FIRMA PERSONA NATURAL O REPRESENTANTE LEGAL HUELLA INDICE DERECHO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="63" y="16" width="431" height="20" uuid="6ff87a63-0813-4260-938c-145c0e90e966"/>
+				<text><![CDATA[INFORMACIÓN DE LA CUENTA BANCARIA PARA CONSIGNACIÓN DE LA DEVOLUCIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="37" y="49" width="58" height="32" uuid="7ab07d37-2378-4b9f-9ef1-d879fd051701"/>
+				<text><![CDATA[Entidad
+Financiera:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="99" y="49" width="71" height="32" uuid="cd8adb5e-7f1b-4461-96a3-e0bb57de3cfd"/>
+				<textFieldExpression><![CDATA[$F{entidadFinanciera}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="192" y="49" width="45" height="32" uuid="3b188ac4-9988-41bc-9d12-a94bbf63537e"/>
+				<text><![CDATA[Tipo de
+Cuenta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="49" width="68" height="32" uuid="d305dbe5-89a9-457f-961f-48a7bb3a0afd"/>
+				<text><![CDATA[Numero de
+Cuenta:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="408" y="49" width="105" height="32" uuid="47c8b1b5-aedc-4f38-b761-b9a6b8e7bfcc"/>
+				<textFieldExpression><![CDATA[$F{numeroCuenta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="237" y="49" width="74" height="32" uuid="db56d125-12c1-4d67-9ae8-e98938bafe3a"/>
+				<textFieldExpression><![CDATA[$F{tipoCuenta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="40" y="103" width="103" height="20" uuid="81da7947-551e-4902-913d-79a3bd9b601f"/>
+				<text><![CDATA[Tipo de Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="103" width="128" height="20" uuid="7faf94b4-58f8-4145-9ff7-1b8bbf651537"/>
+				<text><![CDATA[Numero de Documento:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="143" y="103" width="109" height="20" uuid="3e09f42e-069e-49a1-8dba-aefeff0d6b3d"/>
+				<textFieldExpression><![CDATA[$F{tipoDocumentoTitularCuentaBancaria}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="408" y="103" width="105" height="20" uuid="df1c7cd8-2fa5-457c-8f7b-f3baced4c70c"/>
+				<textFieldExpression><![CDATA[$F{numeroDocumentoTitularCuentaBancaria}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="37" y="217" width="100" height="20" uuid="c3603e52-a18e-4b1d-a50d-f215a3ad8534"/>
+				<text><![CDATA[Motivo Solicitud:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="36" y="237" width="450" height="64" uuid="5aa7fd13-cda0-4715-b183-615877f4d2b9"/>
+				<textFieldExpression><![CDATA[$F{motivosSolicitud}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="37" y="143" width="100" height="19" uuid="51a7d215-9a2b-411c-8baa-542b7351fc7d"/>
+				<text><![CDATA[Nombre Titular:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="137" y="143" width="123" height="19" uuid="24771d28-85ea-4481-8d2e-401612d1a41e"/>
+				<textFieldExpression><![CDATA[$F{nombreTitularCuentaBancaria}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="142" width="128" height="20" uuid="60cefe85-fc60-4faa-ae69-3d65e51533d7"/>
+				<text><![CDATA[Segundo Nombre Titular:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="408" y="143" width="105" height="20" uuid="dea14bc1-c1e2-46d3-ae24-6ad260a58a3f"/>
+				<textFieldExpression><![CDATA[$F{segundoNombreTitularCuentaBancaria}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="37" y="172" width="100" height="20" uuid="46d4916b-242b-4e8d-ab18-8cda0d1a6367"/>
+				<text><![CDATA[Apellido Titular:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="137" y="172" width="121" height="20" uuid="72cda202-a2d6-45c3-a16a-9b9b30a0d9ef"/>
+				<textFieldExpression><![CDATA[$F{apellidoTitularCuentaBancaria}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="280" y="172" width="128" height="20" uuid="678fe721-66f3-41f2-a77c-86fcd50640d7"/>
+				<text><![CDATA[Segundo Apeliido Tirular:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="408" y="172" width="105" height="20" uuid="91d96956-d9e1-4eae-83aa-be4254d13b0c"/>
+				<textFieldExpression><![CDATA[$F{segundoApellidoTitularCuentaBancaria}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="70" splitType="Stretch">
+			<image>
+				<reportElement x="31" y="14" width="85" height="40" uuid="51f298e8-8e3f-4dec-9d4e-6c458c32ab76"/>
+				<imageExpression><![CDATA[$P{iso}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="242" y="13" width="283" height="42" uuid="dad0abec-653d-4070-b9a0-d2ca593c5ff0"/>
+				<textElement textAlignment="Right">
+					<font fontName="Open Sans Light" size="8"/>
+				</textElement>
+				<text><![CDATA[Superintendencia de Notariado y Registro
+Calle 26 No. 13-49 Int. 201 – PBX (1)328-21- 21
+Bogotá D.C. - Colombia
+http://www.supernotariado.gov.co]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

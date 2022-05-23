@@ -1,0 +1,2398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputScript library="js" name="archivo.js" />
+		<h:outputScript library="js" name="keyfilter.js" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-cuentaCupo.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudDevoluciones.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_devoluciones['DevolucionesCuentaCupo']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_devoluciones['devolucion.cuenta.cupo.administracion']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_devoluciones['devolucion.cuenta.cupo.solicitud']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/cuentaCupo/devolucionCuentaCupo.jsf" />
+		</ui:include>
+		<!-- Solicitud devolucion consignacion errada -->
+		<p:panel id="panelFormularioDevolucionCuentaCupo"
+			styleClass="no-border">
+			<!-- Formulario solicitud devolucion consinacion errada -->
+			<p:outputPanel id="formularioDevolucionCuentaCupo"
+				rendered="#{beanDevolucionCuentaCupo.ii_seccion == 0}">
+				<h:form id="formFormularioDevolucionCuentaCupo">
+					<p:importEnum
+						type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumFormularioDevoluciones"
+						var="CampoConfiguracion" />
+					<div>
+						<div class="col-xs-12">
+							<div class="col-xs-12 text-center">
+								<p:outputLabel id="labelTituloSuperNotariado"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_devoluciones['SuperintendenciaNotariadoRegistro']}" />
+								<br /> <br />
+								<p:outputLabel id="labelTituloFormularioDevolucion"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_devoluciones['devolucion.cuenta.cupo.titulo.formulario']}" />
+								<br /> <br />
+								<p:outputLabel id="labelTituloTramitesLinea"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_devoluciones['FormularioDevoluciones.tramitesLinea']}" />
+								<br /> <br />
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-xs-12 col-sm-6">
+									<p:outputLabel id="labelFechaDiligenciamiento"
+										styleClass="label-form" for="fechaDiligenciamiento"
+										value="#{txt_devoluciones['label.FechaDiligenciamiento']}" />
+									<p:inputText id="fechaDiligenciamiento" styleClass="no-borde"
+										readonly="true"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										value="#{beanDevolucionCuentaCupo.obtenerFecha()}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<br />
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_devoluciones['FormularioDevoluciones.SubtituloUno']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<!-- Datos basicos Persona Juridica -->
+						<div class="row">
+							<!-- Tipo Documento representante legal -->
+							<div class="col-xs-12 col-sm-6">
+								<div class="title">
+									<div>
+										<p:outputLabel id="labelTipoDocumentoRepresentante"
+											styleClass="label-form" for="tipoDocumentoRepresentante"
+											value="#{txt_devoluciones['label.tipo.documento.representante']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									</div>
+
+								</div>
+								<div class="ui-inputgroup">
+									<p:inputText id="tipoDocumentoRepresentante"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_tipoDocumentoRepresentanteLegal}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelRepresentanteLegal"
+										position="top">
+										<div>
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.tipo.documento.representante.legal']}" />
+										</div>
+									</p:tooltip>
+								</div>
+							</div>
+							<!-- Numero documento representante legal -->
+							<div class="col-xs-12 col-sm-6">
+								<div class="title">
+									<div>
+										<p:outputLabel id="labelNumeroDocumentoRepresentante"
+											styleClass="label-form" for="numeroDocumentoRepresentante"
+											value="#{txt_devoluciones['label.numero.documento.representante']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									</div>
+									<div>
+										<h:outputText id="ayudaNumeroDocRepresentante"
+											class="fa fa-question-circle" />
+									</div>
+								</div>
+								<div class="ui-inputgroup">
+									<p:inputText id="numeroDocumentoRepresentante"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_numeroDocumentoRepresentanteLegal}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										for="ayudaNumeroDocRepresentante" position="top">
+										<div>
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.numero.documento.representante.legal']}" />
+										</div>
+									</p:tooltip>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<!-- Representante Legal -->
+							<div class="col-xs-12 col-sm-12">
+								<p:outputLabel id="labelRepresentanteLegal"
+									styleClass="label-form" for="representanteLegal"
+									value="#{txt_persona['label.RepresentanteLegal']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="representanteLegal"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.getNombreRepresentanteLegal()}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelRepresentanteLegal"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.RepresentanteLegal']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="representanteLegal" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<!-- Tipo de Documento -->
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelTipoDocumento" styleClass="label-form"
+									for="tipoDocumento"
+									value="#{txt_persona['label.TipoDocumento']}" />
+								<p:inputText id="tipoDocumento"
+									onkeypress="if (event.keyCode == 13){return false;}"
+									styleClass="text-input border-completo" readonly="true"
+									value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelTipoDocumento"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.TipoDocumento']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="tipoDocumento" />
+								</span>
+							</div>
+							<!-- Numero de documento -->
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelNumeroDocumento" styleClass="label-form"
+									for="numeroDocumento"
+									value="#{txt_devoluciones['label.NumeroDocumento']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="numeroDocumento"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelNumeroDocumento"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.NumeroDocumento']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="numeroDocumento" />
+								</span>
+							</div>
+							<!-- Razon social -->
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelRazonSocial" styleClass="label-form"
+									for="razonSocial" value="#{txt_persona['label.RazonSocial']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="razonSocial" readonly="true"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo"
+										value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.is_razonSocial}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelRazonSocial"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.RazonSocial']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="razonSocial" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<!-- Direccion -->
+							<div class="col-xs-12">
+								<p:outputLabel id="labelDireccionCompleta"
+									styleClass="label-form"
+									for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+									value="#{txt_devoluciones['label.Direccion']}" />
+								<div class="ui-inputgroup">
+									<p:inputText styleClass="text-input border-completo"
+										readonly="true"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										id="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+										value="#{beanDevolucionCuentaCupo.mostrarDireccionCompleta()}" />
+								</div>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelDireccionCompleta"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.Direccion']}" />
+									</div>
+								</p:tooltip>
+								<span id="spanDireccionJur" class="help-block"> <p:message
+										for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<!-- Telefono Fijo -->
+							<div class="col-xs-12 col-sm-3">
+								<p:outputLabel id="labelTelefono" styleClass="label-form"
+									for="telefonoFijo" value="#{txt_persona['label.TelefonoFijo']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="telefonoFijo" readonly="true"
+										styleClass="text-input border-completo"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.is_telefono}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelTelefono" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.Telefono']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="telefonoFijo" />
+								</span>
+							</div>
+							<!-- Celular -->
+							<div class="col-xs-12 col-sm-3">
+								<p:outputLabel id="labelCelular" styleClass="label-form"
+									for="celular" value="#{txt_persona['label.NumeroCelular']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="celular"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanDevolucionCuentaCupo.iu_usuarioDto.is_celular}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelCelular" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.NumeroCelular']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="celular" />
+								</span>
+							</div>
+							<!-- Correo Electronico -->
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelCorreo" styleClass="label-form"
+									for="correo" value="#{txt_persona['label.CorreoElectronico']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="correo" readonly="true"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo"
+										value="#{beanDevolucionCuentaCupo.iu_usuarioDto.is_correoElectronico}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelCorreo" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_persona['tooltip.CorreoElectronico']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="correo" />
+								</span>
+							</div>
+						</div>
+						<!-- Datos basicos Persona Natural -->
+						<p:outputPanel id="formularioDatosBasicosPersonaNatural"
+							rendered="#{!beanDevolucionCuentaCupo.ib_datosBasicos}">
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelTipoDocumentoPN"
+										styleClass="label-form" for="tipoDocumentoPN"
+										value="#{txt_devoluciones['label.TipoDocumento']}" />
+									<p:inputText id="tipoDocumentoPN"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelTipoDocumentoPN"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.TipoDocumento']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="tipoDocumentoPN" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelNumeroDocumentoPN"
+										styleClass="label-form" for="numeroDocumentoPN"
+										value="#{txt_devoluciones['label.NumeroDocumento']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="numeroDocumentoPN"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelNumeroDocumentoPN"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.NumeroDocumento']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="numeroDocumentoPN" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelNombrePN" styleClass="label-form"
+										for="nombrePN" value="#{txt_devoluciones['label.Nombre']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="nombrePN"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo mask-Numeric"
+											readonly="true"
+											placeholder="#{txt_devoluciones['placeholder.NombreApelidosTitular']}"
+											value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_primerNombre} #{beanDevolucionCuentaCupo.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_segundoNombre} #{beanDevolucionCuentaCupo.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_primerApellido} #{beanDevolucionCuentaCupo.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_segundoApellido}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											for="nombrePN" position="top">
+											<div>
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.NombreApelidosTitular']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="nombrePN" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel id="labelDireccionCompletaPN"
+										styleClass="label-form"
+										for="direccionResidencia${beanPersona.is_tipoUsuarioNatural}"
+										value="#{txt_devoluciones['label.Direccion']}" />
+									<div class="ui-inputgroup">
+										<p:inputText styleClass="text-input border-completo"
+											readonly="true"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											id="direccionResidencia${beanPersona.is_tipoUsuarioNatural}"
+											value="#{beanDevolucionCuentaCupo.mostrarDireccionCompleta()}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelDireccionCompletaPN"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.Direccion']}" />
+										</div>
+									</p:tooltip>
+									<span id="spanDireccionPN" class="help-block"> <p:message
+											for="direccionResidencia${beanPersona.is_tipoUsuarioNatural}" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelTelefonoPN" styleClass="label-form"
+										for="telefonoFijoPN"
+										value="#{txt_persona['label.TelefonoFijo']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="telefonoFijoPN" readonly="true"
+											styleClass="text-input border-completo"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_telefono}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelTelefonoPN"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.Telefono']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="telefonoFijoPN" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelCelularPN" styleClass="label-form"
+										for="celularPN"
+										value="#{txt_devoluciones['label.NumeroCelular']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="celularPN"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionCuentaCupo.iu_usuarioDto.is_celular}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCelularPN"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.NumeroCelular']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="celularPN" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelCorreoPN" styleClass="label-form"
+										for="correoPN"
+										value="#{txt_devoluciones['label.CorreoElectronico']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="correoPN" readonly="true"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo"
+											value="#{beanDevolucionCuentaCupo.iu_usuarioDto.is_correoElectronico}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCorreoPN"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.CorreoElectronico']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="correoPN" />
+									</span>
+								</div>
+							</div>
+						</p:outputPanel>
+						<p:separator />
+						<div class="col-xs-12 text-center">
+							<p:outputLabel
+								value="#{txt_devoluciones['devolucion.cuenta.cupos.solicitud.devolucion']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<!-- Devolucion -->
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelDevolucion" styleClass="label-form"
+									value="#{txt_devoluciones['label.devolucion']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<div class="ui-inputgroup">
+									<p:selectOneMenu id="listaDevolucion"
+										widgetVar="listaDevolucionSelect"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true"
+										value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_tipoDevolucion}">
+										<p:ajax event="change"
+											update="formFormularioDevolucionCuentaCupo:formularioTipoDevolucion formModalPrevisualizarPdf:devolucionPrevisualizar"
+											onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('blockUI-Loading').hide();"
+											listener="#{beanDevolucionCuentaCupo.guardarTransaccionTipoDevolucion(CampoConfiguracion.TIPO_DEVOLUCION_CUENTA_CUPO.getIs_nombreCampo(),beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_tipoDevolucion)}" />
+										<f:selectItem itemValue=""
+											itemLabel="#{txt['label.SeleccioneComboBox']}" />
+										<f:selectItems
+											value="#{beanDevolucionCuentaCupo.ilec_listaTipoDevolucion}"
+											var="tipoDevolucion"
+											itemValue="#{tipoDevolucion.getIs_criterio()}"
+											itemLabel="#{tipoDevolucion.getIs_criterio()}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelDevolucion"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.devolucion']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="listaDevolucion" />
+									</span>
+								</div>
+							</div>
+						</div>
+						<br />
+						<p:outputPanel id="formularioTipoDevolucion">
+							<ui:fragment
+								rendered="#{beanDevolucionCuentaCupo.ib_tipoDevolucion}">
+								<!-- Cuenta Bancaria Persona Natural -->
+								<p:outputPanel id="seleccionNotaCredito" class="tablas"
+									rendered="#{beanDevolucionCuentaCupo.ii_devolucionTipo == 1}">
+									<div class="col-xs-11 text-center">
+										<p:outputLabel
+											value="#{txt_devoluciones['titulo.notaCredito']}"
+											styleClass="titulo tamano-subtitulo" />
+										<br /> <br />
+									</div>
+									<div class="col-xs-11 text-left">
+										<p:outputLabel
+											value="#{txt_devoluciones['titulo.NotaCreditoDevolucion']}" />
+										<br /> <br />
+									</div>
+									<div class="col-xs-12">
+										<p:dataTable styleClass="tablaCertificados"
+											id="tablaSeleccionNotaCredito"
+											selection="#{beanDevolucionCuentaCupo.incdcc_notaCreditoDevolucionCuentaCupoDto}"
+											widgetVar="consultaSeleccionNotaCredito" reflow="true"
+											emptyMessage="#{txt_registral['tabla.registro.vacia']}"
+											value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.ilncdcc_listaNotaCredito}"
+											var="notaCredito" stickyHeader="false"
+											rowKey="#{notaCredito.is_codigo}">
+											<p:column
+												headerText="#{txt_devoluciones['label.numero.notaCredito']}">
+												<h:outputText id="noNotaCredito"
+													value="#{notaCredito.is_codigo}" />
+											</p:column>
+											<p:column headerText="#{txt_devoluciones['label.fecha']}">
+												<h:outputText value="#{notaCredito.id_fecha}">
+													<f:convertDateTime pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+											<p:column headerText="#{txt_devoluciones['label.recarga']}">
+												<h:outputText value="#{notaCredito.is_valorRecarga}"
+													id="valorConsumo" />
+											</p:column>
+											<p:column headerText="#{txt_devoluciones['label.saldo']}">
+												<h:outputText id="saldo" value="#{notaCredito.is_saldo}" />
+											</p:column>
+											<p:column selectionMode="single"
+												headerText="#{txt_devoluciones['label.seleccionar']}"
+												styleClass="columnaRadioButton" />
+											<p:ajax event="rowSelectRadio"
+												listener="#{beanDevolucionCuentaCupo.validarVigenciaRecargaNotaCredito}" />
+										</p:dataTable>
+										<br /> <br />
+									</div>
+								</p:outputPanel>
+								<p:outputPanel id="seleccionCuentaCupoCancelada" class="tablas"
+									rendered="#{beanDevolucionCuentaCupo.ii_devolucionTipo == 2}">
+									<div class="col-xs-11 text-center">
+										<p:outputLabel value="#{txt_devoluciones['id.cuentaCupo']}"
+											styleClass="titulo tamano-subtitulo" />
+										<h:outputText id="idCuentaCupo"
+											value=" #{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_codigoCuentaCupo}" />
+										<br /> <br />
+									</div>
+									<div class="col-xs-11 text-left">
+										<p:outputLabel
+											value="#{txt_devoluciones['titulo.CuentaCupoCancelada']}" />
+										<br /> <br />
+									</div>
+									<div class="col-xs-12">
+										<p:dataTable styleClass="tablaCertificados"
+											id="tablaSeleccionCuentaCupoCancelada"
+											widgetVar="consultaSeleccionCuentaCupoCancelada"
+											reflow="true"
+											emptyMessage="#{txt_registral['tabla.registro.vacia']}"
+											value="" var="registro" stickyHeader="false">
+											<p:column headerText="#{txt_devoluciones['label.saldo']}">
+												<h:outputText
+													value="#{txt_devoluciones['label.cuentaCupo']}"
+													id="noCuentaCupo" />
+											</p:column>
+											<p:column headerText="#{txt_devoluciones['label.total']}">
+												<h:outputText
+													value="#{beanDevolucionCuentaCupo.is_saldoDisponibleCuentaCupo}"
+													id="tatalCancelacion" />
+											</p:column>
+										</p:dataTable>
+										<br /> <br />
+									</div>
+								</p:outputPanel>
+							</ui:fragment>
+						</p:outputPanel>
+						<br /> <br />
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_devoluciones['InformacionCuentaBancaria.SubtituloCuatro']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelEntidadFinanciera"
+									styleClass="label-form" for="entidadFinanciera"
+									value="#{txt_devoluciones['label.EntidadFinanciera']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="entidadFinanciera"
+									widgetVar="entidadFinancieraSelect"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_entidadFinanciera}">
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:entidadFinancieraPrevisualizar"
+										listener="#{beanDevolucionCuentaCupo.guardarTransaccion(CampoConfiguracion.CODIGO_ENTIDAD_FINANCIERA_DEVOLUCION_CUENTA_CUPO.getIs_nombreCampo(),beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_entidadFinanciera)}" />
+									<f:selectItem itemValue=""
+										itemLabel="#{txt['label.SeleccioneComboBox']}" />
+									<f:selectItems
+										value="#{beanDevolucionCuentaCupo.illeb_entidadBancaria}"
+										var="entidadBancaria"
+										itemValue="#{entidadBancaria.getIs_nombreEntidad()}"
+										itemLabel="#{entidadBancaria.getIs_nombreEntidad()}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelEntidadFinanciera"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.EntidadFinanciera']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="entidadFinanciera" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelTipoCuenta" styleClass="label-form"
+									for="tipoCuenta"
+									value="#{txt_devoluciones['label.TipoCuenta']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="tipoCuenta" widgetVar="tipoCuentaSelect"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_tipoCuenta}">
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:tipoCuentaPrevisualizar"
+										listener="#{beanDevolucionCuentaCupo.guardarTransaccion(CampoConfiguracion.TIPO_CUENTA_DEVOLUCION_CUENTA_CUPO.getIs_nombreCampo(),beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_tipoCuenta)}" />
+									<f:selectItem itemValue=""
+										itemLabel="#{txt['label.SeleccioneComboBox']}" />
+									<f:selectItems
+										value="#{beanDevolucionCuentaCupo.ilec_tipoCuentaBancaria}"
+										var="tipoCuentaBancaria"
+										itemValue="#{tipoCuentaBancaria.getIs_criterio()}"
+										itemLabel="#{tipoCuentaBancaria.getIs_criterio()}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelTipoCuenta"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.TipoCuenta']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="tipoCuenta" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelNumeroCuenta" styleClass="label-form"
+									for="numeroCuenta"
+									value="#{txt_devoluciones['label.NumeroCuenta']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:inputText id="numeroCuenta"
+									onkeypress="if (event.keyCode == 13){return false;}"
+									autocomplete="off"
+									styleClass="text-input border-completo mask-Numeric"
+									maxlength="20"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_devoluciones['placeholder.NumeroCuentaBancaria']}"
+									required="true"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_numeroCuenta}">
+									<p:keyFilter regEx="/[0-9\-\a-z\A-Z]/i" />
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:numeroCuentaPrevisualizar"
+										listener="#{beanDevolucionCuentaCupo.guardarTransaccion(CampoConfiguracion.NUMERO_CUENTA_DEVOLUCION_CUENTA_CUPO.getIs_nombreCampo(),beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_numeroCuenta)}" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNumeroCuenta"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.NumeroCuenta']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="numeroCuenta" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelTipoDocumentoTitularCuentaBancaria"
+									styleClass="label-form"
+									for="tipoDocumentoTitularCuentaBancaria"
+									value="#{txt_devoluciones['label.TipoDocumento']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="tipoDocumentoTitularCuentaBancaria"
+									widgetVar="tipoDocumentoSelect"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_tipoDocumentoTitularCuentaBancaria}">
+									<p:ajax event="change"
+										update="formFormularioDevolucionCuentaCupo:formularioCuentaBancariaPersonas"
+										listener="#{beanDevolucionCuentaCupo.guardarTransaccionTitularCuentaBancaria(CampoConfiguracion.TITULAR_TIPO_DOCUMENTO_DEVOLUCION_CUENTA_CUPO.getIs_nombreCampo(),beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_tipoDocumentoTitularCuentaBancaria)}" />
+									<f:selectItem itemValue=""
+										itemLabel="#{txt['label.SeleccioneComboBox']}" />
+									<f:selectItems
+										value="#{beanDevolucionCuentaCupo.iltd_tiposDocumento}"
+										var="tipoDocumento" itemValue="#{tipoDocumento.getIs_id()}"
+										itemLabel="#{tipoDocumento.getIs_nombre()}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral"
+									for="labelTipoDocumentoTitularCuentaBancaria" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.TipoDocumento']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="tipoDocumentoTitularCuentaBancaria" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelNumeroDocumentoTitularCuentaBancaria"
+									styleClass="label-form"
+									for="numeroDocumentoTitularCuentaBancaria"
+									value="#{txt_devoluciones['label.NumeroDocumento']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:inputText id="numeroDocumentoTitularCuentaBancaria"
+									onkeypress="if (event.keyCode == 13){return false;}"
+									autocomplete="off"
+									styleClass="text-input border-completo mask-Numeric"
+									maxlength="20"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_devoluciones['placeholder.NumeroDocumento']}"
+									required="true"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_numeroDocumentoTitularCuentaBancaria}">
+									<p:keyFilter regEx="/[0-9]/i" />
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:numeroDocumentoTitularPrevisualizar"
+										listener="#{beanDevolucionCuentaCupo.guardarTransaccion(CampoConfiguracion.TITULAR_NUMERO_DOCUMENTO_DEVOLUCION_CUENTA_CUPO.getIs_nombreCampo(),beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_numeroDocumentoTitularCuentaBancaria)}" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral"
+									for="labelNumeroDocumentoTitularCuentaBancaria" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.NumeroDocumento']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="numeroDocumentoTitularCuentaBancaria" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<!-- Campo persona Natural y Juridical -->
+						<p:outputPanel id="formularioCuentaBancariaPersonas">
+							<ui:fragment
+								rendered="#{beanDevolucionCuentaCupo.ib_camposCuentaBancaria}">
+								<!-- Cuenta Bancaria Persona Natural -->
+								<p:outputPanel id="formularioCuentaBancariaPersonaNatural"
+									rendered="#{beanDevolucionCuentaCupo.ib_datosBasicosCuentaBancaria}">
+									<div class="row">
+										<div class="col-xs-12 col-sm-3">
+											<p:outputLabel id="labelNombreTitular"
+												styleClass="label-form" for="nombreTitular"
+												value="#{txt_devoluciones['label.NombreTitular']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											<p:inputText id="nombreTitular"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_devoluciones['placeholder.NombreTitular']}"
+												required="true"
+												value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_nombreTitularCuentaBancaria}">
+												<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:nombreTitularPrevisualizar"
+													listener="#{beanDevolucionCuentaCupo.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_PRIMER_NOMBRE_CUENTA_CUPO.getIs_nombreCampo(),beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_nombreTitularCuentaBancaria)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelNombreTitular"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_devoluciones['tooltip.NombreTitular']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="nombreTitular" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-sm-3">
+											<p:outputLabel id="labelSegundoNombreTitular"
+												styleClass="label-form" for="segundoNombreTitular"
+												value="#{txt_devoluciones['label.SegundoNombreTitular']}" />
+											<p:inputText id="segundoNombreTitular"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30"
+												placeholder="#{txt_devoluciones['placeholder.SegundoNombreTitular']}"
+												value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_segundoNombreTitularCuentaBancaria}">
+												<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:segundoNombreTitularPrevisualizar"
+													listener="#{beanDevolucionCuentaCupo.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_SEGUNDO_NOMBRE_CUENTA_CUPO.getIs_nombreCampo(),beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_segundoNombreTitularCuentaBancaria)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelSegundoNombreTitular"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_devoluciones['tooltip.SegundoNombreTitular']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="segundoNombreTitular" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-sm-3">
+											<p:outputLabel id="labelApellidoTitular"
+												styleClass="label-form" for="apellidoTitular"
+												value="#{txt_devoluciones['label.ApellidoTitular']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											<p:inputText id="apellidoTitular"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_devoluciones['placeholder.ApellidoTitular']}"
+												required="true"
+												value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_apellidoTitularCuentaBancaria}">
+												<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:apellidoTitularPrevisualizar"
+													listener="#{beanDevolucionCuentaCupo.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_PRIMER_APELLIDO_CUENTA_CUPO.getIs_nombreCampo(),beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_apellidoTitularCuentaBancaria)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelApellidoTitular"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_devoluciones['tooltip.ApellidoTitular']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="apellidoTitular" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-sm-3">
+											<p:outputLabel id="labelSegundoApellidoTitular"
+												styleClass="label-form" for="segundoApellidoTitular"
+												value="#{txt_devoluciones['label.SegundoApellidoTitular']}" />
+											<p:inputText id="segundoApellidoTitular"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30"
+												placeholder="#{txt_devoluciones['placeholder.SegundoApellidoTitular']}"
+												value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_segundoApellidoTitularCuentaBancaria}">
+												<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:segundoApellidoTitularPrevisualizar"
+													listener="#{beanDevolucionCuentaCupo.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_SEGUNDO_APELLIDO_CUENTA_CUPO.getIs_nombreCampo(),beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_segundoApellidoTitularCuentaBancaria)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral"
+												for="labelSegundoApellidoTitular" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_devoluciones['tooltip.SegundoApellidoTitular']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="segundoApellidoTitular" />
+											</span>
+										</div>
+									</div>
+								</p:outputPanel>
+								<!-- Cuenta Bancaria Persona Juridica -->
+								<p:outputPanel id="formularioCuentaBancariaPersonaJuridica"
+									rendered="#{!beanDevolucionCuentaCupo.ib_datosBasicosCuentaBancaria}">
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel id="labelRazonSocialCuentaBancaria"
+												styleClass="label-form" for="razonSocialCuentaBancaria"
+												value="#{txt_devoluciones['label.RazonSocial']}" />
+											<p:inputText id="razonSocialCuentaBancaria"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30" placeholder="Razon social"
+												value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_titularCuentaBancariaRazonSocial}">
+
+												<p:keyFilter regEx="/[a-z\A-Z\0-9\.\s]/i" />
+
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:razonSocialCuentaBancariaPrevisualizar"
+													listener="#{beanDevolucionCuentaCupo.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_RAZON_SOCIAL_CUENTA_CUPO.getIs_nombreCampo(),beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_titularCuentaBancariaRazonSocial)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral"
+												for="labelRazonSocialCuentaBancaria" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_devoluciones['tooltip.RazonSocial']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="razonSocialCuentaBancaria" />
+											</span>
+										</div>
+									</div>
+								</p:outputPanel>
+							</ui:fragment>
+						</p:outputPanel>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel id="labelMotivoSolicitud" styleClass="label-form"
+								for="motivoSolicitud"
+								value="#{txt_devoluciones['label.MotivoSolicitud']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:inputTextarea id="motivoSolicitud" rows="6" cols="40"
+									styleClass="mask-AlphaNumChars2"
+									counter="mostrarContadorMotivoSolicitud" maxlength="1000"
+									placeholder="#{txt_devoluciones['placeholder.MotivoSolicitud']}"
+									counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+									autoResize="false"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_motivoSolicitud}">
+									<p:keyFilter regEx="/[0-9\A-Z\a-z\s\,\.]/i" />
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:motivoDevolucionPrevisualizar"
+										listener="#{beanDevolucionCuentaCupo.guardarTransaccion(CampoConfiguracion.MOTIVO_SOLICITUD_DEVOLUCION_CUENTA_CUPO.getIs_nombreCampo(),beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_motivoSolicitud)}" />
+								</p:inputTextarea>
+								<br />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="motivoSolicitud" position="top">
+									<div>
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.MotivoSolicitud']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<h:outputText id="mostrarContadorMotivoSolicitud" />
+							<span class="help-block"> <p:message for="motivoSolicitud" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<br />
+					<p:separator />
+					<br />
+					<div class="row">
+						<div class="col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-4">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_devoluciones['boton.Previsualizar']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();">
+								<p:ajax listener="#{beanDevolucionCuentaCupo.previsualizarPdf}"
+									update="formModalPrevisualizarPdf" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_devoluciones['boton.CargarDocumentos']}">
+								<p:ajax
+									listener="#{beanDevolucionCuentaCupo.validarGenerarNir()}"
+									onstart="cargarKeyfilters();"
+									oncomplete="if(args &amp;&amp; args.validationFailed) validarFormulario('#{txt_devoluciones['campos.obligatorios']}');"
+									update="panelFormularioDevolucionCuentaCupo"
+									process="formFormularioDevolucionCuentaCupo" />
+							</p:commandButton>
+						</div>
+					</div>
+					<br />
+				</h:form>
+			</p:outputPanel>
+			<!-- Cargue de documentos devolucion consignacion errada -->
+			<p:outputPanel id="cargueDocumentosDevolucionCuentaCupo"
+				rendered="#{beanDevolucionCuentaCupo.ii_seccion == 1}"
+				styleClass="panel-content no-border">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelAdjuntarDocumentos"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_devoluciones['label.AdjuntarDocumentos']}" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="col-xs-12 text-center">
+					<p:outputLabel id="labelDescargarFormularioCC"
+						styleClass="text-center tamano-subtitulo"
+						value="#{txt_devoluciones['label.DescargarDocumento']}" />
+					<p:commandButton styleClass="boton-descarga fa fa-download"
+						onstart="PF('blockUI-Loading').show();"
+						oncomplete="PF('blockUI-Loading').hide();" title=" ">
+						<p:ajax listener="#{beanDevolucionCuentaCupo.desactivarPdf}" />
+					</p:commandButton>
+					<br /> <br />
+				</div>
+				<p:outputPanel id="cargaDeDocumentos" class="adjuntar-documentos">
+					<div class="col-xs-12">
+						<p:dataTable var="cargaDocumentosDevolucionCuentaCupo"
+							styleClass="centrar"
+							widgetVar="paramsCargaDocumentosDevolucionCuentaCupo"
+							id="cargarDocumento" reflow="true" rowIndexVar="index"
+							value="#{beanDevolucionCuentaCupo.ilcdf_listaDocumentoFormularioDto}"
+							emptyMessage="#{txt_administrador['tabla.vacia.PJ']}"
+							stickyHeader="false">
+							<p:column
+								headerText="#{txt_devoluciones['header.DocumentosSolicitados']}"
+								styleClass="centrar45 documento-medio">
+								<h:outputText
+									value="#{cargaDocumentosDevolucionCuentaCupo.icd_catalogoDocumentoDto.is_nombre}" />
+							</p:column>
+							<p:column headerText="Adjuntar"
+								styleClass="centrar35 documento-medio">
+								<div class="ui-inputgroup">
+									<h:form>
+										<p:fileUpload
+											id="certificado${cargaDocumentosDevolucionCuentaCupo.icd_catalogoDocumentoDto.is_nombre}"
+											styleClass="cargar-archivo" showButtons="false"
+											sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+											allowTypes="/(\.|\/)(pdf|PDF)$/"
+											disabled="#{cargaDocumentosDevolucionCuentaCupo.ib_desactivarBotonesCarga}"
+											fileUploadListener="#{beanDevolucionCuentaCupo.generarArchivoCargado}"
+											auto="true"
+											label="#{txt_devoluciones['boton.CargarArchivo']}"
+											process="@this" update="cargaDeDocumentos"
+											invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+											invalidFileMessage="#{txt_devoluciones['Mensaje.archivo.formatoInvalido']}">
+											<f:attribute name="foo"
+												value="${cargaDocumentosDevolucionCuentaCupo}" />
+											<div class="col-xs-12 tamano-examinar">
+												<br />
+												<h:outputText id="textoSalidaArchivo"
+													styleClass="text-input"
+													value="#{cargaDocumentosDevolucionCuentaCupo.ia_archivoDto.is_nombreArchivo}" />
+											</div>
+										</p:fileUpload>
+									</h:form>
+								</div>
+							</p:column>
+							<p:column
+								headerText="#{txt_devoluciones['header.CargarArchivos']}"
+								styleClass="centrarEnviado">
+								<p:commandButton value="#{txt_devoluciones['boton.Subir']}"
+									disabled="#{cargaDocumentosDevolucionCuentaCupo.ib_desactivarBotonesCarga}"
+									styleClass="btn-gradiente btn-rojo">
+									<p:ajax oncomplete="PF('confirmarCargueDocumento').show();"
+										update="panelFormularioDevolucionCuentaCupo"
+										process="formFormularioDevolucionCuentaCupo" />
+									<f:setPropertyActionListener
+										value="#{cargaDocumentosDevolucionCuentaCupo}"
+										target="#{beanDevolucionCuentaCupo.icdf_cargaDocumentosFormularioDto}" />
+								</p:commandButton>
+							</p:column>
+							<p:column headerText="#{txt_devoluciones['header.Estado']}"
+								styleClass="centrarEnviado documento-medio">
+								<p:outputPanel
+									rendered="#{cargaDocumentosDevolucionCuentaCupo.ib_desactivarBotonesCarga}">
+									<p:graphicImage name="/iconos/check-verde.png" />
+									<br />
+									<h:outputText
+										value="#{txt_devoluciones['Mensaje.archivoSubido']}" />
+								</p:outputPanel>
+							</p:column>
+						</p:dataTable>
+						<br /> <br />
+					</div>
+					<br />
+					<p:outputPanel id="panelEnviarSolicitud">
+						<h:form id="cargueDocumento">
+							<br />
+							<div class="row">
+								<div class="col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-4">
+									<p:commandButton icon="icon-flecha-gris" iconPos="right"
+										type="submit" styleClass="icon-btn btn-gris "
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();"
+										value="#{txt_devoluciones['boton.Eliminar']}">
+										<p:ajax update="panelFormularioDevolucionCuentaCupo"
+											oncomplete="PF('eliminarTransaccionDevolucionCuentaCupo').show();" />
+									</p:commandButton>
+								</div>
+								<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+									<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+										type="submit" onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();"
+										styleClass="btn-gradiente icon-btn btn-rojo "
+										value="#{txt_devoluciones['boton.EnviarSolicitud']}">
+										<p:ajax process="@form @all"
+											listener="#{beanDevolucionCuentaCupo.validarCamposEnviarSolicitud()}" />
+									</p:commandButton>
+								</div>
+							</div>
+						</h:form>
+					</p:outputPanel>
+				</p:outputPanel>
+			</p:outputPanel>
+			<!-- Resumen solicitud devolucion cuenta cupo -->
+			<p:outputPanel id="resumenSolicitudExitosa"
+				rendered="#{beanDevolucionCuentaCupo.ii_seccion == 2}">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelResumenSolicitudExitosa"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_devoluciones['FormularioResumenCuentaCupo']}" />
+							<br /> <br />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="solicitudExitosa" styleClass="tamano-subtitulo"
+						value="#{txt_devoluciones['Mensaje.RealizadoSolicitudDevolucionCuentaCupo']}" />
+					<br /> <br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelFechaSolicitudExitosa"
+									styleClass="label-form" for="fechaSolicitudExitosa"
+									value="#{txt_devoluciones['label.FechaDiligenciamiento']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionCuentaCupo.itf_transaccionFormularioDto.id_fechaCreacion}"
+									id="fechaSolicitudExitosa">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelNirSolicitudExitosa"
+									styleClass="label-form" for="nirSolicitudExitosa"
+									value="#{txt_devoluciones['label.Nir']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionCuentaCupo.itf_transaccionFormularioDto.is_nir}"
+									id="nirSolicitudExitosa" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudExitosa"
+									styleClass="label-form" for="estadoSolicitudExitosa"
+									value="#{txt_devoluciones['label.Estado']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionCuentaCupo.itf_transaccionFormularioDto.is_estadoTransaccion}"
+									id="estadoSolicitudExitosa" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudExitosa" />
+								</span>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<br /> <br />
+						<p:outputPanel id="entendido">
+							<p:commandButton type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo"
+								value="#{txt_devoluciones['boton.Aceptar']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</p:outputPanel>
+
+			<!-- Resumen solicitud pendiente devolucion cuenta cupo -->
+			<p:outputPanel id="resumenSolicitudPendiente"
+				rendered="#{beanDevolucionCuentaCupo.ii_seccion == 3}">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelResumenSolicitudPendiente"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_devoluciones['FormularioResumenCuentaCupo']}" />
+							<br /> <br />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="solicitudPendiente"
+						styleClass="tamano-subtitulo"
+						value="#{txt_devoluciones['Mensaje.SolicitudDevolucionCuentaCupo']}" />
+					<br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelFechaSolicitudPendiente"
+									styleClass="label-form" for="fechaSolicitudPendiente"
+									value="#{txt_devoluciones['label.FechaDiligenciamiento']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionCuentaCupo.getItf_transaccionFormularioDto().getId_fechaCreacion()}"
+									id="fechaSolicitudPendiente">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelNirSolicitudPendiente"
+									styleClass="label-form" for="nirSolicitudPendiente"
+									value="#{txt_devoluciones['label.Nir']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionCuentaCupo.itf_transaccionFormularioDto.is_nir}"
+									id="nirSolicitudPendiente" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudPendiente"
+									styleClass="label-form" for="estadoSolicitudPendiente"
+									value="#{txt_devoluciones['label.Estado']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionCuentaCupo.itf_transaccionFormularioDto.is_estadoTransaccion}"
+									id="estadoSolicitudPendiente" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudPendiente" />
+								</span>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-4">
+						<br /> <br />
+						<p:outputPanel id="entendidoPendiente">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_devoluciones['boton.Aceptar']}"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</p:outputPanel>
+		</p:panel>
+
+		<!-- Modal de transaccion Aprobada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="devolucionCuentaCupoAprobada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.redireccion']}" />
+			<ui:param name="formulario"
+				value="formModalDevolcionCuentaCupoAprobada" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12">
+					<br />
+					<p:outputLabel id="solicitudAprobada"
+						value="#{txt_devoluciones['Mensaje.SolicitudAprobada']}" />
+					<br />
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="estadoSolicitudes"
+						value="#{txt_devoluciones['ayuda.estadosDevolucionCuentaCupo']}" />
+					<br /> <br /> <br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudAprobada"
+									styleClass="label-form" for="estadoSolicitudAprobada"
+									value="#{txt_devoluciones['label.Estado']}" />
+							</p:column>
+							<p:column styleClass="text-center">
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionCuentaCupo.is_estadoDevolucionCuentaCupo}"
+									id="estadoSolicitudAprobada" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudAprobada" />
+								</span>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelIdSolicitudAprobada"
+									styleClass="label-form" for="idSolicitudAprobada"
+									value="#{txt_devoluciones['label.IdCuentaCupo']}" />
+							</p:column>
+							<p:column styleClass="text-center">
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionCuentaCupo.is_idDevolucionCuentaCupo}"
+									id="idSolicitudAprobada" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="col-xs-12">
+					<br />
+					<p:outputLabel id="solicitudRecarga"
+						value="#{txt_devoluciones['Mensaje.SolicitudAprobada1']}" />
+					<br /> <br />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:outputPanel id="entendidoAprobada">
+							<p:commandButton immediate="true" type="submit"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_devoluciones['boton.ConsultarSaldo']}"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de transaccion Encontrada Devolucion cuenta cupo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId"
+				value="transaccionEncontradaDevolucionCuentaCupo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalTransaccionEncontradaDevolucionCuentaCupo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_devoluciones['wizard.modal.transaccion.retormar']}" />
+						<br /> <br />
+						<h:outputText
+							value="#{txt_devoluciones['wizard.modal.transaccion.retormar1']}" />
+						<br />
+						<h:outputText
+							value="#{txt_devoluciones['wizard.modal.transaccion.retormar2']}" />
+						<br /> <br />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-md-6">
+						<p:outputPanel id="botonDescartar">
+							<p:commandButton styleClass="btn-gris"
+								value="#{txt['boton.Cancelar.Upper']}">
+								<p:confirm header="#{txt_minuta['modal.confirmarQuitar']}"
+									message="#{txt_devoluciones['Mensaje.SeguroEliminar']}" />
+							</p:commandButton>
+						</p:outputPanel>
+						<p:confirmDialog styleClass="box-solid box-danger cerrarModal"
+							global="true" showEffect="fade" hideEffect="fade"
+							responsive="true">
+							<div class="row">
+								<div class="col-xs-5 col-xs-offset-1">
+									<p:commandButton immediate="true"
+										styleClass="ui-confirmdialog-no pull-right btn-gris"
+										value="#{txt['boton.Cancelar.Upper']}">
+										<p:ajax onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('blockUI-Loading').hide();PF('transaccionEncontradaDevolucionCuentaCupo').hide();" />
+									</p:commandButton>
+								</div>
+								<div class="col-xs-5 col-xs-offset-0">
+									<p:commandButton
+										styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left boton-iz"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('transaccionEncontradaDevolucionCuentaCupo').hide();PF('blockUI-Loading').hide();irArriba()"
+										value="#{txt_devoluciones['boton.Aceptar']}"
+										action="/pages/admon/cuentaCupo/devolucionCuentaCupo.jsf?faces-redirect=true">
+										<f:ajax
+											listener="#{beanDevolucionCuentaCupo.limpiarFormulario()}"
+											oncomplete="PF('transaccionEncontradaDevolucionCuentaCupo').hide();" />
+									</p:commandButton>
+								</div>
+							</div>
+						</p:confirmDialog>
+					</div>
+					<div class="col-md-6">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_devoluciones['boton.Aceptar']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();irArriba()"
+							update="panelFormularioDevolucionCuentaCupo">
+							<p:ajax listener="#{beanDevolucionCuentaCupo.cargarFormulario()}"
+								oncomplete="PF('transaccionEncontradaDevolucionCuentaCupo').hide(); cargarKeyfilters();" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de Gegenerar Nir Devolucion cuenta cupo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="generarNirDevolucionCuentaCupo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalGenerarNirDevolucionCuentaCupo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_devoluciones['Mensaje.DevolucionConsignacionErradaFormulario']}" />
+						<br /> <br />
+						<h:outputText
+							value="#{txt_devoluciones['Mensaje.DevolucionConsignacionErradaFormulario1']}" />
+						<br /> <br />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="pull-right btn-gris"
+								value="#{txt['boton.Cancelar.Upper']}">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();PF('generarNirDevolucionCuentaCupo').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+								value="#{txt_devoluciones['boton.Aceptar']}"
+								update="panelFormularioDevolucionCuentaCupo">
+								<p:ajax listener="#{beanDevolucionCuentaCupo.generarNir()}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('generarNirDevolucionCuentaCupo').hide();PF('blockUI-Loading').hide();irArriba()" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de eliminar transaccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId"
+				value="eliminarTransaccionDevolucionCuentaCupo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalEliminarTransaccionDevolucionCuentaCupo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_devoluciones['Mensaje.SeguroEliminar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="pull-right btn-gris"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								value="#{txt['boton.Cancelar.Upper']}">
+								<p:ajax
+									oncomplete="PF('eliminarTransaccionDevolucionCuentaCupo').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								value="#{txt_devoluciones['boton.Aceptar']}"
+								update="panelFormularioDevolucionCuentaCupo">
+								<f:ajax
+									listener="#{beanDevolucionCuentaCupo.eliminarTransaccion()}"
+									oncomplete="PF('eliminarTransaccionDevolucionCuentaCupo').hide();irArriba()" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de enviar solicitud -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="enviarSolicitudDevolucionCuentaCupo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalEnviarSolicitudDevolucionCuentaCupo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_devoluciones['Mensaje.EnvioSolicitudCuentaCupo']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_minuta['boton.cancelar.upper']}"
+								oncomplete="PF('enviarSolicitudDevolucionCuentaCupo').hide();">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton
+								styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+								value="#{txt_devoluciones['boton.Aceptar']}"
+								oncomplete="enviarSolicitudDevolucionCuentaCupo">
+								<p:ajax listener="#{beanDevolucionCuentaCupo.enviarSolicitud()}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									update="formFormularioDevolucionCuentaCupo" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al cargar Documentos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarCargueDocumento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmarCargueDocumento" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_devoluciones['Mensaje.SubirArchivo']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt['boton.Cancelar.Upper']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton
+								disabled="#{cargaDocumentosDevolucionCuentaCupo.ib_desactivarBotonesCarga}"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_devoluciones['boton.Aceptar']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+								<p:ajax
+									listener="#{beanDevolucionCuentaCupo.servicioCargarArchivos(beanDevolucionCuentaCupo.icdf_cargaDocumentosFormularioDto)}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									update="panelFormularioDevolucionCuentaCupo" />
+								<f:attribute name="foo"
+									value="${cargaDocumentosDevolucionCuentaCupo}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal cuenta cupo no existe -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="cuentaCupoNoExiste" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.redireccion']}" />
+			<ui:param name="formulario" value="formModalCuentaCupoNoExiste" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12">
+					<br />
+					<p:outputLabel id="solicitudNoExiste"
+						value="#{txt_cuentaCupo['Mensaje.NoCuentaCupo']}" />
+					<br />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton immediate="true"
+							styleClass="ui-confirmdialog-no pull-right btn-gris"
+							value="#{txt_cuentaCupo['boton.volver']}"
+							action="/pages/personas/inicio.jsf?faces-redirect=true" />
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:outputPanel id="entendidoNoExiste">
+							<p:commandButton type="submit"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_cuentaCupo['boton.Redirigir']}"
+								action="/pages/admon/cuentaCupo/crearCuentaCupo.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de Creacion Cuenta Cupo En Tramite -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="creacionCuentaCupoEnTramite" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario"
+				value="formModalCreacionCuentaCupoEnTramite" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="solicitudPendiente"
+						value="#{txt_cuentaCupo['Mensaje.SolicitudCreacionCuentaCupoRadicada']}" />
+					<br />
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="estadoSolicitudes"
+						value="#{txt_cuentaCupo['ayuda.estadosCuentaCupo']}" />
+					<br /> <br /> <br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel
+									id="labelFechaSolicitudCreacionCuentaCupoEnTramite"
+									styleClass="label-form"
+									for="fechaSolicitudCreacionCuentaCupoEnTramite"
+									value="#{txt_cuentaCupo['label.Fecha']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionCuentaCupo.id_fechaSolicitud}"
+									id="fechaSolicitudCreacionCuentaCupoEnTramite">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelNirSolicitudCreacionCuentaCupoEnTramite"
+									styleClass="label-form"
+									for="nirSolicitudCreacionCuentaCupoEnTramite"
+									value="#{txt_cuentaCupo['label.Nir']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionCuentaCupo.is_nirSolicitud}"
+									id="nirSolicitudCreacionCuentaCupoEnTramite" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel
+									id="labelEstadoSolicitudCreacionCuentaCupoEnTramite"
+									styleClass="label-form"
+									for="estadoSolicitudCreacionCuentaCupoEnTramite"
+									value="#{txt_cuentaCupo['label.Estado']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionCuentaCupo.is_estadoSolicitud}"
+									id="estadoSolicitudCreacionCuentaCupoEnTramite" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudCreacionCuentaCupoEnTramite" />
+								</span>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<p:outputPanel id="entendidoCreacionCuentaCupoEnTramite">
+							<p:commandButton type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_cuentaCupo['Modal.Boton.Entendido']}"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal cuenta cupo sin recarga -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="cuentaCupoSinRecarga" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalCuentaCupoSinRecarga" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12">
+					<p:outputLabel id="solicitudSinRecarga"
+						value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_mensaje}" />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<p:outputPanel id="entendidoSinRecarga">
+							<p:commandButton type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo"
+								value="#{txt_cuentaCupo['Modal.Boton.Entendido']}"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		
+		<!-- Modal De vigencia de fecha nota credito -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="vigenciaNotacredito" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalVigenciaNotacredito" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{beanDevolucionCuentaCupo.is_mensajeVigenciaNotaCredito}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<p:outputPanel id="VigenciaFecha">
+							<p:commandButton type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_cuentaCupo['Modal.Boton.Entendido']}"
+								oncomplete="PF('vigenciaNotacredito').hide();">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		
+		<!-- Modal De vigencia de fecha nota credito -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="consultarCancelacionCuentaCupo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalconsultarCancelacionCuentaCupo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{beanDevolucionCuentaCupo.is_mensajeCancelacionCuentaCupo}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<p:outputPanel id="VigenciaFecha">
+							<p:commandButton type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_cuentaCupo['Modal.Boton.Entendido']}"
+								oncomplete="PF('consultarCancelacionCuentaCupo').hide();">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de Previsualizar PDF -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="previsualizarPdf" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalPrevisualizarPdf" />
+			<ui:define name="body-modal">
+				<div class="text-center">
+					<div id="container_logos_pp">
+						<div class="col-xs-12">
+							<div class="col-xs-4 pad-top1">
+								<a href="#" id="ministerio-justicia"><img
+									src="#{resource['img/dinamicas/minjusticialogo.png']}"
+									class="imagenes" alt="" /></a>
+							</div>
+							<div class="col-xs-4 pad-top">
+								<a href="#" id="logo-snr-60"><img
+									src="#{resource['img/dinamicas/logo-snr-60-pdf.png']}"
+									class="imagenes" alt="" /></a>
+							</div>
+							<div class="col-xs-4">
+								<a href="#" id="logonuevopais"><img
+									src="#{resource['img/dinamicas/logonuevopais.png']}"
+									class="imagenes1" alt="" /></a> <br /> <br />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelTituloSuperNotariado"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_devoluciones['SuperintendenciaNotariadoRegistro']}" />
+						</div>
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelTituloFormularioDevolucion"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_devoluciones['devolucion.cuenta.cupo.titulo.formulario']}" />
+						</div>
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelTituloTramitesLinea"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_devoluciones['FormularioDevoluciones.tramitesLinea']}" />
+							<br /> <br />
+						</div>
+						<div class="row text-left pad-left">
+							<div class="row">
+								<div class="col-xs-12 text-left">
+									<div class="col-xs-12 col-md-6">
+										<p:outputLabel>*</p:outputLabel>
+										<p:outputLabel id="labelFechaDiligenciamiento"
+											for="fechaDiligenciamiento"
+											value="#{txt_devoluciones['label.FechaDiligenciamiento']}" />
+										<p:outputLabel>:</p:outputLabel>
+										<p:outputLabel value="-" styleClass="espacio" />
+										<h:outputText id="fechaDiligenciamiento" readonly="true"
+											value="#{beanDevolucionCuentaCupo.obtenerFecha()}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</div>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="col-xs-12 text-center">
+							<p:outputLabel
+								value="#{txt_devoluciones['FormularioDevoluciones.SubtituloUno']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br /> <br />
+					</div>
+					<div class="row text-left pad-left">
+						<div class="row">
+							<!-- Tipo Documento representante legal -->
+							<div class="col-xs-12 col-sm-6 text-left">
+								<p:outputLabel id="labelTipoDocumentoRepresentantePrevisualizar"
+									for="tipoDocumentoRepresentantePrevisualizar"
+									value="#{txt_devoluciones['label.tipo.documento.representante']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="tipoDocumentoRepresentantePrevisualizar"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_tipoDocumentoRepresentanteLegal}">
+								</h:outputText>
+							</div>
+							<!-- Numero documento representante legal -->
+							<div class="col-xs-12 col-sm-6 text-left">
+								<p:outputLabel
+									id="labelNumeroDocumentoRepresentantePrevisualizar"
+									for="numeroDocumentoRepresentantePrevisualizar"
+									value="#{txt_devoluciones['label.numero.documento.representante']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="numeroDocumentoRepresentantePrevisualizar"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_numeroDocumentoRepresentanteLegal}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="row">
+							<!-- Representante Legal -->
+							<div class="col-xs-12 text-left">
+								<p:outputLabel id="labelRepresentanteLegalPrevisualizar"
+									for="representanteLegalPrevisualizar"
+									value="#{txt_persona['label.RepresentanteLegal']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="representanteLegalPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.getNombreRepresentanteLegal()}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="row">
+							<!-- Tipo de Documento -->
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelTipoDocumentoPrevisualizar"
+									for="tipoDocumentoPrevisualizar"
+									value="#{txt_persona['label.TipoDocumento']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="tipoDocumentoPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+								</h:outputText>
+							</div>
+							<!-- Numero de documento -->
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelNumeroDocumentoPrevisualizar"
+									for="numeroDocumentoPrevisualizar"
+									value="#{txt_devoluciones['label.NumeroDocumento']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="numeroDocumentoPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+								</h:outputText>
+							</div>
+							<!-- Razon social -->
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelRazonSocialPrevisualizar"
+									for="razonSocialPrevisualizar"
+									value="#{txt_persona['label.RazonSocial']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="razonSocialPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.is_razonSocial}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="row">
+							<!-- Direccion -->
+							<div class="col-xs-12 text-left">
+								<p:outputLabel id="labelDireccionCompletaPrevisualizar"
+									for="direccionCompletaPrevisualizar"
+									value="#{txt_devoluciones['label.Direccion']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="direccionCompletaPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.mostrarDireccionCompleta()}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="row">
+							<!-- Telefono Fijo -->
+							<div class="col-xs-12 col-sm-3 text-left">
+								<p:outputLabel id="labelTelefonoPrevisualizar"
+									for="telefonoFijoPrevisualizar"
+									value="#{txt_persona['label.TelefonoFijo']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="telefonoFijoPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.is_telefono}">
+								</h:outputText>
+							</div>
+							<!-- Celular -->
+							<div class="col-xs-12 col-sm-3 text-left">
+								<p:outputLabel id="labelCelularPrevisualizar"
+									for="celularPrevisualizar"
+									value="#{txt_persona['label.NumeroCelular']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="celularPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.iu_usuarioDto.is_celular}">
+								</h:outputText>
+							</div>
+							<!-- Correo Electronico -->
+							<div class="col-xs-12 col-sm-6 text-left">
+								<p:outputLabel id="labelCorreoPrevisualizar"
+									for="correoPrevisualizar"
+									value="#{txt_persona['label.CorreoElectronico']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="correoPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.iu_usuarioDto.is_correoElectronico}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<p:separator />
+					<div class="col-xs-12 text-center">
+						<p:outputLabel
+							value="#{txt_devoluciones['devolucion.cuenta.cupos.solicitud.devolucion']}"
+							styleClass="titulo tamano-subtitulo" />
+						<br /> <br />
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="row">
+							<!-- Devolucion -->
+							<div class="col-xs-12 col-sm-6 text-left">
+								<p:outputLabel id="labelDevolucionPrevisualizar"
+									for="devolucionPrevisualizar"
+									value="#{txt_devoluciones['label.devolucion']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="devolucionPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_tipoDevolucion}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<p:outputPanel id="formularioTipoDevolucion">
+						<ui:fragment
+							rendered="#{beanDevolucionCuentaCupo.ib_tipoDevolucion}">
+							<!-- Cuenta Bancaria Persona Natural -->
+							<p:outputPanel id="seleccionNotaCredito" class="tablas"
+								rendered="#{beanDevolucionCuentaCupo.ib_devolucionTipo}">
+								<div class="col-xs-11 text-center">
+									<p:outputLabel
+										value="#{txt_devoluciones['titulo.notaCredito']}"
+										styleClass="titulo tamano-subtitulo" />
+									<br /> <br />
+								</div>
+								<div class="col-xs-12">
+									<p:dataTable styleClass="tablaCertificados"
+										id="tablaSeleccionNotaCredito"
+										widgetVar="consultaSeleccionNotaCredito" reflow="true"
+										emptyMessage="#{txt_registral['tabla.registro.vacia']}"
+										value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.ilncdcc_listaNotaCredito}"
+										var="notaCredito" stickyHeader="false">
+										<p:column
+											headerText="#{txt_devoluciones['label.numero.notaCredito']}">
+											<h:outputText id="noNotaCredito"
+												value="#{notaCredito.is_notaCredito}" />
+										</p:column>
+										<p:column headerText="#{txt_devoluciones['label.fecha']}">
+											<h:outputText value="#{notaCredito.id_fechaMovimiento}" />
+										</p:column>
+										<p:column headerText="#{txt_devoluciones['label.recarga']}">
+											<h:outputText value="#{notaCredito.is_valorConsumo}"
+												id="valorConsumo" />
+										</p:column>
+										<p:column headerText="#{txt_devoluciones['label.saldo']}">
+											<h:outputText id="saldo"
+												value="#{notaCredito.is_saldoDisponible}" />
+										</p:column>
+									</p:dataTable>
+									<br /> <br />
+								</div>
+							</p:outputPanel>
+							<p:outputPanel id="seleccionCuentaCupoCancelada" class="tablas"
+								rendered="#{!beanDevolucionCuentaCupo.ib_devolucionTipo}">
+								<div class="col-xs-11 text-center">
+									<p:outputLabel value="#{txt_devoluciones['id.cuentaCupo']}"
+										styleClass="titulo tamano-subtitulo" />
+									<h:outputText id="idCuentaCupo"
+										value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_codigoCuentaCupo}" />
+									<br /> <br />
+								</div>
+								<div class="col-xs-12">
+									<p:dataTable styleClass="tablaCertificados"
+										id="tablaSeleccionCuentaCupoCancelada"
+										widgetVar="consultaSeleccionCuentaCupoCancelada" reflow="true"
+										emptyMessage="#{txt_registral['tabla.registro.vacia']}"
+										value="" var="registro" stickyHeader="false">
+										<p:column headerText="#{txt_devoluciones['label.saldo']}">
+											<h:outputText value="#{txt_devoluciones['label.cuentaCupo']}"
+												id="noCuentaCupo" />
+										</p:column>
+										<p:column headerText="#{txt_devoluciones['label.total']}">
+											<h:outputText
+												value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.ilncdcc_listaNotaCredito.is_saldoDisponible}"
+												id="tatalCancelacion" />
+										</p:column>
+									</p:dataTable>
+									<br /> <br />
+								</div>
+							</p:outputPanel>
+						</ui:fragment>
+					</p:outputPanel>
+					<br />
+					<p:separator />
+					<div class="col-xs-12 text-center">
+						<p:outputLabel
+							value="#{txt_devoluciones['InformacionCuentaBancaria.SubtituloCuatro']}"
+							styleClass="titulo tamano-subtitulo" />
+						<br /> <br />
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="row">
+							<!-- Entidad Financiera -->
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelEntidadFinancieraPrevisualizar"
+									for="entidadFinancieraPrevisualizar"
+									value="#{txt_devoluciones['label.EntidadFinanciera']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="entidadFinancieraPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_entidadFinanciera}">
+								</h:outputText>
+							</div>
+							<!-- Tipo de Cuenta -->
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelTipoCuentaPrevisualizar"
+									for="tipoCuentaPrevisualizar"
+									value="#{txt_devoluciones['label.TipoCuenta']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="tipoCuentaPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_tipoCuenta}">
+								</h:outputText>
+							</div>
+							<!-- Numero de cuenta -->
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelNumeroCuentaPrevisualizar"
+									for="numeroCuentaPrevisualizar"
+									value="#{txt_devoluciones['label.NumeroCuenta']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="numeroCuentaPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_numeroCuenta}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="row">
+							<!-- Tipo de Documento -->
+							<div class="col-xs-12 col-sm-6 text-left">
+								<p:outputLabel id="labelTipoDocumentoTitularPrevisualizar"
+									for="tipoDocumentoTitularPrevisualizar"
+									value="#{txt_devoluciones['label.TipoDocumento']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="tipoDocumentoTitularPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_tipoDocumentoTitularCuentaBancaria}">
+								</h:outputText>
+							</div>
+							<!-- Numero de documento -->
+							<div class="col-xs-12 col-sm-6 text-left">
+								<p:outputLabel id="labelNumeroDocumentoTitularPrevisualizar"
+									for="numeroDocumentoTitularPrevisualizar"
+									value="#{txt_devoluciones['label.NumeroDocumento']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="numeroDocumentoTitularPrevisualizar"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_numeroDocumentoTitularCuentaBancaria}">
+								</h:outputText>
+							</div>
+						</div>
+						<br />
+						<p:outputPanel id="formularioCuentaBancariaPersonas">
+							<ui:fragment
+								rendered="#{beanDevolucionCuentaCupo.ib_camposCuentaBancaria}">
+								<!-- Cuenta Bancaria Persona Natural -->
+								<p:outputPanel id="formularioCuentaBancariaPersonaNatural"
+									rendered="#{beanDevolucionCuentaCupo.ib_datosBasicosCuentaBancaria}">
+									<div class="row">
+										<div class="col-xs-12 col-sm-3 text-left">
+											<p:outputLabel id="labelNombreTitularPrevisualizar"
+												for="nombreTitularPrevisualizar"
+												value="#{txt_devoluciones['label.NombreTitular']}" />
+											<p:outputLabel>:</p:outputLabel>
+											<p:outputLabel value="-" styleClass="espacio" />
+											<h:outputText id="nombreTitularPrevisualizar"
+												value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_nombreTitularCuentaBancaria}">
+											</h:outputText>
+										</div>
+										<div class="col-xs-12 col-sm-3 text-left">
+											<p:outputLabel id="labelSegundoNombreTitularPrevisualizar"
+												for="segundoNombreTitularPrevisualizar"
+												value="#{txt_devoluciones['label.SegundoNombreTitular']}" />
+											<p:outputLabel>:</p:outputLabel>
+											<p:outputLabel value="-" styleClass="espacio" />
+											<h:outputText id="segundoNombreTitularPrevisualizar"
+												value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_segundoNombreTitularCuentaBancaria}">
+											</h:outputText>
+										</div>
+										<div class="col-xs-12 col-sm-3 text-left">
+											<p:outputLabel id="labelApellidoTitularPrevisualizar"
+												for="apellidoTitularPrevisualizar"
+												value="#{txt_devoluciones['label.ApellidoTitular']}" />
+											<p:outputLabel>:</p:outputLabel>
+											<p:outputLabel value="-" styleClass="espacio" />
+											<h:outputText id="apellidoTitularPrevisualizar"
+												value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_apellidoTitularCuentaBancaria}">
+											</h:outputText>
+										</div>
+										<div class="col-xs-12 col-sm-3 text-left">
+											<p:outputLabel id="labelSegundoApellidoTitularPrevisualizar"
+												for="segundoApellidoTitularPrevisualizar"
+												value="#{txt_devoluciones['label.SegundoApellidoTitular']}" />
+											<p:outputLabel>:</p:outputLabel>
+											<p:outputLabel value="-" styleClass="espacio" />
+											<h:outputText id="segundoApellidoTitularPrevisualizar"
+												value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_segundoApellidoTitularCuentaBancaria}">
+											</h:outputText>
+										</div>
+									</div>
+								</p:outputPanel>
+								<!-- Cuenta Bancaria Persona Juridica -->
+								<p:outputPanel id="formularioCuentaBancariaPersonaJuridica"
+									rendered="#{!beanDevolucionCuentaCupo.ib_datosBasicosCuentaBancaria}">
+									<div class="row">
+										<div class="col-xs-12 text-left">
+											<p:outputLabel
+												id="labelRazonSocialCuentaBancariaPrevisualizar"
+												for="razonSocialCuentaBancariaPrevisualizar"
+												value="#{txt_devoluciones['label.RazonSocial']}" />
+											<p:outputLabel>:</p:outputLabel>
+											<p:outputLabel value="-" styleClass="espacio" />
+											<h:outputText id="razonSocialCuentaBancariaPrevisualizar"
+												value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_titularCuentaBancariaRazonSocial}">
+											</h:outputText>
+										</div>
+									</div>
+								</p:outputPanel>
+							</ui:fragment>
+						</p:outputPanel>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="row">
+							<div class="col-xs-12 text-left">
+								<p:outputLabel id="labelMotivoDevolucionPrevisualizar"
+									for="motivoDevolucionPrevisualizar"
+									value="#{txt_devoluciones['label.MotivoSolicitud']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<p:inputTextarea id="motivoDevolucionPrevisualizar"
+									readonly="true" styleClass="borde-no"
+									value="#{beanDevolucionCuentaCupo.ifdcc_formularioDevolucionCuentaCupoDto.is_motivoSolicitud}" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-offset-1 col-sm-offset-1 col-xs-10 col-sm-7">
+							<br /> <br /> <br /> <br /> <br />
+							<p:separator styleClass="tamano-firma" />
+						</div>
+						<div
+							class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-3 text-center">
+							<h:outputText id="firma" class="fa fa-square-o fa-5x"
+								readonly="true">
+							</h:outputText>
+						</div>
+						<br />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel styleClass="titulo tamano-subtitulo"
+								value="#{txt_cuentaCupo['label.DeclaracionJuramentadaSiete']}" />
+							<br /> <br />
+						</div>
+					</div>
+					<br /> <br />
+					<div id="container_logos_footer" class="col-xs-12">
+						<div class="title">
+							<div class="img-left">
+								<a href="#" id="ministerio-justicia"><img
+									src="#{resource['img/dinamicas/iso.png']}" class="imagenes2"
+									alt="" /></a>
+							</div>
+							<div class="img-right">
+								<div>
+									<h:outputText
+										value="#{txt_cuentaCupo['info.Superintendencia']}" />
+								</div>
+								<div>
+									<h:outputText value="#{txt_cuentaCupo['info.direccion']}" />
+								</div>
+								<div>
+									<h:outputText value="#{txt_cuentaCupo['info.ciudad']}" />
+								</div>
+								<div>
+									<h:outputText value="#{txt_cuentaCupo['info.correo']}" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt_devoluciones['Boton.Entendido']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();">
+							<p:ajax oncomplete="PF('previsualizarPdf').hide();" />
+						</p:commandButton>
+					</div>
+				</div>
+				<br />
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

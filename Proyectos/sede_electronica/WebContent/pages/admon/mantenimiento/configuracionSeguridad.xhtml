@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-configuraSeguridad.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_configuracionSeguridad['titulo']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_configuracionSeguridad['banner.titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_configuracionSeguridad['banner.subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/mantenimiento/configuracionSeguridad.jsf" />
+		</ui:include>
+		<p:panel id="formMostrar" class="panel-content no-border row">
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<p:outputLabel class="tamano-titulo"
+						value="#{txt_configuracionSeguridad['subtitulo.clave']}" />
+					<br />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+					<p:outputLabel styleClass="label-form" id="claveVigencia"
+						for="vigenciaClave"
+						value="#{txt_configuracionSeguridad['label.VigenciaClave']}" />
+					<div class="dflex campo campo">
+						<ui:param name="vigenciaClave"
+							value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_vigenciaClave}"></ui:param>
+						<h:outputText value="#{vigenciaClave.is_valorUi}" />
+						<p:commandLink styleClass="fa fa-pencil colorLapiz">
+							<p:ajax
+								listener="#{beanConfiguracionSeguridad.setIpb_parametroBooleanoDto(vigenciaClave)}"
+								update="formActualizar" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();PF('actualizarParametros').show();cargarKeyfilters();" />
+						</p:commandLink>
+					</div>
+					<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+						for="claveVigencia" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_configuracionSeguridad['tooltip.VigenciaClave']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+					<h:outputLabel styleClass="label-form"
+						id="cantidadIntentosFallidosBloqueo"
+						for="cantidadIntentosFallidosBloqueoCuenta"
+						value="#{txt_configuracionSeguridad['label.CantidadIntentosBloqueo']}" />
+					<div class="dflex campo campo">
+						<ui:param name="cantidadIntentosFallidosBloqueoCuenta"
+							value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_cantidadIntentosFallidosBloqueoCuenta}"></ui:param>
+						<h:outputText
+							value="#{cantidadIntentosFallidosBloqueoCuenta.is_valorUi}" />
+						<p:commandLink styleClass="fa fa-pencil colorLapiz">
+							<p:ajax
+								listener="#{beanConfiguracionSeguridad.setIpb_parametroBooleanoDto(cantidadIntentosFallidosBloqueoCuenta)}"
+								update="formActualizar" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();PF('actualizarParametros').show();cargarKeyfilters();" />
+						</p:commandLink>
+					</div>
+					<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+						for="cantidadIntentosFallidosBloqueo" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_configuracionSeguridad['tooltip.CantidadIntentosBloqueo']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+					<h:outputLabel styleClass="label-form tresPuntos"
+						for="numeroClavesReutilizacion" id="clavesReutilizacion"
+						value="#{txt_configuracionSeguridad['label.NumeroClavesReutilizacion']}" />
+					<div class="dflex campo campo">
+						<ui:param name="numeroClavesReutilizacion"
+							value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_numeroClavesReutilizacion}"></ui:param>
+						<h:outputText value="#{numeroClavesReutilizacion.is_valorUi}" />
+						<p:commandLink styleClass="fa fa-pencil colorLapiz">
+							<p:ajax
+								listener="#{beanConfiguracionSeguridad.setIpb_parametroBooleanoDto(numeroClavesReutilizacion)}"
+								update="formActualizar" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();PF('actualizarParametros').show();cargarKeyfilters();" />
+						</p:commandLink>
+					</div>
+					<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+						for="clavesReutilizacion" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_configuracionSeguridad['tooltip.NumeroClavesReutilizacion']}" />
+						</div>
+					</p:tooltip>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+					<h:outputLabel styleClass="label-form" for="longitudMinimaClave"
+						id="longitudMinima"
+						value="#{txt_configuracionSeguridad['label.LongitudMinimaClave']}" />
+					<div class="dflex campo">
+						<ui:param name="longitudMinimaClave"
+							value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_longitudMinimaClave}"></ui:param>
+						<h:outputText value="#{longitudMinimaClave.is_valorUi}" />
+						<p:commandLink styleClass="fa fa-pencil colorLapiz">
+							<p:ajax
+								listener="#{beanConfiguracionSeguridad.setIpb_parametroBooleanoDto(longitudMinimaClave)}"
+								update="formActualizar" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();PF('actualizarParametros').show();cargarKeyfilters();" />
+						</p:commandLink>
+					</div>
+					<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+						for="longitudMinima" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_configuracionSeguridad['tooltip.LongitudMinimaClave']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+					<h:outputLabel styleClass="label-form" for="longitudMaximaClave"
+						id="longitudMaxima"
+						value="#{txt_configuracionSeguridad['label.LongitudMaximaClave']}" />
+					<div class="dflex campo">
+						<ui:param name="longitudMaximaClave"
+							value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_longitudMaximaClave}"></ui:param>
+						<h:outputText value="#{longitudMaximaClave.is_valorUi}" />
+						<p:commandLink styleClass="fa fa-pencil colorLapiz">
+							<p:ajax
+								listener="#{beanConfiguracionSeguridad.setIpb_parametroBooleanoDto(longitudMaximaClave)}"
+								update="formActualizar" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();PF('actualizarParametros').show();cargarKeyfilters();" />
+						</p:commandLink>
+					</div>
+					<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+						for="longitudMaxima" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_configuracionSeguridad['tooltip.LongitudMaximaClave']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+					<h:outputLabel styleClass="label-form tresPuntos"
+						for="tiempoVigenciaClaveRecuperacion"
+						id="vigenciaClaveRecuperacion"
+						value="#{txt_configuracionSeguridad['label.TiempoVigenciaClaveRecuperacion']}" />
+					<div class="dflex campo">
+						<ui:param name="tiempoVigenciaClaveRecuperacion"
+							value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_tiempoVigenciaClaveRecuperacion}"></ui:param>
+						<h:outputText
+							value="#{tiempoVigenciaClaveRecuperacion.is_valorUi}" />
+						<p:commandLink styleClass="fa fa-pencil colorLapiz">
+							<p:ajax
+								listener="#{beanConfiguracionSeguridad.setIpb_parametroBooleanoDto(tiempoVigenciaClaveRecuperacion)}"
+								update="formActualizar" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();PF('actualizarParametros').show();cargarKeyfilters();" />
+						</p:commandLink>
+					</div>
+					<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+						for="vigenciaClaveRecuperacion" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_configuracionSeguridad['tooltip.TiempoVigenciaClaveRecuperacion']}" />
+						</div>
+					</p:tooltip>
+				</div>
+			</div>
+			<div class="row px-30">
+				<div class="col-xs-12">
+					<br />
+					<p:separator />
+				</div>
+			</div>
+			<div class="row">
+
+				<div class="col-sm-12 text-center">
+					<p:outputLabel class="tamano-titulo"
+						value="#{txt_configuracionSeguridad['subtitulo.caracteres']}" />
+					<br />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+					<h:outputLabel styleClass="label-form"
+						for="cantidadMinimaMayusculasClave" id="cantidadMinimaMayusculas"
+						value="#{txt_configuracionSeguridad['label.CantMinimaMayusculas']}" />
+					<div class="dflex campo">
+						<ui:param name="cantidadMinimaMayusculasClave"
+							value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_cantidadMinimaMayusculasClave}"></ui:param>
+						<h:outputText value="#{cantidadMinimaMayusculasClave.is_valorUi}" />
+						<p:commandLink styleClass="fa fa-pencil colorLapiz">
+							<p:ajax
+								listener="#{beanConfiguracionSeguridad.setIpb_parametroBooleanoDto(cantidadMinimaMayusculasClave)}"
+								update="formActualizar" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();PF('actualizarParametros').show();cargarKeyfilters();" />
+						</p:commandLink>
+					</div>
+					<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+						for="cantidadMinimaMayusculas" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_configuracionSeguridad['tooltip.CantMinimaMayusculas']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+					<h:outputLabel styleClass="label-form"
+						for="cantidadMinimaMinusculasClave" id="cantidadMinimaMinusculas"
+						value="#{txt_configuracionSeguridad['label.CantMinimaMinusculas']}" />
+					<div class="dflex campo">
+						<ui:param name="cantidadMinimaMinusculasClave"
+							value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_cantidadMinimaMinusculasClave}"></ui:param>
+						<h:outputText value="#{cantidadMinimaMinusculasClave.is_valorUi}" />
+						<p:commandLink styleClass="fa fa-pencil colorLapiz">
+							<p:ajax
+								listener="#{beanConfiguracionSeguridad.setIpb_parametroBooleanoDto(cantidadMinimaMinusculasClave)}"
+								update="formActualizar" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();PF('actualizarParametros').show();cargarKeyfilters();" />
+						</p:commandLink>
+					</div>
+					<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+						for="cantidadMinimaMinusculas" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_configuracionSeguridad['tooltip.CantMinimaMinusculas']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+					<h:outputLabel styleClass="label-form tresPuntos"
+						for="cantidadMinimaCaracteresEspecialesClave"
+						id="cantidadMinimaCaracteresEspeciales"
+						value="#{txt_configuracionSeguridad['label.CantMinimaCaracteresEspeciales']}" />
+					<div class="dflex campo campo">
+						<ui:param name="cantidadMinimaCaracteresEspecialesClave"
+							value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_cantidadMinimaCaracteresEspecialesClave}"></ui:param>
+						<h:outputText
+							value="#{cantidadMinimaCaracteresEspecialesClave.is_valorUi}" />
+						<p:commandLink styleClass="fa fa-pencil colorLapiz">
+							<p:ajax
+								listener="#{beanConfiguracionSeguridad.setIpb_parametroBooleanoDto(cantidadMinimaCaracteresEspecialesClave)}"
+								update="formActualizar" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();PF('actualizarParametros').show();cargarKeyfilters();" />
+						</p:commandLink>
+					</div>
+					<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+						for="cantidadMinimaCaracteresEspeciales" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_configuracionSeguridad['tooltip.CantMinimaCaracteresEspeciales']}" />
+						</div>
+					</p:tooltip>
+				</div>
+			</div>
+			<div class="row px-30">
+				<div class="col-xs-12">
+					<br />
+					<p:separator />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12 text-center">
+					<p:outputLabel class="tamano-titulo"
+						value="#{txt_configuracionSeguridad['subtitulo.sesion']}" />
+					<br />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+					<h:outputLabel styleClass="label-form" for="tiempoCierreSesion"
+						id="cierreSesion"
+						value="#{txt_configuracionSeguridad['label.TiempoCierreSesion']}" />
+					<div class="dflex campo">
+						<ui:param name="tiempoCierreSesion"
+							value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_tiempoCierreSesion}"></ui:param>
+						<h:outputText value="#{tiempoCierreSesion.is_valorUi}" />
+						<p:commandLink styleClass="fa fa-pencil colorLapiz">
+							<p:ajax
+								listener="#{beanConfiguracionSeguridad.setIpb_parametroBooleanoDto(tiempoCierreSesion)}"
+								update="formActualizar" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();PF('actualizarParametros').show();cargarKeyfilters();" />
+						</p:commandLink>
+					</div>
+					<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+						for="cierreSesion" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_configuracionSeguridad['tooltip.TiempoCierreSesion']}" />
+						</div>
+					</p:tooltip>
+				</div>
+			</div>
+			<div class="row px-30">
+				<div class="col-xs-12">
+					<br />
+					<p:separator />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12 text-center">
+					<p:outputLabel class="tamano-titulo"
+						value="#{txt_configuracionSeguridad['subtitulo.correo']}" />
+					<br />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+					<h:outputLabel styleClass="label-form" id="diasVigencia"
+						value="#{txt_configuracionSeguridad['label.diasVigenciaActivacion']}" />
+					<div class="dflex campo">
+						<ui:param name="diasVigenciaActivacion"
+							value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_diasVigenciaActivacion}"></ui:param>
+						<h:outputText value="#{diasVigenciaActivacion.is_valorUi}" />
+						<p:commandLink styleClass="fa fa-pencil colorLapiz">
+							<p:ajax
+								listener="#{beanConfiguracionSeguridad.setIpb_parametroBooleanoDto(diasVigenciaActivacion)}"
+								update="formActualizar" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();PF('actualizarParametros').show();cargarKeyfilters();" />
+						</p:commandLink>
+					</div>
+					<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+						for="diasVigencia" position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_configuracionSeguridad['tooltip.diasVigenciaActivacion']}" />
+						</div>
+					</p:tooltip>
+				</div>
+			</div>
+			<div class="row px-30">
+				<div class="col-xs-12">
+					<br />
+					<p:separator />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<h:outputLabel id="parametrosActuales" styleClass="label-form"
+						value="#{txt_configuracionSeguridad['label.ParametrosActuales']}" />
+					<br />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<p:panelGrid styleClass="panel-center" id="panelSeguridad">
+						<f:facet name="header">
+							<p:row>
+								<p:column styleClass="header" colspan="1">#{txt_configuracionSeguridad['tabla.parametros']}</p:column>
+								<p:column styleClass="header" colspan="1">#{txt_configuracionSeguridad['tabla.valores']}</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="vigenciaClave"
+									value="#{txt_configuracionSeguridad['label.VigenciaClave']}" />
+							</p:column>
+							<p:column>
+								<h:outputText id="vigenciaClave"
+									value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_vigenciaClave.is_valorUi}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column styleClass="label-gris">
+								<h:outputLabel for="cantidadIntentosFallidosBloqueoCuenta"
+									value="#{txt_configuracionSeguridad['label.CantidadIntentosBloqueo']}" />
+							</p:column>
+							<p:column styleClass="label-gris">
+								<h:outputText id="cantidadIntentosFallidosBloqueoCuenta"
+									value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_cantidadIntentosFallidosBloqueoCuenta.is_valorUi}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="numeroClavesReutilizacion"
+									value="#{txt_configuracionSeguridad['label.NumeroClavesReutilizacion']}" />
+							</p:column>
+							<p:column>
+								<h:outputText id="numeroClavesReutilizacion"
+									value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_numeroClavesReutilizacion.is_valorUi}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column styleClass="label-gris">
+								<h:outputLabel for="longitudMinimaClave"
+									value="#{txt_configuracionSeguridad['label.LongitudMinimaClave']}" />
+							</p:column>
+							<p:column styleClass="label-gris">
+								<h:outputText id="longitudMinimaClave"
+									value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_longitudMinimaClave.is_valorUi}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="longitudMaximaClave"
+									value="#{txt_configuracionSeguridad['label.LongitudMaximaClave']}" />
+							</p:column>
+							<p:column>
+								<h:outputText id="longitudMaximaClave"
+									value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_longitudMaximaClave.is_valorUi}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column styleClass="label-gris">
+								<h:outputLabel for="tiempoVigenciaClaveRecuperacion"
+									value="#{txt_configuracionSeguridad['label.TiempoVigenciaClaveRecuperacion']}" />
+							</p:column>
+							<p:column styleClass="label-gris">
+								<h:outputText id="tiempoVigenciaClaveRecuperacion"
+									value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_tiempoVigenciaClaveRecuperacion.is_valorUi}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="cantidadMinimaMayusculasClave"
+									value="#{txt_configuracionSeguridad['label.CantMinimaMayusculas']}" />
+							</p:column>
+							<p:column>
+								<h:outputText id="cantidadMinimaMayusculasClave"
+									value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_cantidadMinimaMayusculasClave.is_valorUi}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column styleClass="label-gris">
+								<h:outputLabel for="cantidadMinimaMinusculasClave"
+									value="#{txt_configuracionSeguridad['label.CantMinimaMinusculas']}" />
+							</p:column>
+							<p:column styleClass="label-gris">
+								<h:outputText id="cantidadMinimaMinusculasClave"
+									value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_cantidadMinimaMinusculasClave.is_valorUi}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputLabel for="cantidadMinimaCaracteresEspecialesClave"
+									value="#{txt_configuracionSeguridad['label.CantMinimaCaracteresEspeciales']}" />
+							</p:column>
+							<p:column>
+								<h:outputText id="cantidadMinimaCaracteresEspecialesClave"
+									value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_cantidadMinimaCaracteresEspecialesClave.is_valorUi}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column styleClass="label-gris">
+								<h:outputLabel for="tiempoCierreSesion"
+									value="#{txt_configuracionSeguridad['label.TiempoCierreSesion']}" />
+							</p:column>
+							<p:column styleClass="label-gris">
+								<h:outputText id="tiempoCierreSesion"
+									value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_tiempoCierreSesion.is_valorUi}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column styleClass="label-gris">
+								<h:outputLabel for="tiempoCierreSesion"
+									value="#{txt_configuracionSeguridad['label.diasVigenciaActivacion']}" />
+							</p:column>
+							<p:column styleClass="label-gris">
+								<h:outputText id="diasVigenciaActivacion"
+									value="#{beanConfiguracionSeguridad.ics_configuracionSeguridadDto.ip_diasVigenciaActivacion.is_valorUi}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<br />
+				</div>
+			</div>
+		</p:panel>
+
+		<!-- Modales -->
+		<!-- Modal actualizacion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="actualizarParametros" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal" value="#{txt_parametro['modal']}" />
+			<ui:param name="formulario" value="formActualizar" />
+			<ui:define name="body-modal">
+				<div class="row text-left px-30">
+					<div class="col-xs-12">
+						<h:outputText styleClass="label-form" for="nombre"
+							value="#{txt_parametro['modal.nombre']}: " />
+						<h:outputText id="nombre"
+							value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_nombre}" />
+					</div>
+					<div class="col-xs-12">
+						<h:outputText styleClass="label-form" for="descripcion"
+							value="#{txt_parametro['modal.descripcion']} " />
+						<h:outputText id="descripcion"
+							value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_descripcion}" />
+					</div>
+				</div>
+				<div class="row px-30">
+					<div class="col-xs-12">
+						<br />
+						<p:separator />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel styleClass="label-form" for="tipoVariable"
+							value="#{txt_parametro['modal.tipoVariable']}" />
+						<br />
+						<p:outputLabel id="tipoVariable"
+							value="#{beanConfiguracionSeguridad.buscarEnum(beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_tipoVariable).getIs_textoLegible()}" />
+					</div>
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel styleClass="label-form" for="unidadParametro"
+							value="#{txt_parametro['modal.unidadParametro']}" />
+						<br />
+						<p:outputLabel id="unidadParametro"
+							value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_unidadParametro}" />
+					</div>
+					<div class="col-xs-12 col-md-4">
+						<ui:param name="tipoVariable"
+							value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_tipoVariable.equals('INTEGER') || beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_tipoVariable.equals('FLOAT')}" />
+						<p:outputLabel styleClass="label-form"
+							for="#{tipoVariable ? 'valorDefecto' : 'valorDefecto1'}"
+							id="labelValorDefecto"
+							value="#{txt_parametro['modal.valorDefecto']}" />
+						<br />
+						<p:outputLabel id="valorDefecto" rendered="#{tipoVariable}"
+							value="#{beanConfiguracionSeguridad.convertirAInteger(beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_valorParametroDefecto)}">
+							<f:convertNumber type="number" />
+						</p:outputLabel>
+						<p:outputLabel id="valorDefecto1" rendered="#{!tipoVariable}"
+							value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_valorParametroDefecto}">
+						</p:outputLabel>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<br />
+					</div>
+				</div>
+				<div class="row text-left px-30">
+					<div class="col-xs-9">
+						<ui:param name="numeroCampoEncontrado"
+							value="#{beanConfiguracionSeguridad.buscarEnum(beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_tipoVariable).getIn_tipoCampoParametro()}" />
+						<p:outputLabel styleClass="label-form"
+							value="#{txt_parametro['modal.valor']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<!-- Se renderiza según el tipo de variable BOOLEAN -> 1 INTEGER -> 2 STRING -> 3 FLOAT -> 4 -->
+						<p:selectOneMenu id="valor1" required="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_valor}"
+							rendered="#{numeroCampoEncontrado == 1}"
+							disabled="#{!beanConfiguracionSeguridad.ipb_parametroBooleanoDto.ib_editable}">
+							<f:selectItem itemLabel="Seleccione" itemValue="" />
+							<f:selectItems
+								value="#{beanConfiguracionSeguridad.ilb_enumBooleanos}"
+								var="boolean" itemLabel="#{boolean.is_valorString}"
+								itemValue="#{boolean.is_codigo}">
+							</f:selectItems>
+						</p:selectOneMenu>
+						<h:outputLabel rendered="#{numeroCampoEncontrado == 1}"
+							class="help-block">
+							<p:message for="valor1" />
+						</h:outputLabel>
+						<p:inputNumber id="valor2" required="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							rendered="#{numeroCampoEncontrado == 2}"
+							placeholder="#{txt_parametro['modal.valor.placeholder']}"
+							disabled="#{!beanConfiguracionSeguridad.ipb_parametroBooleanoDto.ib_editable}"
+							value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_valor}"
+							decimalPlaces="0" />
+						<h:outputLabel rendered="#{numeroCampoEncontrado == 2}"
+							class="help-block">
+							<p:message for="valor2" />
+						</h:outputLabel>
+						<p:inputText id="valor3" rendered="#{numeroCampoEncontrado == 3}"
+							required="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							placeholder="#{txt_parametro['modal.valor.placeholder']}"
+							styleClass="mask-StringChars"
+							disabled="#{!beanConfiguracionSeguridad.ipb_parametroBooleanoDto.ib_editable}"
+							value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_valor}" />
+						<h:outputLabel rendered="#{numeroCampoEncontrado == 3}"
+							class="help-block">
+							<p:message for="valor3" />
+						</h:outputLabel>
+						<p:inputNumber id="valor4" required="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							rendered="#{numeroCampoEncontrado == 4}"
+							placeholder="#{txt_parametro['modal.valor.placeholder']}"
+							disabled="#{!beanConfiguracionSeguridad.ipb_parametroBooleanoDto.ib_editable}"
+							value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_valor}"
+							symbol="%" symbolPosition="s" emptyValue="always"
+							decimalPlaces="0" />
+						<h:outputLabel rendered="#{numeroCampoEncontrado == 4}"
+							class="help-block">
+							<p:message for="valor4" />
+						</h:outputLabel>
+					</div>
+					<div class="col-xs-12 col-md-3 text-center">
+						<div class="title">
+							<div>
+								<h:outputText styleClass="label-form" for="activo"
+									value="#{txt_parametro['modal.activo']}" />
+							</div>
+							<div>
+								<h:outputText id="ayudaActivo" class="fa fa-question-circle" />
+							</div>
+						</div>
+						<p:inputSwitch id="activo" styleClass="noMargen" required="true"
+							disabled="#{!beanConfiguracionSeguridad.ipb_parametroBooleanoDto.ib_editable}"
+							value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.ib_activo}" />
+						<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+							for="ayudaActivo" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_parametro['modal.valorDefecto.tooltip']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="activo" />
+						</span>
+					</div>
+					<div class="col-xs-12">
+						<br />
+					</div>
+					<ui:fragment
+						rendered="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.ibi_valorMinimo != null}">
+						<div class="col-xs-6">
+							<p:outputLabel styleClass="label-form" for="valorMinimo"
+								value="#{txt_parametro['modal.valorMinimo']}" />
+							<br />
+							<p:outputLabel id="valorMinimo"
+								value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.ibi_valorMinimo}">
+								<f:convertNumber type="number" />
+							</p:outputLabel>
+						</div>
+					</ui:fragment>
+					<ui:fragment
+						rendered="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.ibi_valorMaximo != null}">
+						<div class="col-xs-6">
+							<p:outputLabel styleClass="label-form" for="valorMaximo"
+								value="#{txt_parametro['modal.valorMaximo']}" />
+							<br />
+							<p:outputLabel id="valorMaximo"
+								value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.ibi_valorMaximo}">
+								<f:convertNumber type="number" />
+							</p:outputLabel>
+						</div>
+					</ui:fragment>
+					<div class="col-xs-12">
+						<p:outputLabel styleClass="label-form" for="textoAyuda"
+							value="#{txt_parametro['modal.textoAyuda']}" />
+						<br />
+						<p:outputLabel id="textoAyuda"
+							value="#{beanConfiguracionSeguridad.ipb_parametroBooleanoDto.is_textoAyuda}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-10 col-xs-offset-1 col-sm-5 space-row">
+						<p:commandButton value="#{txt_parametro['modal.boton.volver']}"
+							class="btn-gris" oncomplete="PF('#{modalId}').hide()">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
+						<p:commandButton
+							disabled="#{!beanConfiguracionSeguridad.ipb_parametroBooleanoDto.ib_editable}"
+							value="#{txt_parametro['modal.boton.guardar']}"
+							styleClass="btn-gradiente btn-rojo" type="submit"
+							oncomplete="if(args &amp;&amp; args.validationFailed){PF('actualizarParametros').jq.effect('shake', {times: 3}, 100);}">
+							<p:ajax process="formActualizar"
+								listener="#{beanConfiguracionSeguridad.actualizar}"
+								update="formActualizar" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal actualizacion -->
+	</ui:define>
+</ui:composition>

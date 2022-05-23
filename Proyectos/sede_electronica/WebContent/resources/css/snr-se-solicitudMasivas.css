@@ -1,0 +1,61 @@
+.ui-panel.ui-widget.ui-widget-content.ui-corner-all.solicitudesMasivas {
+	padding: 0 !important
+}
+
+.ui-panel-titlebar.ui-widget-header.ui-helper-clearfix.ui-corner-all {
+	background: linear-gradient(#EB1F28, #461A13) !important;
+	font-size: 18px;
+	padding: 15px !important;
+	text-align: center;
+}
+
+.ui-panel-titlebar.ui-widget-header.ui-helper-clearfix.ui-corner-all>.ui-panel-title
+	{
+	color: white;
+}
+
+.imagenTamano {
+	font-size: 18px;
+}
+
+.notaU {
+	font-weight: bold !important;
+	font-size: 80%;
+}
+
+.ocultarBoton {
+	display: block;
+}
+
+.ocultarBotonMovil {
+	display: none;
+}
+
+@media only screen and (max-width: 400px) {
+	.tamanoImg {
+		width: 100%;
+	}
+	.ocultarBoton {
+		display: none;
+	}
+	.ocultarBotonMovil {
+		display: block;
+	}
+	.precio {
+		overflow: visible !important;
+		right: 10%;
+	}
+	.espacio-boton {
+		left: 30%;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	.vcenter.vcentermovil{
+		display: block;
+	}
+}
+
+.modalInfoMasivo {
+	height: 379px;
+}

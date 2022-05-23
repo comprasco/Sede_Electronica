@@ -1,0 +1,33 @@
+.tituloRojo {
+	background:linear-gradient(180deg, rgba(235,31,40,1) 0%, rgba(70,26,19,1) 100%) !important;
+	color: white;
+	font-weight: 600 !important;
+	padding: 0.55em;
+}
+
+.my-10{
+margin: 10px 0; 	
+}
+.py-20{
+	padding: 20px 0;
+}
+
+.bold{
+	font-weight: 700;
+}
+
+.tab-personalizado{
+	font-size: 12px !important;
+	width: 100%;
+	height: 39px;
+}
+
+button.ui-state-default.tab-gris{
+	background-color: #F9F9F9 !important;
+	color: #4C4C4C !important;
+}
+
+button.ui-state-default.tab-gradiente{
+	background-image: linear-gradient(#EB1F28, #461A13) !important;
+	color: #FFFFFF !important;
+}

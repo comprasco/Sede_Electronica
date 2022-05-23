@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<p:tab id="pago#{vista}">
+		<f:facet name="title">
+			<span class="icono icono-pago" />
+			<p:outputLabel class="tituloWizard"
+				value="#{txt_certificados['wizard.tab.pago']}" />
+		</f:facet>
+		<p:panel>
+			<div class="container-fluid-special">
+				<div class="row text-center">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{titulo}" class="titulo" />
+					</div>
+				</div>
+				<br />
+				<div class="row text-center">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{subtitulo}" class="subtitulo" />
+					</div>
+				</div>
+				<br /> <br />
+				<div class="row">
+					<div class="col-xs-12 col-sm-8">
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel id="labelTipoDocumentoPago"
+											styleClass="label-form" for="tipoDocumentoPago"
+											value="#{txt_certificados['wizardCertificado.pago.tipoDocumento']}" />
+									</div>
+									<div class="col-xs-12">
+										<h:outputText id="tipoDocumentoPago"
+											value="#{iit_integracionTemporalDto.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}" />
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-12 col-sm-6">
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel id="labelNumeroDocumetoPago"
+											styleClass="label-form" for="numeroDocumentoPago"
+											value="#{txt_certificados['wizardCertificado.pago.documento']}" />
+									</div>
+									<div class="col-xs-12">
+										<h:outputText id="numeroDocumentoPago"
+											value="#{iit_integracionTemporalDto.iu_usuarioDto.ip_personaDto.is_numeroDocumento}" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<br /> <br />
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel id="labelMedioDePago" styleClass="label-form"
+											for="medioDePago"
+											value="#{txt_certificados['wizardCertificado.pago.medioPago']}" />
+									</div>
+									<div class="col-xs-12">
+										<h:panelGrid columns="2" cellpadding="5">
+											<p:selectOneRadio id="medioDePago"
+												value="#{tipoDePagoBean[tipoDePagoFuncion]}"
+												unselectable="true">
+												<f:selectItem
+													itemLabel="#{txt_certificados['info.pago.debito']}"
+													itemValue="0" />
+												<f:selectItem
+													itemLabel="#{txt_certificados['info.pago.tarjeta']}"
+													itemValue="1" />
+											</p:selectOneRadio>
+										</h:panelGrid>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel id="labelNumeroMatricula" styleClass="label-form"
+							for="listaNumeroMatricula"
+							value="#{txt_certificados['wizardCertificado.pago.matricula']}" />
+						<!-- Número(s) de matrícula recibe una lista de matrículas para iterar -->
+						<p:dataList id="listaNumeroMatricula" value="#{listaMatriculas}"
+							var="matricula">
+							<h:outputText
+								value="#{matricula.getIm_matriculaDto().getIs_codigoMatricula()} - #{matricula.getIm_matriculaDto().getIcr_circuloRegistralMatricula().getIs_nombre()}" />
+						</p:dataList>
+					</div>
+				</div>
+				<br /> <br />
+				<div class="row text-center">
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel id="labelValorPago" styleClass="label-form"
+									for="valorPago"
+									value="#{txt_certificados['wizardCertificado.pago.valor']}" />
+							</div>
+							<div class="col-xs-12">
+								<h:outputText id="valorPago" value="$ #{totalValorPago}.00"
+									class="label-form" styleClass="valorPago" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</p:panel>
+	</p:tab>
+</ui:composition>

@@ -1,0 +1,352 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="formDatosPredio">
+		<h:outputText value="#{txt_correccion['datosPredio.explicacion']}" />
+		<br />
+		<br />
+		<br />
+		<p:outputPanel id="panelBuscarCertificados">
+			<div class="row">
+				<ui:decorate template="/pages/includes/numeroMatricula.xhtml">
+					<ui:param name="numCol" value="6" />
+					<ui:param name="bean" value="${beanCorrecciones}" />
+					<ui:param name="oficinaRegistroSeleccionado"
+						value="icr_circuloRegistralSeleccionadoDto" />
+					<ui:param name="listaOficinaRegistro"
+						value="ilcr_listaCirculoRegistralDto" />
+					<ui:param name="numeroMatricula" value="is_numeroMatricula" />
+					<ui:param name="requerido" value="true" />
+					<ui:param name="panelAnterior" value="formDatosPredio" />
+					<ui:param name="nupre" value="is_nupre" />
+					<ui:param name="mostrarNupre" value="true" />
+				</ui:decorate>
+			</div>
+		</p:outputPanel>
+		<br />
+		<div class="row text-right">
+			<div class="col-xs-12 col-md-6 col-md-offset-3">
+				<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+					styleClass="btn-gradiente icon-btn btn-rojo"
+					value="#{txt_correccion['datos.matricula.boton']}"
+					update="formModalCertificado1 panelBuscarCertificados"
+					process="@form"
+					action="#{beanCorrecciones.consultarDatosMatricula}"
+					onstart="PF('blockUI-Loading').show();"
+					onsuccess="PF('blockUI-Loading').hide();">
+				</p:commandButton>
+			</div>
+		</div>
+		<br />
+		<p:outputPanel>
+			<div class="label-form text-center">
+				<h:outputText value="#{txt_correccion['tabla.cantidad']}" />
+				<h:outputText
+					value="#{(beanCorrecciones.itc_transaccionCorreccionDto.ic_correccionesDto.ilc_listaCorreccionDto == null)?0:beanCorrecciones.itc_transaccionCorreccionDto.ic_correccionesDto.ilc_listaCorreccionDto.size()}" />
+				<h:outputText value="#{txt_correccion['tabla.cantidad.uno']}" />
+			</div>
+			<p:dataTable var="cargarDocumento" styleClass="centrar"
+				widgetVar="paramsCargaDocumentosCuentaCupo" id="cargarDocumento"
+				reflow="true" rowIndexVar="index"
+				value="#{beanCorrecciones.itc_transaccionCorreccionDto.ic_correccionesDto.ilc_listaCorreccionDto}"
+				emptyMessage="#{txt_correccion['tabla.vacia']}" stickyHeader="false">
+				<p:column headerText="#{txt_correccion['tabla.circuloRegistral']}">
+					<h:outputText
+						value="#{cargarDocumento.im_matriculaDto.icr_circuloRegistralMatricula.is_nombre}" />
+				</p:column>
+				<p:column headerText="#{txt_correccion['tabla.matricula']}">
+					<h:outputText
+						value="#{cargarDocumento.im_matriculaDto.is_codigoMatricula}" />
+				</p:column>
+				<p:column headerText="#{txt_correccion['tabla.nupre']}">
+					<h:outputText value="#{cargarDocumento.is_nupre}" />
+				</p:column>
+				<p:column headerText="#{txt_correccion['tabla.direccionPredio']}">
+					<h:outputText value="#{cargarDocumento.is_direccionPredio}" />
+				</p:column>
+				<p:column headerText="#{txt_correccion['tabla.correccion']}"
+					styleClass="text-center">
+					<p:commandLink
+						styleClass="fa fa-search #{cargarDocumento.ib_llenado ?'colorVerde':'colorRojo'}">
+						<p:ajax
+							listener="#{beanCorrecciones.cargarListaCorrecciones(cargarDocumento)}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();"></p:ajax>
+					</p:commandLink>
+				</p:column>
+				<p:column headerText="#{txt_correccion['tabla.eliminar']}"
+					styleClass="text-center">
+					<p:commandLink styleClass="fa fa-trash-o colorRojo"
+						onclick="PF('confirmarEliminar').show();">
+						<p:ajax
+							listener="#{beanCorrecciones.setIc_correccionDto(cargarDocumento)}"></p:ajax>
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+		<br />
+		<br />
+	</h:form>
+	<!-- Modal para listar la matricula consultada y confirmar -->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="dialogConfirmacionDatosMatricula" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+		<ui:param name="tituloModal" value="#{txt_correccion['modal.datos']}" />
+		<ui:param name="formulario" value="formModalCertificado1" />
+		<ui:define name="body-modal">
+			<div class="row">
+				<div class="col-xs-12">
+					<h:outputLabel class="label-form"
+						value="#{txt_correccion['modal.datos.titulo']}" />
+				</div>
+			</div>
+			<br />
+			<div class="row gradiente tablaConsultaPredio">
+				<div class="col-xs-4">
+
+					<h:outputText value="#{txt_correccion['modal.datos.matricula']}" />
+				</div>
+				<div class="col-xs-4">
+					<h:outputText
+						value="#{txt_correccion['modal.datos.ciurculoRegistral']}" />
+				</div>
+				<div class="col-xs-4">
+					<h:outputText value="#{txt_correccion['modal.datos.direccion']}" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-xs-4">
+					<h:outputText
+						value="#{beanCorrecciones.ic_correccionDto.im_matriculaDto.icr_circuloRegistralMatricula.is_id}" />
+				</div>
+				<div class="col-xs-4">
+					<h:outputText
+						value="#{beanCorrecciones.ic_correccionDto.im_matriculaDto.is_codigoMatricula}" />
+				</div>
+				<div class="col-xs-4">
+					<h:outputText
+						value="#{beanCorrecciones.ic_correccionDto.is_direccionPredio}" />
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-xs-12">
+					<h:outputText class="label-form"
+						value="#{txt_correccion['modal.datos.pregunta']}" />
+				</div>
+			</div>
+		</ui:define>
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-12 col-md-5 col-md-offset-1 space-row">
+					<p:commandButton styleClass="btn-gris"
+						value="#{txt['boton.Cancelar.Upper']}"
+						oncomplete="PF('dialogConfirmacionDatosMatricula').hide(); limpiarCampo('formDatosPredio:numeroMatricula','spanNumeroMatricula'); limpiarLista('oficinaRegistro');"
+						update="formDatosPredio">
+					</p:commandButton>
+				</div>
+				<div class="col-xs-12 col-md-5">
+					<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+						styleClass="btn-gradiente icon-btn btn-rojo"
+						value="#{txt_correccion['modal.boton.adiccionar']}"
+						oncomplete="PF('dialogConfirmacionDatosMatricula').hide(); limpiarCampo('formDatosPredio:numeroMatricula','spanNumeroMatricula'); limpiarLista('oficinaRegistro');"
+						update="formDatosPredio">
+						<p:ajax
+							listener="#{beanCorrecciones.cargarListaCorreccionYLimpiarCampos(true)}"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();" />
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+	<!-- Modal para validar el maximo de 10 correcciones por solicitud -->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="maximoMatricula" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+		<ui:param name="tituloModal"
+			value="#{txt['titulo.modal.confirmacion']}" />
+		<ui:param name="formulario" value="formModalMaximoMatricula" />
+		<ui:param name="accionBotonBean" value="${beanCorreccion}" />
+		<ui:param name="accionBotonMetodo" value="buscarMatricula" />
+		<ui:define name="body-modal">
+			<div class="row">
+				<div class="col-xs-12">
+					<h:outputText
+						value="#{txt_certificados['wizardCertificado.datos.modal.maximo.1']}" />
+					<br />
+					<h:outputText
+						value="#{txt_certificados['wizardCertificado.datos.modal.maximo.2']}" />
+					<br />
+					<h:outputText
+						value="#{txt_certificados['wizardCertificado.datos.modal.maximo.3']}" />
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+	<!-- Modal para llenar la correccion a este predio-->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="dataCorreccion" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+		<ui:param name="tituloModal"
+			value="#{txt_correccion['modal.correccion']}" />
+		<ui:param name="formulario" value="formDataCorreccion" />
+		<ui:define name="body-modal">
+			<h:outputText styleClass="tituloParametrizacion"
+				value="#{txt_correccion['modal.correccion.matricula']} "></h:outputText>
+			<h:outputText styleClass="tituloParametrizacion"
+				value="#{beanCorrecciones.ic_correccionDto.im_matriculaDto.is_codigoMatricula}"></h:outputText>
+			<br />
+			<p:dataTable id="dataTableCorrecciones"
+				value="#{beanCorrecciones.ic_correccionDto.iltc_listaTipoCorreccionDto}"
+				reflow="true"
+				emptyMessage="#{txt_correccion['tabla.agregar.correccion.vacia']}"
+				var="tipoCorreccion" rowIndexVar="indexCorreccion">
+				<p:column styleClass="datosCentros"
+					headerText="#{txt_correccion['modal.correccion.grupo']}">
+					<h:outputText value="#{tipoCorreccion.is_grupoCausal}" />
+				</p:column>
+				<p:column styleClass="datosCentros"
+					headerText="#{txt_correccion['modal.correccion.causal']}">
+					<h:outputText value="#{tipoCorreccion.is_causalCorreccion}" />
+				</p:column>
+				<p:column styleClass="datosCentros"
+					headerText="#{txt_correccion['modal.correccion.descripcion']}">
+					<h:outputText value="#{tipoCorreccion.is_descripcion}" />
+				</p:column>
+				<p:column styleClass="datosCentros"
+					headerText="#{txt_correccion['modal.correccion.seleccione']}">
+					<p:inputSwitch value="#{tipoCorreccion.ib_seleccione}"
+						id="activarCorreccion">
+						<p:ajax oncomplete="PF('blockUI-Loading').hide();"
+							onstart="PF('blockUI-Loading').show();" process="@this"
+							update="formDataCorreccion:dataTableCorrecciones:#{indexCorreccion}:correccionObservacion formDataCorreccion:dataTableCorrecciones:#{indexCorreccion}:activarCorreccion"></p:ajax>
+					</p:inputSwitch>
+				</p:column>
+				<p:column styleClass="datosCentros"
+					headerText="#{txt_correccion['modal.correccion.observacion']}">
+					<p:inputTextarea disabled="#{!tipoCorreccion.ib_seleccione}"
+						maxlength="1000" id="correccionObservacion"
+						class="observacionesCorreccion"
+						value="#{tipoCorreccion.is_observaciones}"></p:inputTextarea>
+					<span class="textoRojo">#{tipoCorreccion.is_error}</span>
+				</p:column>
+			</p:dataTable>
+		</ui:define>
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-12 col-md-4 col-md-offset-1 space-row">
+					<p:commandButton styleClass="btn-gris"
+						value="#{txt['boton.volver']}"
+						oncomplete="PF('dataCorreccion').hide();" update="formDatosPredio">
+					</p:commandButton>
+				</div>
+				<div class="col-xs-12 col-md-4 col-md-offset-2">
+					<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+						value="#{txt['boton.Guardar.Upper']}"
+						update="formDatosPredio formDataCorreccion:dataTableCorrecciones">
+						<p:ajax listener="#{beanCorrecciones.agregarTipoCorreccion}"
+							process="@form" onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();" />
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+	<!-- 	Eliminar correccion tabla -->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="confirmarEliminar" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+		<ui:param name="tituloModal"
+			value="#{txt['titulo.modal.confirmacion']}" />
+		<ui:param name="formulario" value="formEliminarCorreccion" />
+		<ui:define name="body-modal">
+			<h:outputText value="#{txt_correccion['modal.eliminar.titulo']}" />
+		</ui:define>
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-12 col-md-5 col-md-offset-1">
+					<p:commandButton styleClass="btn-gris"
+						value="#{txt['boton.Cancelar.Upper']}"
+						oncomplete="PF('confirmarEliminar').hide();">
+					</p:commandButton>
+				</div>
+				<div class="col-xs-12 col-md-5">
+					<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+						value="#{txt['boton.Aceptar.Upper']}"
+						oncomplete="PF('confirmarEliminar').hide();"
+						update="formDatosPredio">
+						<p:ajax
+							listener="#{beanCorrecciones.cargarListaCorreccionYLimpiarCampos(false)}"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();" />
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+	<!-- 	Confirmar generar solicitud -->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="confirmarGenerarSolicitud" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+		<ui:param name="tituloModal"
+			value="#{txt['titulo.modal.confirmacion']}" />
+		<ui:param name="formulario" value="formConfirmarSolicitudCorreccion" />
+		<ui:define name="body-modal">
+			<h:outputText
+				value="#{txt_correccion['modal.generarSolicitud.titulo']}" />
+			<br />
+			<h:outputText
+				value="#{txt_correccion['modal.generarSolicitud.contenido']}" />
+		</ui:define>
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-12 col-md-5 col-md-offset-1 space-row">
+					<p:commandButton styleClass="btn-gris"
+						value="#{txt['boton.Cancelar.Upper']}"
+						oncomplete="PF('confirmarGenerarSolicitud').hide();">
+					</p:commandButton>
+				</div>
+				<div class="col-xs-12 col-md-5">
+					<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+						value="#{txt['boton.Aceptar.Upper']}"
+						oncomplete="PF('confirmarGenerarSolicitud').hide();"
+						update="formDatosPredio:cargarDocumento">
+						<p:ajax listener="#{beanCorrecciones.generarSolicitud}"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();" />
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="infNoCompletoCorreccion" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+		<ui:param name="tituloModal"
+			value="#{txt['titulo.modal.informacion']}" />
+		<ui:param name="formulario" value="formNoTipoCorreccion" />
+		<ui:define name="body-modal">
+			<h:outputText
+				value="#{txt_correccion['modal.noTipoCorreccion.contenido']} " />
+			<br />
+			<h:outputText
+				value="#{txt_correccion['modal.noTipoCorreccion.contenido1']} " />
+			<h:outputText styleClass="fa fa-search" />
+		</ui:define>
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-12 col-md-6 col-md-offset-3">
+					<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+						styleClass="btn-rojo icon-btn btn-gradiente"
+						value="#{txt['boton.entendido']}"
+						oncomplete="PF('infNoCompletoCorreccion').hide();">
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+</ui:composition>

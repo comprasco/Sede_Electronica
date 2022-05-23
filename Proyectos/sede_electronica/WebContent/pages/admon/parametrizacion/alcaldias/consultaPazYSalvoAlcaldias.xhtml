@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-simple.xhtml">
+
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-pazysalvo.css" />
+		<h:outputStylesheet library="css" name="snr-se.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="archivo.js" />
+	</ui:define>
+	<!-- Apartado Titulo -->
+	<ui:define name="title">
+		<title>#{txt_pazysalvo['titulo.consulta.pazysalvo']}</title>
+	</ui:define>
+
+	<ui:define name="body">
+		<!-- Apartado Banner -->
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_pazysalvo['banner.Titulo.pazysalvo']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo"
+				value="#{txt_pazysalvo['banner.Subtitulo.pazysalvo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/parametrizacion/alcaldias/consultaPazYSalvoAlcaldias.jsf" />
+		</ui:include>
+
+		<!-- Apartado Body Elements -->
+		<h:form id="consultaPazySalvo">
+			<p:panel id="panelConsulta" styleClass="panel-content no-border">
+				<div class="row">
+					<div class="col-xs-12 text-center contenedor-link-login">
+						<p:outputLabel id="labelConsultaPazYSalvo"
+							styleClass="label-form tamano-titulo"
+							value="#{txt_pazysalvo['label.Titulo']}" />
+					</div>
+				</div>
+
+				<p:separator />
+
+				<!-- Select departamento municipio -->
+				<div class="row">
+					<!-- Departamento -->
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel id="labelDepartamentoDireccion"
+							styleClass="label-form" for="departamento"
+							value="#{txt_pazysalvo['label.depto']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<p:selectOneMenu id="departamento" filter="true"
+							converter="selectOneMenuConverter" required="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanConsultaPazSalvo.id_departamentoDto}">
+							<p:ajax listener="#{beanConsultaPazSalvo.cambiarMunicipios}"
+								process="@this" update="municipio" />
+							<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{beanConsultaPazSalvo.ild_listaDepartamentoDto}"
+								var="departamento" itemLabel="#{departamento.is_nombre}"
+								itemValue="#{departamento}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelDepartamentoDireccion"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_pazysalvo['tooltip.depto']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="departamento" />
+						</span>
+					</div>
+
+					<!-- Municipio -->
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel id="labelMunicipioDireccion"
+							styleClass="label-form" for="municipio"
+							value="#{txt_pazysalvo['label.Municipio']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<p:selectOneMenu id="municipio" styleClass="tamanoSelect"
+							filter="true"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							converter="selectOneMenuConverter" required="true"
+							value="#{beanConsultaPazSalvo.im_municipioDto}">
+							<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{beanConsultaPazSalvo.ilm_listaMunicipioDto}"
+								var="municipio" itemLabel="#{municipio.is_nombre}"
+								itemValue="#{municipio}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelMunicipioDireccion"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_pazysalvo['tooltip.Municipio']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="municipio" />
+						</span>
+					</div>
+				</div>
+				<br />
+				<!-- Boton consultar alcaldia -->
+				<div class="row ">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-2 space-row">
+						<p:commandButton id="volver"
+							value="#{txt_usuariosAdmin['usuario.admin.volver']}"
+							styleClass="btn-gris" proccess="@this" immediate="true"
+							ajax="false"
+							action="/pages/personas/inicioSesion/ciudadanos.jsf?faces-redirect=true">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+							type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+							value="#{txt_seguimiento['boton.Consultar']}" ajax="false"
+							action="#{beanConsultaPazSalvo.consultarAlcaldia}"
+							update="panelTipoServicio" />
+					</div>
+				</div>
+				<!-- Fin Consulta -->
+
+				<p:separator />
+
+				<!-- Inicio Resultado Consulta -->
+				<p:panel id="panelTipoServicio" styleClass="no-border"
+					rendered="#{not (beanConsultaPazSalvo.iap_alcaldiaParamDto eq null)}">
+					<div class="row ">
+						<!-- Seleccion entidad prestadora de servicio -->
+						<div class="col-xs-12 col-md-6 col-md-offset-3">
+							<p:outputLabel id="labelNombreAlcaldia" styleClass="label-form"
+								for="nombre" value="Nombre" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="nombre" styleClass="tamanoSelect"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								converter="selectOneMenuConverter" required="true"
+								value="#{beanConsultaPazSalvo.iap_alcaldiaParamDto}"
+								label="#{beanConsultaPazSalvo.iap_alcaldiaParamDto.is_nombreEntidad}">
+								<f:selectItems
+									value="#{beanConsultaPazSalvo.ilap_alcaldiasParametrizacionDto}"
+									var="alcaldia" itemLabel="#{alcaldia.is_nombreEntidad}"
+									itemValue="#{alcaldia}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelNombreAlcaldia"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_pazysalvo['label.alcaldia.nombre']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="nombre" />
+							</span>
+						</div>
+					</div>
+
+					<p:outputPanel
+						rendered="#{beanConsultaPazSalvo.iap_alcaldiaParamDto.is_tipoParametrizacion eq 'PAGINA_WEB'}">
+						<div class="row space-row">
+							<div class="col-xs-6 col-md-6 contenedor-link-login">
+								<p:outputLabel id="labelPaginaWeb" styleClass="label-form"
+									for="PaginaWeb" value="#{txt_alcaldia['url.pag']}" />
+								<div class="ui-inputgroup">
+									<h:outputText id="PaginaWeb" styleClass="tamano" escape="false"
+										placeholder="#{txt_alcaldia['pagina.web']}"
+										value="#{beanConsultaPazSalvo.consultarUrlConsultaPazSalvo()}">
+									</h:outputText>
+									<p:tooltip for="PaginaWeb"
+										value="#{txt_alcaldia['url.paz.salvo']}"></p:tooltip>
+								</div>
+							</div>
+						</div>
+					</p:outputPanel>
+
+					<p:outputPanel
+						rendered="#{beanConsultaPazSalvo.iap_alcaldiaParamDto.is_tipoParametrizacion eq 'SERVICIO_WEB'}">
+						<p:tooltip />
+						<ui:repeat
+							value="#{beanConsultaPazSalvo.iap_alcaldiaParamDto.ilpda_parametrosDinamicos}"
+							var="parametrosDinamicos">
+							<p:outputPanel styleClass="no-border"
+								rendered="#{parametrosDinamicos.is_parametroUi eq 'S'}">
+								<div class="row space-row">
+									<div class="col-xs-12 col-md-6 col-md-offset-3">
+										<p:outputLabel styleClass="label-form"
+											value="#{parametrosDinamicos.is_nombreUi} " />
+										<p:inputText styleClass="tamano"
+											value="#{parametrosDinamicos.is_valor}"
+											title="#{parametrosDinamicos.is_descripcionUi}"
+											readonly="#{parametrosDinamicos.is_constante eq 'S'}"
+											disabled="#{parametrosDinamicos.is_constante eq 'S'}">
+										</p:inputText>
+									</div>
+								</div>
+							</p:outputPanel>
+						</ui:repeat>
+						<br />
+						<div class="row ">
+							<div class="col-xs-12 col-md-4 col-md-offset-4">
+								<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+									type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+									value="Consultar Paz y Salvo" ajax="false"
+									action="#{beanConsultaPazSalvo.consultarPazSalvo}"
+									update="panelTipoServicio" />
+							</div>
+						</div>
+					</p:outputPanel>
+				</p:panel>
+
+			</p:panel>
+		</h:form>
+
+		<!-- Modal Informativo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgPazySalvo" />
+			<ui:param name="tituloModal"
+				value="#{txt_pazysalvo['Header.consulta.pazysalvo']}" />
+			<ui:param name="formulario" value="formconsultaPazySalvo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-12">
+								<h:outputText
+									value="#{txt_pazysalvo['Mensaje.informacion.consulta']} #{beanConsultaPazSalvo.im_municipioDto.is_nombre}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton id="aceptarUsuarioValido"
+							styleClass="icon-btn btn-rojo-dialog btn-gradiente"
+							value="#{txt_pazysalvo['Modal.Boton.entendido']}"
+							onclick="PF('dlgPazySalvo').hide();return false" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,106 @@
+
+.ui-button-icon-only .ui-icon {
+	top: 28% !important;
+	margin-top: -10px !important;
+	left: 8% !important;
+	margin-left: 0px !important;
+}
+
+.ui-inputgroup {
+	display: block;
+}
+
+.tamano-titulo {
+	font-size: 20px !important;
+}
+
+.tamano-subtitulo {
+	font-size: 16px !important;
+	color: #000000;
+}
+
+.title{
+	display:flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.ui-confirm-dialog-message {
+    display: inline-block;
+    margin-top: 1px;
+/*     font-weight: 700; */
+}
+
+.adjuntar-documentos {
+    margin-right: -17%;
+    margin-left: -17%;
+    text-align: center;
+}
+
+.boton-descarga:hover {
+	text-decoration: none !important;
+}
+
+div.ui-fileupload-content {
+    display: block !important;
+    flex-direction: column-reverse;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.documento-medio {
+	vertical-align: middle;
+}
+
+.header {
+	background-image: linear-gradient(#EB1F28, #461A13) !important;
+	color: #FFFFFF !important;
+	font-size: 17px !important;
+	height: 24px;
+}
+
+.tablaAntiguoSistema {
+	text-align: center;
+	width: 149px !important;
+}
+
+.info-solicitud {
+    text-align: left;
+    padding-left: 25%;
+    display: block !important;
+}
+
+.tamanoBotonTabla {
+    width: 20%;
+}
+
+.imgMapa {
+	width: 90%;
+	vertical-align: middle;
+	height: 429px;
+}
+
+.tamanoTablaAS {
+    width: 100% !important;
+}
+
+.tamanoTextoAlertaTierras {
+	font-size: 17px;
+	text-align: justify;
+}
+
+.tamano-mapa {
+	left: 250px !important;
+    top: calc(100vh/2 - 142px/2 - 14px);
+    z-index: 1003;
+    position: fixed !important;
+}
+
+.tamano-datos-predio {
+    width: 600px !important;    
+    padding-right: 8%;
+}
+
+.noBorde {
+    border: none;
+}

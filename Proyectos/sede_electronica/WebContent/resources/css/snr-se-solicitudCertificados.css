@@ -1,0 +1,206 @@
+.displayNone {
+	display: none;
+}
+
+.titulo {
+	font-weight: 700 !important;
+	font-size: 17px !important;
+}
+
+.ui-datalist>.ui-datalist-header {
+	background: linear-gradient(#EB1F28, #461A13) !important;
+	color: white;
+	font-size: 18px;
+	padding: 15px !important;
+}
+
+.ui-datalist>.ui-datalist-content {
+	min-height: 58px;
+	padding: 20px 30px;
+}
+
+.ui-datalist-data>.ui-datalist-item {
+	margin-top: 20px;
+}
+
+.certificadoItem {
+	padding: 15px;
+	margin: 5px;
+	background-color: #f1f1f1;
+	color: #818181;
+}
+
+.direccionItem {
+	margin: 5px;
+	color: #818181;
+}
+
+.colorVerde {
+	color: #27822f;
+	font-weight: 600;
+}
+
+.colorGris {
+	color: #2e6fc3;
+	font-weight: 800;
+}
+
+.colorRojo {
+	color: #9f0b0b;
+	font-weight: 600;
+}
+
+.ui-selectonemenu-filter-container {
+	width: 100%
+}
+
+.ui-datalist .ui-datalist-empty-message {
+	padding: 4px 10px;
+	color: #572218;
+	font-size: medium;
+	font-weight: 700;
+	text-align: center;
+}
+
+.metodoEnvioCertificado {
+	display: flex;
+	padding: 9px 0;
+}
+
+.contenidoModal {
+	max-height: 500px !important;
+}
+
+.scrollVertical {
+	overflow-y: auto !important;
+	overflow-x: hidden !important;
+}
+
+.listaErroresE {
+	background-color: #bcefa0;
+}
+
+.listaErroresF {
+	background-color: #ff8a80;
+}
+
+.mensajeValidacion {
+	border: 0px;
+}
+
+body .ui-datatable th.ui-state-default[role="columnheader"], body .ui-treetable th.ui-state-default[role="columnheader"]
+	{
+	border: 1px solid #9a9a9a;
+	text-align: center;
+	font-weight: bold;
+	background: #9a9a9a;
+	color: white;
+}
+
+a.redireccion {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-image: linear-gradient(#EB1F28, #461A13) !important;
+}
+
+.tablaCertificados {
+	text-align: center;
+}
+
+.imagenTamano {
+	font-size: 18px;
+}
+
+.txtInfoCE {
+	margin-top: 18px;
+}
+
+.background-color {
+	Background: #fef;
+}
+
+.matricula {
+	font-weight: bold;
+}
+
+.selectOrip {
+	min-width: 100% !important;
+	max-width: 100%;
+}
+
+.filtro {
+	width: 150px !important;
+}
+
+.circuloCertificado {
+	font-size: 18px;
+}
+
+table.buttonRadio {
+	width: 100%;
+}
+
+table.buttonRadio>tbody>tr {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+table.buttonRadio>tbody>tr>td {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.resumen {
+	width: 100% !important;
+}
+
+.btn-CargueDcmt {
+	border: 0px !important;
+	font-size: 22px !important;
+}
+
+.tamano-col1 {
+	text-align: center;
+	width: 19%;
+}
+
+.tamano-col2 {
+	text-align: center;
+	width: 8%;
+}
+
+.resultado-verde {
+	border: none !important;
+	text-align: center !important;
+	width: auto !important;
+	color: green !important;
+	font-weight: bold !important;
+	
+}
+
+.tamanoForm {
+	width: 600px !important;
+	padding-right: 7%;
+}
+
+.centrar-texto {
+	text-align: center !important;
+}
+
+.imgMapa {
+	width: 337px;
+	vertical-align: middle;
+	height: 429px;
+}
+
+.padTabla{
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.tamanoTabla{
+    padding-right: 227px;
+}

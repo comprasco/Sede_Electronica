@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags-faces">
+	<!-- FLUJO_SOLICITUDES_PAGO -->
+	<ui:param name="carrito"
+		value="#{sec:isAllowed('/pages/flujoSolicitudesPago/Carrito.jsf', 'POST')}" />
+	<ui:param name="misPedidos"
+		value="#{sec:isAllowed('/pages/flujoSolicitudesPago/misPedidos.jsf', 'POST')}" />
+	<ui:param name="historialSolicitudes"
+		value="#{sec:isAllowed('/pages/flujoSolicitudesPago/historialSolicitudes.jsf', 'POST')}" />
+<ui:param name="carrito"
+		value="#{carrito}" />
+	<ui:param name="misSolicitudes"
+		value="#{misPedidos or historialSolicitudes}" />
+	<header id="snr_header_out">
+		<div id="hamburguer_usuario_cont">
+			<div id="hamburguer_Icon">
+				<div id="hamburguer_Icon_Line1" class="highest hamburguer_Icon_Line"></div>
+				<div id="hamburguer_Icon_Line2" class="highest hamburguer_Icon_Line"></div>
+				<div id="hamburguer_Icon_Line3" class="highest hamburguer_Icon_Line"></div>
+			</div>
+			<p:outputPanel id="usuario_mobile_botones_flujo"
+				rendered="#{carrito || misSolicitudes}">
+				<div id="usuario_pedidos_mobile">
+					<span class="fa fa-history" aria-hidden="true"></span> <span
+						class="fa fa-sort-desc" aria-hidden="true"></span>
+				</div>
+				<h:outputText id="separador" rendered="#{carrito}"></h:outputText>
+				<p:link id="usuario_carrito_mobile2" rendered="#{carrito}"
+					outcome="/pages/flujoSolicitudesPago/Carrito.jsf">
+					<span class="fa fa-shopping-cart" aria-hidden="true"></span>
+					<span class="badge">#{beanCarrito.ii_numeroTransacciones}</span>
+				</p:link>
+			</p:outputPanel>
+			<div id="usuario_mobile_cont">
+				<img src="#{resource['iconos/USER_2.png']}" id="usuario_mobile_img"
+					alt="" />
+			</div>
+			<div id="certificados_mobile_cont">
+				<img src="#{resource['iconos/icono_listado.png']}"
+					id="certificados_mobile_img" alt="" /> <img
+					src="#{resource['iconos/flecha-blanca-down.png']}"
+					id="certificados_mobile_flecha" alt="" />
+			</div>
+		</div>
+		<div id="container_hideLogos">
+			<div id="container_logos_fx">
+				<div id="tipoIngresoMobile">
+					<div id="wrapper_informacion_usuario_movil">
+						<ui:param name="direccion"
+						value="#{beanInicio.ius_usuarioSessionDto.is_ubicacionConcatenado eq null || beanInicio.ius_usuarioSessionDto.is_ubicacionConcatenado eq ''}"/>
+						<div class="infoPersona">
+							<span class="textInfo maxTexto">#{txt['Datos.usuario.ingreso']}<span
+								class="bold">
+									#{beanInicio.ius_usuarioSessionDto.is_rol}</span></span>
+							<h:outputText class="textInfo maxTexto" rendered="#{!direccion}"
+								value="#{beanInicio.ius_usuarioSessionDto.is_ubicacionConcatenado}" />
+						</div>
+					</div>
+				</div>
+				<div id="container_logos_pp">
+					<a href="#" id="snr_logo"><img
+						src="#{resource['img/logo-snr-60.png']}" class="header_images"
+						alt="" /></a> <a href="#" id="colombia_logo"><img
+						src="#{resource['img/dinamicas/ministerio-justicia.png']}"
+						class="header_images" alt="" /></a>
+				</div>
+			</div>
+			<div id="hide_menu">
+				<div class="hide_menu_Line" id="hide_menu_Line1"></div>
+				<div class="hide_menu_Line" id="hide_menu_Line2"></div>
+				<div class="hide_menu_Line" id="hide_menu_Line3"></div>
+				<h4 class="hide_menu_text">#{txt['hide.menu']}</h4>
+			</div>
+		</div>
+	</header>
+</ui:composition>

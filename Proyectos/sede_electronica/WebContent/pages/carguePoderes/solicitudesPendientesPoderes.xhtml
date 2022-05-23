@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_solicitudes_poderes['titulo.solicitudes.pendientes']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudesInternasPoderes.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_solicitudes_poderes['titulo.solicitudes.pendientes']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo"
+				value="#{txt_solicitudes_poderes[beanSolicitudesPendientesPoderes.is_tipoConsulta]}" />
+		</ui:include>
+
+		<!-- Importancion de tipos de criterios de busqueda-->
+		<p:importEnum
+			type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTiposSolicitudesPoderes"
+			var="enumCriterioBusqueda" />
+
+		<ui:param name="solicitudCargue"
+			value="#{ beanSolicitudesPendientesPoderes.is_tipoConsulta eq  enumCriterioBusqueda.SOLICITUDES_PENDIENTES_CARGUE_PODER.is_criterio}" />
+		<ui:param name="pendienteCorreccion"
+			value="#{ beanSolicitudesPendientesPoderes.is_tipoConsulta eq enumCriterioBusqueda.SOLICITUDES_PENDIENTES_CORRECCION.is_criterio}" />
+		<ui:param name="pendienteAnulacion"
+			value="#{ beanSolicitudesPendientesPoderes.is_tipoConsulta eq enumCriterioBusqueda.SOLICITUDES_PENDIENTES_ANULACION.is_criterio}" />
+		<h:form>
+			<div class="row panel-seguimiento">
+				<div class="col-xd-12">
+					<p:dataTable class="centrar-elementos-tabla-solicitudes"
+						reflow="true"
+						value="#{beanSolicitudesPendientesPoderes.ilspp_solicitudes}"
+						id="tablaSolicitudes" var="solicitud"
+						sortBy="#{solicitud.id_fechaCreacion}" sortOrder="ascending">
+
+						<f:facet name="header">
+							<h:outputText
+								value="#{txt_solicitudes_poderes[beanSolicitudesPendientesPoderes.is_tipoConsulta]}" />
+						</f:facet>
+
+						<p:column headerText="ID Solicitud">
+							<h:outputText value="#{solicitud.is_id}">
+							</h:outputText>
+						</p:column>
+
+						<p:column
+							headerText="#{txt_solicitudes_poderes['tabla.fecha.creacion']}">
+							<h:outputText value="#{solicitud.id_fechaCreacion}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column
+							headerText="#{txt_solicitudes_poderes['tabla.entidad.solicitante']}">
+							<h:outputText
+								value="#{solicitud.iee_entidadEspecialSolicitante.is_nombreEntidadExterna}" />
+						</p:column>
+
+						<p:column rendered="#{pendienteAnulacion or pendienteCorreccion}"
+							headerText="#{txt_solicitudes_poderes['tabla.id.poder']}">
+							<h:outputText value="#{solicitud.is_idPoder}" />
+						</p:column>
+
+						<p:column
+							headerText="#{txt_solicitudes_poderes['tabla.tipo.poder']}"
+							rendered="#{solicitudCargue}">
+							<h:outputText value="#{solicitud.is_tipoPoder}" />
+						</p:column>
+
+						<p:column rendered="#{pendienteAnulacion}"
+							headerText="#{txt_solicitudes_poderes['tabla.tipo.tramite.anular']}">
+							<h:outputText value="#{solicitud.is_tipoTramite}" />
+						</p:column>
+
+						<p:column
+							headerText="#{txt_solicitudes_poderes['tabla.revision']}">
+							<p:commandButton styleClass="btn-gradiente btn-rojo "
+								value="#{txt_solicitudes_poderes['tabla.boton.detalle']}"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();"
+								action="#{beanSolicitudesPendientesPoderes.redireccionarSolicitud(solicitud.is_id)}"></p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+
+		</h:form>
+
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();
+			});
+		</script>
+		<!-- Script que ejecuta el Keyfilter-->
+	</ui:define>
+</ui:composition>

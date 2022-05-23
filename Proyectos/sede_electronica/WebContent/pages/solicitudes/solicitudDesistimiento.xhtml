@@ -1,0 +1,875 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css" name="snr-se-desistimiento.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_desistimiento['head.titulo.desistimiento']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_desistimiento['banner']}" />
+			<ui:param name="imagen" value="img-solicitudCertificados" />
+			<ui:param name="subtitulo"
+				value="#{txt_desistimiento['head.titulo.desistimiento']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/solicitudDesistimiento.jsf" />
+		</ui:include>
+		<h:form id="formDesistimiento">
+			<p:panel id="consultaNirTurno"
+				rendered="#{beanDesistimiento.ii_desistimiento == 1 or beanDesistimiento.ii_desistimiento == 2}">
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<p:outputLabel styleClass="label-form text-center tamano-titulo"
+							value="#{txt_desistimiento['head.titulo.desistimiento']}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_desistimiento['label.explicacion']}" />
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel id="lblNir" styleClass="label-form" for="nir"
+							value="#{txt_desistimiento['label.form.nir']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="nir" maxlength="100"
+								value="#{beanDesistimiento.is_nir}"
+								placeholder="#{txt_desistimiento['placeHolder.nir']}"
+								styleClass="text-input border-completo inputDes">
+								<p:keyFilter regEx="/[a-zA-Z0-9-]/i" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="lblNir" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_desistimiento['tooltip.label.nir']}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel id="lblTurno" styleClass="label-form" for="turno"
+							value="#{txt_desistimiento['label.form.turno']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="turno" autocomplete="off" maxlength="100"
+								value="#{beanDesistimiento.is_numeroTurno}"
+								styleClass="text-input border-completo inputDes"
+								placeholder="#{txt_desistimiento['placeHolder.turno']}">
+								<p:keyFilter regEx="/[a-zA-Z0-9-]/i" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="lblTurno" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_desistimiento['tooltip.label.turno']}" />
+								</div>
+							</p:tooltip>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel id="lblCalidad" styleClass="label-form"
+							for="calidadSolicitante"
+							value="#{txt_desistimiento['label.form.calidad']}" />
+						<p:outputLabel styleClass="required-field" value="*" />
+						<p:selectOneMenu id="calidadSolicitante"
+							filterMatchMode="contains" widgetVar="calidadSolicitante"
+							value="#{beanDesistimiento.itd_transaccionDesistimientoDto.is_solicitante}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{beanDesistimiento.ilc_listaCatalogoInteresado}"
+								var="interesado"
+								itemLabel="#{txt_traslado_matricula[interesado.is_nombre]}"
+								itemValue="#{interesado.is_id}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="lblCalidad" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_desistimiento['tooltip.label.calidad']}" />
+							</div>
+						</p:tooltip>
+					</div>
+				</div>
+				<br />
+				<div class="col-xs-12 gradiente text-center space-row tituloPanel">
+					<h:outputText
+						value="#{txt_desistimiento['head.titulo.informacion.solicitante']}" />
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel styleClass="label-form" for="tipoPersona"
+							value="#{txt_persona['label.TipoPersona']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="tipoPersona" readonly="true"
+								widgetVar="tipoPersonaSelect"
+								styleClass="text-input border-completo inputDes"
+								value="#{beanDesistimiento.ipc_personaCompletaDto.ipd_personaDto.ic_catalogoDto.is_nombre}" />
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel styleClass="label-form" for="tipoDocumento"
+							value="#{txt_persona['label.TipoDocumento']}" />
+						<div class="ui-inputgroup-center">
+							<p:inputText id="tipoDocumento" readonly="true"
+								styleClass="text-input inputDes border-completo"
+								value="#{beanDesistimiento.ipc_personaCompletaDto.ipd_personaDto.itd_tipoDocumentoDto.is_nombre}" />
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel styleClass="label-form"
+							for="numeroDocumentoNatural"
+							value="#{txt_persona['label.NumeroDocumento']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="numeroDocumentoNatural" readonly="true"
+								styleClass="text-input inputDes border-completo"
+								value="#{beanDesistimiento.ipc_personaCompletaDto.ipd_personaDto.is_numeroDocumento}" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<ui:fragment rendered="#{beanDesistimiento.ii_solicitante != 2}">
+						<div class="col-xs-12 col-md-3">
+							<p:outputLabel id="labelPrimerNombreNat" styleClass="label-form"
+								for="primerNombreNatural"
+								value="#{txt_persona['label.PrimerNombre']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="primerNombreNatural" readonly="true"
+									styleClass="text-input inputDes border-completo" maxlength="15"
+									value="#{beanDesistimiento.ipc_personaCompletaDto.ipnd_personaNaturalDto.is_primerNombre}" />
+							</div>
+							<span class="help-block"> <p:message
+									for="primerNombreNatural" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-md-3">
+							<p:outputLabel id="labelSegundoNombreNat" styleClass="label-form"
+								for="segundoNombreNatural"
+								value="#{txt_persona['label.SegundoNombre']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="segundoNombreNatural"
+									styleClass="text-input inputDes border-completo"
+									readonly="true"
+									value="#{beanDesistimiento.ipc_personaCompletaDto.ipnd_personaNaturalDto.is_segundoNombre}" />
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-3">
+							<p:outputLabel id="labelPrimerApellidoNat"
+								styleClass="label-form" for="primerApellidoNatural"
+								value="#{txt_persona['label.PrimerApellido']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="primerApellidoNatural" readonly="true"
+									styleClass="text-input inputDes border-completo"
+									value="#{beanDesistimiento.ipc_personaCompletaDto.ipnd_personaNaturalDto.is_primerApellido}" />
+							</div>
+							<span class="help-block"> <p:message
+									for="primerApellidoNatural" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-md-3">
+							<p:outputLabel id="labelSegundoApellidoNat"
+								styleClass="label-form" for="segundoApellidoNatural"
+								value="#{txt_persona['label.SegundoApellido']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="segundoApellidoNatural" readonly="true"
+									styleClass="text-input inputDes border-completo"
+									value="#{beanDesistimiento.ipc_personaCompletaDto.ipnd_personaNaturalDto.is_segundoApellido}" />
+							</div>
+						</div>
+					</ui:fragment>
+					<ui:fragment rendered="#{beanDesistimiento.ii_solicitante != 1}">
+						<div class="col-xs-12 col-md-10">
+							<p:outputLabel id="labelRazonSocial" styleClass="label-form"
+								for="razonSocial" value="#{txt_persona['label.RazonSocial']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="razonSocial" readonly="true"
+									styleClass="text-input inputDes border-completo" maxlength="50"
+									placeholder="#{txt_persona['placeholder.RazonSocial']}"
+									value="#{beanDesistimiento.ipc_personaCompletaDto.ipjd_personaJuridicaDto.is_razonSocial}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+									for="labelRazonSocial" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_persona['tooltip.RazonSocial']}" />
+									</div>
+								</p:tooltip>
+							</div>
+						</div>
+					</ui:fragment>
+				</div>
+				<div class="row">
+					<ui:fragment rendered="#{beanDesistimiento.ii_solicitante != 2}">
+						<div class="col-xs-12 col-md-4">
+							<p:outputLabel id="labelGeneroNat" styleClass="label-form"
+								for="genero" value="#{txt_persona['label.Genero']}" />
+							<p:selectOneMenu id="genero" disabled="true"
+								value="#{beanDesistimiento.ipc_personaCompletaDto.ipnd_personaNaturalDto.ic_catalogoTipoGenero.is_id}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" />
+								<f:selectItems
+									value="#{beanDesistimiento.cargarCatalogoTipoGenero()}"
+									var="genero" itemLabel="#{genero.is_nombre}"
+									itemValue="#{genero.is_id}" />
+							</p:selectOneMenu>
+							<span class="help-block"> <p:message for="genero" />
+							</span>
+						</div>
+					</ui:fragment>
+					<div class="col-xs-12 col-md-4">
+						<p:outputLabel id="labelCorreoNat" styleClass="label-form"
+							for="correoNatural"
+							value="#{txt_desistimiento['label.form.correo']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="correoNatural" readonly="true"
+								styleClass="text-input inputDes border-completo"
+								value="#{beanDesistimiento.ipc_personaCompletaDto.iud_usuarioDto.is_correoElectronico}" />
+						</div>
+						<span class="help-block"> <p:message for="correoNatural" />
+						</span>
+					</div>
+				</div>
+				<br />
+				<div id="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-4">
+						<p:commandButton id="btnBuscar" type="submit"
+							styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_desistimiento['boton.buscar']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();">
+							<p:ajax process="@form"
+								listener="#{beanDesistimiento.validacionNIRTurno()}"
+								update="formDesistimiento" />
+						</p:commandButton>
+					</div>
+				</div>
+				<br />
+				<br />
+				<br />
+			</p:panel>
+			<ui:fragment id="resultadoConsulta"
+				rendered="#{beanDesistimiento.ii_desistimiento == 2}">
+				<div class="text-center">
+					<h:outputText styleClass="label-form"
+						value=" #{txt_desistimiento['mensaje.busqueda']}" />
+					<br />
+					<h:outputText value=" #{txt_desistimiento['mensaje.busqueda.dos']}" />
+				</div>
+				<p:panel id="panelTablaRegistro">
+					<p:dataTable styleClass="tablaCertificados" id="tablaRegistro"
+						widgetVar="tablaRegistro" reflow="true" paginator="true" rows="10"
+						paginatorPosition="bottom"
+						paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+						currentPageReportTemplate="{currentPage} / {totalPages}"
+						emptyMessage="#{txt_desistimiento['tabla.registro.vacia']}"
+						var="registro"
+						value="#{beanDesistimiento.iss_desistimientoDto.ilssr_listaSeguimientoSolicitudesRespuestaDto}"
+						stickyHeader="false">
+						<p:column headerText="#{txt_desistimiento['tabla.header.nir']}">
+							<h:outputText value="#{registro.is_nir}" id="registroNir" />
+						</p:column>
+						<p:column headerText="#{txt_desistimiento['tabla.header.turno']}">
+							<h:outputText value="#{registro.is_numeroTurno}"
+								id="registroTurno" />
+						</p:column>
+						<p:column headerText="#{txt_desistimiento['tabla.header.fase']}">
+							<h:outputText value="#{registro.is_faseActualTurno}"
+								id="registroFase">
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{txt_desistimiento['tabla.header.proceso']}">
+							<h:outputText value="#{registro.is_procesoTurno}"
+								id="registroProceso" />
+						</p:column>
+						<p:column headerText="#{txt_desistimiento['tabla.header.datos']}">
+							<h:outputText
+								value="#{registro.is_tipo} #{registro.is_numeroDocumento} #{registro.is_fechaDocumento} #{registro.is_oficinaRegistro}"
+								id="registroDatos" />
+						</p:column>
+						<p:column headerText="#{txt_desistimiento['tabla.header.accion']}">
+							<p:commandButton id="btnSeleccionar"
+								styleClass="btn-gradiente icon-btn btn-rojo"
+								action="#{beanDesistimiento.validarEtapaDesistimiento(registro)}"
+								value="#{txt_desistimiento['boton.seleccionar']}"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();">
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					<div class="col-xs-12 col-md-4 col-md-offset-4">
+						<p:commandButton id="btnLimpiar"
+							rendered="#{beanDesistimiento.ii_desistimiento == 2}"
+							styleClass="btn-gris"
+							value="#{txt_desistimiento['boton.limpiar']}"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();">
+							<p:ajax process="@form"
+								listener="#{beanDesistimiento.limpiarPropiedadesVista()}"
+								update="formDesistimiento" />
+						</p:commandButton>
+					</div>
+					<br />
+					<br />
+				</p:panel>
+			</ui:fragment>
+			<br />
+			<!-- Cargue de archivos  -->
+			<p:panel id="cargueSoportes" styleClass="panel-content"
+				rendered="#{beanDesistimiento.ii_desistimiento == 3}">
+				<div class="row">
+					<div class="col-xs-12 align-center">
+						<p:outputLabel id="labelSoporteDesistimiento"
+							styleClass="label-form text-center tamano-titulo"
+							value="#{txt_desistimiento['tabs.soporte']}" />
+						<br /> <br />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 align-center">
+						<p:outputLabel
+							value="#{txt_desistimiento['text.info.docobligatorios']} " />
+						<br />
+						<p:outputLabel styleClass="label-form"
+							value="#{beanDesistimiento.is_nombreDocumentosObligatorios}" />
+						<br /> <br />
+					</div>
+				</div>
+				<h:form id="formCargarSoporte">
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelTipoDocumental"
+								for="tipoDocumental"
+								value="#{txt_desistimiento['label.adjuntar.tipoDocumental']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:selectOneMenu id="tipoDocumental" widgetVar="tipoDocumental"
+								converter="selectOneMenuConverter" filterMatchMode="contains"
+								filter="true"
+								value="#{beanDesistimiento.ist_soporteTransaccionDto.icd_catalogoDocumentoDto}">
+								<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+									itemValue="" noSelectionOption="true" />
+								<f:selectItems value="#{beanDesistimiento.ilcd_tipoDocumental}"
+									var="tipoDocumental" itemLabel="#{tipoDocumental.is_nombre}"
+									itemValue="#{tipoDocumental}" />
+							</p:selectOneMenu>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelTipoDocumental"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_desistimiento['tooltip.adjuntar.tipoDocumental']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="labelTipoDocumental" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelNumeroDocumento"
+								for="numeroDocumento"
+								value="#{txt_desistimiento['label.adjuntar.numDocumento']}" />
+							<div class="ui-inputgroup">
+								<p:inputText id="numeroDocumento" styleClass="inputRec"
+									autocomplete="off" maxlength="20"
+									value="#{beanDesistimiento.ist_soporteTransaccionDto.is_turno}"
+									placeholder="#{txt_desistimiento['placeholder.adjuntar.numeroDocumento']}">
+									<p:keyFilter regEx="/[0-9\-]/i" />
+								</p:inputText>
+							</div>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelNumeroDocumento"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_desistimiento['tooltip.adjuntar.numDocumento']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="labelNumeroDocumento" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<div class="row space-row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelFechaDocumento"
+								for="fechaDocumento"
+								value="#{txt_desistimiento['label.adjuntar.fechaDocumento']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div>
+								<p:calendar id="fechaDocumento" readonlyInput="true"
+									binding="#{fechaDocumento}" pattern="dd/MM/yyyy" maxlength="10"
+									locale="es" yearRange="1900:2200" navigator="true"
+									placeholder="#{txt['placeholder.FormatoFecha']}"
+									styleClass="text-input-calendar" showOn="button"
+									value="#{beanDesistimiento.ist_soporteTransaccionDto.id_fechaDocumento}" />
+							</div>
+							<h:outputText id="mostrarContador" />
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelFechaDocumento"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_desistimiento['tooltip.adjuntar.fechaDocumento']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message
+									for="labelFechaDocumento" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" id="labelArchivo"
+								for="cargaDocumentos"
+								value="#{txt_desistimiento['label.adjuntar.archivo']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:fileUpload id="cargaDocumentos" styleClass="cargar-archivo"
+								fileUploadListener="#{beanDesistimiento.cargarArchivo}"
+								showButtons="false"
+								sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+								allowTypes="/(\.|\/)(pdf|PDF)$/" auto="true"
+								label="#{txt_persona['label.ExaminarArchivo']}" process="@this"
+								update="textoSalidaArchivo"
+								invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+								invalidFileMessage="#{txt_desistimiento['Mensaje.archivo.formatoInvalido']}">
+								<div class="col-xs-12 tamano-examinar">
+									<br />
+									<h:outputText id="textoSalidaArchivo" styleClass="text-input"
+										value="#{beanDesistimiento.ist_soporteTransaccionDto.ia_archivoDto.is_nombreArchivo}" />
+								</div>
+							</p:fileUpload>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelArchivo" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_desistimiento['tooltip.adjuntar.archivo']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="labelArchivo" />
+							</span>
+						</div>
+					</div>
+					<div class="row space-row">
+						<div
+							class="col-xs-10 col-sm-4 col-xs-offset-1 col-sm-offset-4 space-row">
+							<p:commandButton value="#{txt_desistimiento['label.agregar']}"
+								actionListener="#{beanDesistimiento.agregarTipoDocumental}"
+								styleClass="btn-gradiente btn-rojo" type="submit"
+								process="formCargarSoporte"
+								update="formDesistimiento:cargueSoportes"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();">
+							</p:commandButton>
+						</div>
+					</div>
+					<div class="col-xs-12  align-center">
+						<p:dataTable var="documento" styleClass="centrar"
+							value="#{beanDesistimiento.itd_transaccionDesistimientoDto.ilst_soportesTransaccionCargadosDto}"
+							widgetVar="listaDocumentos" id="listaDocumentos" reflow="true"
+							rowIndexVar="index"
+							emptyMessage="#{txt_desistimiento['tabla.vacia.soporte']}"
+							stickyHeader="false">
+							<p:column
+								headerText="#{txt_desistimiento['label.adjuntar.tipoDocumental']}">
+								<h:outputText
+									value="#{documento.icd_catalogoDocumentoDto.is_nombre}" />
+							</p:column>
+							<p:column headerText="#{txt_desistimiento['label.form.turno']}">
+								<h:outputText value="#{beanDesistimiento.itd_transaccionDesistimientoDto.issr_seguimientoSolicitudesRespuestaDto.is_numeroTurno}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_desistimiento['label.nombreArchivo']}">
+								<h:outputText
+									value="#{documento.ia_archivoDto.is_nombreArchivo}" />
+							</p:column>
+							<p:column headerText="#{txt_desistimiento['tabla.header.subir']}">
+								<p:commandLink
+									styleClass="#{documento.ib_desactivarBotonesCarga ? 'fa fa-check colorVerde' : 'fa fa-cloud-upload colorRojo' }"
+									disabled="#{documento.ib_desactivarBotonesCarga}">
+									<p:ajax
+										listener="#{beanDesistimiento.cargarSeleccion(true,index)}"
+										update="formAccionArchivo"
+										onsuccess="PF('accionArchivo').show();" />
+								</p:commandLink>
+							</p:column>
+							<p:column
+								headerText="#{txt_desistimiento['tabla.header.eliminar']}"
+								styleClass="text-center">
+								<p:commandLink styleClass="fa fa-trash-o colorRojo"
+									disabled="#{documento.ib_desactivarBotonesCarga}">
+									<p:ajax
+										listener="#{beanDesistimiento.cargarSeleccion(false,index)}"
+										update="formAccionArchivo"
+										onsuccess="PF('accionArchivo').show();" />
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+						<br /> <br />
+					</div>
+					<div class="row">
+						<div
+							class="col-xs-10 col-sm-4 col-xs-offset-1 col-sm-offset-4 space-row">
+							<p:commandButton
+								value="#{txt_correccion['tabs.boton.enviarSolicitud']}"
+								disabled="#{beanDesistimiento.itd_transaccionDesistimientoDto.getSize() lt 1}"
+								styleClass="btn-gradiente btn-rojo"
+								onstart="PF('preguntarFinalizacion').show();">
+							</p:commandButton>
+						</div>
+					</div>
+				</h:form>
+			</p:panel>
+		</h:form>
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarRegistro" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmarRegistro" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:dataTable styleClass="tablaCertificados" id="tablaRegistro"
+							widgetVar="tablaRegistro" reflow="true"
+							value="#{beanDesistimiento.itd_transaccionDesistimientoDto.issr_seguimientoSolicitudesRespuestaDto}"
+							emptyMessage="#{txt_desistimiento['tabla.registro.vacia']}"
+							var="registro" stickyHeader="false">
+							<p:column headerText="#{txt_desistimiento['tabla.header.nir']}">
+								<h:outputText value="#{registro.is_nir}" id="registroNir" />
+							</p:column>
+							<p:column headerText="#{txt_desistimiento['tabla.header.turno']}">
+								<h:outputText value="#{registro.is_numeroTurno}"
+									id="registroTurno" />
+							</p:column>
+							<p:column headerText="#{txt_desistimiento['tabla.header.fase']}">
+								<h:outputText value="#{registro.is_faseActualTurno}"
+									id="registroFase">
+								</h:outputText>
+							</p:column>
+							<p:column
+								headerText="#{txt_desistimiento['tabla.header.proceso']}">
+								<h:outputText value="#{registro.is_procesoTurno}"
+									id="registroProceso" />
+							</p:column>
+							<p:column headerText="#{txt_desistimiento['tabla.header.datos']}">
+								<h:outputText
+									value="#{registro.is_tipo} #{registro.is_numeroDocumento} #{registro.is_fechaDocumento} #{registro.is_oficinaRegistro}"
+									id="registroDatos" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel id="lblObservacionesReg" styleClass="label-form"
+							for="observacionesReg"
+							value="#{txt_desistimiento['label.modal.observaciones']}" />
+						<p:inputTextarea id="observacionesReg" rows="5" autocomplete="off"
+							autoResize="false" styleClass="text-input border-completo tamano"
+							maxlength="4000" editable="false"
+							placeholder="#{txt_desistimiento['placeholder.registro.observaciones']}"
+							value="#{beanDesistimiento.itd_transaccionDesistimientoDto.is_observaciones}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{txt_desistimiento['text.modal-registro']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_registrar_alerta['modal.confirmar.boton.cancelar']}"
+								oncomplete="PF('confirmarRegistro').hide();">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								oncomplete="PF('confirmarRegistro').hide();"
+								value="#{txt_registrar_alerta['wizard.seleccion.modal.aceptar']}">
+								<p:ajax process="@all"
+									update="formDesistimiento formDesistimiento:cargueSoportes formDesistimiento:formCargarSoporte"
+									listener="#{beanDesistimiento.generarSolicitud()}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modales -->
+		<!-- Modal para redireccion desistimiento-->
+		<!-- Modal de informacion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalInfoDesistimiento" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalInfoDesistimiento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:define name="body-modal">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 ">
+							<p:outputLabel style="font-weight:bold"
+								value="#{txt_desistimiento['text.info.articulo.titulo']}" />
+						</div>
+						<br />
+						<div class="col-xs-12 textoLey">
+							<p:outputLabel value="#{txt_desistimiento['text.info.articulo']}" />
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton styleClass="btn-rojo btn-gradiente"
+							oncomplete="PF('modalInfoDesistimiento').hide();"
+							action="#{beanDesistimiento.verificarTransaccion}"
+							value="#{txt_solicitud_consulta['boton.entendido']}"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 	Recuperar Transaccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="recuperarTransaccion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formRecuperar" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_desistimiento['modal.recuperar.titulo']}" />
+				<br />
+				<h:outputText
+					value="#{txt_desistimiento['modal.recuperar.contenido']}" />
+				<br />
+				<h:outputText
+					value="#{txt_desistimiento['modal.recuperar.pregunta']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-5 col-md-offset-1">
+						<p:commandButton styleClass="btn-gris text-center"
+							value="#{txt['boton.Cancelar.Upper']}"
+							action="#{beanDesistimiento.descartarTransaccion}"
+							update="formDesistimiento">
+							<div class="col-xs-12 text-center">
+								<p:confirm header="#{txt['titulo.modal.confirmacion']}"
+									message="#{txt_desistimiento['modal.recuperar.confirmar.contenido']}"
+									icon="pi pi-exclamation-triangle" />
+							</div>
+						</p:commandButton>
+						<p:confirmDialog
+							styleClass="box-solid box-danger text-center cerrarModal"
+							global="true" width="400" showEffect="fade" hideEffect="fade"
+							responsive="true">
+							<div class="row">
+								<div class="col-xs-12 col-md-5 col-md-offset-1">
+									<p:commandButton value="#{txt['boton.Cancelar.Upper']}"
+										type="button" styleClass="ui-confirmdialog-no btn-gris " />
+								</div>
+								<div class="col-xs-12 col-md-5">
+									<p:commandButton value="#{txt['boton.Aceptar.Upper']}"
+										type="button"
+										styleClass="ui-confirmdialog-yes  btn-rojo btn-gradiente" />
+								</div>
+							</div>
+						</p:confirmDialog>
+					</div>
+					<div class="col-xs-12 col-md-5">
+						<p:commandButton styleClass="btn-rojo btn-gradiente icon-btn"
+							value="#{txt['boton.Aceptar.Upper']}"
+							action="#{beanDesistimiento.recuperarSolicitud}"
+							update="formDesistimiento"
+							oncomplete="PF('recuperarTransaccion').hide();">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 	accion archivo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="accionArchivo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_desistimiento['label.titulo']}" />
+			<ui:param name="formulario" value="formAccionArchivo" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_desistimiento['label.carga1']}" />
+				<h:outputText
+					value=" #{beanDesistimiento.ib_cargar ? txt_desistimiento['label.carga.subir'] : txt_desistimiento['label.carga.eliminar']}" />
+				<h:outputText value=" #{txt_desistimiento['label.carga2']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							onsuccess="PF('blockUI-Loading').hide();"
+							oncomplete="PF('accionArchivo').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							actionListener="#{beanDesistimiento.accionArchivo}"
+							update="formDesistimiento:cargueSoportes"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide();"
+							oncomplete="PF('accionArchivo').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Error envio documentos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="errorEnvioDocumentos" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_desistimiento['label.tituloInformativo']}" />
+			<ui:param name="formulario" value="formErrorEnvioDocumentos" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_desistimiento['soporte.no.cargado']}" />
+				<br />
+				<h:outputText value="#{txt_desistimiento['soporte.no.cargado1']}" />
+				<h:outputText styleClass="fa fa-cloud-upload" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.entendido']}"
+							onsuccess="PF('errorEnvioDocumentos').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- pregunta finalizar solicitud -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="preguntarFinalizacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_desistimiento['label.titulo']}" />
+			<ui:param name="formulario" value="formPreguntarFinalizacion" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_desistimiento['label.pregunta']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							onsuccess="PF('preguntarFinalizacion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}"
+							actionListener="#{beanDesistimiento.finalizarTransaccion}"
+							onsuccess="PF('preguntarFinalizacion').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 	Finalizar proceso -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="finalizarProceso" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formFinalizarProceso" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_correccion['label.envio1']}" />
+				<h:outputText
+					value="#{beanDesistimiento.itd_transaccionDesistimientoDto.is_nir}" />
+				<h:outputText value=" #{txt_correccion['label.envio2']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.entendido']}"
+							action="/pages/personas/inicio.jsf?faces-redirect=true" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 	PODER no cargado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="poderNoCargado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formPoderNoCargado" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_desistimiento['modal.noPoder']}" />
+				<br />
+				<h:outputText styleClass="label-form" escape="false"
+					value="#{beanDesistimiento.is_documentosFaltantes}" />
+				<br />
+				<h:outputText value="#{txt_desistimiento['modal.noPoder.pregunta']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.entendido']}"
+							onclick="PF('poderNoCargado').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modales -->
+		<!-- Modal de confirmacion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalDocInfo" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalDoc" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:define name="body-modal">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12">
+							<h:outputText value="#{txt_desistimiento['text.info.cargueDoc']}" />
+							<h:outputText styleClass="label-form"
+								value="#{beanDesistimiento.is_nombreDocumentosObligatorios}" />
+							<h:outputText value="#{beanDesistimiento.is_mensajeArchivo}" />
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton styleClass="btn-rojo btn-gradiente"
+							oncomplete="PF('modalDocInfo').hide();"
+							value="#{txt_solicitud_consulta['boton.entendido']}">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

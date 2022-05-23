@@ -1,0 +1,114 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<h:outputScript library="js" name="keyfilter.js" />
+	<!-- Script que ejecuta el Keyfilter-->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			cargarKeyfilters();
+		});
+	</script>
+	<!-- Script que ejecuta el Keyfilter-->
+	<div class="col-xs-12 col-sm-#{numCol+2}">
+		<p:outputLabel styleClass="label-form"
+			id="labelOficinaRegistro#{vista}" for="oficinaRegistro#{vista}"
+			value="#{txt_certificados['wizardCertificado.datos.oficinaRegistro']}" />
+		<p:outputLabel rendered="#{requerido}" styleClass="required-field">*</p:outputLabel>
+		<p:selectOneMenu id="oficinaRegistro#{vista}" filter="true"
+			widgetVar="oficinaRegistro#{vista}" filterMatchMode="contains"
+			required="#{requerido}" converter="selectOneMenuConverter"
+			requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+			filterPlaceholder="#{txt_certificados['wizardCertificado.datos.placeholder.oficinaRegistro']}"
+			value="#{bean[oficinaRegistroSeleccionado]}">
+			<f:selectItem
+				itemLabel="#{txt_certificados['wizardCertificado.datos.seleccionar']}"
+				itemValue="" />
+			<f:selectItems value="#{bean[listaOficinaRegistro]}"
+				var="circuloRegistral"
+				itemLabel="#{circuloRegistral.is_nombre} - (#{circuloRegistral.is_id})"
+				itemValue="#{circuloRegistral}" />
+			<p:ajax update="numeroOficinaRegistro#{vista}" />
+		</p:selectOneMenu>
+		<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+			styleClass="tooltipGeneral" for="labelOficinaRegistro#{vista}"
+			position="top">
+			<div class="content-tooltip-general">
+				<p:outputLabel
+					value="#{txt_certificados['wizardCertificado.datos.tooltip.oficinaRegistro']}" />
+			</div>
+		</p:tooltip>
+		<span class="help-block"> <p:message
+				for="oficinaRegistro#{vista}" />
+		</span>
+	</div>
+	<div class="col-xs-12 col-sm-#{numCol-2}">
+		<p:outputLabel id="labelNumeroOficinaRegistro#{vista}"
+			for="numeroOficinaRegistro#{vista}"
+			styleClass="label-form tresPuntos"
+			value="#{txt_certificados['wizardCertificado.datos.numeroOficinaRegistro']}" />
+		<div class="ui-inputgroup">
+			<p:inputText id="numeroOficinaRegistro#{vista}" readonly="true"
+				styleClass="block"
+				value="#{bean[oficinaRegistroSeleccionado]['is_id']}" />
+		</div>
+		<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+			styleClass="tooltipGeneral" for="labelNumeroOficinaRegistro#{vista}"
+			position="top">
+			<div class="content-tooltip-general">
+				<p:outputLabel
+					value="#{txt_certificados['wizardCertificado.datos.numeroOficinaRegistro']}" />
+			</div>
+		</p:tooltip>
+	</div>
+	<ui:param name="campoNupre"
+		value="#{!beanNupre.getIb_ocultarNupre()}" />
+	<div
+		class="col-xs-12 #{campoNupre.equals(true) ? 'col-sm-'.concat(numCol) : ''}">
+		<p:outputLabel id="labelNumeroMatricula#{vista}"
+			for="numeroMatricula#{vista}" styleClass="label-form"
+			value="#{txt_certificados['wizardCertificado.datos.numeroMatricula']}" />
+		<p:outputLabel rendered="#{requerido}" styleClass="required-field">*</p:outputLabel>
+		<div class="ui-inputgroup">
+			<p:inputText id="numeroMatricula#{vista}" autocomplete="off"
+				maxlength="10" styleClass="mask-Numeric"
+				placeholder="#{txt_certificados['wizardCertificado.datos.placeholder.numeroMatricula']}"
+				requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+				required="#{requerido}" value="#{bean[numeroMatricula]}">
+			</p:inputText>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelNumeroMatricula#{vista}"
+				position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel
+						value="#{txt_certificados['wizardCertificado.datos.tooltip.numeroMatricula']}" />
+				</div>
+			</p:tooltip>
+			<span id="spanNumeroMatricula#{vista}"
+				class="ui-inputgroup-addon ocultar"> <p:commandLink>
+					<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+					<p:ajax event="click"
+						onstart="limpiarCampo('#{panelAnterior}:numeroMatricula#{vista}', 'spanNumeroMatricula#{vista}');" />
+				</p:commandLink>
+			</span>
+		</div>
+		<span class="help-block"> <p:message
+				for="numeroMatricula#{vista}" />
+		</span>
+	</div>
+
+	<ui:fragment rendered="#{campoNupre}">
+		<div class="col-xs-12 col-sm-#{numCol}">
+			<p:outputLabel id="labelNupre#{vista}" for="nupre#{vista}"
+				styleClass="label-form"
+				value="#{txt_certificados['table.label.numNupre']}" />
+			<div class="ui-inputgroup">
+				<p:inputText id="nupre#{vista}" styleClass="mask-AlphaNum"
+					autocomplete="off" maxlength="50" value="#{bean[nupre]}"
+					placeholder="#{txt_certificados['table.placeHolder.numNupre']}">
+				</p:inputText>
+			</div>
+		</div>
+	</ui:fragment>
+</ui:composition>

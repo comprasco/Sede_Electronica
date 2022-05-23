@@ -1,0 +1,910 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags-faces">
+	<p:importEnum
+		type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumPais"
+		var="EnumPais" />
+	<!-- INICIO -->
+	<ui:param name="inicio"
+		value="#{sec:isAllowed('/pages/personas/inicio.jsf', 'POST')}" />
+	<!-- PARAMETRIZACION ALCALDIA -->
+	<ui:param name="parametrizacionAlcaldia"
+		value="#{sec:isAllowed('/pages/admon/parametrizacion/alcaldias/consultaAlcadiasParametrizadas.jsf', 'POST')}" />
+	<!-- CONSULTAS NOTARIAS -->
+	<ui:param name="consultaDatosBasicos"
+		value="#{sec:isAllowed('/pages/solicitudes/consultaDatosBasicos.jsf','POST')}"></ui:param>
+	<ui:param name="consultaEstdosJuridicos"
+		value="#{sec:isAllowed('/pages/solicitudes/estadojuridico.jsf','POST')}"></ui:param>
+	<ui:param name="menuConsultasNotarias"
+		value="#{consultaDatosBasicos or consultaEstdosJuridicos}" />
+	<!-- PARAMETRIZACION USUARIOS ADMINISTRADORES -->
+	<ui:param name="parametrizacionUsuariosAdministadores"
+		value="#{sec:isAllowed('/pages/admon/usuarios/consultaUsuariosAdministradores.jsf', 'POST')}" />
+	<!-- ALERTAS -->
+	<ui:param name="registroAlertaIndividual"
+		value="#{sec:isAllowed('/pages/alertas/registroAlertas/registroAlertaIndividual.jsf', 'POST')}" />
+	<ui:param name="registroAlertaMasiva"
+		value="#{sec:isAllowed('/pages/alertas/registroAlertas/registroAlertaMasiva.jsf', 'POST')}" />
+	<ui:param name="historialAlertas"
+		value="#{sec:isAllowed('/pages/alertas/registroAlertas/consultarAlertas.jsf', 'POST')}" />
+	<ui:param name="menuAlertas"
+		value="#{registroAlertaIndividual or registroAlertaMasiva or historialAlertas}" />
+	<!-- ALERTAS TIERRAS -->
+	<ui:param name="alertaTierras"
+		value="#{sec:isAllowed('/pages/alertas/alertaTierras/alertaDeTierras.jsf', 'POST')}" />
+	<ui:param name="menuAlertasEE" value="#{alertaTierras}" />
+
+	<!-- SOLICITUDES -->
+	<!-- SOLICITUDES - CORRECCION -->
+	<ui:param name="ingresoSolicitud"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudesCorrecciones/ingresoSolicitud.jsf', 'POST')}" />
+	<ui:param name="subSolicitudCorreciones" value="#{ingresoSolicitud}" />
+	<!-- SOLICITUDES - CERTIFICADOS -->
+	<ui:param name="certificadosIndividuales"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudesCertificados/certificadosIndividuales.jsf', 'POST')}" />
+	<ui:param name="certificadosMasivos"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudesCertificados/certificadosMasivos.jsf', 'POST')}" />
+	<ui:param name="certificadosEspeciales"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudesCertificados/certificadosEspeciales.jsf', 'POST')}" />
+	<ui:param name="subSolicitudCertificados"
+		value="#{certificadosIndividuales or certificadosMasivos or certificadosEspeciales}" />
+	<!-- SOLICITUDES - CONSULTAS-->
+	<ui:param name="solicitarConsultas"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudConsultas/solicitarConsultas.jsf', 'POST')}" />
+	<ui:param name="subSolicitudConsultas" value="#{solicitarConsultas}" />
+	<!-- SOLICITUDES - COPIAS -->
+	<ui:param name="solicitudCopias"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudesCopias/solicitudCopias.jsf','POST')}"></ui:param>
+	<!-- SOLICITUDES -DESISTIMIENTO -->
+	<ui:param name="solicitudDesistimiento"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudDesistimiento.jsf','POST')}"></ui:param>
+	<!-- SOLICITUDES - TRASLADO MATRICULA -->
+	<ui:param name="solicitudTrasladoMatriculas"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudTrasladoMatriculas/ingresoSolicitud.jsf', 'POST')}" />
+	<!-- SOLICITUDES - INTERPOSICION RECURSOS -->
+	<ui:param name="solicitudInterposicionRecursos"
+		value="#{sec:isAllowed('/pages/solicitudes/solicitudInterposicionRecursos/solicitudInterposicionRecursos.jsf', 'POST')}" />
+	<!-- SOLICITUDES - SEGUIMIENTO SOLICITUDES -->
+	<ui:param name="seguimientoSolicitudes"
+		value="#{sec:isAllowed('/pages/solicitudes/seguimientoSolicitudes.jsf', 'POST')}" />
+	<!-- SOLICITUDES - SUSPENSION TEMPORAL -->
+	<ui:param name="suspensionTemporal"
+		value="#{sec:isAllowed('/pages/solicitudes/suspensionTemporal.jsf', 'POST')}" />
+	<!-- SOLICITUDES - CONSULTA DRR -->
+	<ui:param name="consultaDrr"
+		value="#{sec:isAllowed('/pages/consultas/drr/condiciones.jsf', 'POST')}" />
+	<!-- SOLICITUDES - RUES -->
+	<ui:param name="solicitudRues"
+		value="#{sec:isAllowed('/pages/solicitudes/paginaRues.jsf','POST')}" />
+	<!-- SOLICITUDES - MODELO MINUTA -->
+	<ui:param name="modeloMinutaVirtual"
+		value="#{sec:isAllowed('/pages/solicitudes/modeloMinutaVirtual.jsf', 'POST')}" />
+	<ui:param name="menuSolicitudes"
+		value="#{suspensionTemporal or solicitudInterposicionRecursos or solicitudTrasladoMatriculas or solicitudRues or subSolicitudCorreciones or subSolicitudCertificados or subSolicitudConsultas or seguimientoSolicitudes or modeloMinutaVirtual or solicitudCopias or consultaDrr or solicitudDesistimiento}" />
+	<!-- SOLICITUD DEVOLUCIONES -->
+	<!-- SOLICITUD DEVOLUCIONES - SERVICIO REGISTRAL -->
+	<ui:param name="solicitudDevolucionesServicioRegistral"
+		value="#{sec:isAllowed('/pages/solicitudes/devoluciones/solicitudDevolucionesServicioRegistral.jsf','POST')}" />
+	<!-- SOLICITUD DEVOLUCIONES - CONSIGNACION ERRADA-->
+	<ui:param name="solicitudDevolucionesConsignacionErrada"
+		value="#{sec:isAllowed('/pages/solicitudes/devoluciones/solicitudDevolucionesConsignacionErrada.jsf','POST')}" />
+	<!-- SOLICITUD DEVOLUCIONES - CUENTA CUPOS-->
+	<ui:param name="solicitudDevolucionesCuentaCupos"
+		value="#{sec:isAllowed('/pages/solicitudes/devoluciones/solicitudDevolucionesCuentaCupos.jsf', 'POST')}" />
+	<!-- SOLICITUD DEVOLUCIONES - RECEPCION DOCUMENTOS -->
+	<ui:param name="solicitudRecepcionDocumentos"
+		value="#{sec:isAllowed('/pages/solicitudes/devoluciones/recepcionDocumento.jsf','POST')}" />
+	<ui:param name="menuSolicitudDevoluciones"
+		value="#{solicitudDevolucionesConsignacionErrada or solicitudDevolucionesCuentaCupos or solicitudDevolucionesServicioRegistral or solicitudRecepcionDocumentos}" />
+	<!-- ADMINISTRACION -->
+	<!-- ADMINISTRACION - ROLES Y PERMISOS-->
+	<ui:param name="rolesPermisos"
+		value="#{sec:isAllowed('/pages/admon/rolesPermisos.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - REGISTRO USUARIO INTERNO-->
+	<ui:param name="registroUsuarioInterno"
+		value="#{sec:isAllowed('/pages/admon/admonUsuario/registroUsuarioInterno.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB MANTENIMIENTO -->
+	<!-- ADMINISTRACION - SUB MANTENIMIENTO - CONFIGURACION SEGURIDAD-->
+	<ui:param name="configuracionSeguridad"
+		value="#{sec:isAllowed('/pages/admon/mantenimiento/configuracionSeguridad.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB MANTENIMIENTO - BLOQUEO Y DESBLOQUE USUARIO-->
+	<ui:param name="bloqueoDesbloqueoUsuario"
+		value="#{sec:isAllowed('/pages/admon/mantenimiento/bloqueoDesbloqueoUsuario.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB MANTENIMIENTO - MANTENIMIENTO CACHE-->
+	<ui:param name="mantenimientoCache"
+		value="#{sec:isAllowed('/pages/admon/mantenimiento/mantenimientoCache.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB MANTENIMIENTO - PARAMETRIZACION CORREOS-->
+	<ui:param name="parametrizacionCorreos"
+		value="#{sec:isAllowed('/pages/admon/parametrizacion/correos/administracionCorreos.jsf', 'POST')}" />
+	<ui:param name="subMantenimiento"
+		value="#{configuracionSeguridad or bloqueoDesbloqueoUsuario or mantenimientoCache or parametrizacionCorreos}" />
+	<!-- ADMINISTRACION - SUB PARAMETRIZACION -->
+	<!-- ADMINISTRACION - SUB PARAMETRIZACION - ADMINISTRACION PARAMETROS-->
+	<ui:param name="administracionParametros"
+		value="#{sec:isAllowed('/pages/admon/parametrizacion/administracionParametros.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB PARAMETRIZACION - ADMINISTRACION CATALOGOS -->
+	<ui:param name="administracionCatalogos"
+		value="#{sec:isAllowed('/pages/admon/parametrizacion/administracionCatalogos.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB PARAMETRIZACION - SERVICIO INTEGRACION-->
+	<ui:param name="administracionServiciosIntegracion"
+		value="#{sec:isAllowed('/pages/admon/parametrizacion/administracionServiciosIntegracion.jsf', 'POST')}" />
+	<ui:param name="subParametrizacion"
+		value="#{administracionParametros or administracionCatalogos or administracionServiciosIntegracion}" />
+	<!-- ADMINISTRACION - CREACION ENTIDAD ESPECIAL -->
+	<ui:param name="creacionEntidadEspecial"
+		value="#{sec:isAllowed('/pages/admon/usuarios/consultaUsuariosAdministradoresEntidadEspecial.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - APROBACION PERSONA JURIDICA -->
+	<ui:param name="aprobacionPersonaJuridica"
+		value="#{sec:isAllowed('/pages/admon/aprobacionPersonaJuridica.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - ASOCIACION NATURAL A JURIDICA -->
+	<ui:param name="asociacionNaturalAJuridica"
+		value="#{sec:isAllowed('/pages/admon/asociacionNaturalAJuridica.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - ASOCIACION NATURAL A ENTIDAD ESPEICAL -->
+	<ui:param name="asociacionNaturalAEntidadEspecial"
+		value="#{sec:isAllowed('/pages/admon/asociacionNaturalAEntidadEspecial.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB ADMINISTRACION CUENTA CUPO -->
+	<!-- ADMINISTRACION - SUB ADMINISTRACION CUENTA CUPO - CREAR -->
+	<ui:param name="crearCuentaCupo"
+		value="#{sec:isAllowed('/pages/admon/cuentaCupo/crearCuentaCupo.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB ADMINISTRACION CUENTA CUPO - MODIFICAR-->
+	<ui:param name="modificarCuentaCupo"
+		value="#{sec:isAllowed('/pages/admon/cuentaCupo/modificarCuentaCupo.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB ADMINISTRACION CUENTA CUPO - RECARGA-->
+	<ui:param name="recargarCuentaCupo"
+		value="#{sec:isAllowed('/pages/admon/cuentaCupo/recargarCuentaCupo.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB ADMINISTRACION CUENTA CUPO - CONSULTAR-->
+	<ui:param name="consultarCuentaCupo"
+		value="#{sec:isAllowed('/pages/admon/cuentaCupo/consultaCuentaCupoM.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB ADMINISTRACION CUENTA CUPO - CANCELAR-->
+	<ui:param name="cancelarCuentaCupo"
+		value="#{sec:isAllowed('/pages/admon/cuentaCupo/cancelarCuentaCupo.jsf', 'POST')}" />
+
+	<ui:param name="subAdministracionCuentaCupo"
+		value="#{crearCuentaCupo or modificarCuentaCupo or recargarCuentaCupo or consultarCuentaCupo or cancelarCuentaCupo}" />
+	<!-- ADMINISTRACION - SUB REPOSITORIO PODERES -->
+	<!-- ADMINISTRACION - SUB REPOSITORIO PODERES - CARGAR PODER-->
+	<ui:param name="cargarPoder"
+		value="#{sec:isAllowed('/pages/carguePoderes/cargarPoder.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB REPOSITORIO PODERES - CONSULTAR PODER-->
+	<ui:param name="consultarPoderCargado"
+		value="#{sec:isAllowed('/pages/carguePoderes/consultarPoderCargado.jsf', 'POST')}" />
+	<!-- ADMINISTRACION - SUB REPOSITORIO PODERES - SOLICITUD PENDIENTE ANULACION -->
+	<ui:param name="solicitudPendienteAnulacion"
+		value="#{sec:isAllowed('/pages/carguePoderes/solicitudesPendientesPoderes.jsf?tipo=SPA', 'POST')}" />
+	<!-- ADMINISTRACION - SUB REPOSITORIO PODERES - SOLICITUD PENDIENTE CORRECCION-->
+	<ui:param name="solicitudPendienteCorreccion"
+		value="#{sec:isAllowed('/pages/carguePoderes/solicitudesPendientesPoderes.jsf', 'POST') and !solicitudPendienteAnulacion}" />
+	<!-- ADMINISTRACION - SUB REPOSITORIO PODERES SOLICITUD PENDIENTE DE CARGUE PODER -->
+	<ui:param name="solicitudPendienteCarguePoder"
+		value="#{sec:isAllowed('/pages/carguePoderes/solicitudesPendientesPoderes.jsf', 'POST') and !solicitudPendienteAnulacion}" />
+	<ui:param name="subRepositorioDePoderes"
+		value="#{cargarPoder or consultarPoderCargado or solicitudPendienteAnulacion or solicitudPendienteCorreccion or solicitudPendienteCarguePoder}" />
+	<!-- ADMINISTRACION - GESTION MODELO MINUTA -->
+	<ui:param name="gestionModeloMinuta"
+		value="#{sec:isAllowed('/pages/admon/modeloMinuta/gestionModeloMinuta.jsf', 'POST')}" />
+	<ui:param name="menuAdministracion"
+		value="#{rolesPermisos or registroUsuarioInterno or subMantenimiento or subParametrizacion or subAdministracionCuentaCupo or creacionEntidadEspecial or aprobacionPersonaJuridica or asociacionNaturalAJuridica or asociacionNaturalAEntidadEspecial or subRepositorioDePoderes or gestionModeloMinuta}" />
+	<!-- CONVENIOS ENTIDAD ESPECIAL -->
+	<ui:param name="menuConveniosEE"
+		value="#{sec:isAllowed('/pages/admon/conveniosEE.jsf', 'POST')}" />
+	<!-- HISTORIAL NOTIFICACIONES -->
+	<ui:param name="historialNotificaciones"
+		value="#{sec:isAllowed('/pages/personas/historialNotificaciones.jsf','POST')}" />
+
+
+	<!-- MENU DERECHO -->
+	<ui:param name="perfilUsuario"
+		value="#{sec:isAllowed('/pages/personas/perfilUsuario.jsf', 'POST')}" />
+	<ui:param name="modificarContrasena"
+		value="#{sec:isAllowed('/pages/personas/editarUsuario.jsf', 'POST')}" />
+	<!-- FLUJO_SOLICITUDES_PAGO -->
+	<ui:param name="carrito"
+		value="#{sec:isAllowed('/pages/flujoSolicitudesPago/Carrito.jsf', 'POST')}" />
+	<ui:param name="misPedidos"
+		value="#{sec:isAllowed('/pages/flujoSolicitudesPago/misPedidos.jsf', 'POST')}" />
+	<ui:param name="historialSolicitudes"
+		value="#{sec:isAllowed('/pages/flujoSolicitudesPago/historialSolicitudes.jsf', 'POST')}" />
+
+
+	<ui:param name="carrito" value="#{carrito}" />
+	<ui:param name="misSolicitudes"
+		value="#{misPedidos or historialSolicitudes}" />
+	<!-- LISTAS MENUS -->
+	<div id="listas_menu_cont">
+		<!-- BOTON ESCONDER MENU -->
+		<div id="hide_menu"></div>
+		<!-- BOTON ESCONDER MENU FIN -->
+		<!-- MENU IZQUIERDA -->
+		<div class="cus-wrapper" id="wrapper_menu_izq">
+			<!-- Sidebar -->
+			<nav id="sidebar" class="menuIzquierda">
+				<div id="accordion">
+					<h:form>
+						<!-- OPCION DE MENU INICIO -->
+						<div class="item-menu-izq negrita">
+							<p:link outcome="/pages/personas/inicio.jsf">
+								<span class="inicio_icon icono-izq"></span>
+								<span>#{txt_menu['menu.inicio']}</span>
+							</p:link>
+						</div>
+						<!-- PARAMETRIZACION ALCALDIAS -->
+						<div class="item-menu-izq negrita">
+							<p:link rendered="#{parametrizacionAlcaldia}"
+								outcome="/pages/admon/parametrizacion/alcaldias/consultaAlcadiasParametrizadas.jsf">
+								<span class="solicitudes_icon icono-izq"></span>
+								<span>#{txt_alcaldia['parametrizacion.alcaldia']}</span>
+							</p:link>
+						</div>
+						<!-- OPCION DE MENU PAGINA HISTORIAL DE NOTIFICACIONES  -->
+						<div class="item-menu-izq negrita">
+							<p:link rendered="#{historialNotificaciones}"
+								outcome="/pages/personas/historialNotificaciones.jsf">
+								<span class="historialNotificaciones_icon icono-izq"></span>
+								<span>#{txt_menu['menu.HistorialNotificaciones']}</span>
+							</p:link>
+						</div>
+						<p:accordionPanel multiple="false" activeIndex="-1"
+							styleClass="sub-menu-izq">
+							<p:tab rendered="#{menuConsultasNotarias}"
+								titleStyleClass="tab-menu-izq">
+								<f:facet name="title">
+									<span
+										class="administracion_icon dropdown-toggle sidebar_main_links collapsed icono-izq" />
+									<span>#{txt_menu['menu.conultaNotarias']}</span>
+								</f:facet>
+								<!-- OPCION DE MENU CONSULTAR DATOS BASICOS -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{consultaDatosBasicos}" styleClass=""
+										outcome="/pages/solicitudes/consultaDatosBasicos.jsf">
+										<span class="icono-izq solicitudes_icon"></span>
+										<span>#{txt_menu['menu.conultaNotarias.datosBasicos']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU CONSULTAR ESTADO JURIDICO PREDIO -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{consultaEstdosJuridicos}" styleClass=""
+										outcome="/pages/solicitudes/estadojuridico.jsf">
+										<span class="icono-izq solicitudes_icon"></span>
+										<span>#{txt_menu['menu.conultaNotarias.estadoJuridico']}</span>
+									</p:link>
+								</div>
+							</p:tab>
+							<!-- OPCION DE MENU PARAMETRIZACION USUARIOS ADMINISTRADORES -->
+							<p:tab rendered="#{parametrizacionUsuariosAdministadores}"
+								titleStyleClass="tab-menu-izq">
+								<f:facet name="title">
+									<span class="icono-izq administracion_icon" />
+									<span>#{txt_usuariosAdmin['usuario.admin.titulo.parametrizacion']}</span>
+								</f:facet>
+								<!-- OPCION DE MENU CONSULTAR USUARIOS ADMNISTRADORES -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{parametrizacionUsuariosAdministadores}"
+										styleClass=""
+										outcome="/pages/admon/usuarios/consultaUsuariosAdministradores.jsf">
+										<span>#{txt_usuariosAdmin['usuario.admin.titulo.consultar']}</span>
+									</p:link>
+								</div>
+							</p:tab>
+							<!-- OPCION DE MENU ALERTAS -->
+							<p:tab rendered="#{menuAlertas}" titleStyleClass="tab-menu-izq">
+								<f:facet name="title">
+									<span class="icono-izq alertas_icon" />
+									<span>#{txt_menu['menu.alertas']}</span>
+								</f:facet>
+								<p:accordionPanel multiple="false" activeIndex="-1"
+									styleClass="sub-menu-izq">
+									<p:tab title="#{txt_menu['menu.registrarAlerta']}"
+										titleStyleClass="tab-menu-izq tab-sub-menu">
+										<!-- OPCION DE MENU REGISTRAR ALERTAS INDIVIDUALES -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{registroAlertaIndividual}" styleClass=""
+												outcome="/pages/alertas/registroAlertas/registroAlertaIndividual.jsf">
+												<span>#{txt_menu['menu.registrarAlertaIndividual']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU REGISTRAR ALERTAS MASIVAS -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{registroAlertaMasiva}" styleClass=""
+												outcome="/pages/alertas/registroAlertas/registroAlertaMasiva.jsf">
+												<span>#{txt_menu['menu.registrarAlertaMasiva']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU CONSULTAR ALERTAS -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{historialAlertas}" styleClass=""
+												outcome="/pages/alertas/registroAlertas/consultarAlertas.jsf">
+												<span>#{txt_menu['menu.consultarHistorialAlertasCargadas']}</span>
+											</p:link>
+										</div>
+									</p:tab>
+								</p:accordionPanel>
+							</p:tab>
+							<!-- OPCION DE MENU ALERTAS ENTIDADES ESPECIALES -->
+							<p:tab rendered="#{menuAlertasEE}" titleStyleClass="tab-menu-izq">
+								<f:facet name="title">
+									<span class="icono-izq alertas_icon" />
+									<span>#{txt_menu['menu.alertas']}</span>
+								</f:facet>
+								<div class="item-menu-izq">
+									<p:link rendered="#{alertaTierras}" styleClass=""
+										outcome="/pages/alertas/alertaTierras/alertaDeTierras.jsf">
+										<span>#{txt_menu['menu.alertasTierra']}</span>
+									</p:link>
+								</div>
+							</p:tab>
+							<!-- OPCION DE MENU SOLICITUDES -->
+							<p:tab rendered="#{menuSolicitudes}"
+								titleStyleClass="tab-menu-izq">
+								<f:facet name="title">
+									<span class="icono-izq solicitudes_icon" />
+									<span>#{txt_menu['menu.solicitudes']}</span>
+								</f:facet>
+								<p:accordionPanel multiple="false" activeIndex="-1"
+									styleClass="sub-menu-izq">
+									<!-- OPCION DE MENU SOLICITUD DE CORRECIONES -->
+									<p:tab title="#{txt_menu['menu.correciones']}"
+										titleStyleClass="tab-menu-izq tab-sub-menu"
+										rendered="#{subSolicitudCorreciones}">
+										<div class="item-menu-izq">
+											<p:link rendered="#{ingresoSolicitud}" styleClass=""
+												outcome="/pages/solicitudes/solicitudesCorrecciones/ingresoSolicitud.jsf">
+												<span>#{txt_menu['menu.ingresoSolicitud']}</span>
+											</p:link>
+										</div>
+									</p:tab>
+									<!-- OPCION DE MENU SOLICITUD DE CERTIFICADOS -->
+									<p:tab title="#{txt_menu['menu.solicitudCertificados']}"
+										titleStyleClass="tab-menu-izq tab-sub-menu"
+										rendered="#{subSolicitudCertificados}">
+										<div class="item-menu-izq">
+											<p:link rendered="#{certificadosIndividuales}" styleClass=""
+												outcome="/pages/solicitudes/solicitudesCertificados/certificadosIndividuales.jsf">
+												<span>#{txt_menu['menu.certificadosIndividuales']}</span>
+											</p:link>
+										</div>
+										<div class="item-menu-izq">
+											<p:link rendered="#{certificadosMasivos}" styleClass=""
+												outcome="/pages/solicitudes/solicitudesCertificados/certificadosMasivos.jsf">
+												<span>#{txt_menu['menu.certificadosMasivos']}</span>
+											</p:link>
+										</div>
+										<div class="item-menu-izq">
+											<p:link rendered="#{certificadosEspeciales}" styleClass=""
+												outcome="/pages/solicitudes/solicitudesCertificados/certificadosEspeciales.jsf">
+												<span>#{txt_menu['menu.certificadosEspeciales']}</span>
+											</p:link>
+										</div>
+									</p:tab>
+									<!-- OPCION DE MENU SOLICITUD DE CONSULTAS -->
+									<p:tab title="#{txt_menu['menu.solicitudConsultas']}"
+										titleStyleClass="tab-menu-izq tab-sub-menu"
+										rendered="#{subSolicitudConsultas}">
+										<div class="item-menu-izq">
+											<p:commandLink rendered="#{solicitarConsultas}" styleClass=""
+												oncomplete="PF('modalInformativo').show()">
+												<span>#{txt_menu['menu.solicitarConsultas']}</span>
+											</p:commandLink>
+										</div>
+									</p:tab>
+								</p:accordionPanel>
+								<!-- OPCION DE MENU SOLICITUD COPIAS -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{solicitudCopias}" styleClass=""
+										outcome="/pages/solicitudes/solicitudesCopias/solicitudCopias.jsf">
+										<span>#{txt_menu['menu.solicitudCopias']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU SOLICITUD DE DESISTIMIENTO  -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{solicitudDesistimiento}" styleClass=""
+										outcome="/pages/solicitudes/solicitudDesistimiento.jsf">
+										<span>#{txt_menu['menu.solicitarDesistimiento']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU SOLICITUD TRASLADO MATRICULAS -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{solicitudTrasladoMatriculas}" styleClass=""
+										outcome="/pages/solicitudes/solicitudTrasladoMatriculas/ingresoSolicitud.jsf">
+										<span>#{txt_menu['menu.trasladoMatricula']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU SOLICITUD INTERPOSICION RECURSOS -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{solicitudInterposicionRecursos}"
+										styleClass=""
+										outcome="/pages/solicitudes/solicitudInterposicionRecursos/solicitudInterposicionRecursos.jsf">
+										<span>#{txt_menu['menu.interposicionRecursos']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU SEGUIMIENTO DE SOLICITUDES -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{seguimientoSolicitudes}" styleClass=""
+										outcome="/pages/solicitudes/seguimientoSolicitudes.jsf">
+										<span>#{txt_menu['menu.seguimientoSolicitudes']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU SUSPENSION TEMPORAL -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{suspensionTemporal}" styleClass=""
+										outcome="/pages/solicitudes/suspensionTemporal.jsf">
+										<span>#{txt_menu['menu.suspensionTemporal']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU CONSULTA DRR -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{consultaDrr}" styleClass=""
+										outcome="/pages/consultas/drr/condiciones.jsf">
+										<span>#{txt_menu['menu.consultaDrr']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU PAGINA RUES -->
+								<div class="item-menu-izq">
+									<p:commandLink rendered="#{solicitudRues}" styleClass=""
+										action="#{beanContenidoCentro.redirigirRues}" update="@none">
+										<span>#{txt_menu['menu.rues']}</span>
+									</p:commandLink>
+								</div>
+								<!-- OPCION DE MENU MODELO MINUTA -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{modeloMinutaVirtual}" styleClass=""
+										outcome="/pages/solicitudes/modeloMinutaVirtual.jsf">
+										<span>#{txt_menu['menu.modeloMinuta']}</span>
+									</p:link>
+								</div>
+							</p:tab>
+
+							<!-- OPCION DE MENU SOLICITUD DEVOLUCIONES -->
+							<p:tab titleStyleClass="tab-menu-izq"
+								rendered="#{menuSolicitudDevoluciones}">
+								<f:facet name="title">
+									<span class="devoluciones_icon icono-izq" />
+									<span>#{txt_menu['menu.solicitudDevoluciones']}</span>
+								</f:facet>
+								<p:importEnum
+									type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTipoProceso"
+									var="EnumDevolucion" />
+								<p:accordionPanel multiple="false" activeIndex="-1" id="sub-menu-devolucion"
+									styleClass="sub-menu-izq">
+									<!-- OPCION DE MENU SOLICITUD DEVOLUCION SERVICIO REGISTRAL -->
+									<p:tab
+										titleStyleClass="tab-menu-izq tab-devolucion"
+										rendered="#{solicitudDevolucionesServicioRegistral}">
+										<f:facet name="title">
+											<span>#{txt_menu['menu.solicitudDevolucionesServicioRegistral']}</span>
+										</f:facet>
+										<div class="item-menu-izq">
+											<p:link rendered="#{solicitudDevolucionesServicioRegistral}"
+												styleClass=""
+												outcome="/pages/solicitudes/devoluciones/solicitudDevolucionesServicioRegistral.jsf">
+												<span>#{txt_menu['menu.solicitudDevolucionesServicioRegistral.crear']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU RECEPCION DOCUMENTOS -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{solicitudRecepcionDocumentos}"
+												styleClass=""
+												outcome="/pages/solicitudes/devoluciones/recepcionDocumento.jsf">
+												<span>#{txt_menu['menu.solicitudDevolucionesServicioRegistral.recepcionDocumentos']}</span>
+												<f:param name="is_proceso"
+													value="#{EnumDevolucion.DEVOLUCION_SERVICIO_REGISTRAL.is_codigo}" />
+											</p:link>
+										</div>
+									</p:tab>
+									<!-- OPCION DE MENU SOLICITUD DEVOLUCION CONSIGNACION ERRADA -->
+									<p:tab
+										titleStyleClass="tab-menu-izq tab-devolucion"
+										rendered="#{solicitudDevolucionesConsignacionErrada}">
+										<f:facet name="title">
+											<span>#{txt_menu['menu.solicitudDevolucionesConsignacionErrada']}</span>
+										</f:facet>
+										<div class="item-menu-izq">
+											<p:link rendered="#{solicitudDevolucionesConsignacionErrada}"
+												styleClass=""
+												outcome="/pages/solicitudes/devoluciones/solicitudDevolucionesConsignacionErrada.jsf">
+												<span>#{txt_menu['menu.solicitudDevolucionesConsignacionErrada.crear']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU RECEPCION DOCUMENTOS -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{solicitudRecepcionDocumentos}"
+												styleClass=""
+												outcome="/pages/solicitudes/devoluciones/recepcionDocumento.jsf">
+												<span>#{txt_menu['menu.solicitudDevolucionesConsignacionErrada.recepcionDocumentos']}</span>
+												<f:param name="is_proceso"
+													value="#{EnumDevolucion.DEVOLUCION_SERVICIO_REGISTRAL.is_codigo}" />
+											</p:link>
+										</div>
+									</p:tab>
+									<!-- OPCION DE MENU SOLICITUD DEVOLUCION CUENTA CUPOS -->
+									<p:tab
+										titleStyleClass="tab-menu-izq tab-devolucion"
+										rendered="#{solicitudDevolucionesCuentaCupos}">
+										<f:facet name="title">
+											<span>#{txt_menu['menu.solicitudDevolucionesCuentaCupos']}</span>
+										</f:facet>
+										<div class="item-menu-izq">
+											<p:link rendered="#{solicitudDevolucionesCuentaCupos}"
+												styleClass=""
+												outcome="/pages/solicitudes/devoluciones/solicitudDevolucionesCuentaCupos.jsf">
+												<span>#{txt_menu['menu.solicitudDevolucionesCuentaCupos.crear']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU RECEPCION DOCUMENTOS -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{solicitudRecepcionDocumentos}"
+												styleClass=""
+												outcome="/pages/solicitudes/devoluciones/recepcionDocumento.jsf">
+												<span>#{txt_menu['menu.solicitudDevolucionesCuentaCupos.recepcionDocumentos']}</span>
+												<f:param name="is_proceso"
+													value="#{EnumDevolucion.DEVOLUCION_SERVICIO_REGISTRAL.is_codigo}" />
+											</p:link>
+										</div>
+									</p:tab>
+								</p:accordionPanel>
+							</p:tab>
+							<!-- OPCION DE MENU ADMINISTRACION -->
+							<p:tab rendered="#{menuAdministracion}"
+								titleStyleClass="tab-menu-izq">
+								<f:facet name="title">
+									<span class="icono-izq administracion_icon" />
+									<span>#{txt_menu['menu.administrador']}</span>
+								</f:facet>
+								<!-- OPCION DE MENU ROLES Y PERMISOS -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{rolesPermisos}"
+										outcome="/pages/admon/rolesPermisos.jsf">
+										<span>#{txt_menu['menu.rolesPermisos']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU ADMINISTRACION USUARIO INTERNO -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{registroUsuarioInterno}"
+										outcome="/pages/admon/admonUsuario/registroUsuarioInterno.jsf">
+										<span>#{txt_menu['menu.administracionUsuarioInterno']}</span>
+									</p:link>
+								</div>
+								<p:accordionPanel multiple="false" activeIndex="-1"
+									styleClass="sub-menu-izq">
+									<!-- OPCION DE MENU MANTENIMIENTO -->
+									<p:tab rendered="#{subMantenimiento}"
+										title="#{txt_menu['menu.mantenimiento']}"
+										titleStyleClass="tab-menu-izq tab-sub-menu">
+										<!-- OPCION DE MENU CONFIGURACION DE SEGURIDAD -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{configuracionSeguridad}"
+												outcome="/pages/admon/mantenimiento/configuracionSeguridad.jsf">
+												<span>#{txt_menu['menu.configuracionSeguridad']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU MANTENIMIENTO DE USUARIO -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{bloqueoDesbloqueoUsuario}"
+												outcome="/pages/admon/mantenimiento/bloqueoDesbloqueoUsuario.jsf">
+												<span>#{txt_menu['menu.actividadRol']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU MANTENIMIENTO DE CACHE -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{mantenimientoCache}"
+												outcome="/pages/admon/mantenimiento/mantenimientoCache.jsf">
+												<span>#{txt_menu['menu.mantenimientoCache']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU MANTENIMIENTO DE PLANTILLAS CORREO -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{parametrizacionCorreos}"
+												outcome="/pages/admon/parametrizacion/correos/administracionCorreos.jsf">
+												<span>#{txt_menu['menu.parametrizacion.correo']}</span>
+											</p:link>
+										</div>
+									</p:tab>
+									<!-- OPCION DE MENU PARAMETRIZACION -->
+									<p:tab rendered="#{subParametrizacion}"
+										title="#{txt_menu['menu.parametrizacion']}"
+										titleStyleClass="tab-menu-izq tab-sub-menu">
+										<!-- OPCION DE MENU ADMINISTRACION GENERAL DE PARAMETROS -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{administracionParametros}"
+												outcome="/pages/admon/parametrizacion/administracionParametros.jsf">
+												<span>#{txt_menu['menu.administracionParametros']}</span>
+											</p:link>
+										</div>
+										<!--OPCION DE MENU ADMINISTRACION DE CATALOGOS -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{administracionCatalogos}"
+												outcome="/pages/admon/parametrizacion/administracionCatalogos.jsf">
+												<span>#{txt_menu['menu.administracionCatalogos']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU ADMINISTRACION DE SERVICIOS DE INTEGRACION -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{administracionServiciosIntegracion}"
+												outcome="/pages/admon/parametrizacion/administracionServiciosIntegracion.jsf">
+												<span>#{txt_menu['menu.administracionServiciosIntegracion']}</span>
+											</p:link>
+										</div>
+									</p:tab>
+									<!-- OPCION DE MENU ADMINISTRACION CUENTA CUPO -->
+									<p:tab rendered="#{subAdministracionCuentaCupo}"
+										title="#{txt_menu['menu.administracionCuentaCupo']}"
+										titleStyleClass="tab-menu-izq tab-sub-menu">
+										<!-- OPCION DE MENU CREcAR CUENTA CUPO -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{crearCuentaCupo}"
+												outcome="/pages/admon/cuentaCupo/crearCuentaCupo.jsf">
+												<span>#{txt_menu['menu.crear.cuenta.cupo']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU MODIFICAR CUENTA CUPO -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{modificarCuentaCupo}"
+												outcome="/pages/admon/cuentaCupo/modificarCuentaCupo.jsf">
+												<span>#{txt_menu['menu.modificar.cuenta.cupo']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU RECARGAR CUENTA CUPO -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{recargarCuentaCupo}"
+												outcome="/pages/admon/cuentaCupo/recargarCuentaCupo.jsf">
+												<span>#{txt_menu['menu.recargar.cuenta.cupo']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU CONSULTA CUENTA CUPO -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{consultarCuentaCupo}"
+												outcome="/pages/admon/cuentaCupo/consultaCuentaCupoM.jsf">
+												<span>#{txt_menu['menu.consultar.cuenta.cupo']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU CANCELAR CUENTA CUPO -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{cancelarCuentaCupo}"
+												outcome="/pages/admon/cuentaCupo/cancelarCuentaCupo.jsf">
+												<span>#{txt_menu['menu.cancelar.cuenta.cupo']}</span>
+											</p:link>
+										</div>
+									</p:tab>
+									<!-- OPCION DE MENU REPOSITORIO DE PODERES -->
+									<p:tab rendered="#{subRepositorioDePoderes}"
+										title="#{txt_menu['menu.repositorioDePoderes']}"
+										titleStyleClass="tab-menu-izq tab-sub-menu">
+										<!-- OPCION DE MENU CARGAR PODER -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{cargarPoder}"
+												outcome="/pages/carguePoderes/cargarPoder.jsf">
+												<span>#{txt_menu['menu.cargarPoder']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU CONSULTAR PODER -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{consultarPoderCargado}"
+												outcome="/pages/carguePoderes/consultarPoderCargado.jsf">
+												<span>#{txt_menu['menu.consultarPoder']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU CONSULTAR SOLICITUDES ANULACION -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{solicitudPendienteAnulacion}"
+												outcome="/pages/carguePoderes/solicitudesPendientesPoderes.jsf?tipo=SPA">
+												<span>#{txt_menu['menu.solicitudes.pendientes.anulacion']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU SOLICITUDES CORRECCION -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{solicitudPendienteCorreccion}"
+												outcome="/pages/carguePoderes/solicitudesPendientesPoderes.jsf?tipo=SPC">
+												<span>#{txt_menu['menu.solicitudes.pendientes.correccion']}</span>
+											</p:link>
+										</div>
+										<!-- OPCION DE MENU SOLICITUDES PENDIENTE CARGUE -->
+										<div class="item-menu-izq">
+											<p:link rendered="#{solicitudPendienteCarguePoder}"
+												outcome="/pages/carguePoderes/solicitudesPendientesPoderes.jsf?tipo=SPCP">
+												<span>#{txt_menu['menu.solicitudes.pendientes.cargue.poder']}</span>
+											</p:link>
+										</div>
+									</p:tab>
+								</p:accordionPanel>
+								<!-- OPCION DE MENU CREACION DE ENTIDAD ESPECIAL -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{creacionEntidadEspecial}"
+										outcome="/pages/admon/usuarios/consultaUsuariosAdministradoresEntidadEspecial.jsf">
+										<span>#{txt_menu['menu.creacionEntidadEspecial']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU APROBACION PERSONA JURIDICA -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{aprobacionPersonaJuridica}"
+										outcome="/pages/admon/aprobacionPersonaJuridica.jsf">
+										<span>#{txt_menu['menu.aprobacionPersonaJuridica']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU ASOCIACION PERSONA NATURAL A PERSONA JURIDICA -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{asociacionNaturalAJuridica}"
+										outcome="/pages/admon/asociacionNaturalAJuridica.jsf">
+										<span>#{txt_menu['menu.asociacionNaturalAJuridica']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU ASOCIACION PERSONA NATURAL A ENTIDAD ESPECIAL -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{asociacionNaturalAEntidadEspecial}"
+										outcome="/pages/admon/asociacionNaturalAEntidadEspecial.jsf">
+										<span>#{txt_menu['menu.asociacionNaturalAEntidadEspecial']}</span>
+									</p:link>
+								</div>
+								<!-- OPCION DE MENU MODELO MINUTA VIRTUAL -->
+								<div class="item-menu-izq">
+									<p:link rendered="#{gestionModeloMinuta}"
+										outcome="/pages/admon/modeloMinuta/gestionModeloMinuta.jsf">
+										<span>#{txt_menu['menu.modeloMinuta']}</span>
+									</p:link>
+								</div>
+							</p:tab>
+							<!-- OPCION DE MENU CONVENIOS ENTIDADES ESPECIALES -->
+							<div class="item-menu-izq">
+								<p:link rendered="#{menuConveniosEE}"
+									outcome="/pages/admon/conveniosEE.jsf">
+									<span class="solicitudes_icon icono-izq"></span>
+									<span>#{txt_menu['menu.convenios']}</span>
+								</p:link>
+							</div>
+							<!-- OPCION DE MENU PAGINA HISTORIAL DE NOTIFICACIONES  -->
+							<div class="item-menu-izq">
+								<p:link rendered="#{historialNotificaciones}"
+									outcome="/pages/personas/historialNotificaciones.jsf">
+									<span id="historialNotificaciones_icon" class="icono-izq"></span>
+									<span>#{txt_menu['menu.HistorialNotificaciones']}</span>
+								</p:link>
+							</div>
+						</p:accordionPanel>
+					</h:form>
+				</div>
+			</nav>
+		</div>
+		<!-- MENU IZQUIERDA FIN -->
+		<!-- MENU FLUJO SOLICITUDES MOVIL -->
+		<div class="cus-wrapper" id="wrapper_menu_solicitudes_pago_mobile">
+			<!-- Sidebar -->
+<!-- 			<nav id="sidebar" class="menuIzquierda"> -->
+<!-- 				<div id="accordion"> -->
+					<ul class="list-unstyled components" id="sidebar_list">
+						<p:outputPanel rendered="#{misSolicitudes}">
+							<li class="pos_relative menu_izq_li" ><p:link
+									value="#{txt_menu['menu.pendientesPorPago']}"
+									outcome="/pages/flujoSolicitudesPago/misPedidos.jsf?is_resumen=1"
+									styleClass="active sidebar_main_links inicio_icon menu_usuario_icons"></p:link></li>
+<!-- 						</p:outputPanel> -->
+<!-- 						<p:outputPanel rendered="#{misSolicitudes}"> -->
+							<li class="pos_relative menu_izq_li" ><p:link
+									value="#{txt_menu['menu.historialSolicitudes']}"
+									outcome="/pages/flujoSolicitudesPago/historialSolicitudes.jsf"
+									styleClass="active sidebar_main_links inicio_icon menu_usuario_icons"></p:link></li>
+						</p:outputPanel>
+					</ul>
+<!-- 				</div> -->
+<!-- 			</nav> -->
+		</div>
+		<!-- MENU FLUJO SOLICITUDES MOVIL -->
+		<div id="contenedorInfoUsuario" class="cus-wrapper high">
+			<div id="wrapper_informacion_usuario">
+				<div class="infoPersona">
+					<span class="textInfo maxTexto">#{beanInicio.is_encabezado}<span
+						class="bold">#{beanInicio.is_cuerpo}</span></span>
+					<ui:param name="direccionValidacion"
+						value="#{beanInicio.ius_usuarioSessionDto}" />
+					<ui:param name="direccion"
+						value="#{direccionValidacion eq null || direccionValidacion.is_ubicacionConcatenado eq null || direccionValidacion.is_ubicacionConcatenado eq ''}" />
+					<h:outputText class="textInfo maxTexto" rendered="#{!direccion}"
+						value="#{direccionValidacion.is_ubicacionConcatenado}" />
+				</div>
+			</div>
+			<!-- MENU FLUJO SOLICITUDES PAGO -->
+			<div id="wrapper_flujo_solicitudes_pago">
+				<p:outputPanel id="usuario_botones_flujo"
+					rendered="#{carrito || misSolicitudes}">
+					<div id="usuario_pedidos_mobile" class="usuarioMobile"
+						data-toggle="tooltip" data-placement="bottom"
+						title="#{txt_menu['menu.misPedidos']}">
+						<span class="fa fa-history" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false"> <span
+							class="fa fa-sort-desc" aria-hidden="true"></span>
+						</span>
+						<ul class="dropdown-menu">
+							<li><p:link
+									outcome="/pages/flujoSolicitudesPago/misPedidos.jsf?is_resumen=1"
+									value="#{txt_menu['menu.pendientesPorPago']}"></p:link></li>
+							<li><p:link
+									outcome="/pages/flujoSolicitudesPago/historialSolicitudes.jsf"
+									value="#{txt_menu['menu.historialSolicitudes']}"></p:link></li>
+						</ul>
+					</div>
+					<h:outputText id="separador-v" rendered="#{carrito}"></h:outputText>
+					<p:link id="usuario_carrito_mobile" class="usuarioMobile"
+						data-toggle="tooltip" data-placement="bottom"
+						rendered="#{carrito}" title="#{txt_menu['menu.carrito']}"
+						outcome="/pages/flujoSolicitudesPago/Carrito.jsf">
+						<span class="fa fa-shopping-cart" aria-hidden="true"></span>
+						<span class="badge">#{beanCarrito.ii_numeroTransacciones}</span>
+					</p:link>
+				</p:outputPanel>
+			</div>
+			<!-- MENU FLUJO SOLICITUDES PAGO -->
+			<!-- MENU USUARIO -->
+			<div id="wrapper_usuario">
+				<div id="sidebar_usuario">
+					<p:accordionPanel multiple="false" id="menu-usuario-full"
+						activeIndex="-1" styleClass="gradiente menu-der">
+						<p:tab titleStyleClass="sub-menu-der">
+							<f:facet name="title">
+								<div class="row">
+									<div class="col-xs-8">
+										<span class="textInfo maxTexto bold">#{direccionValidacion.is_nombreConcatenado
+											eq null or direccionValidacion.is_nombreConcatenado eq 'N/A'?
+											'':direccionValidacion.is_nombreConcatenado}
+											#{direccionValidacion.is_nombreConcatenado eq null or
+											direccionValidacion.is_nombreConcatenado eq 'N/A'? '':'/'}<h:outputText
+												class="textInfo maxTexto"
+												value="#{direccionValidacion.is_nombreUsuario} " />
+										</span>
+										<h:outputLabel
+											rendered="#{direccionValidacion ne null and direccionValidacion.is_tipoDocumento ne null and direccionValidacion.is_numeroDocumento ne null}"
+											class="textInfo maxTexto"
+											value="#{direccionValidacion.is_tipoDocumento}:#{direccionValidacion.is_numeroDocumento}" />
+									</div>
+									<div class="col-xs-4">
+										<span class="ui-icon usuario_icono_icon"></span>
+									</div>
+								</div>
+							</f:facet>
+							<p:link rendered="#{perfilUsuario}"
+								styleClass="item-menu-der pos_relative usuario_main_links"
+								outcome="/pages/personas/perfilUsuario.jsf">
+								<span class="editar_usuario_icon menu_usuario_icons"></span>
+								<span class="usuario_links usuario_main_title">#{txt_menu['menu.perfilUsuario']}</span>
+							</p:link>
+							<p:link rendered="#{modificarContrasena}"
+								styleClass="item-menu-der pos_relative usuario_main_links"
+								outcome="/pages/personas/editarUsuario.jsf">
+								<span class="editar_contrasena_icon menu_usuario_icons"></span>
+								<span class="usuario_links usuario_main_title">#{txt_menu['menu.modificarContrasena']}</span>
+							</p:link>
+							<p:link
+								styleClass="item-menu-der pos_relative usuario_main_links"
+								href="/appLogout">
+								<span class="editar_sesion_icon menu_usuario_icons"></span>
+								<span class="usuario_links usuario_main_title">#{txt_menu['menu.cerrarSesion']}</span>
+							</p:link>
+						</p:tab>
+					</p:accordionPanel>
+					<p:menu toggleable="true" id="menu-usuario-mobil"
+						styleClass="gradiente menu-der">
+						<p:menuitem rendered="#{perfilUsuario}"
+							icon="editar_usuario_icon usuario_main_title menu_usuario_icons"
+							styleClass="item-menu-der usuario_links"
+							value="#{txt_menu['menu.perfilUsuario']}"
+							url="/pages/personas/perfilUsuario.jsf" />
+
+						<p:menuitem rendered="#{modificarContrasena}"
+							icon="editar_contrasena_icon usuario_main_title menu_usuario_icons"
+							styleClass="item-menu-der usuario_links"
+							value="#{txt_menu['menu.modificarContrasena']}"
+							url="/pages/personas/editarUsuario.jsf" />
+
+						<p:menuitem styleClass="item-menu-der usuario_links"
+							icon="editar_sesion_icon usuario_main_title menu_usuario_icons"
+							value="#{txt_menu['menu.cerrarSesion']}" url="/appLogout" />
+					</p:menu>
+				</div>
+			</div>
+			<!-- wrapper usuario -->
+		</div>
+		<!-- MENU USUARIO FIN -->
+		<div id="listas_menu_out"></div>
+	</div>
+</ui:composition>

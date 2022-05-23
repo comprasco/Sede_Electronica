@@ -1,0 +1,235 @@
+#section {
+	width: 100%;
+	height: 120%;
+	background-size: cover !important;
+	background-image: url("#{resource['img/fondo-login.png']}") !important;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	-webkit-background-size: cover;
+	min-height: 200px;
+	max-height: 100%;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Didact+Gothic');
+
+.text-title {
+	display: block;
+	font-size: 22px !important;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	text-align: center;
+	font-weight: bold !important;
+}
+
+.panel-login {
+	padding: 20px;
+	margin: 3% auto;
+	width: 55%;
+}
+
+.text-subtitle {
+	display: block;
+	font-size: 14px !important;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-weight: bold !important;
+}
+
+body .ui-panel.ui-widget {
+	border-radius: 10px;
+}
+
+.img-size {
+	width: 20%;
+}
+
+.select-html {
+	width: 100%;
+	height: 37px;
+	background-color: #F9F9F9;
+	border-color: #F9F9F9;
+	color: #572228;
+	font-size: 14px;
+	padding-left: 12px;
+	font-weight: 500;
+}
+
+.input-html {
+	width: 100%;
+	height: 37px;
+	border: 1px solid #EFEFEF;
+	color: #572228;
+	font-size: 14px;
+	padding-left: 12px;
+	font-weight: 500;
+	letter-spacing: 3px;
+}
+
+.password-html {
+	width: 100%;
+	height: 37px;
+	border: 1px solid #EFEFEF;
+	color: #572228;
+	font-size: 18px;
+	padding-left: 12px;
+	font-weight: 600;
+	letter-spacing: 4px;
+}
+
+.space-row {
+	margin-bottom: 10px;
+}
+
+.label-olvidar {
+	float: right;
+	color: #4C4C4C;
+	padding-top: 5px;
+	font-size: 16px;
+}
+
+.separador-small {
+	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.volver {
+	color: #4C4C4C;
+	font-weight: 700;
+	cursor: pointer;
+	font-size: 8px;
+}
+
+.boton-atras {
+	width: 22px;
+    margin-left: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.link-cursor {
+	cursor: pointer;
+}
+
+#content-btn-right {
+	padding-right: 50px;
+}
+
+#content-btn-left {
+	padding-left: 50px;
+}
+
+#content-btn-center {
+	padding-center: 60px;
+}
+
+.boton-center {
+	padding: 80px;
+}
+
+@media only screen and (min-width: 200px) and (max-width: 576px) {
+	.text-title {
+		font-size: 24px !important;
+	}
+	.text-subtitle {
+		font-size: 14px !important;
+	}
+	.col-sm-offset-1-two {
+		margin-left: 8.33333333%;
+	}
+	.col-sm-offset-1-one {
+		margin-left: 8.33333333%;
+	}
+	.panel-login {
+		width: 85% !important;
+		height: auto;
+		margin-top: 30px !important;
+	}
+}
+
+@media only screen and (min-width: 200px) and (max-width: 530px) {
+	#content-btn-right {
+		padding-right: 15px !important;
+	}
+	#content-btn-left {
+		padding-left: 15px !important;
+	}
+	.btn-login-gris {
+		width: 50% !important;
+	}
+	.btn-login-rojo {
+		width: 40% !important;
+	}
+}
+
+@media only screen and (min-width: 531px) and (max-width: 768px) {
+	#content-btn-right {
+		padding-right: 25px !important;
+	}
+	#content-btn-left {
+		padding-left: 25px !important;
+	}
+	.btn-login-gris {
+		width: 40% !important;
+	}
+	.btn-login-rojo {
+		width: 40% !important;
+	}
+}
+
+@media only screen and (min-width: 577px) and (max-width: 768px) {
+	.text-title {
+		font-size: 28px !important;
+	}
+	.text-subtitle {
+		font-size: 16px !important;
+	}
+	.col-sm-offset-1-two {
+		margin-left: 8.33333333%;
+	}
+	.col-sm-offset-1-one {
+		margin-left: 8.33333333%;
+	}
+	.panel-login {
+		width: 65% !important;
+		height: auto;
+		margin-top: 30px !important;
+	}
+}
+
+@media only screen and (min-width: 769px) and (max-width: 992px) {
+	.text-title {
+		font-size: 32px !important;
+	}
+	.text-subtitle {
+		font-size: 18px !important;
+	}
+	.col-sm-offset-1-two {
+		margin-left: 8.33333333%;
+	}
+	#content-btn-right {
+		padding-right: 25px !important;
+	}
+	#content-btn-left {
+		padding-left: 25px !important;
+	}
+	.btn-login-gris {
+		width: 40% !important;
+	}
+	.btn-login-rojo {
+		width: 40% !important;
+	}
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+	.btn-login-gris {
+		width: 40% !important;
+	}
+	.btn-login-rojo {
+		width: 40% !important;
+	}
+}
+
+@media only screen and (min-width: 1201px) {
+}

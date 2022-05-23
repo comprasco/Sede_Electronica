@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-cuentaCupo.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputScript library="js" name="archivo.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_cuentaCupo['CuentaCupo']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_cuentaCupo['CuentaCupo.Titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_cuentaCupo['CuentaCupo.Subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/cuentaCupo/consultarCuentaCupo.jsf" />
+		</ui:include>
+		<p:panel id="panelConsultaCuentaCupo"
+			styleClass="panel-content no-border">
+			<p:outputPanel rendered="#{!beanConsultarCuentaCupo.ib_consultado}">
+				<h:form id="formConsulta">
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelMoviento"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_cuentaCupo['label.cosultarMovientosCuentaCupo']}" />
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-md-6">
+							<p:outputLabel id="labelFechaInicial" styleClass="label-form"
+								for="fechaInicial"
+								value="#{txt_flujoSolicitudesPago['historialPedidos.fechaInicial']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:calendar id="fechaInicial" readonlyInput="true"
+								pattern="dd/MM/yyyy" maxlength="10"
+								maxdate="#{beanConsultarCuentaCupo.id_fechaActual}" locale="es"
+								yearRange="1900:2200" navigator="true"
+								placeholder="#{txt['placeholder.FormatoFecha']}"
+								styleClass="text-input-calendar" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								showOn="button"
+								value="#{beanConsultarCuentaCupo.id_fechainicial}">
+								<p:ajax event="dateSelect" update="fechaFinal"
+									onstart="PF('blockUI-Loading').show();"
+									onsuccess="PF('blockUI-Loading').hide();" />
+							</p:calendar>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelFechaInicial"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_flujoSolicitudesPago['historialPedidos.fechaInicial.tooltip']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="fechaInicial" />
+							</span>
+						</div>
+						<div class="col-xs-12 col-md-6">
+							<p:outputLabel id="labelFechaFinal" styleClass="label-form"
+								for="fechaFinal"
+								value="#{txt_flujoSolicitudesPago['historialPedidos.fechaFinal']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<p:calendar id="fechaFinal" readonlyInput="true"
+								pattern="dd/MM/yyyy" maxlength="10" locale="es"
+								yearRange="1900:2200" navigator="true"
+								mindate="#{beanConsultarCuentaCupo.id_fechainicial}"
+								maxdate="#{beanConsultarCuentaCupo.id_fechaActual}"
+								placeholder="#{txt['placeholder.FormatoFecha']}"
+								styleClass="text-input-calendar" required="true"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								showOn="button" value="#{beanConsultarCuentaCupo.id_fechafinal}">
+							</p:calendar>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelFechaFinal" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_flujoSolicitudesPago['historialPedidos.fechaFinal.tooltip']}" />
+								</div>
+							</p:tooltip>
+							<span class="help-block"> <p:message for="fechaFinal" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-4">
+							<p:commandButton styleClass="btn-gris"
+								value="#{txt_cuentaCupo['boton.volver']}"
+								action="/pages/admon/cuentaCupo/consultaCuentaCupoM.jsf?faces-redirect=true">
+								<p:ajax
+									listener="#{beanConsultarCuentaCupo.redireccionConsultaCuentaCupo()}"
+									update="panelConsultaCuentaCupo" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+							<p:commandButton value="#{txt_cuentaCupo['boton.consultar']}"
+								styleClass="btn-gradiente btn-rojo consulta" type="submit"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();">
+								<p:ajax
+									listener="#{beanConsultarCuentaCupo.consultarCuentaCupo()}"
+									update="panelConsultaCuentaCupo panelResultado"
+									process="@form @all" />
+							</p:commandButton>
+						</div>
+					</div>
+				</h:form>
+			</p:outputPanel>
+			<p:outputPanel id="panelResultado"
+				rendered="#{beanConsultarCuentaCupo.ib_consultado}">
+
+				<br />
+				<div class="row">
+					<div class="col-xs-4"></div>
+					<div class="col-xs-6">
+						<p:outputLabel id="labelMoviento"
+							styleClass="label-form text-center tamano-titulo"
+							value="#{txt_cuentaCupo['label.MovientosCuentaCupo']}" />
+					</div>
+					<div class="col-xs-3"></div>
+				</div>
+
+				<br />
+				<h:form id="formTabla">
+					<p:dataTable id="tablaCuentaCupo" widgetVar="tablaCuentaCupo"
+						reflow="true"
+						emptyMessage="#{txt_cuentaCupo['tabla.texto.vacia']}" rows="10"
+						value="#{beanConsultarCuentaCupo.itscm_tipoSalidaConsultarMovimientosWsDto.ilnc_listaNotaCredito}"
+						var="cuentaCupo" stickyHeader="false" lazy="true"
+						styleClass="text-center">
+						<p:column id="notaCredito"
+							headerText="#{txt_cuentaCupo['texto.columna.notaCredito']}">
+							<h:outputText value="#{cuentaCupo.is_notaCredito}" />
+						</p:column>
+						<p:column id="fecha"
+							headerText="#{txt_cuentaCupo['texto.columna.fecha']}">
+							<h:outputText value="#{cuentaCupo.id_fechaMovimiento}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+							</h:outputText>
+						</p:column>
+						<p:column id="valorRecarga"
+							headerText="#{txt_cuentaCupo['texto.columna.consumo']}">
+							<h:outputText value="$ #{cuentaCupo.is_valorConsumo}">
+							</h:outputText>
+						</p:column>
+						<p:column id="consumo"
+							headerText="#{txt_cuentaCupo['texto.columna.saldoDisponible']}">
+							<h:outputText value="$ #{cuentaCupo.is_saldoDisponible}">
+							</h:outputText>
+						</p:column>
+					</p:dataTable>
+					<br />
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<!-- tabla -->
+							<table class="tamanoTablaMov">
+								<thead>
+									<tr>
+										<th>#{txt_cuentaCupo['texto.footer.totalRecarga']}</th>
+										<th>#{txt_cuentaCupo['texto.footer.totalConsumo']}</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><h:outputText
+												value="#{beanConsultarCuentaCupo.ibd_valorRecarga}">
+												<f:convertNumber type="currency" currencySymbol="$"
+													maxFractionDigits="0" />
+											</h:outputText></td>
+										<td><h:outputText
+												value="#{beanConsultarCuentaCupo.ibd_consumo}">
+												<f:convertNumber type="currency" currencySymbol="$"
+													maxFractionDigits="0" />
+											</h:outputText></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<br />
+					<br />
+					<p:panel header="#{txt_cuentaCupo['header.MetodosExportacion']}"
+						align="Center">
+						<h:commandLink align="Center">
+							<p:graphicImage name="/iconos/pdf.png" />
+							<p:dataExporter type="pdf" target="tablaCuentaCupo"
+								fileName="#{txt_cuentaCupo['archivo.NombreArchivoDescarga']}"
+								encoding="iso-8859-1"
+								preProcessor="#{beanConsultarCuentaCupo.preProcessPDF}"
+								postProcessor="#{beanConsultarCuentaCupo.postProcessPDF}" />
+						</h:commandLink>
+						<h:commandLink align="Center">
+							<p:graphicImage name="/iconos/xls.png" />
+							<p:dataExporter type="xlsx" target="tablaCuentaCupo"
+								fileName="#{txt_cuentaCupo['archivo.NombreArchivoDescarga']}"
+								encoding="iso-8859-1" />
+						</h:commandLink>
+					</p:panel>
+					<div class="row">
+						<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+							<br />
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								update="panelConsultaCuentaCupo"
+								actionListener="#{beanConsultarCuentaCupo.setIb_consultado(false)}"
+								value="#{txt_cuentaCupo['boton.salir']}">
+							</p:commandButton>
+						</div>
+						<div class="col-xs-4"></div>
+					</div>
+				</h:form>
+			</p:outputPanel>
+		</p:panel>
+	</ui:define>
+</ui:composition>

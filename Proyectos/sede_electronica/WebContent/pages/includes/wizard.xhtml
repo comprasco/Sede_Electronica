@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<ui:insert name="title-wizard" />
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-wizard.css" />
+		<ui:insert name="head-wizard" />
+	</ui:define>
+	<ui:define name="body">
+		<ui:insert name="banner" />
+		<h:form id="wizard">
+			<p:wizard nextLabel="#{siguienteLabel}" backLabel="#{atrasLabel}"
+				id="wizardGenerico" widgetVar="wizardGenerico"
+				flowListener="#{target.validarSiguiente}">
+				<ui:insert name="primerPaso">
+				</ui:insert>
+				<ui:insert name="segundoPaso">
+				</ui:insert>
+				<ui:insert name="tercerPaso">
+				</ui:insert>
+				<ui:insert name="cuartoPaso">
+				</ui:insert>
+			</p:wizard>
+			<ui:insert name="modalWizard">
+			</ui:insert>
+		</h:form>
+		<ui:insert name="modalWizardExterno">
+		</ui:insert>
+	</ui:define>
+</ui:composition>

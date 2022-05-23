@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<p:tab id="pago#{vista}">
+		<f:facet name="title">
+			<span class="icono icono-pago" />
+			<p:outputLabel class="tituloWizard"
+				value="#{txt_certificados['wizard.tab.pago']}" />
+		</f:facet>
+		<p:panel>
+			<div class="container-fluid">
+				<div class="row text-center">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{titulo}" class="titulo" />
+					</div>
+				</div>
+				<br /> <br />
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel id="labelTipoDocumentoPago" styleClass="label-form"
+							for="tipoDocumentoPago"
+							value="#{txt_certificados['wizardCertificado.pago.tipoDocumento']}" />
+						<div class="tipo-input">
+							<h:outputText id="tipoDocumentoPago" value="#{tipoDocumento}" />
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<p:outputLabel id="labelNumeroDocumetoPago"
+							styleClass="label-form" for="numeroDocumentoPago"
+							value="#{txt_certificados['wizardCertificado.pago.documento']}" />
+						<div class="tipo-input">
+							<h:outputText id="numeroDocumentoPago" value="#{numeroDocumento}" />
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<ui:insert name="cambioInformacion">
+							<p:outputLabel id="labelNumeroMatricula" styleClass="label-form"
+								for="listaNumeroMatricula"
+								value="#{txt_certificados['wizardCertificado.pago.matricula']}" />
+							<div class="tipo-input">
+								<!-- Número(s) de matrícula recibe una lista de matrículas para iterar -->
+								<p:dataList id="listaNumeroMatricula" value="#{listaMatriculas}"
+									var="matricula">
+									<h:outputText
+										value="#{matricula.getIm_matriculaDto().getIs_codigoMatricula()} - #{matricula.getIm_matriculaDto().getIcr_circuloRegistralMatricula().getIs_nombre()}" />
+								</p:dataList>
+							</div>
+						</ui:insert>
+					</div>
+				</div>
+				<br /> <br />
+				<div class="row ui-g">
+					<div class="col-xs-12">
+						<p:outputLabel id="labelMedioDePago" styleClass="label-form"
+							for="medioDePago"
+							value="#{txt_certificados['wizardCertificado.pago.medioPago']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:outputPanel id="customPanel" styleClass="espacio-abajo">
+							<p:selectOneRadio id="medioDePago"
+								value="#{tipoDePagoBean[tipoDePagoFuncion]}" unselectable="true"
+								layout="custom" columns="3"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								required="true">
+								<f:selectItem
+									itemLabel="#{txt_certificados['info.pago.debito']}"
+									itemValue="#{txt_certificados['info.debito']}" />
+								<f:selectItem
+									itemLabel="#{txt_certificados['info.pago.tarjeta']}"
+									itemValue="#{txt_certificados['info.tarjeta']}" />
+								<f:selectItem
+									itemLabel="#{txt_certificados['info.pago.imprimir']}"
+									itemValue="#{txt_certificados['info.imprimir']}" />
+							</p:selectOneRadio>
+							<h:panelGrid columns="3" cellpadding="5"
+								styleClass="tableRadio oneButton" headerClass="tableCuerpo"
+								rowClasses="fila" columnClasses="columna">
+								<p:radioButton id="radioDebito" for="medioDePago" itemIndex="0" />
+								<p:graphicImage styleClass="imgPago" name="/iconos/pse.png" />
+								<h:outputLabel for="radioDebito"
+									value="#{txt_certificados['info.pago.debito']}" />
+								<p:radioButton id="radioCredito" for="medioDePago" itemIndex="1" />
+								<p:graphicImage styleClass="imgPago" name="/iconos/tarjeta.png" />
+								<h:outputLabel for="radioCredito"
+									value="#{txt_certificados['info.pago.tarjeta']}" />
+								<p:radioButton id="radioImprimir" for="medioDePago"
+									itemIndex="2" />
+								<p:graphicImage styleClass="imgPago" name="/iconos/baloto.png" />
+								<h:outputLabel for="radioImprimir"
+									value="#{txt_certificados['info.pago.imprimir']}" />
+							</h:panelGrid>
+						</p:outputPanel>
+						<span class="help-block"> <p:message for="medioDePago" />
+						</span>
+					</div>
+					<div class="col-xs-12" style="margin-top: 15px;">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelValorPago" styleClass="label-form"
+								for="valorPago"
+								value="#{txt_certificados['wizardCertificado.pago.valor']}" />
+						</div>
+						<div class="col-xs-12 text-center">
+							<h:outputText id="valorPago" value="# ${totalValorPago}.00"
+								class="label-form span-pagar" styleClass="valorPago" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</p:panel>
+	</p:tab>
+</ui:composition>

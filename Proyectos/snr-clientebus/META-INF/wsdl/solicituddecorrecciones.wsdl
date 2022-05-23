@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions targetNamespace="https://www.supernotariado.gov.co/services/bachue/ee/solicituddecorreccion/v1" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="https://www.supernotariado.gov.co/schemas/bachue/ee/solicituddecorreccion/obtenercausalescorreccion/v1" xmlns:WL5G3N2="https://www.supernotariado.gov.co/schemas/bachue/ee/solicituddecorreccion/ingresosolicitud/v1" xmlns:WL5G3N3="https://www.supernotariado.gov.co/services/bachue/ee/solicituddecorreccion/v1" xmlns:WL5G3N4="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <WL5G3N0:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bachue="https://www.supernotariado.gov.co/services/bachue/ee/solicituddecorreccion/v1" xmlns:bachue1="https://www.supernotariado.gov.co/schemas/bachue/ee/solicituddecorreccion/obtenercausalescorreccion/v1" xmlns:bachue2="https://www.supernotariado.gov.co/schemas/bachue/ee/solicituddecorreccion/ingresosolicitud/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/solicituddecorreccion/obtenercausalescorreccion/v1" schemaLocation="http://52.170.212.47:7016/services/ee/solicituddecorrecciones/v1?SCHEMA%2FExpuestosExternamente%2FSolicitudDeCorreccion%2FResources%2FSchemas%2FLegacy%2FEE_OCC_ObtenerCausalesCorreccion"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/solicituddecorreccion/ingresosolicitud/v1" schemaLocation="http://52.170.212.47:7016/services/ee/solicituddecorrecciones/v1?SCHEMA%2FExpuestosExternamente%2FSolicitudDeCorreccion%2FResources%2FSchemas%2FLegacy%2FEE_SDC_IngresoSolicitud"/>
+    </schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="ObtenerCausalesCorreccion_Request">
+    <WL5G3N0:part element="WL5G3N1:entradaObtenerCausalesCorreccion" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ObtenerCausalesCorreccion_Response">
+    <WL5G3N0:part element="WL5G3N1:salidaObtenerCausalesCorreccion" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="IngresoSolicitud_Request">
+    <WL5G3N0:part element="WL5G3N2:entradaIngresoSolicitud" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="IngresoSolicitud_Response">
+    <WL5G3N0:part element="WL5G3N2:salidaIngresoSolicitud" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="SDI_EE_SolicitudDeCorreccion">
+    <WL5G3N0:operation name="ObtenerCausalesCorreccion">
+      <WL5G3N0:input message="WL5G3N3:ObtenerCausalesCorreccion_Request"/>
+      <WL5G3N0:output message="WL5G3N3:ObtenerCausalesCorreccion_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="IngresoSolicitud">
+      <WL5G3N0:input message="WL5G3N3:IngresoSolicitud_Request"/>
+      <WL5G3N0:output message="WL5G3N3:IngresoSolicitud_Response"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="SDI_EE_SolicitudDeCorreccion" type="WL5G3N3:SDI_EE_SolicitudDeCorreccion">
+    <WL5G3N4:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="ObtenerCausalesCorreccion">
+      <WL5G3N4:operation soapAction="https://www.supernotariado.gov.co/schemas/bachue/ee/solicituddecorreccion/obtenercausalescorreccion/v1" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N4:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N4:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="IngresoSolicitud">
+      <WL5G3N4:operation soapAction="https://www.supernotariado.gov.co/schemas/bachue/ee/solicituddecorreccion/ingresosolicitud/v1" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N4:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N4:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="SDI_EE_SolicitudDeCorreccionQSService">
+    <WL5G3N0:documentation>OSB Service</WL5G3N0:documentation>
+    <WL5G3N0:port binding="WL5G3N3:SDI_EE_SolicitudDeCorreccion" name="SDI_EE_SolicitudDeCorreccionQSPort">
+      <WL5G3N4:address location="http://10.0.0.27:7016/services/ee/solicituddecorrecciones/v1"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

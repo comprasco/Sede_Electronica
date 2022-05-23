@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputScript library="js" name="archivo.js" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+		<h:outputStylesheet library="css" name="snr-se-inscribirAlerta.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css" name="snr-se-bandejaAlerta.css" />
+		<!-- Script que ejecuta el Keyfilter-->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			cargarKeyfilters();
+		});
+	</script>
+	<!-- Script que ejecuta el Keyfilter-->
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_bandejaAlertas['header.titulo.consultarAlertas']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<p:importEnum
+			type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTiposMIME"
+			var="EnumTiposMIME" />
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_bandejaAlertas['header.breadcrumb.titulo']}" />
+			<ui:param name="imagen" value="img-registroAlertas" />
+			<ui:param name="subtitulo"
+				value="#{txt_bandejaAlertas['header.titulo.revision.bandejaAlerta']}" />
+			<ui:param name="urlVista"
+				value="/pages/alertas/alertaTierras/bandejaAlertas.jsf" />
+		</ui:include>
+		<h:form id="formBandejaAlertas">
+			<p:panel id="panelBandejaAlertas">
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<p:outputPanel
+							styleClass="text-center text-titulo label-form titulo">
+							#{txt_bandejaAlertas['header.titulo.consultarAlertas']}
+						</p:outputPanel>
+					</div>
+				</div>
+				<hr />
+				<p:outputPanel id="pBandejaAlertas"
+					rendered="#{beanBandejaAlertas.ii_renderizarVistas == 0}"
+					styleClass="no-border">
+					<h:form id="formConsultarAlertaTierras">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-xs-12 col-md-4">
+									<p:outputLabel id="labelFechaInscripcion"
+										styleClass="label-form"
+										value="#{txt_bandejaAlertas['form.label.fechaInscripcion']}"
+										for="fechaInscripcion" />
+									<p:calendar id="fechaInscripcion" readonlyInput="true"
+										pattern="dd/MM/yyyy" maxlength="10"
+										maxdate="#{beanBandejaAlertas.id_fechaActual}" locale="es"
+										yearRange="1900:2200" navigator="true"
+										placeholder="#{txt['placeholder.FormatoFecha']}"
+										styleClass="text-input-calendar" showOn="button"
+										value="#{beanBandejaAlertas.ibat_bandejaAlertaTierraDto.id_fechaInscripcion}" />
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelFechaInscripcion"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_bandejaAlertas['tooltips.consulta.fechaInscripcion']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<ui:fragment rendered="#{beanBandejaAlertas.ib_entidadEspecial}">
+									<div class="col-xs-12 col-md-8">
+										<div class="title">
+											<div>
+												<p:outputLabel id="labelCodigoEntidad"
+													styleClass="label-form" for="codigoEntidad"
+													value="#{txt_alertaTierras['label.CodigoEntidad']}" />
+											</div>
+										</div>
+										<p:selectOneMenu id="codigoEntidad"
+											converter="selectOneMenuConverter"
+											value="#{beanBandejaAlertas.ibat_bandejaAlertaTierraDto.is_entidad}">
+											<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+												itemValue="" />
+											<f:selectItems
+												value="#{beanBandejaAlertas.illaja_listaAutoridadesJADto}"
+												var="codigoEntidad"
+												itemLabel="#{codigoEntidad.is_nombreAutoridad}"
+												itemValue="#{codigoEntidad}" />
+										</p:selectOneMenu>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCodigoEntidad"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_alertaTierras['label.CodigoEntidad']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="codigoEntidad" />
+										</span>
+									</div>
+								</ui:fragment>
+								<ui:fragment
+									rendered="#{beanBandejaAlertas.ib_adminEntidadEspecial}">
+									<div class="col-xs-12 col-md-8">
+										<div class="title">
+											<div>
+												<p:outputLabel id="labelAdminCodigoEntidad"
+													styleClass="label-form" for="codigoAdminEntidad"
+													value="#{txt_alertaTierras['label.CodigoEntidad']}" />
+											</div>
+										</div>
+										<p:inputText id="codigoAdminEntidad"
+											styleClass="text-input border-completo disable"
+											readonly="true"
+											value="#{beanBandejaAlertas.ibat_bandejaAlertaTierraDto.is_entidad}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelAdminCodigoEntidad"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_alertaTierras['label.CodigoEntidad']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="codigoAdminEntidad" />
+										</span>
+									</div>
+								</ui:fragment>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-xs-12 col-md-4">
+									<p:outputLabel id="labelTipoDocumental" styleClass="label-form"
+										value="#{txt_bandejaAlertas['form.label.tipoDocumental']}"
+										for="tipoDocumental" />
+									<p:selectOneMenu id="tipoDocumental" widgetVar="tipoDocumental"
+										value="#{beanBandejaAlertas.ibat_bandejaAlertaTierraDto.is_tipoDocumento}"
+										converter="selectOneMenuConverter">
+										<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanBandejaAlertas.ilc_tipoDocumental}"
+											var="tipoDocumental" itemLabel="#{tipoDocumental.is_nombre}"
+											itemValue="#{tipoDocumental}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelTipoDocumental"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_bandejaAlertas['tooltips.consulta.tipoDocumento']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<div class="col-xs-12 col-md-4">
+									<p:outputLabel id="labelCirculoRegistral"
+										styleClass="label-form"
+										value="#{txt_bandejaAlertas['form.label.circuloRegistral']}"
+										for="circuloRegistral" />
+									<p:selectOneMenu id="circuloRegistral"
+										widgetVar="circuloRegistral"
+										value="#{beanBandejaAlertas.icr_circuloRegistralDto.is_nombre}"
+										converter="selectOneMenuConverter" filter="true"
+										filterMatchMode="contains"
+										filterPlaceholder="#{txt_bandejaAlertas['form.placeHolder.circuloRegistral']}">
+										<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanBandejaAlertas.ilcr_listaCirculoRegistral}"
+											var="circuloRegistral"
+											itemLabel="#{circuloRegistral.is_nombre} - (#{circuloRegistral.is_id})"
+											itemValue="#{circuloRegistral}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelCirculoRegistral"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_bandejaAlertas['tooltips.consulta.circuloRegistral']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<div class="col-xs-12 col-md-4">
+									<p:outputLabel id="labelNumMatricula" styleClass="label-form"
+										value="#{txt_bandejaAlertas['form.label.numMatricula']}"
+										for="numMatricula" />
+									<p:inputText id="numMatricula" autocomplete="off"
+										maxlength="10" styleClass="mask-Numeric"
+										value="#{beanBandejaAlertas.ibat_bandejaAlertaTierraDto.ii_numeroMatricula}"
+										placeholder="#{txt_bandejaAlertas['form.placeholder.numMatricula']}">
+										<p:keyFilter regEx="/[0-9\s]/i" />
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelNumMatricula"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_bandejaAlertas['form.placeholder.numMatricula']}" />
+										</div>
+									</p:tooltip>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-xs-12 col-md-4">
+									<p:outputLabel id="labelComunidad" styleClass="label-form"
+										value="#{txt_bandejaAlertas['form.label.idComunidad.etnica']}"
+										for="comunidad" />
+									<p:selectOneMenu id="comunidad"
+										value="#{beanBandejaAlertas.ibat_bandejaAlertaTierraDto.is_comunidadEtnica}"
+										converter="selectOneMenuConverter">
+										<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanBandejaAlertas.illce_coumunidadEtnicaDto}"
+											var="tipoComunidadEtnica"
+											itemLabel="#{tipoComunidadEtnica.is_nombre}"
+											itemValue="#{tipoComunidadEtnica}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelComunidad"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_bandejaAlertas['tooltips.consulta.idComunidad']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<div class="col-xs-12 col-md-4 space-row">
+									<p:outputLabel id="labelEstado" styleClass="label-form"
+										value="#{txt_bandejaAlertas['form.label.estado']}"
+										for="estado" />
+									<p:selectOneMenu id="estado" widgetVar="estado"
+										value="#{beanBandejaAlertas.ibat_bandejaAlertaTierraDto.is_estado}"
+										converter="selectOneMenuConverter">
+										<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+											itemValue="" />
+										<f:selectItems value="#{beanBandejaAlertas.ilc_estadoAlerta}"
+											var="estadoAlerta" itemLabel="#{estadoAlerta.is_nombre}"
+											itemValue="#{estadoAlerta}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelEstado" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_bandejaAlertas['tooltips.consulta.estado']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<div class="col-xs-12 col-md-4">
+									<p:commandButton
+										value="#{txt_bandejaAlertas['form.boton.consultar']}"
+										styleClass="btn-gradiente btn-rojo consulta" type="submit">
+										<p:ajax
+											listener="#{beanBandejaAlertas.consultarAlertaTierras()}"
+											onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('blockUI-Loading').hide(); cargarKeyfilters();"
+											update="formBandejaAlertas:panelBandejaAlertas formBandejaAlertas:formTabla:panelTablaBandejaAlertas"
+											process="formConsultarAlertaTierras" />
+									</p:commandButton>
+								</div>
+							</div>
+						</div>
+						<br />
+					</h:form>
+				</p:outputPanel>
+				<h:form id="formTabla">
+					<p:panel id="panelTablaBandejaAlertas" styleClass="no-border"
+						rendered="#{beanBandejaAlertas.ii_renderizarVistas == 0}">
+
+						<div class="row text-center">
+							<h3 class="label-form">#{txt_bandejaAlertas['header.tabla.alertas.entidad']}</h3>
+						</div>
+						<p:separator />
+						<p:dataTable id="tablaBandeja" widgetVar="tablaBandeja"
+							value="#{beanBandejaAlertas.iltbat_tablaBandejaAlertasTierrasDto}"
+							styleClass="tablaCertificados" reflow="true"
+							emptyMessage="#{txt_bandejaAlertas['tabla.vacia']}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							currentPageReportTemplate="{currentPage} / {totalPages}"
+							var="alerta" stickyHeader="false"
+							filteredValue="#{beanBandejaAlertas.il_filtroBandejaAlerta}">
+							<f:facet name="header">
+								<p:spacer height="5" />
+								<p:inputText id="globalFilter"
+									onkeyup="PF('tablaBandeja').filter()" styleClass="filtro mask-AlphaNumEsp"
+									placeholder="#{txt_bandejaAlertas['tabla.placeholder.buscar']}"
+									maxlength="100" />
+							</f:facet>
+							<p:column filterBy="#{alerta.ii_idAlerta}"
+								filterStyle="display: none"
+								headerText="#{txt_bandejaAlertas['column.header.idAlerta']}">
+								<h:outputText value="#{alerta.ii_idAlerta}" />
+							</p:column>
+							<p:column filterBy="#{alerta.is_estadoAlerta}"
+								filterStyle="display: none"
+								headerText="#{txt_bandejaAlertas['column.header.estado.alerta']}">
+								<h:outputText value="#{alerta.is_estadoAlerta}" />
+							</p:column>
+							<p:column filterBy="#{alerta.is_nombreEntidad}"
+								filterStyle="display: none"
+								headerText="#{txt_bandejaAlertas['column.header.nombre.entidad']}">
+								<h:outputText value="#{alerta.is_nombreEntidad}" />
+							</p:column>
+							<p:column filterBy="#{alerta.id_fechaInscripcion}"
+								filterStyle="display: none"
+								headerText="#{txt_bandejaAlertas['column.header.fecha.inscripcion']}">
+								<h:outputText value="#{alerta.id_fechaInscripcion}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column filterBy="#{alerta.is_codTipoDocumentoPublico}"
+								filterStyle="display: none"
+								headerText="#{txt_bandejaAlertas['column.header.tipo.documento']}">
+								<h:outputText value="#{alerta.is_codTipoDocumentoPublico}" />
+							</p:column>
+							<p:column filterBy="#{alerta.is_nombreComunidadEtnica}"
+								filterStyle="display: none"
+								headerText="#{txt_bandejaAlertas['column.header.comunidad.etnica']}">
+								<h:outputText value="#{alerta.is_nombreComunidadEtnica}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_bandejaAlertas['column.header.detalle.alerta']}">
+								<p:commandButton
+									styleClass="btn-gradiente text-center botonAlerta"
+									value="#{txt_bandejaAlertas['tabla.boton.detalle.alerta']}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();">
+									<p:ajax listener="#{beanBandejaAlertas.detallarAlerta()}"
+										update="formBandejaAlertas:panelBandejaAlertas" />
+								</p:commandButton>
+							</p:column>
+							<p:column
+								headerText="#{txt_bandejaAlertas['column.header.inactivar.alerta']}">
+								<p:commandButton
+									styleClass="btn-gradiente  text-center botonAlerta"
+									disabled="#{alerta.ib_botonInactivarAlerta}"
+									value="#{txt_bandejaAlertas['tabla.boton.inactivar.alerta']}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();">
+									<p:ajax
+										listener="#{beanBandejaAlertas.rediccionarInactivarAlerta(alerta)}"
+										update="formBandejaAlertas:panelBandejaAlertas" />
+								</p:commandButton>
+							</p:column>
+							<p:column
+								headerText="#{txt_bandejaAlertas['column.header.negacion.correccion']}">
+								<p:commandButton
+									styleClass="btn-gradiente  text-center botonAlerta"
+									disabled="#{alerta.ib_botonNegarAlerta}"
+									value="#{txt_bandejaAlertas['tabla.boton.negacion.correccion']}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();">
+									<p:ajax
+										listener="#{beanBandejaAlertas.rediccionarNegacionAlerta(alerta)}"
+										update="formBandejaAlertas:panelBandejaAlertas" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+				</h:form>
+				<p:outputPanel id="detalleAlertasTierras" styleClass="no-border"
+					rendered="#{beanBandejaAlertas.ii_renderizarVistas == 1}">
+					<ui:decorate
+						template="/pages/includes/bandejaAlertas/detalleAlertaTierras.xhtml">
+						<ui:param name="requerido" value="false" />
+						<ui:param name="bean" value="${beanBandejaAlertas}" />
+						<ui:param name="dto" value="itscda_tipoSalidaDetalleAlertaWsDto" />
+						<ui:param name="dtoI" value="ili_inactivacionWsDto" />
+						<ui:param name="tipoAlerta" value="is_tipoAlerta" />
+						<ui:param name="entidad" value="is_nombreEntidad" />
+						<ui:param name="oficinaOrigen" value="is_nomOficinaOrigen" />
+						<ui:param name="tipoDocumento" value="is_nomTipoDocumentoPublico" />
+						<ui:param name="numeroDocumento" value="is_docNumero" />
+						<ui:param name="fechaDocumento" value="id_fechaDocumento" />
+						<ui:param name="comunidadEtnica" value="is_nitComunidadEtnica" />
+						<ui:param name="numeroProceso" value="is_procesoNroRadicado" />
+						<ui:param name="fechaProceso" value="id_procesoFechaRadicado" />
+						<ui:param name="estado" value="is_estado" />
+						<ui:param name="fechaInactivacion"
+							value="id_fechaInactivacionAlerta" />
+						<ui:param name="listarMatricula"
+							value="ilmdat_listaMatriculaDetalleAlertaTierrasDto" />
+						<ui:param name="listarAlertaGenerada"
+							value="ilag_listaAlertasGeneradasDto" />
+						<ui:param name="listarAntiguoSistema"
+							value="ildapas_listaDetalleAlertaProcesoASDto" />
+						<ui:param name="circuloRegistral" value="is_nomCirculoRegistral" />
+						<ui:param name="numeroMatricula"
+							value="is_numMatriculaInmobiliaria" />
+						<ui:param name="numeroPredial" value="is_numPredial" />
+						<ui:param name="motivo" value="is_motivoInactivacion" />
+						<ui:param name="tipoOficinaI" value="is_nomOficinaOrigen" />
+						<ui:param name="documentoInactivacion"
+							value="is_nomTipoDocumentoPublico" />
+						<ui:param name="fechaDocumentoI" value="id_fechaDocumento" />
+						<ui:param name="numeroDocumentoI" value="is_docNumero" />
+						<ui:param name="txtInactivacion" value="is_textoInactivacion" />
+						<ui:param name="circuloRegistralM" value="is_nomCirculoRegistral" />
+						<ui:param name="numeroMatriculaM"
+							value="ii_numMatriculaInmobiliaria" />
+						<ui:param name="turnoM" value="is_turno" />
+						<ui:param name="textoAlerta" value="is_texto" />
+						<ui:param name="usuarioGenerador" value="is_usuarioGenerador" />
+						<ui:param name="alertaAS" value="ii_idAlerta" />
+						<ui:param name="circuloRegistralAS" value="is_nomCirculoRegistral" />
+						<ui:param name="pais" value="is_nomPais" />
+						<ui:param name="departamento" value="is_nomDepartamento" />
+						<ui:param name="municipio" value="is_nomMunicipio" />
+						<ui:param name="tipoPredioAS" value="is_tipoPredio" />
+						<ui:param name="libro" value="ii_numLibro" />
+						<ui:param name="tomo" value="ii_numTomo" />
+						<ui:param name="tipoPartidaAS" value="is_idTipoPartida" />
+						<ui:param name="numeroPartida" value="ii_numPartida" />
+						<ui:param name="numeroFolio" value="ii_numFolio" />
+						<ui:param name="anio" value="ii_anio" />
+						<ui:param name="predio" value="is_nomPredio" />
+						<ui:param name="numeroPredio" value="ii_numPredio" />
+					</ui:decorate>
+				</p:outputPanel>
+				<p:outputPanel id="pInactivarAlerta" styleClass="no-border"
+					rendered="#{beanBandejaAlertas.ii_renderizarVistas == 2}">
+					<ui:decorate
+						template="/pages/includes/bandejaAlertas/inactivarAlerta.xhtml">
+						<ui:param name="vista" value="Bandeja" />
+						<ui:param name="bean" value="${beanBandejaAlertas}" />
+						<ui:param name="dto" value="iiae_inactivarAlertaEntradaDto" />
+						<ui:param name="actualizar" value="pInactivarAlerta" />
+						<ui:param name="idAlerta" value="ii_idAlerta" />
+						<ui:param name="idMotivoi" value="is_idMotivo" />
+						<ui:param name="tipoOficina"
+							value="iiae_inactivarAlertaEntradaDto" />
+						<ui:param name="oficina" value="is_tipoOficina" />
+						<ui:param name="nombreOficina"
+							value="iiae_inactivarAlertaEntradaDto" />
+						<ui:param name="nombreOficinaOrigen"
+							value="is_nombreOficinaOrigen" />
+						<ui:param name="tipoDocumento" value="is_documentoInactivacion" />
+						<ui:param name="numDocumento" value="is_numeroDocInactivacion" />
+						<ui:param name="fecha" value="id_fechaDocumento" />
+						<ui:param name="txtInactivacion" value="is_txtInactivacion" />
+						<ui:param name="documentoSoporte"
+							value="icdf_cargarDocumentoAlertaTierrasDto" />
+						<ui:param name="listaMotivos" value="ilemi_listaMotivo" />
+						<ui:param name="metodoDocumento" value="cargarSoporteBloqueo" />
+						<ui:param name="validarCargarDocumentoAlerta"
+							value="validarCargarDocumentoAlerta" />
+						<ui:param name="mostrarNombreDocumentoCargado"
+							value="mostrarNombreDocumentoCargado" />
+						<ui:param name="cargarDocumentoAlertaTierras"
+							value="cargarDocumentoAlertaTierras" />
+						<ui:param name="regresar" value="regresarBandeja" />
+						<ui:param name="confirmarInactivarAlerta" value="inactivarAlerta"></ui:param>
+						<ui:param name="listaTipoOficina"
+							value="illoo_listaOficinasOrigenDto" />
+						<ui:param name="listTipoDocumento" value="ilc_tipoDocumental" />
+						<ui:param name="modalConfirmacion"
+							value="confirmarInactivacionAlertaTierras" />
+					</ui:decorate>
+				</p:outputPanel>
+				<p:outputPanel id="detalleNegacionCorreccion" styleClass="no-border"
+					rendered="#{beanBandejaAlertas.ii_renderizarVistas == 3}">
+					<ui:decorate
+						template="/pages/includes/bandejaAlertas/negacionCorreccion.xhtml">
+						<ui:param name="requerido" value="false" />
+					</ui:decorate>
+				</p:outputPanel>
+				<p:outputPanel id="regresarAlertaTierras"
+					rendered="#{beanBandejaAlertas.ib_regresarAlertaTierras}">
+					<div class="row">
+						<br />
+						<div class="col-xs-12 col-md-4 col-md-offset-4">
+							<p:commandButton
+								value="#{txt_bandejaAlertas['tabla.boton.regresar']}"
+								styleClass="btn-gradiente btn-rojo consulta" type="submit"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								action="/pages/alertas/alertaTierras/alertaDeTierras.jsf?faces-redirect=true">
+							</p:commandButton>
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

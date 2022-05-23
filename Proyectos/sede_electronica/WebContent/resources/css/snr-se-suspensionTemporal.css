@@ -1,0 +1,133 @@
+.switch {
+	text-align: center;
+	padding: 12px;
+}
+
+.img-x-size {
+	width: 12px;
+	height: 12px;
+}
+
+.textoRojo {
+	font-weight: bold;
+	color: #EB1F28;
+}
+
+.textoGris {
+	font-weight: bold;
+	color: #AEAEAE;
+}
+
+.vcenter {
+	display: flex;
+	align-items: center;
+}
+
+.titulo {
+	font-weight: 700 !important;
+	font-size: 17px !important;
+}
+
+.ui-datalist>.ui-datalist-header {
+	background: linear-gradient(#EB1F28, #461A13) !important;
+	color: white;
+	font-size: 18px;
+	padding: 15px !important;
+}
+
+.ui-datalist>.ui-datalist-content {
+	min-height: 58px;
+	padding: 20px 30px;
+}
+
+.ui-datalist-data>.ui-datalist-item {
+	margin-top: 20px;
+}
+
+.ui-selectonemenu-filter-container {
+	width: 100%
+}
+
+.ui-datalist .ui-datalist-empty-message {
+	padding: 4px 10px;
+	color: #572218;
+	font-size: medium;
+	font-weight: 700;
+	text-align: center;
+}
+
+.panel-seguimiento {
+	margin-right: 20px;
+	margin-left: 30px;
+}
+
+.panel-seguimientos {
+	margin-right: 15%;
+	margin-left: 15%;
+}
+
+/* ESTILOS ASOCIADOS AL DETALLE SEGUIMIENTO */
+.ui-panel > .ui-panel-titlebar {
+   background: linear-gradient(180deg, rgba(235, 31, 40, 1) 0%, rgba(70, 26, 19, 1) 100%) !important;
+   text-align: center;
+}
+div.ui-panel .ui-panel-title {
+    color: #f4f4f4 !important;
+    font-weight: bold !important;
+}
+.espacio-inferior {
+    margin-bottom: 20px;
+}
+.text-read-only {
+    border: 1px solid #d2d6de;
+    padding-left: 10px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.panel-header {
+	margin-bottom: 20px;
+}
+
+.table-center {
+	text-align: center;
+}
+
+.header {
+    font-size: 1PX;
+    border-color: #f4f4f4;
+    color: #fff;
+    height: 0px;
+}
+
+body .ui-datatable .ui-datatable-header, body .ui-treetable .ui-datatable-header, body .ui-datatable .ui-treetable-header, body .ui-treetable .ui-treetable-header, body .ui-datatable .ui-datatable-footer, body .ui-treetable .ui-datatable-footer, body .ui-datatable .ui-treetable-footer, body .ui-treetable .ui-treetable-footer {
+   	font-size: 1PX;
+	border-color: #f4f4f4;
+	color: #fff;
+	height: 0px;
+	text-align: left;
+}
+
+.centrar-boton {
+	padding-left: 15%;
+}
+
+.textoLey {
+	text-align: justify;
+}
+  
+.tituloPanel {
+	color: white;
+	font-size: 16px;
+	padding: 5px 0;
+}
+
+.tamano-titulo {
+	font-size: 20px !important;
+}
+
+.colorRojo{
+    color: #770707 !important;
+    text-decoration: none !important;
+}
+

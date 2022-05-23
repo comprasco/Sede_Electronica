@@ -1,0 +1,194 @@
+package co.gov.supernotariado.bachue.clientebus.bancarizacion.type.consultarestadotransaccionconvenio;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+
+
+/**
+ * <p>Clase Java para consultarEstadoTransaccionConvenio complex type.
+ * 
+ * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * 
+ * <pre>
+ * &lt;complexType name="consultarEstadoTransaccionConvenio">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element name="usuarioWS" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="claveWS" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="codigoConvenio" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="codigoServicio" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="idSeguimientoConvenio" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="confirmacionEntrega" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *       &lt;/sequence>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "ConsultarEstadoTransaccionConvenio", propOrder = {
+    "usuarioWS",
+    "claveWS",
+    "codigoConvenio",
+    "codigoServicio",
+    "idSeguimientoConvenio",
+    "confirmacionEntrega"
+})
+public class ConsultarEstadoTransaccionConvenio {
+
+    protected String usuarioWS;
+    protected String claveWS;
+    protected String codigoConvenio;
+    protected String codigoServicio;
+    protected String idSeguimientoConvenio;
+    protected String confirmacionEntrega;
+
+    /**
+     * Obtiene el valor de la propiedad usuarioWS.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUsuarioWS() {
+        return usuarioWS;
+    }
+
+    /**
+     * Define el valor de la propiedad usuarioWS.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUsuarioWS(String value) {
+        this.usuarioWS = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad claveWS.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getClaveWS() {
+        return claveWS;
+    }
+
+    /**
+     * Define el valor de la propiedad claveWS.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setClaveWS(String value) {
+        this.claveWS = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad codigoConvenio.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCodigoConvenio() {
+        return codigoConvenio;
+    }
+
+    /**
+     * Define el valor de la propiedad codigoConvenio.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCodigoConvenio(String value) {
+        this.codigoConvenio = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad codigoServicio.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCodigoServicio() {
+        return codigoServicio;
+    }
+
+    /**
+     * Define el valor de la propiedad codigoServicio.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCodigoServicio(String value) {
+        this.codigoServicio = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad idSeguimientoConvenio.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getIdSeguimientoConvenio() {
+        return idSeguimientoConvenio;
+    }
+
+    /**
+     * Define el valor de la propiedad idSeguimientoConvenio.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setIdSeguimientoConvenio(String value) {
+        this.idSeguimientoConvenio = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad confirmacionEntrega.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getConfirmacionEntrega() {
+        return confirmacionEntrega;
+    }
+
+    /**
+     * Define el valor de la propiedad confirmacionEntrega.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setConfirmacionEntrega(String value) {
+        this.confirmacionEntrega = value;
+    }
+
+}

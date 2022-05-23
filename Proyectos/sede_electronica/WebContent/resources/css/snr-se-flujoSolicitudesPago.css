@@ -1,0 +1,84 @@
+.panelCarrito {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.panel {
+	display: flex;
+	height: 50px;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+	padding: 0 10px;
+}
+
+.titulo {
+	background: linear-gradient(#EB1F28, #461A13);
+	color: white;
+	font-weight: 700;
+	font-size: 15px;
+	font-weight: 700;
+}
+
+.subtitulo {
+	background: #d2d2d2;
+	color: #464646;
+	font-weight: 600;
+	font-size: 13px;
+	text-transform: uppercase;
+	color: #464646;
+	border-radius: 6px 6px 0 0;
+}
+
+.panelContenedor {
+	width: 100%;
+	margin: 20px auto;
+	max-height: 300px;
+}
+
+.panelDatos {
+	margin: 0 auto 20px auto;
+	border: 1px solid #ccc;
+	border-radius: 0 0 6px 6px;
+	padding: 20px 30px;
+}
+
+.scrollVertical {
+	overflow-y: auto !important;
+	overflow-x: hidden !important;
+}
+
+.tituloTabla {
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.textoContainer {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.colorVerde {
+	color: #27822f;
+	font-weight: 600;
+}
+.panelAccion{
+	padding-top:10px;
+}
+.panelAccion div{
+	margin: 5px 0;
+}
+
+/*datalist */
+.ui-datalist-content .ui-widget-content {
+	border: 0;
+}
+
+div#dataListDatosTipoServicio>ul.ui-datalist-data>li.ui-datalist-item {
+	margin-bottom: 5px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}

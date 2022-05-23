@@ -1,0 +1,99 @@
+<WL5G3N0:definitions targetNamespace="https://www.supernotariado.gov.co/services/bachue/ee/consultatrazabilidad/v1" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="https://www.supernotariado.gov.co/schemas/bachue/ee/consultatrazabilidad/consultartrazabilidad/v1" xmlns:WL5G3N2="http://www.gobiernoenlinea.gov.co/GEL-XML/1.0/schemas/integracion/supernotariado/bachue" xmlns:WL5G3N3="https://www.supernotariado.gov.co/schemas/bachue/ee/consultatrazabilidad/consultaActosTurno/v1" xmlns:WL5G3N4="https://www.supernotariado.gov.co/schemas/bachue/ee/consultatrazabilidad/consultaDetalleCertificado/v1" xmlns:WL5G3N5="https://www.supernotariado.gov.co/services/bachue/ee/consultatrazabilidad/v1" xmlns:WL5G3N6="http://schemas.xmlsoap.org/wsdl/soap12/">
+   <WL5G3N0:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bachue="https://www.supernotariado.gov.co/services/bachue/ee/consultatrazabilidad/v1" xmlns:bachue1="https://www.supernotariado.gov.co/schemas/bachue/ee/consultatrazabilidad/consultartrazabilidad/v1" xmlns:bachue2="http://www.gobiernoenlinea.gov.co/GEL-XML/1.0/schemas/integracion/supernotariado/bachue" xmlns:bachue3="https://www.supernotariado.gov.co/schemas/bachue/ee/consultatrazabilidad/consultaActosTurno/v1" xmlns:bachue4="https://www.supernotariado.gov.co/schemas/bachue/ee/consultatrazabilidad/consultaDetalleCertificado/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+         <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/consultatrazabilidad/consultartrazabilidad/v1" schemaLocation="http://13.90.249.221:7004/services/ee/consultartrazabilidad/v1?SCHEMA%2FExpuestosExternamente%2FConsultaTrazabilidad%2FResources%2FSchemas%2FEE_CT_ConsultarTrazabilidad"/>
+      </schema>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bachue="https://www.supernotariado.gov.co/services/bachue/ee/consultatrazabilidad/v1" xmlns:bachue1="https://www.supernotariado.gov.co/schemas/bachue/ee/consultatrazabilidad/consultartrazabilidad/v1" xmlns:bachue2="http://www.gobiernoenlinea.gov.co/GEL-XML/1.0/schemas/integracion/supernotariado/bachue" xmlns:bachue3="https://www.supernotariado.gov.co/schemas/bachue/ee/consultatrazabilidad/consultaActosTurno/v1" xmlns:bachue4="https://www.supernotariado.gov.co/schemas/bachue/ee/consultatrazabilidad/consultaDetalleCertificado/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+         <import namespace="http://www.gobiernoenlinea.gov.co/GEL-XML/1.0/schemas/integracion/supernotariado/bachue" schemaLocation="http://13.90.249.221:7004/services/ee/consultartrazabilidad/v1?SCHEMA%2FExpuestosExternamente%2FConsultaTrazabilidad%2FResources%2FSchemas%2FEE_CT_ConsultarTrazabilidadNOC"/>
+         <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/consultatrazabilidad/consultaActosTurno/v1" schemaLocation="http://13.90.249.221:7004/services/ee/consultartrazabilidad/v1?SCHEMA%2FExpuestosExternamente%2FConsultaTrazabilidad%2FResources%2FSchemas%2FEE_CT_ConsultaActosTurno"/>
+         <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/consultatrazabilidad/consultaDetalleCertificado/v1" schemaLocation="http://13.90.249.221:7004/services/ee/consultartrazabilidad/v1?SCHEMA%2FExpuestosExternamente%2FConsultaTrazabilidad%2FResources%2FSchemas%2FEE_CT_ConsultaDetalleCertificado"/>
+      </schema>
+   </WL5G3N0:types>
+   <WL5G3N0:message name="ConsultarTrazabilidad_Request">
+      <WL5G3N0:part element="WL5G3N1:entradaConsultarTrazabilidad" name="entrada"/>
+   </WL5G3N0:message>
+   <WL5G3N0:message name="ConsultarTrazabilidad_Response">
+      <WL5G3N0:part element="WL5G3N1:salidaConsultarTrazabilidad" name="salida"/>
+   </WL5G3N0:message>
+   <WL5G3N0:message name="ConsultarTrazabilidadNOC_Request">
+      <WL5G3N0:part element="WL5G3N2:entradaTrazabilidadTramiteRegistroNodoCentral" name="entrada"/>
+   </WL5G3N0:message>
+   <WL5G3N0:message name="ConsultarTrazabilidadNOC_Response">
+      <WL5G3N0:part element="WL5G3N2:salidaTrazabilidadTramiteRegistroNodoCentral" name="salida"/>
+   </WL5G3N0:message>
+   <WL5G3N0:message name="ConsultaActosTurno_Request">
+      <WL5G3N0:part element="WL5G3N3:entradaConsultaActosTurno" name="entrada"/>
+   </WL5G3N0:message>
+   <WL5G3N0:message name="ConsultaActosTurno_Response">
+      <WL5G3N0:part element="WL5G3N3:salidaConsultaActosTurno" name="salida"/>
+   </WL5G3N0:message>
+   <WL5G3N0:message name="ConsultaDetalleCertificado_Request">
+      <WL5G3N0:part element="WL5G3N4:entradaConsultaDetalleCertificado" name="entrada"/>
+   </WL5G3N0:message>
+   <WL5G3N0:message name="ConsultaDetalleCertificado_Response">
+      <WL5G3N0:part element="WL5G3N4:salidaConsultaDetalleCertificado" name="salida"/>
+   </WL5G3N0:message>
+   <WL5G3N0:portType name="SDI_EE_ConsultaTrazabilidad">
+      <WL5G3N0:operation name="consultarTrazabilidad">
+         <WL5G3N0:input message="WL5G3N5:ConsultarTrazabilidad_Request"/>
+         <WL5G3N0:output message="WL5G3N5:ConsultarTrazabilidad_Response"/>
+      </WL5G3N0:operation>
+      <WL5G3N0:operation name="consultarTrazabilidadNOC">
+         <WL5G3N0:input message="WL5G3N5:ConsultarTrazabilidadNOC_Request"/>
+         <WL5G3N0:output message="WL5G3N5:ConsultarTrazabilidadNOC_Response"/>
+      </WL5G3N0:operation>
+      <WL5G3N0:operation name="ConsultaActosTurno">
+         <WL5G3N0:input message="WL5G3N5:ConsultaActosTurno_Request"/>
+         <WL5G3N0:output message="WL5G3N5:ConsultaActosTurno_Response"/>
+      </WL5G3N0:operation>
+      <WL5G3N0:operation name="ConsultaDetalleCertificado">
+         <WL5G3N0:input message="WL5G3N5:ConsultaDetalleCertificado_Request"/>
+         <WL5G3N0:output message="WL5G3N5:ConsultaDetalleCertificado_Response"/>
+      </WL5G3N0:operation>
+   </WL5G3N0:portType>
+   <WL5G3N0:binding name="SDI_EE_ConsultaTrazabilidadSOAP12Binding" type="WL5G3N5:SDI_EE_ConsultaTrazabilidad">
+      <WL5G3N6:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+      <WL5G3N0:operation name="consultarTrazabilidad">
+         <WL5G3N6:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/consultatrazabilidad/v1/ConsultarTrazabilidad" style="document"/>
+         <WL5G3N0:input>
+            <WL5G3N6:body parts="entrada" use="literal"/>
+         </WL5G3N0:input>
+         <WL5G3N0:output>
+            <WL5G3N6:body parts="salida" use="literal"/>
+         </WL5G3N0:output>
+      </WL5G3N0:operation>
+      <WL5G3N0:operation name="consultarTrazabilidadNOC">
+         <WL5G3N6:operation soapAction="http://www.gobiernoenlinea.gov.co/GEL-XML/1.0/schemas/integracion/supernotariado/bachue" style="document"/>
+         <WL5G3N0:input>
+            <WL5G3N6:body parts="entrada" use="literal"/>
+         </WL5G3N0:input>
+         <WL5G3N0:output>
+            <WL5G3N6:body parts="salida" use="literal"/>
+         </WL5G3N0:output>
+      </WL5G3N0:operation>
+      <WL5G3N0:operation name="ConsultaActosTurno">
+         <WL5G3N6:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/consultatrazabilidad/v1/ConsultaActosTurno" style="document"/>
+         <WL5G3N0:input>
+            <WL5G3N6:body parts="entrada" use="literal"/>
+         </WL5G3N0:input>
+         <WL5G3N0:output>
+            <WL5G3N6:body parts="salida" use="literal"/>
+         </WL5G3N0:output>
+      </WL5G3N0:operation>
+      <WL5G3N0:operation name="ConsultaDetalleCertificado">
+         <WL5G3N6:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/consultatrazabilidad/v1/ConsultaDetalleCertificado" style="document"/>
+         <WL5G3N0:input>
+            <WL5G3N6:body parts="entrada" use="literal"/>
+         </WL5G3N0:input>
+         <WL5G3N0:output>
+            <WL5G3N6:body parts="salida" use="literal"/>
+         </WL5G3N0:output>
+      </WL5G3N0:operation>
+   </WL5G3N0:binding>
+   <WL5G3N0:service name="SDI_EE_ConsultaTrazabilidadSOAP12BindingQSService">
+      <WL5G3N0:documentation>OSB Service</WL5G3N0:documentation>
+      <WL5G3N0:port binding="WL5G3N5:SDI_EE_ConsultaTrazabilidadSOAP12Binding" name="SDI_EE_ConsultaTrazabilidadSOAP12BindingQSPort">
+         <WL5G3N6:address location="http://snrappdev08.datatools.com.co:7004/services/ee/consultartrazabilidad/v1"/>
+      </WL5G3N0:port>
+   </WL5G3N0:service>
+</WL5G3N0:definitions>

@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<div class="container-fluid">
+		<div id="contenedor-img">
+			<ui:fragment rendered="#{!beanBanner.getIb_ocultarBanners()}">
+				<div class="row">
+					<div id="contenedor-img-usuario" class="#{imagen}">
+						<div class="col-xs-12 height-text-first">
+							<p:outputLabel styleClass="text-first" value="#{titulo}" />
+						</div>
+						<p:outputPanel id="panelUsuarioNatural">
+							<div class="col-xs-12">
+								<p:outputLabel styleClass="text-second" value="#{subtitulo}" />
+							</div>
+						</p:outputPanel>
+						<div class="col-xs-12 height-img-rectangule">
+							<p:graphicImage styleClass="img-header-interno"
+								name="/img/rectangule.png" />
+						</div>
+
+						<div class="col-xs-12">
+							<p:outputLabel styleClass="text-snr"
+								value="#{txt['SedeElectronicaSNR']}" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<div class="contenedor-link-login">
+							<a
+								href="${request.contextPath}/pages/personas/inicioSesion/ciudadanos.jsf"
+								class="text-perfil-link"><p:graphicImage
+									styleClass="btn-atras" name="/img/btn-atras.png" />#{beanInicio.ib_autenticado
+								? txt['label.VolverInicio.Upper'] :
+								txt['label.VolverInicioSesion.Upper']}</a>
+						</div>
+					</div>
+				</div>
+			</ui:fragment>
+			<div class="row">
+				<div class="col-xs-12 maxTexto" id="breadCrump" style="#{beanBanner.getIb_ocultarBanners()?'margin-top: 30px;': null}">
+					<ui:param name="tituloBoolean" value="#{titulo != null}" />
+					<ui:param name="subtituloBoolean" value="#{subtitulo != null}" />
+					<h:outputLink styleClass="itemBreadCrump"
+						rendered="#{beanInicio.ib_autenticado}"
+						value="${request.contextPath}/pages/personas/inicio.jsf">
+						#{txt['label.Inicio.Upper']}
+					</h:outputLink>
+					<h:link styleClass="itemBreadCrump"
+						rendered="#{!beanInicio.ib_autenticado}"
+						value="#{txt['label.InicioSesion.Upper']}"
+						outcome="/pages/personas/inicioSesion/ciudadanos.jsf" />
+					<p:commandLink rendered="#{tituloBoolean}"
+						styleClass="chevronClass">
+						<i class="fa fa-chevron-right" aria-hidden="true"></i>
+					</p:commandLink>
+					<h:outputText class="itemBreadCrump" rendered="#{tituloBoolean}"
+						value="#{titulo}" />
+					<p:commandLink rendered="#{subtituloBoolean}"
+						styleClass="chevronClass">
+						<i class="fa fa-chevron-right" aria-hidden="true"></i>
+					</p:commandLink>
+					<h:link styleClass="itemBreadCrump final"
+						rendered="#{subtituloBoolean}" value="#{subtitulo}"
+						outcome="#{urlVista}" />
+				</div>
+			</div>
+		</div>
+	</div>
+</ui:composition>

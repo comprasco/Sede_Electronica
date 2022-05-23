@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="asuntoHistorialNotificaciones" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0dec6b23-377b-4dbc-8f4f-313d22ca1d0f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="minjusticialogo" class="Object" isForPrompting="false">
+		<parameterDescription><![CDATA[minjusticialogo]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="logonuevopais" class="Object" isForPrompting="false">
+		<parameterDescription><![CDATA[logonuevopais]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="iso" class="Object" isForPrompting="false">
+		<parameterDescription><![CDATA[iso]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="snrlogo" class="Object" isForPrompting="false">
+		<parameterDescription><![CDATA[snrlogo]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="adjunto" class="java.lang.String">
+		<fieldDescription><![CDATA[adjunto]]></fieldDescription>
+	</field>
+	<field name="archivo" class="java.lang.String">
+		<fieldDescription><![CDATA[archivo]]></fieldDescription>
+	</field>
+	<field name="asunto" class="java.lang.String">
+		<fieldDescription><![CDATA[asunto]]></fieldDescription>
+	</field>
+	<field name="de" class="java.lang.String">
+		<fieldDescription><![CDATA[de]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.util.Date">
+		<fieldDescription><![CDATA[fecha]]></fieldDescription>
+	</field>
+	<field name="para" class="java.lang.String">
+		<fieldDescription><![CDATA[para]]></fieldDescription>
+	</field>
+	<field name="texto" class="java.lang.String">
+		<fieldDescription><![CDATA[texto]]></fieldDescription>
+	</field>
+	<pageHeader>
+		<band height="73">
+			<image>
+				<reportElement x="33" y="19" width="150" height="43" uuid="a3df26e7-a214-4de9-9e17-1ae1c53528f7"/>
+				<imageExpression><![CDATA[$P{minjusticialogo}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="239" y="19" width="140" height="48" uuid="1613737f-0386-467e-920b-e140f29f2c0a"/>
+				<imageExpression><![CDATA[$P{snrlogo}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="393" y="13" width="114" height="54" uuid="595f1dea-f37e-41ad-b2a6-6816e869e88e"/>
+				<imageExpression><![CDATA[$P{logonuevopais}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="509" splitType="Stretch">
+			<textField>
+				<reportElement x="158" y="37" width="336" height="20" uuid="50c8e925-7123-40bc-8217-c44db71796dd"/>
+				<textFieldExpression><![CDATA[$F{de}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="47" y="37" width="100" height="20" uuid="ba5c0710-9589-4b6a-9670-93d8b1ffc62f"/>
+				<text><![CDATA[DE: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="158" y="67" width="336" height="20" uuid="7fa2d4f1-30d2-4379-978e-efc8bbf0ed73"/>
+				<textFieldExpression><![CDATA[$F{para}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="47" y="67" width="100" height="20" uuid="df2f0bf6-5642-41c7-b6e1-cb338c968383"/>
+				<text><![CDATA[PARA: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="158" y="98" width="336" height="20" uuid="1b98a212-1c39-455b-8024-e7427b44bb87"/>
+				<textFieldExpression><![CDATA[$F{asunto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="128" width="336" height="20" uuid="e4c601ec-81de-4002-b969-99c10e5d308a"/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="47" y="128" width="100" height="20" uuid="8e94854a-6612-424c-a268-eef9dc2c3745"/>
+				<text><![CDATA[FECHA: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="98" width="100" height="20" uuid="89679ea0-3a44-461d-94ad-3b3cc2541e3d"/>
+				<text><![CDATA[ASUNTO: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="158" y="158" width="336" height="20" uuid="e6678ca6-fb9d-40ac-8228-82bfbcdc4722"/>
+				<textFieldExpression><![CDATA[$F{adjunto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="47" y="158" width="100" height="20" uuid="10181abe-7787-4ac0-8a4b-bc6406043f14"/>
+				<text><![CDATA[ADJUNTO: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="158" y="188" width="336" height="185" uuid="d7d86d8e-603a-4ffe-9fc7-952122c390b0"/>
+				<textFieldExpression><![CDATA[$F{texto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="47" y="188" width="100" height="20" uuid="42446aec-4399-4b72-82b0-37d23af64b6a"/>
+				<text><![CDATA[TEXTO: ]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="70" splitType="Stretch">
+			<image>
+				<reportElement x="31" y="14" width="85" height="40" uuid="51f298e8-8e3f-4dec-9d4e-6c458c32ab76"/>
+				<imageExpression><![CDATA[$P{iso}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="242" y="13" width="283" height="42" uuid="dad0abec-653d-4070-b9a0-d2ca593c5ff0"/>
+				<textElement textAlignment="Right">
+					<font fontName="Open Sans Light" size="8"/>
+				</textElement>
+				<text><![CDATA[Superintendencia de Notariado y Registro
+Calle 26 No. 13-49 Int. 201 – PBX (1)328-21- 21
+Bogotá D.C. - Colombia
+http://www.supernotariado.gov.co]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

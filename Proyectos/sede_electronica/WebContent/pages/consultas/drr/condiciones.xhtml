@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_consulta_drr['titulo.drr']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-consultaDrr.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="body">
+
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_consulta_drr['titulo.drr']}" />
+			<ui:param name="imagen" value="img-seguimientoSolicitud" />
+			<ui:param name="subtitulo" value="#{txt_consulta_drr['subtitulo.drr']}" />
+		</ui:include>
+
+		<div class="row">
+
+			<div
+				class="col-xs-12 col-sm-8 text-justify col-sm-offset-2 padding-condiciones">
+				<h:outputText id="mensajeInformativo" class="label-form"
+					value="#{beanConsultaDrr.consultarMensajeConfirmacion()}">
+				</h:outputText>
+			</div>
+
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 col-md-4 col-md-offset-4">
+				<p:commandButton class="btn-rojo btn-gradiente redireccion"
+					action="/pages/consultas/drr/consulta.jsf?faces-redirect=true"
+					onstart="PF('blockUI-Loading').show();"
+					onsuccess="PF('blockUI-Loading').hide();" value="#{txt_consulta_drr['entendido']}">
+				</p:commandButton>
+			</div>
+		</div>
+
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();
+			});
+		</script>
+	</ui:define>
+</ui:composition>

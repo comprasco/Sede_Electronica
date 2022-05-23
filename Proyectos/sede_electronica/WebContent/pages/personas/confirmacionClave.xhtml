@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-simple.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se.css" />
+		<h:outputStylesheet library="css" name="snr-se-recuperacionClave.css" />
+		<h:outputScript library="js" name="snr-se.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_recuperarClave['titulo.ConfirmacionClave']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<div id="section">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<p:panel styleClass="panel-login no-border">
+							<div class="row centrar-img">
+								<div class="col-sm-12">
+									<br /> <span class="text-title">#{txt_recuperarClave['banner.tituloConfirmacionClave']}</span>
+									<span class="text-subtitle">#{txt_recuperarClave['banner.subtituloRestablecerClave']}</span>
+									<p:graphicImage styleClass="img-size"
+										name="/img/rectangule.png" />
+								</div>
+							</div>
+							<br />
+							<h:form>
+								<br />
+								<div>
+									<div class="row centrar-img">
+										<p:outputLabel
+											value="#{txt_recuperarClave['mensaje.ModificacionExitosa']}" />
+									</div>
+								</div>
+								<br />
+								<br />
+								<div class="row">
+									<div class="col-xs-12 col-sm-6 col-md-offset-3">
+										<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+											type="submit"
+											styleClass="btn-gradiente icon-btn btn-rojo "
+											ajax="false"
+											action="/pages/personas/inicioSesion/ciudadanos.jsf?faces-redirect=true"
+											value="#{txt_recuperarClave['boton.aceptar.Upper']}"
+											process="@form" update="@form" />
+									</div>
+								</div>
+							</h:form>
+							<br />
+							<div class="espacio-fin"></div>
+						</p:panel>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

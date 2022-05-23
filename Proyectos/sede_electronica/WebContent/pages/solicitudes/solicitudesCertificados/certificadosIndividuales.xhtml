@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/includes/wizard.xhtml">
+	<ui:param name="siguienteLabel"
+		value="#{txt['wizard.boton.siguiente']}" />
+	<ui:param name="atrasLabel"	
+		value="#{txt_certificados['wizard.boton.atras']}" />
+	<ui:define name="title-wizard">
+		<title>#{txt_certificados['titulo.certificados']}</title>
+	</ui:define>
+	<ui:define name="head-wizard">
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+		<h:outputStylesheet library="css" name="snr-se-resumen.css" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+	</ui:define>
+	<ui:define name="banner">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_certificados['banner']}" />
+			<ui:param name="imagen" value="img-solicitudCertificados" />
+			<ui:param name="subtitulo"
+				value="#{txt_certificados['banner.subtitulo.certificadosInvividuales']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/solicitudesCertificados/certificadosIndividuales.jsf" />
+		</ui:include>
+	</ui:define>
+	<f:metadata>
+		<f:viewParam name="as_id"
+			value="#{beanCertificadoIndividual.is_codigoUruidCarritoId}" />
+		<f:viewParam name="as_codigoSubServicio"
+			value="#{beanCertificadoIndividual.is_codigoSubServicioId}" />
+		<f:event type="preRenderView"
+			listener="#{beanCertificadoIndividual.valorParametro}" />
+	</f:metadata>
+	<!-- estos parametros son para enviar una validacion sobre cada formulario al wizard -->
+	<ui:param name="target" value="${beanCertificadoIndividual}" />
+	<ui:param name="metodo" value="validarSiguiente" />
+	<ui:define name="primerPaso">
+		<ui:decorate
+			template="/pages/includes/wizardPestanas/conoceMatricula.xhtml">
+			<ui:param name="bean" value="${beanCertificadoIndividual}" />
+			<ui:param name="funcion" value="ib_conoceMatricula" />
+			<ui:param name="vista" value="SolicitudCertificados" />
+			<ui:param name="aclaratoria" value="modalInfo" />
+			<ui:param name="panelRender"
+				value="wizard:form#{vista}:panelTipoCertificados" />
+			<ui:define name="panelPersonalizado">
+				<div class="row text-center">
+					<div class="col-xs-12">
+						<p:commandLink styleClass="label-form" id="aclaratoria"
+							value="#{txt_certificados['wizard.texto.aclaratoria']}"
+							onclick="PF('modalAclaratoria').show()" />
+					</div>
+				</div>
+				<p:panel id="panelTipoCertificados" styleClass="no-border"
+					visible="#{beanCertificadoIndividual.ib_conoceMatricula}">
+					<p:separator />
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel for="accordionPanel" styleClass="label-form"
+								value="#{txt_certificados['wizard.seleccion.tipoCertificado.titulo']}" />
+							<p:accordionPanel id="accordionPanel" dynamic="true">
+								<p:tab
+									title="#{txt_certificados['wizard.seleccion.certificado.inmediato.titulo']}"
+									styleClass="tab-personalizado tab-gradiente">
+									<div class="row">
+										<div class="col-xs-12">
+											<p:selectOneButton id="tipoCertificadoSelect1"
+												styleClass="oneButton no-paddin-imp" layout="responsive" columns="1"
+												converter="selectOneMenuConverter"
+												value="#{beanCertificadoIndividual.iti_transaccionIndividualDto.idc_detalleCatalogoDto}">
+												<p:ajax
+													update="wizard:form#{vista}:descripcionTipoCertificado" />
+												<f:selectItems
+													value="#{beanCertificadoIndividual.ildc_listaDetalleCatalogoInmediatosDto}"
+													var="tipoCertificado"
+													itemLabel="#{tipoCertificado.ic_catalogoDto.is_nombre}"
+													itemValue="#{tipoCertificado}" />
+											</p:selectOneButton>
+										</div>
+									</div>
+								</p:tab>
+							</p:accordionPanel>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel for="descripcionTipoCertificado"
+										styleClass="label-form"
+										value="#{txt_certificados['wizard.seleccion.descripcion.titulo']}" />
+								</div>
+								<div class="col-xs-12 text-justify">
+									<h:outputText id="descripcionTipoCertificado"
+										value="#{beanCertificadoIndividual.iti_transaccionIndividualDto.idc_detalleCatalogoDto.is_codigoDescripcion}"
+										escape="false" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:panel>
+			</ui:define>
+		</ui:decorate>
+		<!-- estos parametros son para enviar una validacion sobre cada formulario al wizard -->
+	</ui:define>
+	<ui:define name="segundoPaso">
+		<p:tab id="datos">
+			<f:facet name="title">
+				<span class="icono icono-buscar" />
+				<p:outputLabel class="tituloWizard"
+					value="#{txt_certificados['wizard.tab.datos']}" />
+			</f:facet>
+			<p:panel id="panelCertificadoIndividuales">
+				<div class="container-fluid-special">
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<p:outputLabel styleClass="label-form" for="tipoCertificado"
+								value="#{txt_certificados['wizardCertificado.datos.tipoCertificado']}" />
+							<div class="tipo-input-medium">
+								<p:outputLabel id="tipoCertificado"
+									value="#{beanCertificadoIndividual.iti_transaccionIndividualDto.idc_detalleCatalogoDto.ic_catalogoDto.is_nombre}" />
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<p:outputLabel id="labelModoEnvioCertificado"
+								styleClass="label-form" for="modoEnvioCertificado"
+								value="#{txt_certificados['wizardCertificado.datos.modoEnvio']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:inputText id="modoEnvioCertificado" autocomplete="off"
+									placeholder="#{txt['placeholder.FormatoCorreo']}"
+									maxlength="100" required="true"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									value="#{beanCertificadoIndividual.is_correoEnvio}">
+									<f:validator validatorId="ValidarCorreoFormato" />
+									<p:ajax event="change"
+										onstart="mostrarLimpiar('wizard:modoEnvioCertificado', 'spanCorreoEnvio');" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="modoEnvioCertificado"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_persona['tooltip.CorreoElectronico']}" />
+									</div>
+								</p:tooltip>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelModoEnvioCertificado"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_certificados['wizardCertificado.datos.tooltip.modoEnvio']}" />
+									</div>
+								</p:tooltip>
+
+								<span id="spanCorreoEnvio" class="ui-inputgroup-addon ocultar">
+									<p:commandLink>
+										<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+										<p:ajax event="click"
+											onstart="limpiarCampo('wizard:modoEnvioCertificado', 'spanCorreoEnvio');" />
+									</p:commandLink>
+								</span>
+							</div>
+							<span class="help-block" id="prueba"> <p:message
+									for="modoEnvioCertificado" />
+							</span>
+						</div>
+					</div>
+					<br /> <br />
+					<p:separator />
+					<br />
+					<div class="row">
+						<div class="col-xs-12 col-md-7">
+							<div class="row text-center">
+								<div class="col-xs-12">
+									<p:outputLabel
+										value="#{txt_certificados['wizardCertificado.datos.titulo']}"
+										class="titulo" />
+								</div>
+							</div>
+							<br />
+							<p:outputPanel id="panelBuscarCertificados">
+								<div class="row">
+									<ui:decorate template="/pages/includes/numeroMatricula.xhtml">
+										<ui:param name="numCol" value="6" />
+										<ui:param name="bean" value="${beanCertificadoIndividual}" />
+										<ui:param name="oficinaRegistroSeleccionado"
+											value="icr_circuloRegistralSeleccionadoDto" />
+										<ui:param name="listaOficinaRegistro"
+											value="ilcr_listaCirculoRegistralDto" />
+										<ui:param name="numeroMatricula" value="is_numeroMatricula" />
+										<ui:param name="requerido" value="false" />
+										<ui:param name="panelAnterior" value="wizard" />
+										<ui:param name="nupre" value="is_nupre" />
+										<ui:param name="mostrarNupre" value="true" />
+									</ui:decorate>
+								</div>
+								<p:outputLabel id="cedulaCatastral"
+									value="#{txt_certificados['table.label.cedCatastral']}"
+									class="label-form"></p:outputLabel>
+								<p:inputText id="cedCatastral" autocomplete="off" maxlength="12"
+									value="#{beanCertificadoIndividual.is_cedulaCatastral}"
+									placeholder="#{txt_certificados['table.placeHolder.cedCatastral']}">
+								</p:inputText>
+							</p:outputPanel>
+
+							<br />
+							<div class="row text-right">
+								<div class="col-xs-12 col-md-6 col-md-offset-3">
+									<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+										styleClass="btn-gradiente icon-btn btn-rojo"
+										value="#{txt_certificados['wizardCertificado.datos.boton']}">
+										<p:ajax
+											process="@form"
+											listener="#{beanCertificadoIndividual.consultarDatosMatricula}"
+											execute="wizard:panelBuscarCertificados"
+											onstart="PF('blockUI-Loading').show();"
+											onsuccess="PF('blockUI-Loading').hide();" />
+									</p:commandButton>
+								</div>
+							</div>
+							<br />
+						</div>
+						<div class="col-xs-12 col-md-5">
+							<p:dataList id="certificadosConsultados"
+								value="#{beanCertificadoIndividual.iti_transaccionIndividualDto.ilsm_listaSalidaMatriculaDto}"
+								paginator="true" var="certificado" type="ordered"
+								emptyMessage="#{txt_certificados['wizardCertificado.datos.tabla.vacio']}"
+								paginatorPosition="bottom" rows="4" styleClass="paginated"
+								paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+								currentPageReportTemplate="{currentPage} / {totalPages}">
+								<f:facet name="header">
+									<p:outputLabel
+										value="#{txt_certificados['wizardCertificado.datos.tabla.titulo']}" />
+									<br />
+									<p:outputLabel
+										value="#{beanCertificadoIndividual.iti_transaccionIndividualDto.ii_cantidadSolicitudes} #{txt_certificados['wizardCertificado.datos.tabla.titulo.cantidad']}" />
+
+								</f:facet>
+								<div class="row certificadoItem">
+									<div class="col-xs-10 maxTexto">
+										<p:outputLabel
+											value="#{certificado.im_matriculaDto.icr_circuloRegistralMatricula.is_id} - #{certificado.im_matriculaDto.is_codigoMatricula}" />
+									</div>
+									<div class="col-xs-2 text-center">
+										<p:commandLink
+											title="#{txt_certificados['wizardCertificado.datos.tabla.boton']}"
+											class="descartarCertificado"
+											styleClass="fa fa-times-circle imagenTamano"
+											update="wizard:certificadosConsultados">
+											<f:ajax
+												listener="#{beanCertificadoIndividual.descartarCertificado(certificado.is_id)}"
+												render="wizard:certificadosConsultados">
+											</f:ajax>
+										</p:commandLink>
+									</div>
+								</div>
+								<div class="row direccionItem">
+									<div class="col-xs-8 maxTexto">
+										<h:outputText value="#{certificado.is_direccion}" />
+									</div>
+									<div class="col-xs-4 text-right maxTexto colorVerde">
+										<h:outputText value="#{certificado.ibd_valorUnitario}">
+											<f:convertNumber type="currency" currencySymbol="$"
+												maxFractionDigits="0" />
+										</h:outputText>
+									</div>
+								</div>
+							</p:dataList>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+		</p:tab>
+	</ui:define>
+	<ui:define name="tercerPaso">
+		<ui:decorate
+			template="/pages/includes/wizardPestanas/resumenSolicitud.xhtml">
+			<ui:param name="vista" value="SolicitudCertificados" />
+			<ui:param name="titulo"
+				value="#{txt_certificados['wizardCertificado.datos.tabla.titulo']}" />
+			<!-- Datos interesado -->
+			<ui:param name="tipoDocumento"
+				value="#{beanCertificadoIndividual.iti_transaccionIndividualDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}" />
+			<ui:param name="numeroDocumento"
+				value="#{beanCertificadoIndividual.iti_transaccionIndividualDto.ip_personaDto.is_numeroDocumento}" />
+			<ui:param name="correoEnvio"
+				value="#{beanCertificadoIndividual.is_correoEnvio}" />
+			<ui:param name="formaEnvio"
+				value="#{txt_certificados['wizardCertificado.resumen.correoEnvio']}" />
+			<!-- Datos interesado -->
+			<ui:param name="accionSolicitar"
+				value="guardarTransaccionCertificado" />
+			<ui:param name="beanSolicitar" value="#{beanCertificadoIndividual}" />
+			<ui:define name="contenidoResumen">
+				<ui:decorate
+					template="/pages/includes/resumenes/certificados/resumenCertificadoIndividual.xhtml">
+					<ui:param name="listaCertificados"
+						value="#{beanCertificadoIndividual.iti_transaccionIndividualDto.ilsm_listaSalidaMatriculaDto}" />
+					<ui:param name="valorTotal"
+						value="#{beanCertificadoIndividual.iti_transaccionIndividualDto.ibd_valorTotal}">
+						<f:convertNumber type="currency" currencySymbol="$"
+							maxFractionDigits="0" />
+					</ui:param>
+				</ui:decorate>
+			</ui:define>
+			<ui:define name="botonResumen">
+				<div class="row">
+					<div class="col-sm-4 col-sm-offset-4">
+						<p:commandLink class="btn-rojo redireccion"
+							value="#{txt_certificados['wizardCertificados.resumen.solicitar']}"
+							onclick="PF('modalConfirmacionGenerarLiquidacion').show()">
+						</p:commandLink>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+	<ui:define name="modalWizard">
+		<!-- Modal para listar la matricula consultada y confirmar -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dialogConfirmacionDatosMatricula" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano"/>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalCertificado1" />
+			<ui:define name="body-modal">
+				<p:panelGrid id="panelGridModal" columns="1" cellpadding="5"
+					layout="grid" styleClass="no-border container-fluid">
+					<div class="row">
+						<div class="col-xs-12">
+							<h:outputLabel class="label-form"
+								value="#{txt_certificados['wizardCertificado.datos.modal.titulo']}" />
+							<p:outputLabel
+								value="#{txt_certificados['wizardCertificado.datos.modal.subtitulo']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:dataTable var="certificadoConsultado"
+								styleClass="tablaCertificados tabla-gris"
+								id="tablaConfirmacionDatosMatricula"
+								widgetVar="tablaConfirmacionDatosMatricula1"
+								value="#{beanCertificadoIndividual.ism_salidaMatriculaDto}">
+								<p:column
+									headerText="#{txt_certificados['wizardCertificado.resumen.tabla.matricula']}">
+									<h:outputText
+										value="#{certificadoConsultado.im_matriculaDto.icr_circuloRegistralMatricula.is_id} - #{certificadoConsultado.im_matriculaDto.is_codigoMatricula}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_certificados['wizardCertificado.resumen.tabla.direccion']}">
+									<h:outputText value="#{certificadoConsultado.is_direccion}" />
+								</p:column>
+								<p:column
+									headerText="#{txt_certificados['wizardCertificado.resumen.tabla.valorUnitario']}">
+									<h:outputText class="colorVerde"
+										value="#{certificadoConsultado.ibd_valorUnitario}">
+										<f:convertNumber type="currency" currencySymbol="$"
+											maxFractionDigits="0" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<h:outputText class="label-form"
+								value="#{txt_certificados['wizardCertificado.datos.modal.pregunta']}" />
+						</div>
+					</div>
+				</p:panelGrid>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-1 space-row">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt_certificados['wizard.seleccion.modal.cancelar']}"
+							oncomplete="PF('dialogConfirmacionDatosMatricula').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-4 col-md-offset-2">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_certificados['wizard.seleccion.modal.aceptar']}"
+							oncomplete="PF('dialogConfirmacionDatosMatricula').hide();">
+							<p:ajax listener="#{beanCertificadoIndividual.cargarCertificado}"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();" update="wizard"
+								oncomplete="limpiarCampo('wizard:numeroMatricula','spanNumeroMatricula'); limpiarLista('oficinaRegistro');" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgEstadoCI" />
+			<ui:param name="formulario" value="dlgEstado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano"/>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{txt_certificados['modal.texto.estado.a']}"/>
+					</div>
+				</div>
+
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+						<p:button id="btn-cancel-confirmacion"
+							styleClass="icon-btn pull-right btn-rojo btn-gradiente"
+							value="#{txt_certificados['boton.entendido']}"
+							onclick="PF('dlgEstadoCI').hide();return false" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgEstadoCIT" />
+			<ui:param name="formulario" value="dlgEstadoce" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano"/>/>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{txt_certificados['modal.texto.estado.t']}"/>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+						<p:button id="btn-cancel-confirmacion"
+							styleClass="icon-btn pull-right btn-rojo btn-gradiente"
+							value="#{txt_certificados['boton.entendido']}"
+							onclick="PF('dlgEstadoCIT').hide();return false" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal para listar la matricula consultada  y confirmar -->
+		<!-- Modal de redirección matricula -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalCertificado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano"/>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.redireccion']}" />
+			<ui:param name="formulario" value="formModalCertificado2" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.advertencia']}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.primeraParte']} " />
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.redirigir']}"
+							class="label-form" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-10 col-xs-offset-1 col-sm-5 space-row">
+						<p:commandButton value="#{txt_certificados['boton.volver']}"
+							class="btn-gris" oncomplete="PF('#{modalId}').hide()">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
+						<p:commandButton value="#{txt_certificados['boton.redirigir']}"
+							class="btn-rojo btn-gradiente"
+							oncomplete="PF('#{modalId}').hide()">
+							<f:ajax listener="#{beanCertificadoIndividual.buscarMatricula}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal  de redirección -->
+		<!-- Transaccion encontrada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="transaccionEncontrada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno"/>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalTransaccionEncontrada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizard.seleccion.modal.transaccion.retormar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-6 space-row">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt_certificados['wizard.seleccion.modal.cancelar']}">
+							<p:ajax onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();"
+								listener="#{beanCertificadoIndividual.cancelarTransaccion(true)}" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_certificados['wizard.seleccion.modal.aceptar']}">
+							<f:ajax onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();"
+								listener="#{beanCertificadoIndividual.cancelarTransaccion(false)}" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Transaccion encontrada -->
+		<!-- Solicitud generada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="solicitudGenerada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno"/>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalSolicitudGenerada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizardCertificado.pago.modal']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-4 col-md-offset-4">
+					<p:importEnum
+						type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumParametrosURL"
+						var="EnumParametrosURL" />
+						<p:link class="btn-rojo redireccion"
+							value="#{txt_certificados['boton.entendido']}"
+							outcome="#{beanCertificadoIndividual.is_redireccionResumenPago}#{beanCertificadoIndividual.iit_integracionTemporalDto.is_nir}#{EnumParametrosURL.REFERENCIA_PAGO.is_nombreParametro}#{beanCertificadoIndividual.iit_integracionTemporalDto.is_referenciaPago}">
+						</p:link>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Solicitud generada -->
+		<!-- Maximo Matricula -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="maximoMatricula" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano"/>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalMaximoMatricula" />
+			<ui:param name="accionBotonBean" value="${beanCertificadoIndividual}" />
+			<ui:param name="accionBotonMetodo" value="buscarMatricula" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['wizardCertificado.datos.modal.maximo.1']}" />
+						<br />
+						<h:outputText
+							value="#{txt_certificados['wizardCertificado.datos.modal.maximo.2']}" />
+						<br />
+						<h:outputText
+							value="#{txt_certificados['wizardCertificado.datos.modal.maximo.3']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+				<div class="col-xs-12 col-sm-6 space-row">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							oncomplete="PF('maximoMatricula').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<p:link class="btn-rojo redireccion"
+							outcome="${beanCertificadoIndividual.is_redireccionMasivos}"
+							value="#{txt_certificados['boton.redireccion']}">
+						</p:link>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Maximo Matricula -->
+		<!-- Modal Confirmacion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalConfirmacionGenerarLiquidacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno"/>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmacion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['generarLIquidacion.confirmar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-5 col-md-offset-1 space-row">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							oncomplete="PF('modalConfirmacionGenerarLiquidacion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-5 col-md-offset-0">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}">
+							<p:ajax onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('modalConfirmacionGenerarLiquidacion').hide(); PF('blockUI-Loading').hide();"
+								listener="#{beanCertificadoIndividual.guardarTransaccionCertificado}"
+								update="wizard:formModalSolicitudGenerada" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal Confirmacion FIN -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalAclaratoria" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande"/>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalCertificadoCE2" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="row text-center">
+							<p:outputLabel
+								value="#{txt_certificados['wizardAclaratoria.modal.tradicion']}"
+								styleClass="label-form" id="certificadoTL" />
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:graphicImage
+									value="#{resource['img/especiales/nrMatricula.png']}"
+									alt="#{txt_certificados['modal.texto.imagen.nrMatricula']}"
+									title="#{txt_certificados['modal.texto.imagen.nrMatricula']}" />
+							</div>
+						</div>
+						<p:separator></p:separator>
+						<div class="row text-center">
+							<p:outputLabel
+								value="#{txt_certificados['wizardAclaratoria.modal.escritura']}"
+								styleClass="label-form" id="escriturap" />
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:graphicImage
+									value="#{resource['img/especiales/cedCatastral.png']}"
+									alt="#{txt_certificados['modal.texto.imagen.cedCatastral']}"
+									title="#{txt_certificados['modal.texto.imagen.cedCatastral']}" />
+							</div>
+						</div>
+						<p:separator></p:separator>
+						<div class="row text-center">
+							<p:outputLabel
+								value="#{txt_certificados['wizardAclaratoria.modal.escrituraAnt']}"
+								styleClass="label-form" id="escrituraAnt" />
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:graphicImage
+									value="#{resource['img/especiales/antSistema.png']}"
+									alt="#{txt_certificados['modal.texto.imagen.antSistema']}"
+									title="#{txt_certificados['modal.texto.imagen.antSistema']}" />
+							</div>
+						</div>
+						<p:separator></p:separator>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:graphicImage
+									value="#{resource['img/especiales/ofcRegistro.png']}"
+									alt="#{txt_certificados['modal.texto.imagen.antSistema']}"
+									title="#{txt_certificados['modal.texto.imagen.antSistema']}" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<p:separator />
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3 center-component">
+						<p:commandButton value="#{txt_certificados['boton.entendido']}"
+							class="btn-rojo btn-gradiente"
+							oncomplete="PF('#{modalId}').hide()">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal Migrado -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalMigracion" />
+			<ui:param name="tamano" value="modal-pequeno"/>
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalMigracion" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['operacion.migrada']}" />
+					</div>
+				</div>
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-5 col-md-offset-1">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							oncomplete="PF('modalMigracion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-5 col-md-offset-0">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}">
+							<p:ajax onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('modalMigracion').hide(); PF('blockUI-Loading').hide();" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal Migrado FIN -->
+	</ui:define>
+</ui:composition>

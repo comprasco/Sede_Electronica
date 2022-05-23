@@ -1,0 +1,2796 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputScript library="js" name="archivo.js" />
+		<h:outputScript library="js" name="keyfilter.js" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-cuentaCupo.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudDevoluciones.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_devoluciones['DevolucionesConsignacionErrada']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_devoluciones['DevolucionesConsignacionErrada.Titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_devoluciones['DevolucionesConsignacionErrada.Subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/devoluciones/solicitudDevolucionesConsignacionErrada.jsf" />
+		</ui:include>
+		<!-- Solicitud devolucion consignacion errada -->
+		<p:panel id="panelDevolucionesConsignacionErrada"
+			styleClass="no-border">
+			<!-- Formulario solicitud devolcuon consinacion errada -->
+			<p:outputPanel id="formularioDevolucionConsignacionErrada"
+				rendered="#{beanDevolucionesConsignacionErrada.ii_seccion == 0}">
+				<h:form id="formFormularioDevolucionConsignacionErrada">
+					<p:importEnum
+						type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumFormularioDevoluciones"
+						var="CampoConfiguracion" />
+					<div>
+						<div class="col-xs-12">
+							<div class="col-xs-12 text-center">
+								<p:outputLabel id="labelTitulo"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_devoluciones['SuperintendenciaNotariadoRegistro']}" />
+								<br /> <br />
+								<p:outputLabel id="labelSubtitulo"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_devoluciones['FormularioDevoluciones']}" />
+								<br /> <br />
+								<p:outputLabel id="labelTituloTramitesLinea"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_devoluciones['FormularioDevoluciones.tramitesLinea']}" />
+								<br /> <br />
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-xs-12 col-sm-6">
+									<p:outputLabel id="labelFechaDiligenciamiento"
+										styleClass="label-form" for="fechaDiligenciamiento"
+										value="#{txt_devoluciones['label.FechaDiligenciamiento']}" />
+									<p:inputText id="fechaDiligenciamiento" styleClass="no-borde"
+										readonly="true"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										value="#{beanDevolucionesConsignacionErrada.obtenerFecha()}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</p:inputText>
+								</div>
+								<div class="col-xs-12 col-sm-6">
+									<p:outputLabel id="labelCiudad" styleClass="label-form"
+										for="ciudad" value="#{txt_devoluciones['label.ciudad']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:selectOneMenu id="ciudad"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true"
+										value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_ciudad}">
+										<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanDevolucionesConsignacionErrada.ild_listaDepartamentoDto}"
+											var="departamento" itemLabel="#{departamento.is_nombre}"
+											itemValue="#{departamento.is_nombre}" />
+										<p:ajax event="blur"
+											update="formModalPrevisualizarPdf:ciudadPrevisualizar"
+											listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.CIUDAD_DEVOLUCION_CONSIGNACION_ERRADA.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_ciudad)}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelCiudad" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.Departamento']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="ciudad" />
+									</span>
+								</div>
+							</div>
+						</div>
+						<br />
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_devoluciones['FormularioDevoluciones.SubtituloUno']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<!-- Datos basicos Persona Juridica -->
+						<p:outputPanel id="formularioDatosBasicosPersonaJuridica"
+							rendered="#{beanDevolucionesConsignacionErrada.ib_datosBasicos}">
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelTipoDocumento" styleClass="label-form"
+										for="tipoDocumento"
+										value="#{txt_devoluciones['label.TipoDocumento']}" />
+									<p:inputText id="tipoDocumento"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelTipoDocumento"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.TipoDocumento']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="tipoDocumento" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelNumeroDocumento"
+										styleClass="label-form" for="numeroDocumento"
+										value="#{txt_devoluciones['label.NumeroDocumento']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="numeroDocumento"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelNumeroDocumento"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.NumeroDocumento']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="numeroDocumento" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelRazonSocial" styleClass="label-form"
+										for="razonSocial"
+										value="#{txt_devoluciones['label.RazonSocial']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="razonSocial" readonly="true"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo"
+											value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ipj_personaJuridicaDto.is_razonSocial}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelRazonSocial"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.RazonSocial']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="razonSocial" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelRepresentanteLegal"
+										styleClass="label-form" for="representanteLegal"
+										value="#{txt_devoluciones['label.RepresentanteLegalCompleto']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="representanteLegal"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ipj_personaJuridicaDto.getNombreRepresentanteLegal()}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelRepresentanteLegal"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.RepresentanteLegal']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="representanteLegal" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelNumeroDocumentoRepresentante"
+										styleClass="label-form" for="numeroDocumentoRepresentante"
+										value="#{txt_devoluciones['label.FormularioDevolucionesDocumentoRepresentante']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="numeroDocumentoRepresentante"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											for="numeroDocumentoRepresentante" position="top">
+											<div>
+												<p:outputLabel
+													value="#{txt_devoluciones['ayuda.FormularioDevolucionesDocumentoRepresentante']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="numeroDocumentoRepresentante" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel id="labelDireccionCompleta"
+										styleClass="label-form"
+										for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+										value="#{txt_devoluciones['label.Direccion']}" />
+									<div class="ui-inputgroup">
+										<p:inputText styleClass="text-input border-completo"
+											readonly="true"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											id="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+											value="#{beanDevolucionesConsignacionErrada.mostrarDireccionCompleta()}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelDireccionCompleta"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.Direccion']}" />
+										</div>
+									</p:tooltip>
+									<span id="spanDireccionJur" class="help-block"> <p:message
+											for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelTelefono" styleClass="label-form"
+										for="telefonoFijo"
+										value="#{txt_persona['label.TelefonoFijo']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="telefonoFijo" readonly="true"
+											styleClass="text-input border-completo"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ipj_personaJuridicaDto.is_telefono}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelTelefono"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.Telefono']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="telefonoFijo" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelCelular" styleClass="label-form"
+										for="celular"
+										value="#{txt_devoluciones['label.NumeroCelular']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="celular"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.is_celular}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCelular" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.NumeroCelular']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="celular" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelCorreo" styleClass="label-form"
+										for="correo"
+										value="#{txt_devoluciones['label.CorreoElectronico']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="correo" readonly="true"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo"
+											value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.is_correoElectronico}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCorreo" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.CorreoElectronico']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="correo" />
+									</span>
+								</div>
+							</div>
+						</p:outputPanel>
+						<!-- Datos basicos Persona Natural -->
+						<p:outputPanel id="formularioDatosBasicosPersonaNatural"
+							rendered="#{!beanDevolucionesConsignacionErrada.ib_datosBasicos}">
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelTipoDocumentoPN"
+										styleClass="label-form" for="tipoDocumentoPN"
+										value="#{txt_devoluciones['label.TipoDocumento']}" />
+									<p:inputText id="tipoDocumentoPN"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelTipoDocumentoPN"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.TipoDocumento']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="tipoDocumentoPN" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelNumeroDocumentoPN"
+										styleClass="label-form" for="numeroDocumentoPN"
+										value="#{txt_devoluciones['label.NumeroDocumento']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="numeroDocumentoPN"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelNumeroDocumentoPN"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.NumeroDocumento']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="numeroDocumentoPN" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelGenero" styleClass="label-form"
+										for="generoPN" value="#{txt_devoluciones['label.Genero']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="generoPN"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.ic_catalogoTipoGenero.is_nombre}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelGenero" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel value="#{txt_devoluciones['label.Genero']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="generoPN" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-3">
+									<p:outputLabel id="labelNombrePN" styleClass="label-form"
+										for="nombrePersona"
+										value="#{txt_devoluciones['label.PrimerNombre']}" />
+									<p:inputText id="nombrePersona" readonly="true"
+										styleClass="text-input border-completo mask-Numeric"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_primerNombre}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelNombrePN" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['label.PrimerNombre']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="nombrePersona" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<p:outputLabel id="labelSegundoNombre" styleClass="label-form"
+										for="segundoNombre"
+										value="#{txt_devoluciones['label.SegundoNombre']}" />
+									<p:inputText id="segundoNombre" readonly="true"
+										styleClass="text-input border-completo mask-Numeric"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_segundoNombre}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelSegundoNombre"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['label.SegundoNombre']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="segundoNombre" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<p:outputLabel id="labelApellidoPN" styleClass="label-form"
+										for="primerApellido"
+										value="#{txt_devoluciones['label.PrimerApellido']}" />
+									<p:inputText id="primerApellido" readonly="true"
+										styleClass="text-input border-completo mask-Numeric"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_primerApellido}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelApellidoPN"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['label.PrimerApellido']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="primerApellido" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<p:outputLabel id="labelSegundoApellido"
+										styleClass="label-form" for="segundoApellido"
+										value="#{txt_devoluciones['label.SegundoApellido']}" />
+									<p:inputText id="segundoApellido" readonly="true"
+										styleClass="text-input border-completo mask-Numeric"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_segundoApellido}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelSegundoApellido"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['label.SegundoApellido']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message
+											for="segundoApellido" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel id="labelDireccionCompletaPN"
+										styleClass="label-form"
+										for="direccionResidencia${beanPersona.is_tipoUsuarioNatural}"
+										value="#{txt_devoluciones['label.Direccion']}" />
+									<div class="ui-inputgroup">
+										<p:inputText styleClass="text-input border-completo"
+											readonly="true"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											id="direccionResidencia${beanPersona.is_tipoUsuarioNatural}"
+											value="#{beanDevolucionesConsignacionErrada.mostrarDireccionCompleta()}" />
+									</div>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelDireccionCompletaPN"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.Direccion']}" />
+										</div>
+									</p:tooltip>
+									<span id="spanDireccionPN" class="help-block"> <p:message
+											for="direccionResidencia${beanPersona.is_tipoUsuarioNatural}" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelTelefonoPN" styleClass="label-form"
+										for="telefonoFijoPN"
+										value="#{txt_persona['label.TelefonoFijo']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="telefonoFijoPN" readonly="true"
+											styleClass="text-input border-completo"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_telefono}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelTelefonoPN"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.Telefono']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="telefonoFijoPN" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelCelularPN" styleClass="label-form"
+										for="celularPN"
+										value="#{txt_devoluciones['label.NumeroCelular']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="celularPN"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo" readonly="true"
+											value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.is_celular}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCelularPN"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.NumeroCelular']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="celularPN" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelCorreoPN" styleClass="label-form"
+										for="correoPN"
+										value="#{txt_devoluciones['label.CorreoElectronico']}" />
+									<div class="ui-inputgroup">
+										<p:inputText id="correoPN" readonly="true"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											styleClass="text-input border-completo"
+											value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.is_correoElectronico}">
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelCorreoPN"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.CorreoElectronico']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="correoPN" />
+									</span>
+								</div>
+							</div>
+						</p:outputPanel>
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_devoluciones['FormularioDevoluciones.SubtituloDos']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelNumeroConsignacion"
+									styleClass="label-form" for="numeroConsignacion"
+									value="#{txt_devoluciones['label.NumeroConsignacion']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:inputText id="numeroConsignacion"
+									placeholder="#{txt_devoluciones['placeholder.NumeroConsignacion']}"
+									styleClass="text-input border-completo mask-Numeric"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true" maxlength="30"
+									onkeypress="if (event.keyCode == 13){return false;}"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroConsignacion}">
+									<p:keyFilter regEx="/[0-9\-]/i" />
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:numeroConsignacionPrevisualizar"
+										listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.NUMERO_TIPO_CONSIGNACION.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroConsignacion)}" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNumeroConsignacion"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.NumeroConsignacion']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="numeroConsignacion" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelTipoConsignacion"
+									styleClass="label-form" for="tipoConsignacion"
+									value="#{txt_devoluciones['label.TipoConsignacion']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="tipoConsignacion"
+									widgetVar="tipoConsignacionSelect"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_tipoConsignacion}">
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:tipoConsignacionPrevisualizar"
+										listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.TIPO_CONSIGNACION.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_tipoConsignacion)}" />
+									<f:selectItem itemValue=""
+										itemLabel="#{txt['label.SeleccioneComboBox']}" />
+									<f:selectItems
+										value="#{beanDevolucionesConsignacionErrada.ilec_tipoTransaccion}"
+										var="tipoConsignacion"
+										itemValue="#{tipoConsignacion.getIs_criterio()}"
+										itemLabel="#{tipoConsignacion.getIs_criterio()}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelTipoConsignacion"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.TipoConsignacion']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="tipoConsignacion" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelNombreEntidad" styleClass="label-form"
+									for="nombreEntidad"
+									value="#{txt_devoluciones['label.NombreEntidad']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="nombreEntidad"
+									widgetVar="nombreEntidadSelect"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_nombreEntidad}">
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:nombreEntidadPrevisualizar"
+										listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.CODIGO_ENTIDAD_FINANCIERA.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_nombreEntidad)}" />
+									<f:selectItem itemValue=""
+										itemLabel="#{txt['label.SeleccioneComboBox']}" />
+									<f:selectItems
+										value="#{beanDevolucionesConsignacionErrada.illeb_entidadBancaria}"
+										var="entidadBancaria"
+										itemValue="#{entidadBancaria.getIs_nombreEntidad()}"
+										itemLabel="#{entidadBancaria.getIs_nombreEntidad()}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNombreEntidad"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.NombreEntidad']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="nombreEntidad" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4">
+								<div class="title">
+									<div>
+										<p:outputLabel id="labelFechaConsignacion"
+											styleClass="label-form" for="fechaConsignacion"
+											value="#{txt_devoluciones['label.FechaConsignacion']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									</div>
+									<div>
+										<h:outputText id="ayudaFechaConsignacion"
+											class="fa fa-question-circle" />
+									</div>
+								</div>
+								<div class="ui-inputgroup">
+									<p:calendar id="fechaConsignacion" readonlyInput="true"
+										pattern="dd/MM/yyyy" maxlength="10" maxdate="0" locale="es"
+										yearRange="1900:2200" navigator="true"
+										placeholder="#{txt['placeholder.FormatoFecha']}"
+										styleClass="text-input-calendar" required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										showOn="button"
+										value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.id_fechaConsignacion}">
+										<p:ajax event="dateSelect"
+											update="formModalPrevisualizarPdf:fechaConsignacionPrevisualizar"
+											listener="#{beanDevolucionesConsignacionErrada.guardarTransaccionFecha(CampoConfiguracion.FECHA_CONSIGNACION.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.id_fechaConsignacion)}" />
+									</p:calendar>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="ayudaFechaConsignacion"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['ayuda.FechaConsignacion']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="fechaConsignacion" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelNumeroCuentaBancaria"
+									styleClass="label-form" for="numeroCuentaBancaria"
+									value="#{txt_devoluciones['label.NumeroCuentaBancaria']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<div class="ui-inputgroup">
+									<p:inputText id="numeroCuentaBancaria"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo mask-Numeric"
+										required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										placeholder="#{txt_devoluciones['placeholder.NumeroCuentaBancaria']}"
+										maxlength="30"
+										value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroCuentaBancaria}">
+										<p:keyFilter regEx="/[0-9]/i" />
+										<p:ajax event="blur"
+											update="formModalPrevisualizarPdf:numeroCuentaBancariaPrevisualizar"
+											listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.NUMERO_CUENTA_CONSIGNACION_ERRADA.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroCuentaBancaria)}" />
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelNumeroCuentaBancaria"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_devoluciones['tooltip.NumeroCuentaBancaria']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="numeroCuentaBancaria" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelValor" styleClass="label-form"
+									for="valor" value="#{txt_devoluciones['label.Valor']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<div class="ui-inputgroup">
+									<p:inputNumber id="valor" decimalPlaces="0" symbolPosition="p"
+										symbol="$ " maxValue="99999999999"
+										placeholder="#{txt_devoluciones['placeholder.Valor']}"
+										styleClass="numero-borde"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true" maxlength="11"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.ibi_valor}">
+										<p:ajax event="blur"
+											update="formModalPrevisualizarPdf:valorPrevisualizar"
+											listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.VALOR_CONSIGNACION.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.ibi_valor)}" />
+									</p:inputNumber>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										for="labelValor" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel value="#{txt_devoluciones['tooltip.Valor']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="valor" />
+								</span>
+							</div>
+						</div>
+						<br /> <br />
+						<div class="col-xs-12">
+							<div class="col-xs-12 col-md-9">
+								<p:outputLabel value="#{txt_devoluciones['label.PreguntaUno']}"
+									styleClass="titulo tamano-subtitulo" />
+							</div>
+							<div class="col-xs-6 col-md-3">
+								<p:outputPanel id="panelSwitchIntervino">
+									<h:outputText id="spanNoIntervino"
+										value="#{txt_devoluciones['label.No']}"
+										class="#{!beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.ib_intervino ? 'textoRojo' : 'textoGris' }" />
+									<p:inputSwitch id="intervinoSwitch"
+										value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.ib_intervino}">
+										<p:ajax event="change"
+											update="panelSwitchIntervino formFormularioDevolucionConsignacionErrada:formularioPersonaNoTitular"
+											listener="#{beanDevolucionesConsignacionErrada.previsualizarPreguntaIntervino}"
+											oncomplete="#{beanDevolucionesConsignacionErrada.guardarTransaccionIntervino(CampoConfiguracion.SOLICITANTE_CALIDAD_ACTUA.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.ib_intervino)}"
+											render="formFormularioDevolucionConsignacionErrada:panelSwitchIntervino:0:spaNoIntervino formFormularioDevolucionConsignacionErrada:panelSwitchIntervino:0:spanSiIntervino" />
+									</p:inputSwitch>
+									<h:outputText id="spanSiIntervino"
+										value="#{txt_devoluciones['label.Si']}"
+										class="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.ib_intervino ?  'textoRojo' : 'textoGris' }" />
+								</p:outputPanel>
+								<br />
+							</div>
+						</div>
+						<br />
+						<!-- Informacion no titular -->
+						<p:outputPanel id="formularioPersonaNoTitular">
+							<br />
+							<ui:fragment
+								rendered="#{beanDevolucionesConsignacionErrada.ib_camposNoTitular}">
+								<div class="col-xs-12">
+									<div class="col-xs-12 text-left">
+										<p:outputLabel
+											value="#{txt_devoluciones['PersonaNoRealizoPago']}" />
+									</div>
+								</div>
+								<br />
+								<br />
+								<div class="row">
+									<div class="col-xs-12 col-sm-6">
+										<p:outputLabel id="labelTipoDocumentoPersonaNoTitular"
+											styleClass="label-form" for="tipoDocumentoPersonaNoTitular"
+											value="#{txt_devoluciones['label.TipoDocumento']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<p:selectOneMenu id="tipoDocumentoPersonaNoTitular"
+											widgetVar="tipoDocumentoSelectNoTitular"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											required="true"
+											value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_tipoDocumentoNoTitular}">
+											<p:ajax event="change"
+												update="formFormularioDevolucionConsignacionErrada:formularioNoTitularPersonas"
+												listener="#{beanDevolucionesConsignacionErrada.guardarTransaccionNoTitularCuentaBancaria(CampoConfiguracion.TIPO_DOCUMENTO.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_tipoDocumentoNoTitular)}" />
+											<f:selectItem itemValue=""
+												itemLabel="#{txt['label.SeleccioneComboBox']}" />
+											<f:selectItems
+												value="#{beanDevolucionesConsignacionErrada.iltd_tiposDocumento}"
+												var="tipoDocumento" itemValue="#{tipoDocumento.getIs_id()}"
+												itemLabel="#{tipoDocumento.getIs_nombre()}" />
+										</p:selectOneMenu>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral"
+											for="labelTipoDocumentoPersonaNoTitular" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.TipoDocumento']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="tipoDocumentoPersonaNoTitular" />
+										</span>
+									</div>
+									<div class="col-xs-12 col-sm-6">
+										<p:outputLabel id="labelNumeroDocumentoPersonaNoTitular"
+											styleClass="label-form" for="numeroDocumentoPersonaNoTitular"
+											value="#{txt_devoluciones['label.NumeroDocumento']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<p:inputText id="numeroDocumentoPersonaNoTitular"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											autocomplete="off"
+											styleClass="text-input border-completo mask-Numeric"
+											maxlength="20"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											placeholder="#{txt_devoluciones['placeholder.NumeroDocumento']}"
+											required="true"
+											value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroDocumentoNoTitular}">
+											<p:keyFilter regEx="/[0-9]/i" />
+											<p:ajax event="blur"
+												update="formModalPrevisualizarPdf:numeroDocumentoTitularCuentaBancariaPrevisualizar"
+												listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.NUMERO_DOCUMENTO.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroDocumentoNoTitular)}" />
+										</p:inputText>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral"
+											for="labelNumeroDocumentoPersonaNoTitular" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_devoluciones['tooltip.NumeroDocumento']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="numeroDocumentoPersonaNoTitular" />
+										</span>
+									</div>
+									<br />
+								</div>
+								<p:outputPanel id="formularioNoTitularPersonas">
+									<ui:fragment
+										rendered="#{beanDevolucionesConsignacionErrada.ib_noTitularPersonas}">
+										<p:outputPanel id="formularioPersonaNoTitularPN"
+											rendered="#{beanDevolucionesConsignacionErrada.ib_personaNoTitular}">
+											<div class="row">
+												<div class="col-xs-12 col-sm-3">
+													<p:outputLabel id="labelNombrePersonaNoTitular"
+														styleClass="label-form" for="nombrePersonaNoTitular"
+														value="#{txt_devoluciones['label.NombreTitular']}" />
+													<p:outputLabel styleClass="required-field">*</p:outputLabel>
+													<p:inputText id="nombrePersonaNoTitular"
+														onkeypress="if (event.keyCode == 13){return false;}"
+														autocomplete="off"
+														styleClass="text-input border-completo mask-Numeric"
+														maxlength="30"
+														requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+														placeholder="#{txt_devoluciones['placeholder.NombreTitular']}"
+														required="true"
+														value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_primerNombreNoTitular}">
+														<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+														<p:ajax event="blur"
+															update="formModalPrevisualizarPdf:nombrePersonaNoTitularPrevisualizar"
+															listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.PRIMER_NOMBRE.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_primerNombreNoTitular)}" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="labelNombrePersonaNoTitular" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_devoluciones['ayuda.NombreTitular']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="nombrePersonaNoTitular" />
+													</span>
+												</div>
+												<div class="col-xs-12 col-sm-3">
+													<p:outputLabel id="labelSegundoNombrePersonaNoTitular"
+														styleClass="label-form"
+														for="segundoNombrePersonaNoTitular"
+														value="#{txt_devoluciones['label.SegundoNombreTitular']}" />
+													<p:inputText id="segundoNombrePersonaNoTitular"
+														onkeypress="if (event.keyCode == 13){return false;}"
+														autocomplete="off"
+														styleClass="text-input border-completo mask-Numeric"
+														maxlength="30"
+														placeholder="#{txt_devoluciones['placeholder.SegundoNombreTitular']}"
+														value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_segundoNombreNoTitular}">
+														<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+														<p:ajax event="blur"
+															update="formModalPrevisualizarPdf:segundoNombrePersonaNoTitularPrevisualizar"
+															listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.SEGUNDO_NOMBRE.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_segundoNombreNoTitular)}" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="labelSegundoNombrePersonaNoTitular" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_devoluciones['ayuda.SegundoNombreTitular']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="segundoNombrePersonaNoTitular" />
+													</span>
+												</div>
+												<div class="col-xs-12 col-sm-3">
+													<p:outputLabel id="labelApellidoPersonaNoTitular"
+														styleClass="label-form" for="apellidoPersonaNoTitular"
+														value="#{txt_devoluciones['label.ApellidoTitular']}" />
+													<p:outputLabel styleClass="required-field">*</p:outputLabel>
+													<p:inputText id="apellidoPersonaNoTitular"
+														onkeypress="if (event.keyCode == 13){return false;}"
+														autocomplete="off"
+														styleClass="text-input border-completo mask-Numeric"
+														maxlength="30"
+														requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+														placeholder="#{txt_devoluciones['placeholder.ApellidoTitular']}"
+														required="true"
+														value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_primerApellidoNoTitular}">
+														<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+														<p:ajax event="blur"
+															update="formModalPrevisualizarPdf:apellidoPersonaNoTitularPrevisualizar"
+															listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.PRIMER_APELLIDO.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_primerApellidoNoTitular)}" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="labelApellidoPersonaNoTitular" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_devoluciones['ayuda.ApellidoTitular']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="apellidoPersonaNoTitular" />
+													</span>
+												</div>
+												<div class="col-xs-12 col-sm-3">
+													<p:outputLabel id="labelSegundoApellidoPersonaNoTitular"
+														styleClass="label-form"
+														for="segundoApellidoPersonaNoTitular"
+														value="#{txt_devoluciones['label.SegundoApellidoTitular']}" />
+													<p:inputText id="segundoApellidoPersonaNoTitular"
+														onkeypress="if (event.keyCode == 13){return false;}"
+														autocomplete="off"
+														styleClass="text-input border-completo mask-Numeric"
+														maxlength="30"
+														placeholder="#{txt_devoluciones['placeholder.SegundoApellidoTitular']}"
+														value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_segundoApellidoNoTitular}">
+														<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+														<p:ajax event="blur"
+															update="formModalPrevisualizarPdf:segundoApellidoPersonaNoTitularPrevisualizar"
+															listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.SEGUNDO_APELLIDO.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_segundoApellidoNoTitular)}" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="labelSegundoApellidoPersonaNoTitular" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_devoluciones['ayuda.SegundoApellidoTitular']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="segundoApellidoPersonaNoTitular" />
+													</span>
+												</div>
+											</div>
+										</p:outputPanel>
+										<br />
+										<p:outputPanel id="formularioPersonaNoTitularPJ"
+											rendered="#{!beanDevolucionesConsignacionErrada.ib_personaNoTitular}">
+											<div class="row">
+												<div class="col-xs-12 col-sm-12">
+													<p:outputLabel id="labelRazonSocialPersonaNoTitular"
+														styleClass="label-form" for="razonSocialPersonaNoTitular"
+														value="#{txt_devoluciones['label.RazonSocial']}" />
+													<p:inputText id="razonSocialPersonaNoTitular"
+														onkeypress="if (event.keyCode == 13){return false;}"
+														autocomplete="off"
+														styleClass="text-input border-completo mask-Numeric"
+														maxlength="30" placeholder="Razon social"
+														value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_razonSocialNoTitular}">
+														<p:keyFilter regEx="/[a-z\A-Z\0-9\.\s]/i" />
+														<p:ajax event="blur"
+															update="formModalPrevisualizarPdf:razonSocialPersonaNoTitularPrevisualizar"
+															listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.EMPRESA_RAZON_SOCIAL.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_razonSocialNoTitular)}" />
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="labelRazonSocialPersonaNoTitular" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel value="Razon Social']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="razonSocialPersonaNoTitular" />
+													</span>
+												</div>
+											</div>
+										</p:outputPanel>
+										<br />
+									</ui:fragment>
+								</p:outputPanel>
+							</ui:fragment>
+						</p:outputPanel>
+						<br />
+						<div class="col-xs-12">
+							<div class="col-xs-12 col-md-9">
+								<p:outputLabel value="#{txt_devoluciones['label.PreguntaDos']}"
+									styleClass="titulo tamano-subtitulo" />
+							</div>
+							<div class="col-xs-6 col-md-3">
+								<p:outputPanel id="panelSwitchIntervinoTitular">
+									<h:outputText id="spanNoIntervinoTitular"
+										value="#{txt_devoluciones['label.No']}"
+										class="#{!beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.ib_intervinoTitularCuentaBancaria ? 'textoRojo' : 'textoGris' }" />
+									<p:inputSwitch
+										value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.ib_intervinoTitularCuentaBancaria}">
+										<p:ajax event="change" update="panelSwitchIntervinoTitular"
+											listener="#{beanDevolucionesConsignacionErrada.previsualizarPreguntaIntervinoCuentaBancaria}"
+											oncomplete="#{beanDevolucionesConsignacionErrada.guardarTransaccionIntervino(CampoConfiguracion.INTERVINO_TITULAR_CUENTA_BANCARIA.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.ib_intervinoTitularCuentaBancaria)}"
+											render="formFormularioDevolucionConsignacionErrada:panelSwitchIntervinoTitular:0:spaNoIntervinoTitular formFormularioDevolucionConsignacionErrada:panelSwitchIntervinoTitular:0:spanSiIntervinoTitular" />
+									</p:inputSwitch>
+									<h:outputText id="spanSiIntervinoTitular"
+										value="#{txt_devoluciones['label.Si']}"
+										class="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.ib_intervinoTitularCuentaBancaria ?  'textoRojo' : 'textoGris' }" />
+								</p:outputPanel>
+							</div>
+						</div>
+						<br /> <br />
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_devoluciones['InformacionCuentaBancaria.SubtituloCuatro']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelEntidadFinanciera"
+									styleClass="label-form" for="entidadFinanciera"
+									value="#{txt_devoluciones['label.EntidadFinanciera']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="entidadFinanciera"
+									widgetVar="entidadFinancieraSelect"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_entidadFinanciera}">
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:entidadFinancieraPrevisualizar"
+										listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.CODIGO_ENTIDAD_FINANCIERA_CONSIGNACION.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_entidadFinanciera)}" />
+									<f:selectItem itemValue=""
+										itemLabel="#{txt['label.SeleccioneComboBox']}" />
+									<f:selectItems
+										value="#{beanDevolucionesConsignacionErrada.illeb_entidadBancaria}"
+										var="entidadBancaria"
+										itemValue="#{entidadBancaria.getIs_nombreEntidad()}"
+										itemLabel="#{entidadBancaria.getIs_nombreEntidad()}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelEntidadFinanciera"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.EntidadFinanciera']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="entidadFinanciera" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelTipoCuenta" styleClass="label-form"
+									for="tipoCuenta"
+									value="#{txt_devoluciones['label.TipoCuenta']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="tipoCuenta" widgetVar="tipoCuentaSelect"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_tipoCuenta}">
+									<p:ajax event="blur"
+										listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.TIPO_CUENTA.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_tipoCuenta)}" />
+									<f:selectItem itemValue=""
+										itemLabel="#{txt['label.SeleccioneComboBox']}" />
+									<f:selectItems
+										value="#{beanDevolucionesConsignacionErrada.ilec_tipoCuentaBancaria}"
+										var="tipoCuentaBancaria"
+										itemValue="#{tipoCuentaBancaria.getIs_criterio()}"
+										itemLabel="#{tipoCuentaBancaria.getIs_criterio()}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelTipoCuenta"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.TipoCuenta']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="tipoCuenta" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelNumeroCuenta" styleClass="label-form"
+									for="numeroCuenta"
+									value="#{txt_devoluciones['label.NumeroCuenta']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:inputText id="numeroCuenta"
+									onkeypress="if (event.keyCode == 13){return false;}"
+									autocomplete="off"
+									styleClass="text-input border-completo mask-Numeric"
+									maxlength="20"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_devoluciones['placeholder.NumeroCuentaBancaria']}"
+									required="true"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroCuenta}">
+									<p:keyFilter regEx="/[0-9\-\a-z\A-Z]/i" />
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:numeroCuentaPrevisualizar"
+										listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.NUMERO_CUENTA.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroCuenta)}" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelNumeroCuenta"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.NumeroCuenta']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="numeroCuenta" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelTipoDocumentoTitularCuentaBancaria"
+									styleClass="label-form"
+									for="tipoDocumentoTitularCuentaBancaria"
+									value="#{txt_devoluciones['label.TipoDocumento']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:selectOneMenu id="tipoDocumentoTitularCuentaBancaria"
+									widgetVar="tipoDocumentoSelect"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_tipoDocumentoTitularCuentaBancaria}">
+									<p:ajax event="change"
+										update="formFormularioDevolucionConsignacionErrada:formularioCuentaBancariaPersonas"
+										listener="#{beanDevolucionesConsignacionErrada.guardarTransaccionTitularCuentaBancaria(CampoConfiguracion.TITULAR_CUENTA_TIPO_DOCUMENTO.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_tipoDocumentoTitularCuentaBancaria)}" />
+									<f:selectItem itemValue=""
+										itemLabel="#{txt['label.SeleccioneComboBox']}" />
+									<f:selectItems
+										value="#{beanDevolucionesConsignacionErrada.iltd_tiposDocumento}"
+										var="tipoDocumento" itemValue="#{tipoDocumento.getIs_id()}"
+										itemLabel="#{tipoDocumento.getIs_nombre()}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral"
+									for="labelTipoDocumentoTitularCuentaBancaria" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.TipoDocumento']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="tipoDocumentoTitularCuentaBancaria" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelNumeroDocumentoTitularCuentaBancaria"
+									styleClass="label-form"
+									for="numeroDocumentoTitularCuentaBancaria"
+									value="#{txt_devoluciones['label.NumeroDocumento']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<p:inputText id="numeroDocumentoTitularCuentaBancaria"
+									onkeypress="if (event.keyCode == 13){return false;}"
+									autocomplete="off"
+									styleClass="text-input border-completo mask-Numeric"
+									maxlength="20"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									placeholder="#{txt_devoluciones['placeholder.NumeroDocumento']}"
+									required="true"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroDocumentoTitularCuentaBancaria}">
+									<p:keyFilter regEx="/[0-9]/i" />
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:numeroDocumentoTitularCuentaBancariaPrevisualizar"
+										listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_NUMERO_DOCUMENTO.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroDocumentoTitularCuentaBancaria)}" />
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral"
+									for="labelNumeroDocumentoTitularCuentaBancaria" position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.NumeroDocumento']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="numeroDocumentoTitularCuentaBancaria" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<!-- Campo persona Natural y Juridical -->
+						<p:outputPanel id="formularioCuentaBancariaPersonas">
+							<ui:fragment
+								rendered="#{beanDevolucionesConsignacionErrada.ib_camposCuentaBancaria}">
+								<!-- Cuenta Bancaria Persona Natural -->
+								<p:outputPanel id="formularioCuentaBancariaPersonaNatural"
+									rendered="#{beanDevolucionesConsignacionErrada.ib_datosBasicosCuentaBancaria}">
+									<div class="row">
+										<div class="col-xs-12 col-sm-3">
+											<p:outputLabel id="labelNombreTitular"
+												styleClass="label-form" for="nombreTitular"
+												value="#{txt_devoluciones['label.NombreTitular']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											<p:inputText id="nombreTitular"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_devoluciones['placeholder.NombreTitular']}"
+												required="true"
+												value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_nombreTitularCuentaBancaria}">
+												<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:nombreTitularPrevisualizar"
+													listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_PRIMER_NOMBRE.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_nombreTitularCuentaBancaria)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelNombreTitular"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_devoluciones['ayuda.NombreTitular']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="nombreTitular" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-sm-3">
+											<p:outputLabel id="labelSegundoNombreTitular"
+												styleClass="label-form" for="segundoNombreTitular"
+												value="#{txt_devoluciones['label.SegundoNombreTitular']}" />
+											<p:inputText id="segundoNombreTitular"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30"
+												placeholder="#{txt_devoluciones['placeholder.SegundoNombreTitular']}"
+												value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_segundoNombreTitularCuentaBancaria}">
+												<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:segundoNombreTitularPrevisualizar"
+													listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_SEGUNDO_NOMBRE.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_segundoNombreTitularCuentaBancaria)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelSegundoNombreTitular"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_devoluciones['ayuda.SegundoNombreTitular']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="segundoNombreTitular" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-sm-3">
+											<p:outputLabel id="labelApellidoTitular"
+												styleClass="label-form" for="apellidoTitular"
+												value="#{txt_devoluciones['label.ApellidoTitular']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											<p:inputText id="apellidoTitular"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_devoluciones['placeholder.ApellidoTitular']}"
+												required="true"
+												value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_apellidoTitularCuentaBancaria}">
+												<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:apellidoTitularPrevisualizar"
+													listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_PRIMER_APELLIDO.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_apellidoTitularCuentaBancaria)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelApellidoTitular"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_devoluciones['ayuda.ApellidoTitular']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="apellidoTitular" />
+											</span>
+										</div>
+										<div class="col-xs-12 col-sm-3">
+											<p:outputLabel id="labelSegundoApellidoTitular"
+												styleClass="label-form" for="segundoApellidoTitular"
+												value="#{txt_devoluciones['label.SegundoApellidoTitular']}" />
+											<p:inputText id="segundoApellidoTitular"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30"
+												placeholder="#{txt_devoluciones['placeholder.SegundoApellidoTitular']}"
+												value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_segundoApellidoTitularCuentaBancaria}">
+												<p:keyFilter regEx="/[a-z\A-Z\s]/i" />
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:segundoApellidoTitularPrevisualizar"
+													listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_SEGUNDO_APELLIDO.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_segundoApellidoTitularCuentaBancaria)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral"
+												for="labelSegundoApellidoTitular" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_devoluciones['ayuda.SegundoApellidoTitular']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="segundoApellidoTitular" />
+											</span>
+										</div>
+									</div>
+								</p:outputPanel>
+								<!-- Cuenta Bancaria Persona Juridica -->
+								<p:outputPanel id="formularioCuentaBancariaPersonaJuridica"
+									rendered="#{!beanDevolucionesConsignacionErrada.ib_datosBasicosCuentaBancaria}">
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel id="labelRazonSocialCuentaBancaria"
+												styleClass="label-form" for="razonSocialCuentaBancaria"
+												value="#{txt_devoluciones['label.RazonSocial']}" />
+											<p:inputText id="razonSocialCuentaBancaria"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												maxlength="30" placeholder="Razon social"
+												value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_titularCuentaBancariaRazonSocial}">
+
+												<p:keyFilter regEx="/[a-z\A-Z\0-9\.\s]/i" />
+
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:razonSocialCuentaBancariaPrevisualizar"
+													listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.TITULAR_CUENTA_RAZON_SOCIAL.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_titularCuentaBancariaRazonSocial)}" />
+											</p:inputText>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral"
+												for="labelRazonSocialCuentaBancaria" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_devoluciones['tooltip.RazonSocial']}" />
+												</div>
+											</p:tooltip>
+											<span class="help-block"> <p:message
+													for="razonSocialCuentaBancaria" />
+											</span>
+										</div>
+									</div>
+								</p:outputPanel>
+							</ui:fragment>
+						</p:outputPanel>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel id="labelMotivoSolicitud" styleClass="label-form"
+								for="motivoSolicitud"
+								value="#{txt_devoluciones['label.MotivoSolicitud']}" />
+							<p:outputLabel styleClass="required-field">*</p:outputLabel>
+							<div class="ui-inputgroup">
+								<p:inputTextarea id="motivoSolicitud" rows="6" cols="40"
+									styleClass="mask-AlphaNumChars2"
+									counter="mostrarContadorMotivoSolicitud" maxlength="1000"
+									placeholder="#{txt_devoluciones['placeholder.MotivoSolicitud']}"
+									counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+									autoResize="false"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_motivoSolicitud}">
+									<p:keyFilter regEx="/[0-9\A-Z\a-z\s\,\.]/i" />
+									<p:ajax event="blur"
+										update="formModalPrevisualizarPdf:motivoSolicitudPrevisualizar"
+										listener="#{beanDevolucionesConsignacionErrada.guardarTransaccion(CampoConfiguracion.MOTIVO_SOLICITUD_DEVOLUCION_CONSIGNACION_ERRADA.getIs_nombreCampo(),beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_motivoSolicitud)}" />
+								</p:inputTextarea>
+								<br />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="motivoSolicitud" position="top">
+									<div>
+										<p:outputLabel
+											value="#{txt_devoluciones['tooltip.MotivoSolicitud']}" />
+									</div>
+								</p:tooltip>
+							</div>
+							<h:outputText id="mostrarContadorMotivoSolicitud" />
+							<span class="help-block"> <p:message for="motivoSolicitud" />
+							</span>
+						</div>
+					</div>
+					<br />
+					<br />
+					<p:separator />
+					<br />
+					<div class="row">
+						<div class="col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-4">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_devoluciones['boton.Previsualizar']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();">
+								<p:ajax
+									listener="#{beanDevolucionesConsignacionErrada.previsualizarPdf}"
+									update="formModalPrevisualizarPdf" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_devoluciones['boton.CargarDocumentos']}">
+								<p:ajax
+									listener="#{beanDevolucionesConsignacionErrada.validarGenerarNir()}"
+									onstart="cargarKeyfilters();"
+									oncomplete="if(args &amp;&amp; args.validationFailed) validarFormulario('#{txt_registral['campos.obligatorios']}');"
+									update="panelDevolucionesConsignacionErrada"
+									process="formFormularioDevolucionConsignacionErrada" />
+							</p:commandButton>
+						</div>
+					</div>
+					<br />
+				</h:form>
+			</p:outputPanel>
+			<!-- Cargue de documentos devolucion consignacion errada -->
+			<p:outputPanel id="cargueDocumentosDevolucionConsignacionErrada"
+				rendered="#{beanDevolucionesConsignacionErrada.ii_seccion == 1}"
+				styleClass="panel-content no-border">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelAdjuntarDocumentos"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_devoluciones['label.AdjuntarDocumentos']}" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="col-xs-12">
+					<p:outputLabel styleClass="tamano-subtitulo"
+						value="#{txt_devoluciones['Mensaje.IntervinoObligatorio']}" />
+					<br /> <br />
+				</div>
+				<div class="col-xs-12">
+					<p:outputLabel styleClass="tamano-subtitulo"
+						value="#{txt_devoluciones['Mensaje.IntervinoTitularObligatorio']}" />
+					<br /> <br /> <br />
+				</div>
+				<p:outputPanel id="cargaDeDocumentos" class="adjuntar-documentos">
+					<div class="col-xs-12">
+						<p:dataTable var="cargaDocumentosDevolucionConsignacionErrada"
+							styleClass="centrar"
+							widgetVar="paramsCargaDocumentosDevolucionConsignacionErrada"
+							id="cargarDocumento" reflow="true" rowIndexVar="index"
+							value="#{beanDevolucionesConsignacionErrada.ilcdf_listaDocumentoFormularioDto}"
+							emptyMessage="#{txt_administrador['tabla.vacia.PJ']}"
+							stickyHeader="false">
+							<p:column
+								headerText="#{txt_devoluciones['header.DocumentosSolicitados']}"
+								styleClass="centrar45 documento-medio">
+								<h:outputText
+									value="#{cargaDocumentosDevolucionConsignacionErrada.icd_catalogoDocumentoDto.is_nombre}" />
+							</p:column>
+							<p:column headerText="Adjuntar"
+								styleClass="centrar35 documento-medio">
+								<div class="ui-inputgroup">
+									<h:form>
+										<p:fileUpload
+											id="certificado${cargaDocumentosDevolucionConsignacionErrada.icd_catalogoDocumentoDto.is_nombre}"
+											styleClass="cargar-archivo" showButtons="false"
+											sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+											allowTypes="/(\.|\/)(pdf|PDF)$/"
+											disabled="#{cargaDocumentosDevolucionConsignacionErrada.ib_desactivarBotonesCarga}"
+											fileUploadListener="#{beanDevolucionesConsignacionErrada.generarArchivoCargado}"
+											auto="true"
+											label="#{txt_devoluciones['boton.CargarArchivo']}"
+											process="@this" update="cargaDeDocumentos"
+											invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+											invalidFileMessage="#{txt_devoluciones['Mensaje.archivo.formatoInvalido']}">
+											<f:attribute name="foo"
+												value="${cargaDocumentosDevolucionConsignacionErrada}" />
+											<div class="col-xs-12 tamano-examinar">
+												<br />
+												<h:outputText id="textoSalidaArchivo"
+													styleClass="text-input"
+													value="#{cargaDocumentosDevolucionConsignacionErrada.ia_archivoDto.is_nombreArchivo}" />
+											</div>
+										</p:fileUpload>
+									</h:form>
+								</div>
+							</p:column>
+							<p:column
+								headerText="#{txt_devoluciones['header.CargarArchivos']}"
+								styleClass="centrarEnviado">
+								<p:commandButton value="#{txt_devoluciones['boton.Subir']}"
+									disabled="#{cargaDocumentosDevolucionConsignacionErrada.ib_desactivarBotonesCarga}"
+									styleClass="btn-gradiente btn-rojo">
+									<p:ajax oncomplete="PF('confirmarCargueDocumento').show();"
+										update="panelDevolucionesConsignacionErrada"
+										process="formFormularioDevolucionConsignacionErrada" />
+									<f:setPropertyActionListener
+										value="#{cargaDocumentosDevolucionConsignacionErrada}"
+										target="#{beanDevolucionesConsignacionErrada.icdf_cargaDocumentosFormularioDto}" />
+								</p:commandButton>
+							</p:column>
+							<p:column headerText="#{txt_devoluciones['header.Estado']}"
+								styleClass="centrarEnviado documento-medio">
+								<p:outputPanel
+									rendered="#{cargaDocumentosDevolucionConsignacionErrada.ib_desactivarBotonesCarga}">
+									<p:graphicImage name="/iconos/check-verde.png" />
+									<br />
+									<h:outputText
+										value="#{txt_devoluciones['Mensaje.archivoSubido']}" />
+								</p:outputPanel>
+							</p:column>
+						</p:dataTable>
+						<br /> <br />
+					</div>
+					<br />
+					<p:outputPanel id="panelEnviarSolicitud">
+						<h:form id="cargueDocumento">
+							<br />
+							<div class="row">
+								<div class="col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-4">
+									<p:commandButton icon="icon-flecha-gris" iconPos="right"
+										type="submit" styleClass="icon-btn btn-gris "
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();"
+										value="#{txt_devoluciones['boton.Eliminar']}">
+										<p:ajax
+											oncomplete="PF('eliminarTransaccionDevolucionConsignacionErrada').show();" />
+									</p:commandButton>
+								</div>
+								<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+									<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+										type="submit" onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();"
+										styleClass="btn-gradiente icon-btn btn-rojo "
+										value="#{txt_devoluciones['boton.EnviarSolicitud']}">
+										<p:ajax process="@form @all"
+											listener="#{beanDevolucionesConsignacionErrada.validarCamposEnviarSolicitud()}" />
+									</p:commandButton>
+								</div>
+							</div>
+						</h:form>
+					</p:outputPanel>
+				</p:outputPanel>
+			</p:outputPanel>
+			<!-- Resumen solicitud devolucion consignacion errada -->
+			<p:outputPanel id="resumenSolicitudExitosa"
+				rendered="#{beanDevolucionesConsignacionErrada.ii_seccion == 2}">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelResumenSolicitudExitosa"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_devoluciones['FormularioResumenConsignacionErrada']}" />
+							<br /> <br />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="solicitudExitosa" styleClass="tamano-subtitulo"
+						value="#{txt_devoluciones['Mensaje.RealizadoSolicitudDevolucionConsignacionErrada']}" />
+					<br /> <br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelFechaSolicitudExitosa"
+									styleClass="label-form" for="fechaSolicitudExitosa"
+									value="#{txt_devoluciones['label.FechaDiligenciamiento']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesConsignacionErrada.itf_transaccionFormularioDto.id_fechaCreacion}"
+									id="fechaSolicitudExitosa">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelNirSolicitudExitosa"
+									styleClass="label-form" for="nirSolicitudExitosa"
+									value="#{txt_devoluciones['label.Nir']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesConsignacionErrada.itf_transaccionFormularioDto.is_nir}"
+									id="nirSolicitudExitosa" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudExitosa"
+									styleClass="label-form" for="estadoSolicitudExitosa"
+									value="#{txt_devoluciones['label.Estado']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesConsignacionErrada.itf_transaccionFormularioDto.is_estadoTransaccion}"
+									id="estadoSolicitudExitosa" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudExitosa" />
+								</span>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<br /> <br />
+						<p:outputPanel id="entendido">
+							<p:commandButton type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo"
+								value="#{txt_devoluciones['boton.Aceptar']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</p:outputPanel>
+			<!-- Resumen solicitud Pendiente devolucion consignacion errada -->
+			<p:outputPanel id="resumenSolicitudPendiente"
+				rendered="#{beanDevolucionesConsignacionErrada.ii_seccion == 3}">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelResumenSolicitudPendiente"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_devoluciones['FormularioResumenConsignacionErrada']}" />
+							<br /> <br />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="solicitudPendiente"
+						styleClass="tamano-subtitulo"
+						value="#{txt_devoluciones['Mensaje.SolicitudDevolucionConsignacionErradaRadicada']}" />
+					<br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelFechaSolicitudPendiente"
+									styleClass="label-form" for="fechaSolicitudPendiente"
+									value="#{txt_devoluciones['label.FechaDiligenciamiento']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesConsignacionErrada.getItf_transaccionFormularioDto().getId_fechaCreacion()}"
+									id="fechaSolicitudPendiente">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelNirSolicitudPendiente"
+									styleClass="label-form" for="nirSolicitudPendiente"
+									value="#{txt_devoluciones['label.Nir']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesConsignacionErrada.itf_transaccionFormularioDto.is_nir}"
+									id="nirSolicitudPendiente" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudPendiente"
+									styleClass="label-form" for="estadoSolicitudPendiente"
+									value="#{txt_devoluciones['label.Estado']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesConsignacionErrada.itf_transaccionFormularioDto.is_estadoTransaccion}"
+									id="estadoSolicitudPendiente" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudPendiente" />
+								</span>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-4">
+						<br /> <br />
+						<p:outputPanel id="entendidoPendiente">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_devoluciones['boton.Aceptar']}"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</p:outputPanel>
+		</p:panel>
+
+		<!-- Modal de transaccion Aprobada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="devolucionConsignacionErradaAprobada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.redireccion']}" />
+			<ui:param name="formulario"
+				value="formModalDevolcionConsignacionErradaAprobada" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12">
+					<br />
+					<p:outputLabel id="solicitudAprobada"
+						value="#{txt_devoluciones['Mensaje.SolicitudAprobada']}" />
+					<br />
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="estadoSolicitudes"
+						value="#{txt_devoluciones['ayuda.estadosDevolucionConsignacionErrada']}" />
+					<br /> <br /> <br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudAprobada"
+									styleClass="label-form" for="estadoSolicitudAprobada"
+									value="#{txt_devoluciones['label.Estado']}" />
+							</p:column>
+							<p:column styleClass="text-center">
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesConsignacionErrada.is_estadoDevolucionConsignacionErrada}"
+									id="estadoSolicitudAprobada" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudAprobada" />
+								</span>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelIdSolicitudAprobada"
+									styleClass="label-form" for="idSolicitudAprobada"
+									value="#{txt_devoluciones['label.IdCuentaCupo']}" />
+							</p:column>
+							<p:column styleClass="text-center">
+								<h:outputText styleClass="text-input"
+									value="#{beanDevolucionesConsignacionErrada.is_idDevolucionConsignacionErrada}"
+									id="idSolicitudAprobada" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="col-xs-12">
+					<br />
+					<p:outputLabel id="solicitudRecarga"
+						value="#{txt_devoluciones['Mensaje.SolicitudAprobada1']}" />
+					<br /> <br />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:outputPanel id="entendidoAprobada">
+							<p:commandButton immediate="true" type="submit"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_devoluciones['boton.ConsultarSaldo']}"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de transaccion Encontrada Devolucion consignacion errada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId"
+				value="transaccionEncontradaDevolucionConsignacionErrada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalTransaccionEncontradaDevolucionConsignacionErrada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_devoluciones['wizard.modal.transaccion.retormar']}" />
+						<br /> <br />
+						<h:outputText
+							value="#{txt_devoluciones['wizard.modal.transaccion.retormar1']}" />
+						<br />
+						<h:outputText
+							value="#{txt_devoluciones['wizard.modal.transaccion.retormar2']}" />
+						<br /> <br />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-md-6">
+						<p:outputPanel id="botonDescartar">
+							<p:commandButton styleClass="btn-gris"
+								value="#{txt['boton.Cancelar.Upper']}">
+								<p:confirm header="#{txt_minuta['modal.confirmarQuitar']}"
+									message="#{txt_devoluciones['Mensaje.SeguroEliminar']}" />
+							</p:commandButton>
+						</p:outputPanel>
+						<p:confirmDialog styleClass="box-solid box-danger cerrarModal"
+							global="true" showEffect="fade" hideEffect="fade"
+							responsive="true">
+							<div class="row">
+								<div class="col-xs-5 col-xs-offset-1">
+									<p:commandButton immediate="true"
+										styleClass="ui-confirmdialog-no pull-right btn-gris"
+										value="#{txt['boton.Cancelar.Upper']}">
+										<p:ajax onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('blockUI-Loading').hide();PF('transaccionEncontradaDevolucionConsignacionErrada').hide();" />
+									</p:commandButton>
+								</div>
+								<div class="col-xs-5 col-xs-offset-0">
+									<p:commandButton
+										styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left boton-iz"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('transaccionEncontradaDevolucionConsignacionErrada').hide();PF('blockUI-Loading').hide();irArriba()"
+										value="#{txt_devoluciones['boton.Aceptar']}"
+										action="/pages/solicitudes/devoluciones/solicitudDevolucionesConsignacionErrada.jsf?faces-redirect=true">
+										<f:ajax
+											listener="#{beanDevolucionesConsignacionErrada.limpiarFormulario()}"
+											oncomplete="PF('transaccionEncontradaDevolucionConsignacionErrada').hide();" />
+									</p:commandButton>
+								</div>
+							</div>
+						</p:confirmDialog>
+					</div>
+					<div class="col-md-6">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_devoluciones['boton.Aceptar']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();irArriba()"
+							update="panelDevolucionesConsignacionErrada">
+							<p:ajax
+								listener="#{beanDevolucionesConsignacionErrada.cargarFormulario()}"
+								oncomplete="PF('transaccionEncontradaDevolucionConsignacionErrada').hide(); cargarKeyfilters();" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de Gegenerar Nir Devolucion consignacion errada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId"
+				value="generarNirDevolucionConsignacionErrada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalGenerarNitDevolucionConsignacionErrada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_devoluciones['Mensaje.DevolucionConsignacionErradaFormulario']}" />
+						<br /> <br />
+						<h:outputText
+							value="#{txt_devoluciones['Mensaje.DevolucionConsignacionErradaFormulario1']}" />
+						<br /> <br />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="pull-right btn-gris"
+								value="#{txt['boton.Cancelar.Upper']}">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();PF('generarNirDevolucionConsignacionErrada').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+								value="#{txt_devoluciones['boton.Aceptar']}"
+								update="panelDevolucionesConsignacionErrada">
+								<p:ajax
+									listener="#{beanDevolucionesConsignacionErrada.generarNir()}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('generarNirDevolucionConsignacionErrada').hide();PF('blockUI-Loading').hide();irArriba()" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de eliminar transaccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId"
+				value="eliminarTransaccionDevolucionConsignacionErrada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalEliminarTransaccionDevolucionConsignacionErrada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_devoluciones['Mensaje.SeguroEliminar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="pull-right btn-gris"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								value="#{txt['boton.Cancelar.Upper']}">
+								<p:ajax
+									oncomplete="PF('eliminarTransaccionDevolucionConsignacionErrada').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								value="#{txt_devoluciones['boton.Aceptar']}"
+								update="panelDevolucionesConsignacionErrada">
+								<f:ajax
+									listener="#{beanDevolucionesConsignacionErrada.eliminarTransaccion()}"
+									oncomplete="PF('eliminarTransaccionDevolucionConsignacionErrada').hide();irArriba()" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de enviar solicitud -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId"
+				value="enviarSolicitudDevolucionConsignacionErrada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalEnviarSolicitudDevolucionConsignacionErrada" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_devoluciones['Mensaje.EnvioSolicitud']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_minuta['boton.cancelar.upper']}"
+								oncomplete="PF('enviarSolicitudDevolucionConsignacionErrada').hide();">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton
+								styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+								value="#{txt_devoluciones['boton.Aceptar']}"
+								oncomplete="PF('enviarSolicitudDevolucionConsignacionErrada').hide();irArriba()">
+								<p:ajax
+									listener="#{beanDevolucionesConsignacionErrada.enviarSolicitud()}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									update="panelDevolucionesConsignacionErrada" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al cargar Documentos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarCargueDocumento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmarCargueDocumento" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_devoluciones['Mensaje.SubirArchivo']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt['boton.Cancelar.Upper']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton
+								disabled="#{cargaDocumentosDevolucionConsignacionErrada.ib_desactivarBotonesCarga}"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_devoluciones['boton.Aceptar']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+								<p:ajax
+									listener="#{beanDevolucionesConsignacionErrada.servicioCargarArchivos(beanDevolucionesConsignacionErrada.icdf_cargaDocumentosFormularioDto)}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									update="panelDevolucionesConsignacionErrada" />
+								<f:attribute name="foo"
+									value="${cargaDocumentosDevolucionConsignacionErrada}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de Previsualizar PDF -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="previsualizarPdf" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalPrevisualizarPdf" />
+			<ui:define name="body-modal">
+				<div class="text-center">
+					<div id="container_logos_pp">
+						<div class="col-xs-12">
+							<div class="col-xs-4 pad-top1">
+								<a href="#" id="ministerio-justicia"><img
+									src="#{resource['img/dinamicas/minjusticialogo.png']}"
+									class="imagenes" alt="" /></a>
+							</div>
+							<div class="col-xs-4 pad-top">
+								<a href="#" id="logo-snr-60"><img
+									src="#{resource['img/dinamicas/logo-snr-60-pdf.png']}"
+									class="imagenes" alt="" /></a>
+							</div>
+							<div class="col-xs-4">
+								<a href="#" id="logonuevopais"><img
+									src="#{resource['img/dinamicas/logonuevopais.png']}"
+									class="imagenes1" alt="" /></a> <br /> <br />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelSuperintendenciaNotariadoRegistro"
+								styleClass="text-center tamano-titulo"
+								value="#{txt_devoluciones['SuperintendenciaNotariadoRegistro']}" />
+						</div>
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelFormularioConsignacionErrada"
+								styleClass="text-center tamano-titulo"
+								value="#{txt_devoluciones['FormularioDevoluciones']}" />
+						</div>
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelFormularioDevoluciones"
+								styleClass="text-center tamano-titulo"
+								value="#{txt_devoluciones['FormularioDevoluciones.tramitesLinea']}" />
+							<br /> <br />
+						</div>
+						<div class="row text-left pad-left">
+							<div class="row">
+								<div class="col-xs-12 text-left">
+									<div class="col-xs-12 col-md-6">
+										<p:outputLabel>*</p:outputLabel>
+										<p:outputLabel id="labelFechaDiligenciamiento"
+											for="fechaDiligenciamiento"
+											value="#{txt_devoluciones['label.FechaDiligenciamiento']}" />
+										<p:outputLabel>:</p:outputLabel>
+										<p:outputLabel value="-" styleClass="espacio" />
+										<h:outputText id="fechaDiligenciamiento" readonly="true"
+											value="#{beanDevolucionesConsignacionErrada.obtenerFecha()}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</div>
+									<div class="col-xs-12 col-md-6 text-left">
+										<p:outputLabel id="labelCiudadPrevisualizar"
+											for="ciudadPrevisualizar"
+											value="#{txt_devoluciones['label.Departamento']}" />
+										<p:outputLabel>:</p:outputLabel>
+										<p:outputLabel value="-" styleClass="espacio" />
+										<h:outputText id="ciudadPrevisualizar"
+											value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_ciudad}">
+										</h:outputText>
+									</div>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="col-xs-12 text-center">
+							<p:outputLabel
+								value="#{txt_devoluciones['FormularioDevoluciones.SubtituloUno']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<p:outputPanel id="formularioDatosBasicosPersonaJuridica"
+							rendered="#{beanDevolucionesConsignacionErrada.ib_datosBasicos}">
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 text-left">
+									<p:outputLabel id="labelTipoDocumentoPrevisualizar"
+										for="tipoDocumentoPrevisualizar"
+										value="#{txt_devoluciones['label.TipoDocumento']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="tipoDocumentoPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+									</h:outputText>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4 text-left">
+									<p:outputLabel id="labelRazonSocialPrevisualizar"
+										for="razonSocialPrevisualizar"
+										value="#{txt_devoluciones['label.RazonSocial']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="razonSocialPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ipj_personaJuridicaDto.is_razonSocial}">
+									</h:outputText>
+								</div>
+								<div class="col-xs-12 col-sm-4 text-left">
+									<p:outputLabel id="labelRepresentanteLegalPrevisualizar"
+										for="representanteLegalPrevisualizar"
+										value="#{txt_devoluciones['label.RepresentanteLegal']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="representanteLegalPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ipj_personaJuridicaDto.getNombreRepresentanteLegal()}">
+									</h:outputText>
+								</div>
+								<div class="col-xs-12 col-sm-4 text-left">
+									<p:outputLabel
+										id="labelNumeroDocumentoRepresentantePrevisualizar"
+										for="numeroDocumentoRepresentantePrevisualizar"
+										value="#{txt_devoluciones['label.FormularioDevolucionesDocumentoRepresentante']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="numeroDocumentoRepresentantePrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroDocumentoRepresentanteLegal}">
+									</h:outputText>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 text-left">
+									<p:outputLabel id="labelDireccionCompletaPrevisualizar"
+										for="direccionCompletaPrevisualizar"
+										value="#{txt_devoluciones['label.Direccion']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="direccionCompletaPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.mostrarDireccionCompleta()}">
+									</h:outputText>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4 text-left">
+									<p:outputLabel id="labelTelefonoPrevisualizar"
+										for="telefonoFijoPrevisualizar"
+										value="#{txt_persona['label.TelefonoFijo']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="telefonoFijoPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ipj_personaJuridicaDto.is_telefono}">
+									</h:outputText>
+								</div>
+								<div class="col-xs-12 col-sm-4 text-left">
+									<p:outputLabel id="labelCelularPrevisualizar"
+										for="celularPrevisualizar"
+										value="#{txt_devoluciones['label.NumeroCelular']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="celularPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.is_celular}">
+									</h:outputText>
+								</div>
+								<div class="col-xs-12 col-sm-4 text-left">
+									<p:outputLabel id="labelCorreoPrevisualizar"
+										for="correoPrevisualizar"
+										value="#{txt_devoluciones['label.CorreoElectronico']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="correoPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.is_correoElectronico}">
+									</h:outputText>
+								</div>
+							</div>
+						</p:outputPanel>
+						<p:outputPanel id="formularioDatosBasicosPersonaNatural"
+							rendered="#{!beanDevolucionesConsignacionErrada.ib_datosBasicos}">
+							<div class="row">
+								<div class="col-xs-12 col-sm-4 text-left">
+									<p:outputLabel id="labelTipoDocumentoPNPrevisualizar"
+										for="tipoDocumentoPNPrevisualizar"
+										value="#{txt_devoluciones['label.TipoDocumento']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="tipoDocumentoPNPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+									</h:outputText>
+								</div>
+								<div class="col-xs-12 col-sm-4 text-left">
+									<p:outputLabel id="labelNumeroDocumentoPNPrevisualizar"
+										for="numeroDocumentoPNPrevisualizar"
+										value="#{txt_devoluciones['label.NumeroDocumento']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="numeroDocumentoPNPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+									</h:outputText>
+								</div>
+								<div class="col-xs-12 col-sm-4 text-left">
+									<p:outputLabel id="labelGeneroPrevisualizar"
+										for="generoPrevisualizar"
+										value="#{txt_devoluciones['label.Genero']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="generoPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.ic_catalogoTipoGenero.is_nombre}">
+									</h:outputText>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-3">
+									<p:outputLabel id="labelNombrePNPrevisualizar"
+										for="nombrePersonaPrevisualizar"
+										value="#{txt_devoluciones['label.PrimerNombre']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="nombrePersonaPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_primerNombre}">
+									</h:outputText>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<p:outputLabel id="labelSegundoNombrePrevisualizar"
+										for="segundoNombrePrevisualizar"
+										value="#{txt_devoluciones['label.SegundoNombre']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="segundoNombrePrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_segundoNombre}">
+									</h:outputText>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<p:outputLabel id="labelApellidoPNPrevisualizar"
+										for="primerApellidoPrevisualizar"
+										value="#{txt_devoluciones['label.PrimerApellido']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="primerApellidoPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_primerApellido}">
+									</h:outputText>
+								</div>
+								<div class="col-xs-12 col-sm-3">
+									<p:outputLabel id="labelSegundoApellidoPrevisualizar"
+										for="segundoApellidoPrevisualizar"
+										value="#{txt_devoluciones['label.SegundoApellido']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="segundoApellidoPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ip_personaDto.ipn_personaNaturalDto.is_segundoApellido}">
+									</h:outputText>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 text-left">
+									<p:outputLabel id="labelDireccionCompletaPNPrevisualizar"
+										for="direccionResidenciaPrevisualizar"
+										value="#{txt_devoluciones['label.Direccion']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="direccionResidenciaPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.mostrarDireccionCompleta()}">
+									</h:outputText>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-4 text-left">
+									<p:outputLabel id="labelTelefonoPNPrevisualizar"
+										for="telefonoFijoPNPrevisualizar"
+										value="#{txt_persona['label.TelefonoFijo']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="telefonoFijoPNPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.ipj_personaJuridicaDto.is_telefono}">
+									</h:outputText>
+								</div>
+								<div class="col-xs-12 col-sm-4 text-left">
+									<p:outputLabel id="labelCelularPNPrevisualizar"
+										for="celularPNPrevisualizar"
+										value="#{txt_devoluciones['label.NumeroCelular']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="celularPNPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.is_celular}">
+									</h:outputText>
+								</div>
+								<div class="col-xs-12 col-sm-4 text-left">
+									<p:outputLabel id="labelCorreoPNPrevisualizar"
+										for="correoPNPrevisualizar"
+										value="#{txt_devoluciones['label.CorreoElectronico']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="correoPNPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.iu_usuarioDto.is_correoElectronico}">
+									</h:outputText>
+								</div>
+							</div>
+						</p:outputPanel>
+						<br />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_devoluciones['FormularioDevoluciones.SubtituloDos']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelNumeroConsignacionPrevisualizar"
+									for="numeroConsignacionPrevisualizar"
+									value="#{txt_devoluciones['label.NumeroConsignacion']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="numeroConsignacionPrevisualizar"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroConsignacion}">
+								</h:outputText>
+							</div>
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelTipoConsignacionPrevisualizar"
+									for="tipoConsignacionPrevisualizar"
+									value="#{txt_devoluciones['label.TipoConsignacion']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="tipoConsignacionPrevisualizar"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_tipoConsignacion}">
+								</h:outputText>
+							</div>
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelNombreEntidadPrevisualizar"
+									for="nombreEntidadPrevisualizar"
+									value="#{txt_devoluciones['label.NombreEntidad']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="nombreEntidadPrevisualizar"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_nombreEntidad}">
+								</h:outputText>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4 text-left">
+								<div class="monto-solicitado centrar-campos">
+									<p:outputLabel id="labelFechaConsignacionPrevisualizar"
+										for="fechaConsignacionPrevisualizar"
+										value="#{txt_devoluciones['label.FechaConsignacion']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="fechaConsignacionPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.id_fechaConsignacion}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 text-left">
+								<div class="monto-solicitado centrar-campos">
+									<p:outputLabel id="labelNumeroCuentaBancariaPrevisualizar"
+										for="numeroCuentaBancariaPrevisualizar"
+										value="#{txt_devoluciones['label.NumeroCuentaBancaria']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="numeroCuentaBancariaPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroCuentaBancaria}">
+									</h:outputText>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4 text-left">
+								<div class="monto-solicitado">
+									<p:outputLabel id="labelValorPrevisualizar"
+										for="valorPrevisualizar"
+										value="#{txt_devoluciones['label.Valor']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<p:inputNumber id="valorPrevisualizar" symbol="$ "
+										decimalPlaces="0" symbolPosition="p"
+										inputStyleClass="borde-no" readonly="true"
+										value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.ibi_valor}">
+									</p:inputNumber>
+								</div>
+							</div>
+						</div>
+						<br /> <br />
+						<div class="col-xs-12">
+							<div class="col-xs-12 col-md-9 text-left">
+								<p:outputLabel value="#{txt_devoluciones['label.PreguntaUno']}"
+									styleClass="titulo tamano-subtitulo" />
+							</div>
+							<div class="col-xs-6 col-md-3">
+								<p:outputPanel id="panelSwitchIntervino">
+									<h:outputText id="spanNoIntervino"
+										value="#{beanDevolucionesConsignacionErrada.is_intervinoSelecccion}" />
+								</p:outputPanel>
+							</div>
+						</div>
+						<br />
+						<!-- Persona realizo pago Previsualizar -->
+						<p:outputPanel id="formularioPersonaNoTitular">
+							<ui:fragment
+								rendered="#{beanDevolucionesConsignacionErrada.ib_camposNoTitular}">
+								<div class="col-xs-12">
+									<div class="col-xs-12 text-center">
+										<p:outputLabel
+											value="#{txt_devoluciones['PersonaNoRealizoPago']}" />
+									</div>
+								</div>
+								<br />
+								<br />
+								<div class="row">
+									<div class="col-xs-12 col-sm-6 text-left">
+										<p:outputLabel
+											id="labelTipoDocumentoPersonaNoTitularPrevisualizar"
+											for="tipoDocumentoPersonaNoTitularPrevisualizar"
+											value="#{txt_devoluciones['label.TipoDocumento']}" />
+										<p:outputLabel>:</p:outputLabel>
+										<p:outputLabel value="-" styleClass="espacio" />
+										<h:outputText id="tipoDocumentoPersonaNoTitularPrevisualizar"
+											value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_tipoDocumentoNoTitular}">
+										</h:outputText>
+									</div>
+									<div class="col-xs-12 col-sm-6 text-left">
+										<p:outputLabel
+											id="labelNumeroDocumentoPersonaNoTitularPrevisualizar"
+											for="numeroDocumentoPersonaNoTitularPrevisualizar"
+											value="#{txt_devoluciones['label.NumeroDocumento']}" />
+										<p:outputLabel>:</p:outputLabel>
+										<p:outputLabel value="-" styleClass="espacio" />
+										<h:outputText
+											id="numeroDocumentoPersonaNoTitularPrevisualizar"
+											value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroDocumentoNoTitular}">
+										</h:outputText>
+									</div>
+								</div>
+								<br />
+								<p:outputPanel id="formularioNoTitularPersonas">
+									<ui:fragment
+										rendered="#{beanDevolucionesConsignacionErrada.ib_noTitularPersonas}">
+										<p:outputPanel id="formularioPersonaNoTitularPN"
+											rendered="#{beanDevolucionesConsignacionErrada.ib_personaNoTitular}">
+											<div class="row">
+												<div class="col-xs-12 col-sm-3 text-left">
+													<p:outputLabel
+														id="labelNombrePersonaNoTitularPrevisualizar"
+														for="nombrePersonaNoTitularPrevisualizar"
+														value="#{txt_devoluciones['label.NombreTitular']}" />
+													<p:outputLabel>:</p:outputLabel>
+													<p:outputLabel value="-" styleClass="espacio" />
+													<h:outputText id="nombrePersonaNoTitularPrevisualizar"
+														value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_primerNombreNoTitular}">
+													</h:outputText>
+												</div>
+												<div class="col-xs-12 col-sm-3 text-left">
+													<p:outputLabel
+														id="labelSegundoNombrePersonaNoTitularPrevisualizar"
+														for="segundoNombrePersonaNoTitularPrevisualizar"
+														value="#{txt_devoluciones['label.SegundoNombreTitular']}" />
+													<p:outputLabel>:</p:outputLabel>
+													<p:outputLabel value="-" styleClass="espacio" />
+													<h:outputText
+														id="segundoNombrePersonaNoTitularPrevisualizar"
+														value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_segundoNombreNoTitular}">
+													</h:outputText>
+												</div>
+												<div class="col-xs-12 col-sm-3 text-left">
+													<p:outputLabel
+														id="labelApellidoPersonaNoTitularPrevisualizar"
+														for="apellidoPersonaNoTitularPrevisualizar"
+														value="#{txt_devoluciones['label.ApellidoTitular']}" />
+													<p:outputLabel>:</p:outputLabel>
+													<p:outputLabel value="-" styleClass="espacio" />
+													<h:outputText id="apellidoPersonaNoTitularPrevisualizar"
+														value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_primerApellidoNoTitular}">
+													</h:outputText>
+												</div>
+												<div class="col-xs-12 col-sm-3 text-left">
+													<p:outputLabel
+														id="labelSegundoApellidoPersonaNoTitularPrevisualizar"
+														for="segundoApellidoPersonaNoTitularPrevisualizar"
+														value="#{txt_devoluciones['label.SegundoApellidoTitular']}" />
+													<p:outputLabel>:</p:outputLabel>
+													<p:outputLabel value="-" styleClass="espacio" />
+													<h:outputText
+														id="segundoApellidoPersonaNoTitularPrevisualizar"
+														value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_segundoApellidoNoTitular}">
+													</h:outputText>
+												</div>
+											</div>
+										</p:outputPanel>
+										<p:outputPanel id="formularioPersonaNoTitularPJ"
+											rendered="#{!beanDevolucionesConsignacionErrada.ib_personaNoTitular}">
+											<div class="row">
+												<div class="col-xs-12 text-left">
+													<p:outputLabel
+														id="labelRazonSocialPersonaNoTitularPrevisualizar"
+														for="razonSocialPersonaNoTitularPrevisualizar"
+														value="#{txt_devoluciones['label.RazonSocial']}" />
+													<p:outputLabel>:</p:outputLabel>
+													<p:outputLabel value="-" styleClass="espacio" />
+													<h:outputText id="razonSocialPersonaNoTitularPrevisualizar"
+														value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_razonSocialNoTitular}">
+													</h:outputText>
+												</div>
+											</div>
+										</p:outputPanel>
+									</ui:fragment>
+								</p:outputPanel>
+							</ui:fragment>
+						</p:outputPanel>
+						<br />
+						<div class="col-xs-12">
+							<div class="col-xs-12 col-md-9 text-left">
+								<p:outputLabel value="#{txt_devoluciones['label.PreguntaDos']}"
+									styleClass="titulo tamano-subtitulo" />
+							</div>
+							<div class="col-xs-6 col-md-3">
+								<p:outputPanel id="panelSwitchIntervinoTitular">
+									<h:outputText id="spanNoIntervinoPrevisualizar"
+										value="#{beanDevolucionesConsignacionErrada.is_intervinoTitularCuentaBancariaSeleccion}" />
+								</p:outputPanel>
+							</div>
+						</div>
+						<br /> <br />
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_devoluciones['InformacionCuentaBancaria.SubtituloCuatro']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelEntidadFinancieraPrevisualizar"
+									for="entidadFinancieraPrevisualizar"
+									value="#{txt_devoluciones['label.EntidadFinanciera']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="entidadFinancieraPrevisualizar"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_entidadFinanciera}">
+								</h:outputText>
+							</div>
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelTipoCuentaPrevisualizar"
+									for="tipoCuentaPrevisualizar"
+									value="#{txt_devoluciones['label.TipoCuenta']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="tipoCuentaPrevisualizar"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_tipoCuenta}">
+								</h:outputText>
+							</div>
+							<div class="col-xs-12 col-sm-4 text-left">
+								<p:outputLabel id="labelNumeroCuentaPrevisualizar"
+									for="numeroCuentaPrevisualizar"
+									value="#{txt_devoluciones['label.NumeroCuenta']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="numeroCuentaPrevisualizar"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroCuenta}">
+								</h:outputText>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-6 text-left">
+								<p:outputLabel
+									id="labelTipoDocumentoTitularCuentaBancariaPrevisualizar"
+									for="tipoDocumentoTitularCuentaBancariaPrevisualizar"
+									value="#{txt_devoluciones['label.TipoDocumento']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText
+									id="tipoDocumentoTitularCuentaBancariaPrevisualizar"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_tipoDocumentoTitularCuentaBancaria}">
+								</h:outputText>
+							</div>
+							<div class="col-xs-12 col-sm-6 text-left">
+								<p:outputLabel
+									id="labelNumeroDocumentoTitularCuentaBancariaPrevisualizar"
+									for="numeroDocumentoTitularCuentaBancariaPrevisualizar"
+									value="#{txt_devoluciones['label.NumeroDocumento']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText
+									id="numeroDocumentoTitularCuentaBancariaPrevisualizar"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_numeroDocumentoTitularCuentaBancaria}">
+								</h:outputText>
+							</div>
+						</div>
+						<br />
+						<!-- Render Previsualizar Cuenta bancaria  -->
+						<p:outputPanel id="formularioCuentaBancariaPersonas">
+							<ui:fragment
+								rendered="#{beanDevolucionesConsignacionErrada.ib_camposCuentaBancaria}">
+								<!-- Cuenta Bancaria Persona Natural Previsualizar -->
+								<p:outputPanel id="formularioCuentaBancariaPersonaNatural"
+									rendered="#{beanDevolucionesConsignacionErrada.ib_datosBasicosCuentaBancaria}">
+									<div class="row">
+										<div class="col-xs-12 col-sm-6 text-left">
+											<p:outputLabel id="labelNombreTitularPrevisualizar"
+												for="nombreTitularPrevisualizar"
+												value="#{txt_devoluciones['label.NombreTitular']}" />
+											<p:outputLabel>:</p:outputLabel>
+											<p:outputLabel value="-" styleClass="espacio" />
+											<h:outputText id="nombreTitularPrevisualizar"
+												value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_nombreTitularCuentaBancaria}">
+											</h:outputText>
+										</div>
+										<div class="col-xs-12 col-sm-6 text-left">
+											<p:outputLabel id="labelSegundoNombreTitularPrevisualizar"
+												for="segundoNombreTitularPrevisualizar"
+												value="#{txt_devoluciones['label.SegundoNombreTitular']}" />
+											<p:outputLabel>:</p:outputLabel>
+											<p:outputLabel value="-" styleClass="espacio" />
+											<h:outputText id="segundoNombreTitularPrevisualizar"
+												value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_segundoNombreTitularCuentaBancaria}">
+											</h:outputText>
+										</div>
+									</div>
+									<br />
+									<div class="row">
+										<div class="col-xs-12 col-sm-6 text-left">
+											<p:outputLabel id="labelApellidoTitularPrevisualizar"
+												for="apellidoTitularPrevisualizar"
+												value="#{txt_devoluciones['label.ApellidoTitular']}" />
+											<p:outputLabel>:</p:outputLabel>
+											<p:outputLabel value="-" styleClass="espacio" />
+											<h:outputText id="apellidoTitularPrevisualizar"
+												value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_apellidoTitularCuentaBancaria}">
+											</h:outputText>
+										</div>
+										<div class="col-xs-12 col-sm-6 text-left">
+											<p:outputLabel id="labelSegundoApellidoTitularPrevisualizar"
+												for="segundoApellidoTitularPrevisualizar"
+												value="#{txt_devoluciones['label.SegundoApellidoTitular']}" />
+											<p:outputLabel>:</p:outputLabel>
+											<p:outputLabel value="-" styleClass="espacio" />
+											<h:outputText id="segundoApellidoTitularPrevisualizar"
+												value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_segundoApellidoTitularCuentaBancaria}">
+											</h:outputText>
+										</div>
+									</div>
+								</p:outputPanel>
+								<!-- Cuenta Bancaria Persona Juridica -->
+								<p:outputPanel id="formularioCuentaBancariaPersonaJuridica"
+									rendered="#{!beanDevolucionesConsignacionErrada.ib_datosBasicosCuentaBancaria}">
+									<div class="row">
+										<div class="col-xs-12 text-left">
+											<p:outputLabel
+												id="labelRazonSocialCuentaBancariaPrevisualizar"
+												for="razonSocialCuentaBancariaPrevisualizar"
+												value="#{txt_devoluciones['label.RazonSocial']}" />
+											<p:outputLabel>:</p:outputLabel>
+											<p:outputLabel value="-" styleClass="espacio" />
+											<h:outputText id="razonSocialCuentaBancariaPrevisualizar"
+												value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_titularCuentaBancariaRazonSocial}">
+											</h:outputText>
+										</div>
+									</div>
+								</p:outputPanel>
+							</ui:fragment>
+						</p:outputPanel>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 text-left">
+								<p:outputLabel id="labelMotivoSolicitudPrevisualizar"
+									for="motivoSolicitudPrevisualizar"
+									value="#{txt_devoluciones['label.MotivoSolicitud']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<p:inputTextarea id="motivoSolicitudPrevisualizar"
+									readonly="true" styleClass="borde-no"
+									value="#{beanDevolucionesConsignacionErrada.ifdce_formularioDevolucionConsignacionErradaDto.is_motivoSolicitud}" />
+							</div>
+						</div>
+						<br />
+					</div>
+					<br />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt_devoluciones['Boton.Entendido']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();">
+							<p:ajax oncomplete="PF('previsualizarPdf').hide();" />
+						</p:commandButton>
+					</div>
+				</div>
+				<br />
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

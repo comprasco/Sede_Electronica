@@ -1,0 +1,1035 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css" name="snr-se-prorroga.css" />
+		<h:outputStylesheet library="css" name="snr-se-cuentaCupo.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_prorroga['head.titulo.prorroga']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_prorroga['banner']}" />
+			<ui:param name="imagen" value="img-solicitudCertificados" />
+			<ui:param name="subtitulo"
+				value="#{txt_prorroga['head.titulo.prorroga']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/solicitudProrroga.jsf" />
+		</ui:include>
+		<f:metadata>
+			<f:viewParam name="nir" value="#{beanProrroga.is_nir}" />
+			<f:viewParam name="ib_apoderado" value="#{beanProrroga.ib_apoderado}" />
+		</f:metadata>
+		<p:panel id="panelProrroga" styleClass="no-border dflex">
+
+			<h:form id="formProrroga">
+				<ui:fragment id="formularioProrroga"
+					rendered="#{beanProrroga.ii_prorroga == 1}">
+					<!-- Script que ejecuta el Keyfilter-->
+					<script type="text/javascript">
+						$(document).ready(function() {
+							cargarKeyfilters();
+						});
+					</script>
+					<!-- Script que ejecuta el Keyfilter-->
+					<h:form id="formFormularioProrroga">
+						<div>
+							<div class="col-xs-11 text-center">
+								<p:outputLabel value="#{txt_prorroga['label.titulo.prorroga']}"
+									styleClass="titulo tamano-titulo" />
+								<br /> <br />
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="col-xs-12">
+										<p:outputLabel id="labelCiudad"
+											value="#{txt_prorroga['label.bogota']}: " />
+										<p:outputLabel value="&#160;" />
+										<p:outputLabel id="fechaDiligenciamiento"
+											value="#{beanProrroga.obtenerFecha()}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</p:outputLabel>
+									</div>
+									<div class="col-xs-12">
+										<p:outputLabel id="labelSenores"
+											value="#{txt_prorroga['label.senores']}" />
+									</div>
+									<div class="col-xs-12">
+										<p:outputLabel id="labelDirAdmYFin"
+											value="#{txt_prorroga['label.diradmyfin']}" />
+									</div>
+									<div class="col-xs-12">
+										<p:outputLabel id="labelSuperNotaria"
+											value="#{txt_prorroga['label.supernotaria']}" />
+									</div>
+									<div class="col-xs-12">
+										<p:outputLabel id="labelDirSuperNotaria"
+											value="#{txt_prorroga['label.direccion.supernotaria']}" />
+									</div>
+									<div class="col-xs-12">
+										<p:outputLabel id="labelBogota"
+											value="#{txt_prorroga['label.bogota']}" />
+									</div>
+									<div class="col-xs-12">
+										<p:outputLabel id="labelReferencia"
+											value="#{txt_prorroga['label.referencia']}: #{beanProrroga.is_nir}" />
+									</div>
+								</div>
+							</div>
+							<br /> <br /> <br />
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="title col-xs-12">
+										<p:outputLabel id="labelRespetados"
+											value="#{txt_prorroga['label.respetados']}" />
+									</div>
+								</div>
+								<br /> <br />
+								<div class="col-xs-12">
+									<div class="col-xs-12 text-justify">
+										<p:outputLabel id="labelCuerpo1"
+											value="#{txt_prorroga['label.cuerpo1']} #{beanProrroga.is_nir} #{txt_prorroga['label.cuerpo2']}: " />
+									</div>
+								</div>
+								<br /> <br />
+								<div class="col-xs-12">
+									<div class="col-xs-11">
+										<p:calendar id="fechaSolicitante" readonlyInput="true"
+											binding="#{fechaSolicitud}" pattern="dd/MM/yyyy"
+											maxlength="10" locale="es" yearRange="1900:2200"
+											navigator="true"
+											placeholder="#{txt['placeholder.FormatoFecha']}"
+											styleClass="text-input-calendar" required="true"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											showOn="button" value="#{beanProrroga.id_fechaSolicitante}">
+											<p:ajax event="blur"
+												update="formModalPrevisualizarPdf:labelFechaSolicitante" />
+										</p:calendar>
+										<span class="help-block"> <p:message
+												for="fechaSolicitante" />
+										</span>
+									</div>
+									<div class="col-xs-1">
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									</div>
+
+								</div>
+								<br /> <br />
+								<div class="col-xs-12">
+									<div class="col-xs-12 text-justify">
+										<p:outputLabel id="labelCuerpo2"
+											value=", #{txt_prorroga['label.cuerpo3']}" />
+									</div>
+								</div>
+								<br /> <br /> <br /> <br />
+								<div class="col-xs-12">
+									<div class="title col-xs-12">
+										<p:outputLabel id="labelCordialmente"
+											value="#{txt_prorroga['label.cordialmente']}" />
+									</div>
+
+								</div>
+								<br /> <br /> <br />
+								<p:outputPanel id="panelDatosNatural"
+									rendered="#{beanProrroga.ii_solicitante == 1}">
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<div>
+												<p:outputLabel id="labelNombreYfirmaN"
+													styleClass="label-form" for="NombreYfirmaN"
+													value="#{txt_prorroga['label.nombreyfirman']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											</div>
+											<p:inputText id="NombreYfirmaN" autocomplete="off"
+												styleClass="text-input border-completo mask-Tilde"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_prorroga['placeholder.nombreyfirman']}"
+												required="true"
+												value="#{beanProrroga.ip_prorrogaDto.is_nombre}">
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:NombreYfirmaN" />
+											</p:inputText>
+										</div>
+										<span class="help-block"> <p:message
+												for="NombreYfirmaN" />
+										</span>
+									</div>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<div>
+												<p:outputLabel id="labelDocumento" styleClass="label-form"
+													for="Documento" value="#{txt_prorroga['label.documento']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											</div>
+											<p:inputText id="Documento" autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_prorroga['placeholder.documento']}"
+												required="true"
+												value="#{beanProrroga.ip_prorrogaDto.is_numeroDocumento}">
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:Documento" />
+											</p:inputText>
+										</div>
+										<span class="help-block"> <p:message for="Documento" />
+										</span>
+									</div>
+
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<div>
+												<p:outputLabel id="labelDireccionN" styleClass="label-form"
+													for="DireccionN" value="#{txt_prorroga['label.direccion']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											</div>
+											<p:inputText id="DireccionN" autocomplete="off"
+												styleClass="text-input border-completo mask-Direccion"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_prorroga['placeholder.direccion']}"
+												required="true"
+												value="#{beanProrroga.ip_prorrogaDto.is_direccion}">
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:DireccionN" />
+											</p:inputText>
+										</div>
+										<span class="help-block"> <p:message for="DireccionN" />
+										</span>
+									</div>
+
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<div>
+												<p:outputLabel id="labelCorreoN" styleClass="label-form"
+													for="CorreoN" value="#{txt_prorroga['label.correo']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											</div>
+											<p:inputText id="CorreoN" autocomplete="off"
+												styleClass="text-input border-completo mask-Correo"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_prorroga['placeholder.correo']}"
+												required="true"
+												value="#{beanProrroga.ip_prorrogaDto.is_correoElectronico}">
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:CorreoN" />
+											</p:inputText>
+										</div>
+										<span class="help-block"> <p:message for="CorreoN" />
+										</span>
+									</div>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<div>
+												<p:outputLabel id="labelTelefonoN" styleClass="label-form"
+													for="TelefonoN" value="#{txt_prorroga['label.telefono']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											</div>
+											<p:inputText id="TelefonoN" autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_prorroga['placeholder.telefono']}"
+												required="true"
+												value="#{beanProrroga.ip_prorrogaDto.is_telefono}">
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:TelefonoN" />
+											</p:inputText>
+										</div>
+										<span class="help-block"> <p:message for="TelefonoN" />
+										</span>
+									</div>
+								</p:outputPanel>
+								<p:outputPanel id="panelDatosJuridica"
+									rendered="#{beanProrroga.ii_solicitante == 2}">
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<div>
+												<p:outputLabel id="labelNombreYfirmaJ"
+													styleClass="label-form" for="NombreYfirmaJ"
+													value="#{txt_prorroga['label.nombreyfirmaj']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											</div>
+											<p:inputText id="NombreYfirmaJ" autocomplete="off"
+												styleClass="text-input border-completo mask-Tilde"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_prorroga['placeholder.nombreyfirmaj']}"
+												required="true"
+												value="#{beanProrroga.ip_prorrogaDto.is_nombre}">
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:NombreYfirmaJ" />
+											</p:inputText>
+										</div>
+										<span class="help-block"> <p:message
+												for="NombreYfirmaJ" />
+										</span>
+									</div>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<div>
+												<p:outputLabel id="labelNit" styleClass="label-form"
+													for="Nit" value="#{txt_prorroga['label.nit']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											</div>
+											<p:inputText id="Nit" autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_prorroga['placeholder.nit']}"
+												required="true"
+												value="#{beanProrroga.ip_prorrogaDto.is_numeroDocumento}">
+												<p:ajax event="blur" update="formModalPrevisualizarPdf:Nit" />
+											</p:inputText>
+										</div>
+										<span class="help-block"> <p:message for="Nit" />
+										</span>
+									</div>
+
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<div>
+												<p:outputLabel id="labelDireccionJ" styleClass="label-form"
+													for="DireccionJ" value="#{txt_prorroga['label.direccion']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											</div>
+											<p:inputText id="DireccionJ" autocomplete="off"
+												styleClass="text-input border-completo mask-Direccion"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_prorroga['placeholder.direccion']}"
+												required="true"
+												value="#{beanProrroga.ip_prorrogaDto.is_direccion}">
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:DireccionJ" />
+											</p:inputText>
+										</div>
+										<span class="help-block"> <p:message for="DireccionJ" />
+										</span>
+									</div>
+
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<div>
+												<p:outputLabel id="labelCorreoJ" styleClass="label-form"
+													for="CorreoJ" value="#{txt_prorroga['label.correo']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											</div>
+											<p:inputText id="CorreoJ" autocomplete="off"
+												styleClass="text-input border-completo mask-Correo"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_prorroga['placeholder.correo']}"
+												required="true"
+												value="#{beanProrroga.ip_prorrogaDto.is_correoElectronico}">
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:CorreoJ" />
+											</p:inputText>
+										</div>
+										<span class="help-block"> <p:message for="CorreoJ" />
+										</span>
+									</div>
+									<div class="col-xs-6">
+										<div class="col-xs-12">
+											<div>
+												<p:outputLabel id="labelTelefonoJ" styleClass="label-form"
+													for="TelefonoJ" value="#{txt_prorroga['label.telefono']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											</div>
+											<p:inputText id="TelefonoJ" autocomplete="off"
+												styleClass="text-input border-completo mask-Numeric"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_prorroga['placeholder.telefono']}"
+												required="true"
+												value="#{beanProrroga.ip_prorrogaDto.is_telefono}">
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:TelefonoJ" />
+											</p:inputText>
+										</div>
+										<span class="help-block"> <p:message for="TelefonoJ" />
+										</span>
+									</div>
+								</p:outputPanel>
+							</div>
+						</div>
+						<br />
+						<p:separator />
+						<div class="row">
+							<div class="col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-4">
+								<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+									styleClass="btn-gradiente icon-btn btn-rojo "
+									value="#{txt_prorroga['boton.previsualizar']}">
+									<p:ajax listener="#{beanProrroga.previsualizarPdf}"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();"
+										update="formModalPrevisualizarPdf" />
+
+								</p:commandButton>
+							</div>
+							<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+								<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+									type="submit" onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									styleClass="btn-gradiente icon-btn btn-rojo "
+									value="#{txt_prorroga['boton.cargardocumentos']}">
+									<p:ajax listener="#{beanProrroga.validarGenerarNir()}"
+										onstart="cargarKeyfilters();"
+										oncomplete="if(args &amp;&amp; args.validationFailed) validarFormulario('#{txt_prorroga['campos.obligatorios']}');"
+										update="panelProrroga" process="formFormularioProrroga" />
+								</p:commandButton>
+							</div>
+						</div>
+						<br />
+
+					</h:form>
+				</ui:fragment>
+				<br />
+			</h:form>
+			<!-- Cargue de documentos -->
+			<p:outputPanel id="cargueDocumentosProrroga"
+				rendered="#{beanProrroga.ii_prorroga eq 2}"
+				styleClass="panel-content no-border">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelAdjuntarDocumentos"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_prorroga['label.adjuntardocumentos']}" />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 align-center">
+					<p:outputLabel id="labelDescargarFormulario"
+						styleClass="text-center tamano-subtitulo"
+						value="#{txt_prorroga['label.descargardocumento']}" />
+					<p:commandButton styleClass="boton-descarga fa fa-download"
+						onstart="PF('blockUI-Loading').show();"
+						oncomplete="PF('blockUI-Loading').hide();" title=" ">
+						<p:ajax listener="#{beanprorroga.desactivarPdf}" />
+					</p:commandButton>
+					<br /> <br />
+				</div>
+				<div class="col-xs-12 align-center">
+					<p:outputLabel styleClass="text-center tamano-subtitulo"
+						value="#{txt_prorroga['label.cargadocumentos']}" />
+					<br /> <br /> <br />
+				</div>
+				<p:outputPanel id="cargaDeDocumentos" class="adjuntar-documentos">
+					<div class="col-xs-12">
+						<p:dataTable var="cargaDocumentoProrroga" styleClass="centrar"
+							widgetVar="paramsCargaDocumentoProrroga" id="cargarDocumento"
+							reflow="true" rowIndexVar="index"
+							value="#{beanProrroga.ilcdf_listaDocumentoFormularioDto}"
+							emptyMessage="#{txt_administrador['tabla.vacia.PJ']}"
+							stickyHeader="false">
+							<p:column
+								headerText="#{txt_prorroga['header.documentossolicitados']}"
+								styleClass="centrar45 documento-medio">
+								<h:outputText
+									value="#{cargaDocumentoProrroga.icd_catalogoDocumentoDto.is_nombre}" />
+							</p:column>
+							<p:column headerText="Adjuntar"
+								styleClass="centrar35 documento-medio">
+								<div class="ui-inputgroup">
+									<h:form>
+										<p:fileUpload
+											id="certificado${cargaDocumentoProrroga.icd_catalogoDocumentoDto.is_nombre}"
+											styleClass="cargar-archivo" showButtons="false"
+											sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+											allowTypes="/(\.|\/)(pdf|PDF)$/"
+											disabled="#{cargaDocumentoProrroga.ib_desactivarBotonesCarga}"
+											fileUploadListener="#{beanProrroga.generarArchivoCargado}"
+											auto="true" label="#{txt_prorroga['boton.cargararchivo']}"
+											process="@this" update="cargaDeDocumentos"
+											invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+											invalidFileMessage="#{txt_prorroga['mensaje.archivo.formatoinvalido']}">
+											<f:attribute name="foo" value="${cargaDocumentoProrroga}" />
+											<div class="col-xs-12 tamano-examinar">
+												<br />
+												<h:outputText id="textoSalidaArchivo"
+													styleClass="text-input"
+													value="#{cargaDocumentoProrroga.ia_archivoDto.is_nombreArchivo}" />
+											</div>
+										</p:fileUpload>
+									</h:form>
+								</div>
+							</p:column>
+							<p:column headerText="#{txt_prorroga['header.cargararchivos']}"
+								styleClass="centrarEnviado">
+								<p:commandButton value="#{txt_prorroga['boton.subir']}"
+									disabled="#{cargaDocumentoProrroga.ib_desactivarBotonesCarga}"
+									styleClass="btn-gradiente btn-rojo">
+									<p:ajax oncomplete="PF('confirmarCargueDocumento').show();"
+										update="panelProrroga" />
+									<f:setPropertyActionListener value="#{cargaDocumentoProrroga}"
+										target="#{beanProrroga.icdf_cargaDocumentosFormularioDto}" />
+								</p:commandButton>
+							</p:column>
+							<p:column headerText="#{txt_cuentaCupo['header.Estado']}"
+								styleClass="centrarEnviado documento-medio">
+								<p:outputPanel
+									rendered="#{cargaDocumentoProrroga.ib_desactivarBotonesCarga}">
+									<p:graphicImage name="/iconos/check-verde.png" />
+									<br />
+									<h:outputText value="#{txt_prorroga['mensaje.archivosubido']}" />
+								</p:outputPanel>
+							</p:column>
+						</p:dataTable>
+						<br /> <br />
+					</div>
+					<br />
+					<p:outputPanel id="panelCheckPoliticas">
+						<h:form id="cargueDocumento">
+							<div>
+								<p:outputLabel styleClass="bold"
+									value="#{txt_cuentaCupo['Mensaje.EliminarSolicitud']}" />
+							</div>
+							<br />
+							<br />
+							<div class="row">
+								<div class="col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-4">
+									<p:commandButton icon="icon-flecha-gris" iconPos="right"
+										type="submit" styleClass="icon-btn btn-gris "
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();"
+										value="#{txt_cuentaCupo['boton.Eliminar']}">
+										<p:ajax oncomplete="PF('eliminarTransaccionProrroga').show();" />
+									</p:commandButton>
+								</div>
+								<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+									<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+										type="submit" onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide(); PF('preguntarFinalizacion').show();"
+										styleClass="btn-gradiente icon-btn btn-rojo "
+										value="#{txt_cuentaCupo['boton.EnviarSolicitud']}">
+									</p:commandButton>
+								</div>
+							</div>
+						</h:form>
+					</p:outputPanel>
+				</p:outputPanel>
+			</p:outputPanel>
+			<p:outputPanel id="resumenProrroga"
+				rendered="#{beanProrroga.ii_prorroga eq 3}"
+				styleClass="panel-content no-border">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelResumenSolicitudExitosa"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_prorroga['FormularioResumenProrroga']}" />
+							<br /> <br />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="solicitudExitosa" styleClass="tamano-subtitulo"
+						value="#{txt_prorroga['Mensaje.RealizadoSolicitudDevolucionProrroga']}" />
+					<br /> <br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelFechaSolicitudExitosa"
+									styleClass="label-form" for="fechaSolicitudExitosa"
+									value="#{txt_registral['label.FechaDiligenciamiento']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanProrroga.itf_transaccionFormularioDto.id_fechaCreacion}"
+									id="fechaSolicitudExitosa">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelNirSolicitudExitosa"
+									styleClass="label-form" for="nirSolicitudExitosa"
+									value="#{txt_registral['label.Nir']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanProrroga.itf_transaccionFormularioDto.is_nir}"
+									id="nirSolicitudExitosa" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudExitosa"
+									styleClass="label-form" for="estadoSolicitudExitosa"
+									value="#{txt_registral['label.Estado']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanProrroga.itf_transaccionFormularioDto.is_estadoTransaccion}"
+									id="estadoSolicitudExitosa" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudExitosa" />
+								</span>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<br /> <br />
+						<p:outputPanel id="entendido">
+							<p:commandButton type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo"
+								value="#{txt_registral['boton.Aceptar']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</p:outputPanel>
+			<!-- Modal de Previsualizar PDF -->
+			<ui:decorate template="/pages/includes/modal.xhtml">
+				<ui:param name="modalId" value="previsualizarPdf" />
+				<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+				<ui:param name="tituloModal"
+					value="#{txt['titulo.modal.informacion']}" />
+				<ui:param name="formulario" value="formModalPrevisualizarPdf" />
+				<ui:define name="body-modal">
+					<div class="text-left">
+						<div id="container_logos_pp">
+							<div class="col-xs-12">
+								<div class="col-xs-4 pad-top1">
+									<a href="#" id="ministerio-justicia"><img
+										src="#{resource['img/dinamicas/minjusticialogo.png']}"
+										class="imagenes" alt="" /></a>
+								</div>
+								<div class="col-xs-4 pad-top">
+									<a href="#" id="logo-snr-60"><img
+										src="#{resource['img/dinamicas/logo-snr-60-pdf.png']}"
+										class="imagenes" alt="" /></a>
+								</div>
+								<div class="col-xs-4">
+									<a href="#" id="logonuevopais"><img
+										src="#{resource['img/dinamicas/logonuevopais.png']}"
+										class="imagenes1" alt="" /></a> <br /> <br />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-xs-12">
+									<p:outputLabel id="labelCiudad"
+										value="#{txt_prorroga['label.bogota']}: " />
+									<p:outputLabel value="&#160;" />
+									<p:outputLabel id="fechaDiligenciamiento"
+										value="#{beanProrroga.obtenerFecha()}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</p:outputLabel>
+								</div>
+								<div class="col-xs-12">
+									<p:outputLabel id="labelSenores"
+										value="#{txt_prorroga['label.senores']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:outputLabel id="labelDirAdmYFin"
+										value="#{txt_prorroga['label.diradmyfin']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:outputLabel id="labelSuperNotaria"
+										value="#{txt_prorroga['label.supernotaria']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:outputLabel id="labelDirSuperNotaria"
+										value="#{txt_prorroga['label.direccion.supernotaria']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:outputLabel id="labelBogota"
+										value="#{txt_prorroga['label.bogota']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:outputLabel id="labelReferencia"
+										value="#{txt_prorroga['label.referencia']} #{beanProrroga.is_nir}" />
+								</div>
+							</div>
+						</div>
+						<br /> <br /> <br />
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-xs-12">
+									<p:outputLabel id="labelRespetados"
+										value="#{txt_prorroga['label.respetados']}" />
+								</div>
+							</div>
+						</div>
+						<br /> <br />
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-xs-12 text-justify">
+									<p:outputLabel id="labelCuerpo1"
+										value="#{txt_prorroga['label.cuerpo1']} #{beanProrroga.is_nir} #{txt_prorroga['label.cuerpo2']}" />
+									<p:outputLabel value="&#160;" />
+									<p:outputLabel id="labelFechaSolicitante"
+										value="#{beanProrroga.id_fechaSolicitante}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</p:outputLabel>
+									<p:outputLabel value="," />
+
+									<p:outputLabel id="labelCuerpo3"
+										value="#{txt_prorroga['label.cuerpo3']}" />
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="col-xs-12">
+									<p:outputLabel id="labelCordialmente"
+										value="#{txt_prorroga['label.cordialmente']}" />
+								</div>
+
+							</div>
+						</div>
+						<br /> <br />
+						<p:outputPanel id="panelDatosNatural"
+							rendered="#{beanProrroga.ii_solicitante == 1}">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="col-xs-12">
+										<div>
+											<p:outputLabel id="labelNombreYfirmaN" for="NombreYfirmaN"
+												value="#{txt_prorroga['label.nombreyfirman']}:" />
+											<p:outputLabel value="&#160;" />
+											<p:outputLabel id="NombreYfirmaN"
+												value="#{beanProrroga.ip_prorrogaDto.is_nombre}" />
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div>
+											<p:outputLabel id="labelDocumento" for="Documento"
+												value="#{txt_prorroga['label.documento']}:" />
+											<p:outputLabel value="&#160;" />
+											<p:outputLabel id="Documento"
+												value="#{beanProrroga.ip_prorrogaDto.is_numeroDocumento}" />
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div>
+											<p:outputLabel id="labelDireccionN" for="DireccionN"
+												value="#{txt_prorroga['label.direccion']}:" />
+											<p:outputLabel value="&#160;" />
+											<p:outputLabel id="DireccionN"
+												value="#{beanProrroga.ip_prorrogaDto.is_direccion}" />
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div>
+											<p:outputLabel id="labelCorreoN" for="CorreoN"
+												value="#{txt_prorroga['label.correo']}:" />
+											<p:outputLabel value="&#160;" />
+											<p:outputLabel id="CorreoN"
+												value="#{beanProrroga.ip_prorrogaDto.is_correoElectronico}" />
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div>
+											<p:outputLabel id="labelTelefonoN" for="TelefonoN"
+												value="#{txt_prorroga['label.telefono']}:" />
+											<p:outputLabel value="&#160;" />
+											<p:outputLabel id="TelefonoN"
+												value="#{beanProrroga.ip_prorrogaDto.is_telefono}" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</p:outputPanel>
+						<p:outputPanel id="panelDatosJuridica"
+							rendered="#{beanProrroga.ii_solicitante == 2}">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="col-xs-12">
+										<div>
+											<p:outputLabel id="labelNombreYfirmaJ" for="NombreYfirmaJ"
+												value="#{txt_prorroga['label.nombreyfirmaj']}:" />
+											<p:outputLabel value="&#160;" />
+											<p:outputLabel id="NombreYfirmaJ"
+												value="#{beanProrroga.ip_prorrogaDto.is_nombre}" />
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div>
+											<p:outputLabel id="labelNit" for="Nit"
+												value="#{txt_prorroga['label.nit']}:" />
+											<p:outputLabel value="&#160;" />
+											<p:outputLabel id="Nit"
+												value="#{beanProrroga.ip_prorrogaDto.is_numeroDocumento}" />
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div>
+											<p:outputLabel id="labelDireccionJ" for="DireccionJ"
+												value="#{txt_prorroga['label.direccion']}:" />
+											<p:outputLabel value="&#160;" />
+											<p:outputLabel id="DireccionJ"
+												value="#{beanProrroga.ip_prorrogaDto.is_direccion}" />
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div>
+											<p:outputLabel id="labelCorreoJ" for="CorreoJ"
+												value="#{txt_prorroga['label.correo']}:" />
+											<p:outputLabel value="&#160;" />
+											<p:outputLabel id="CorreoJ"
+												value="#{beanProrroga.ip_prorrogaDto.is_correoElectronico}" />
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div>
+											<p:outputLabel id="labelTelefonoJ" for="TelefonoJ"
+												value="#{txt_prorroga['label.telefono']}:" />
+											<p:outputLabel value="&#160;" />
+											<p:outputLabel id="TelefonoJ"
+												value="#{beanProrroga.ip_prorrogaDto.is_telefono}" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</p:outputPanel>
+
+						<br /> <br />
+						<div id="container_logos_footer" class="col-xs-12">
+							<div class="title">
+								<div class="img-left">
+									<a href="#" id="ministerio-justicia"><img
+										src="#{resource['img/dinamicas/iso.png']}" class="imagenes2"
+										alt="" /></a>
+								</div>
+								<div class="img-right">
+									<div>
+										<h:outputText
+											value="#{txt_cuentaCupo['info.Superintendencia']}" />
+									</div>
+									<div>
+										<h:outputText value="#{txt_cuentaCupo['info.direccion']}" />
+									</div>
+									<div>
+										<h:outputText value="#{txt_cuentaCupo['info.ciudad']}" />
+									</div>
+									<div>
+										<h:outputText value="#{txt_cuentaCupo['info.correo']}" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</ui:define>
+				<ui:define name="accion-modal">
+					<div class="row">
+						<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+							<p:commandButton styleClass="btn-gradiente btn-rojo"
+								value="#{txt_cuentaCupo['Modal.Boton.Entendido']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();">
+								<p:ajax oncomplete="PF('previsualizarPdf').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+					<br />
+				</ui:define>
+			</ui:decorate>
+			<!-- Cargue de documentos-->
+			<!-- Modal de Gegenerar Nir Cuenta Cupo -->
+			<ui:decorate template="/pages/includes/modal.xhtml">
+				<ui:param name="modalId" value="generarNirProrroga" />
+				<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+				<ui:param name="tituloModal"
+					value="#{txt['titulo.modal.confirmacion']}" />
+				<ui:param name="formulario" value="formModalGenerarNitProrroga" />
+				<ui:define name="body-modal">
+					<div class="row">
+						<div class="col-xs-12">
+							<h:outputText
+								value="#{txt_prorroga['mensaje.modificarformulario']}" />
+							<br /> <br />
+							<h:outputText
+								value="#{txt_prorroga['mensaje.modificarformulario1']}" />
+							<br /> <br />
+						</div>
+					</div>
+				</ui:define>
+				<ui:define name="accion-modal">
+					<div class="row">
+						<div class="row">
+							<div class="col-xs-5 col-xs-offset-1">
+								<p:commandButton immediate="true"
+									styleClass="pull-right btn-gris"
+									value="#{txt_prorroga['boton.cancelar']}">
+									<p:ajax onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();PF('generarNirProrroga').hide();" />
+								</p:commandButton>
+							</div>
+							<div class="col-xs-5 col-xs-offset-0">
+								<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+									value="#{txt_prorroga['boton.aceptar']}" update="panelProrroga">
+									<p:ajax listener="#{beanProrroga.generarNir()}"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('generarNirProrroga').hide();PF('blockUI-Loading').hide();irArriba()" />
+								</p:commandButton>
+							</div>
+						</div>
+					</div>
+				</ui:define>
+			</ui:decorate>
+		</p:panel>
+
+		<!-- Modal de confirmarcion al descargar Formulario -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarFormularioDescargado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario"
+				value="formModalconfirmarFormularioDescargado" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_prorroga['mensaje.descargadocumento']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton immediate="true"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_prorroga['boton.entendido']}"
+								oncomplete="PF('confirmarFormularioDescargado').hide();">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al cargar Documentos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarCargueDocumento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmarCargueDocumento" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_prorroga['mensaje.subirarchivo']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_prorroga['boton.cancelar']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton
+								disabled="#{cargaDocumentoProrroga.ib_desactivarBotonesCarga}"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_cuentaCupo['boton.Aceptar']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+								<p:ajax
+									listener="#{beanProrroga.servicioCargarArchivos(beanProrroga.icdf_cargaDocumentosFormularioDto)}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									update="panelProrroga" />
+								<f:attribute name="foo" value="${cargaDocumentoProrroga}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de eliminar transaccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="eliminarTransaccionProrroga" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalEliminarTransaccionProrroga" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_prorroga['mensaje.seguroeliminar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="pull-right btn-gris"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								value="#{txt_prorroga['boton.cancelar']}">
+								<p:ajax oncomplete="PF('eliminarTransaccionProrroga').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+								value="#{txt_prorroga['boton.aceptar']}" update="panelProrroga">
+								<f:ajax listener="#{beanProrroga.eliminarTransaccion()}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('eliminarTransaccionProrroga').hide();PF('blockUI-Loading').hide();irArriba()" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- pregunta finalizar solicitud -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="preguntarFinalizacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt_desistimiento['label.titulo']}" />
+			<ui:param name="formulario" value="formPreguntarFinalizacion" />
+			<ui:define name="body-modal">
+				<h:outputText value="#{txt_recepcionDocumento['label.pregunta']}" />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							onsuccess="PF('preguntarFinalizacion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt['boton.Aceptar.Upper']}" update="panelProrroga formProrroga"
+							actionListener="#{beanProrroga.finalizarTransaccion}"
+							onsuccess="PF('preguntarFinalizacion').hide();" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+	</ui:define>
+</ui:composition>

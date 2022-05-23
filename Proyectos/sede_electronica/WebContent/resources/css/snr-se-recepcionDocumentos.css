@@ -1,0 +1,25 @@
+.text-area-alto{
+	height: 10% !important;
+}
+
+.espacio{
+	padding-top: 10px !important;
+}
+
+.tamano-titulo {
+	font-size: 20px !important;
+	text-transform: uppercase !important;
+}
+.colorRojo{
+    color: #770707 !important;
+    text-decoration: none !important;
+}
+
+.colorVerde{
+    color: #26d934 !important;
+	text-decoration: none !important;
+}
+
+.tituloGrande{
+	font-size: 20px !important;
+}

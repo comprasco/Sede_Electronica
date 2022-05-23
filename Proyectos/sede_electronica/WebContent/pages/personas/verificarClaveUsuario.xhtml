@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-simple.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se.css" />
+		<h:outputStylesheet library="css" name="snr-se-recuperacionClave.css" />
+		<h:outputScript library="js" name="snr-se.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_recuperarClave['titulo.restablecerClaveUsuario']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<div id="section">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<p:panel id="inicioSesion" styleClass="panel-login no-border">
+							<div class="container-fluid-special">
+								<h:form>
+									<div class="row">
+										<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+											<div class="contenedor-link-login">
+												<p:commandLink
+													action="/pages/personas/inicioSesion/ciudadanos.jsf?faces-redirect=true"
+													styleClass="text-link">
+													<p:graphicImage styleClass="btn-atras img-vertical-align"
+														name="/img/btn-atras.png" />#{txt['label.VolverInicioSesion.Upper']}
+							</p:commandLink>
+											</div>
+										</div>
+									</div>
+								</h:form>
+							</div>
+							<div class="row centrar-img">
+								<div class="col-sm-12">
+									<br /> <span class="text-title">#{txt_recuperarClave['banner.tituloRestablecerClave']}</span>
+									<span class="text-subtitle">#{txt_recuperarClave['banner.subtituloRestablecerClave']}</span>
+									<p:graphicImage styleClass="img-size"
+										name="/img/rectangule.png" />
+								</div>
+							</div>
+							<br />
+							<h:form id="cambioClave">
+								<div class="row">
+									<div class="col-xs-10 col-xs-offset-1">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel styleClass="label-form"
+													value="#{txt_recuperarClave['label.ClaveGenerica']}"
+													id="clave-Generica" for="claveGenerica" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+												<p:inputText id="claveGenerica"
+													placeholder="#{txt_recuperarClave['placeholder.ClaveGenerica']}"
+													class="password-html" required="true" name="claveGenerica"
+													requiredMessage="#{txt_recuperarClave['mensaje.ClaveGenerica']}"
+													value="#{beanRecuperacionClave.isrc_solicitudRecuperacionClaveDto.is_claveGenerica}" />
+												<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+													for="clave-Generica" position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_recuperarClave['tooltip.ClaveGenerica']}" />
+													</div>
+												</p:tooltip>
+												<span class="help-block"> <p:message
+														for="claveGenerica" />
+												</span>
+											</div>
+										</div>
+										<f:metadata>
+											<f:viewParam name="as_codigo"
+												value="#{beanRecuperacionClave.isrc_solicitudRecuperacionClaveDto.is_codigo}" />
+										</f:metadata>
+										<p:separator styleClass="separador-small" />
+										<div class="row">
+											<div class="col-xs-12 col-md-6">
+												<p:outputLabel id="nuevaClave" styleClass="label-form"
+													for="claveNueva"
+													value="#{txt_recuperarClave['label.NuevaClave']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+												<div class="ui-inputgroup">
+													<p:password id="claveNueva"
+														styleClass="text-input border-completo" maxlength="20"
+														requiredMessage="#{txt_recuperarClave['mensaje.NuevaClave']}"
+														required="true"
+														value="#{beanRecuperacionClave.isrc_solicitudRecuperacionClaveDto.is_clave}">
+														<p:ajax event="change"
+															oncomplete="PF('tooltipMsg').show();"
+															onstart="mostrarLimpiar('cambioClave:claveNueva', 'spanNuevaClave');" />
+														<p:ajax event="focus" onstart="PF('tooltipMsg').show();" />
+													</p:password>
+													<p:tooltip showEvent="mouseover"
+														styleClass="tooltipGeneral" for="nuevaClave"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_recuperarClave['tooltip.NuevaClave']}" />
+														</div>
+													</p:tooltip>
+													<span id="spanNuevaClave"
+														class="ui-inputgroup-addon ocultar"> <p:commandLink
+															styleClass="text-link-input"
+															value="#{txt_recuperarClave['boton.ver']}">
+															<p:ajax event="click"
+																onstart="verContrasena('cambioClave:claveNueva');" />
+														</p:commandLink>
+													</span>
+													<p:commandButton id="nueva-Clave" icon="icon-contrasena"
+														styleClass="icon-input btn-gradiente icono_boton" />
+
+													<pe:tooltip widgetVar="tooltipMsg" id="tooltipIndica"
+														showEvent="mouseover" myPosition="top, right"
+														hideEvent="mouseout" atPosition="bottom center"
+														styleClass="tooltip-contrasena" for="nueva-Clave">
+														<div id="content-tooltip-msg">
+															<p:outputLabel
+																value="#{beanValidacionContrasena.is_msgValidacion}" />
+														</div>
+													</pe:tooltip>
+
+												</div>
+												<span class="help-block"> <p:message for="claveNueva" />
+												</span>
+											</div>
+											<div class="col-xs-12 col-md-6">
+												<p:outputLabel id="confirmarClave" styleClass="label-form"
+													for="claveConfirmar"
+													value="#{txt_recuperarClave['label.ConfirmarClave']}" />
+												<p:outputLabel styleClass="required-field">*</p:outputLabel>
+												<div class="ui-inputgroup">
+													<p:password id="claveConfirmar"
+														styleClass="text-input border-completo" maxlength="20"
+														requiredMessage="#{txt_recuperarClave['mensaje.ConfirmarClave']}"
+														required="true"
+														value="#{beanRecuperacionClave.isrc_solicitudRecuperacionClaveDto.is_claveConfirmacion}">
+														<p:ajax event="change"
+															onstart="mostrarLimpiar('cambioClave:claveConfirmar', 'spanClaveConfirmar');" />
+													</p:password>
+													<p:tooltip showEvent="mouseover"
+														styleClass="tooltipGeneral" for="confirmarClave"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_recuperarClave['tooltip.ConfirmarClave']}" />
+														</div>
+													</p:tooltip>
+													<span id="spanClaveConfirmar"
+														class="ui-inputgroup-addon ocultar"> <p:commandLink
+															styleClass="text-link-input"
+															value="#{txt_recuperarClave['boton.ver']}">
+															<p:ajax event="click"
+																onstart="verContrasena('cambioClave:claveConfirmar')" />
+														</p:commandLink>
+													</span>
+												</div>
+												<span class="help-block"> <p:message
+														for="claveConfirmar" />
+												</span>
+											</div>
+										</div>
+										<br />
+										<h:form method="post">
+											<br />
+											<div class="row">
+												<div class="col-xs-6 col-md-4 col-md-offset-2">
+													<p:commandButton icon="icon-flecha-gris" iconPos="right"
+														immediate="true" styleClass="icon-btn pull-right btn-gris"
+														value="#{txt_recuperarClave['boton.cancelar.Upper']}"
+														action="/pages/personas/inicioSesion/ciudadanos.jsf?faces-redirect=true"
+														ajax="false" process="@this" />
+												</div>
+												<div class="col-xs-6 col-md-4">
+													<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+														type="submit"
+														styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+														ajax="false"
+														action="#{beanRecuperacionClave.validarClaveUsuario()}"
+														value="#{txt_recuperarClave['boton.enviar.Upper']}"
+														process="@form" update="@form" />
+												</div>
+											</div>
+											<br />
+											<div class="row centrar-img">
+												<div>
+													<p:outputLabel value="#{beanRecuperacionClave.is_msg}" />
+												</div>
+											</div>
+										</h:form>
+									</div>
+								</div>
+							</h:form>
+							<br />
+							<div class="espacio-fin"></div>
+							<br />
+						</p:panel>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

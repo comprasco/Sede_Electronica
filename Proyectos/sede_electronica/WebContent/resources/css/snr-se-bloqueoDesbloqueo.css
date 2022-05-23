@@ -1,0 +1,53 @@
+
+.bold {
+	font-weight: 700;
+}
+
+.header {
+	background-image: linear-gradient(#EB1F28, #461A13) !important;
+	color: #FFFFFF !important;
+	font-size: 17px !important;
+	height: 24px;
+}
+
+.ui-button-icon-only .ui-icon {
+	top: 28% !important;
+	margin-top: -10px !important;
+	left: 16% !important;
+	margin-left: 0px !important;
+}
+
+.detalle-usuario {
+	width: 100%;
+	height: 35px;
+	padding: 10px;
+}
+
+.textoRojo {
+	font-weight: bold;
+	color: #EB1F28;
+}
+
+.textoGris {
+	font-weight: bold;
+	color: #AEAEAE;
+}
+
+.centrar {
+	text-align: center;
+}
+
+.centrar20 {
+	text-align: center;
+	width: 20%;
+}
+
+.centrar25 {
+	text-align: center;
+	width: 25%;
+}
+
+.centrar55 {
+	text-align: center;
+	width: 55%;
+}

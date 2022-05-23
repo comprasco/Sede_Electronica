@@ -1,0 +1,412 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<!-- Script que ejecuta el Keyfilter-->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			cargarKeyfilters();
+		});
+	</script>
+	<!-- Script que ejecuta el Keyfilter-->
+	<p:panel id="panelDetalle">
+		<p:outputPanel id="tablaBandejaAlertasTierra"
+			styleClass="no-border text-center">
+			<p:outputLabel id="tituloDetalleAlerta"
+				value="#{txt_bandejaAlertas['header.titulo.detalleAlertas']}"
+				styleClass="tamano-titulo" />
+			<div class="row">
+				<hr />
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form" id="tipoAlerta"
+						value="#{txt_bandejaAlertas['form.label.tipo.alerta']}" />
+					<p:inputText id="txt_TipoAlerta" value="#{bean[dto][tipoAlerta]}"
+						readonly="true"></p:inputText>
+				</div>
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form" id="detalleNombreEntidad"
+						value="#{txt_bandejaAlertas['column.header.nombre.entidad']}" />
+					<p:inputText id="txt_nombreEntidad" value="#{bean[dto][entidad]}"
+						readonly="true"></p:inputText>
+				</div>
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form" id="detalleOficinaOrigen"
+						value="#{txt_bandejaAlertas['form.label.oficiona.origen']}" />
+					<p:inputText id="txt_TipoEntidad"
+						value="#{bean[dto][oficinaOrigen]}" readonly="true"></p:inputText>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form" id="label_TipoDocumental"
+						value="#{txt_bandejaAlertas['form.label.tipo.documento.alerta']}" />
+					<p:inputText id="txt_TipoDocumental"
+						value="#{bean[dto][tipoDocumento]}" readonly="true"></p:inputText>
+				</div>
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form" id="numeroDocumento"
+						value="#{txt_bandejaAlertas['form.label.numero.documento']}" />
+					<p:inputText id="txt_NumeroDocumento"
+						value="#{bean[dto][numeroDocumento]}" readonly="true"></p:inputText>
+				</div>
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form" id="fechaDocumento"
+						value="#{txt_bandejaAlertas['form.label.fecha.documento']}" />
+					<p:inputText id="fechaDocumentall"
+						value="#{bean[dto][fechaDocumento]}" readonly="true">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</p:inputText>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form" id="comunidadEtnica"
+						value="#{txt_bandejaAlertas['form.label.comunidad.etnia']}" />
+					<p:inputText id="txt_ComunidadEtnica"
+						value="#{bean[dto][comunidadEtnica]}" readonly="true"></p:inputText>
+				</div>
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form" id="nrProceso"
+						value="#{txt_bandejaAlertas['form.label.numero.rad.proceso']}" />
+					<p:inputText id="txt_Proceso" value="#{bean[dto][numeroPorceso]}"
+						readonly="true"></p:inputText>
+
+				</div>
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form" id="fechaProceso"
+						value="#{txt_bandejaAlertas['form.label.fecha.proceso']}" />
+					<p:inputText id="txt_FechaProceso"
+						value="#{bean[dto][fechaProceso]}" readonly="true">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</p:inputText>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form" id="label_Estado"
+						value="#{txt_bandejaAlertas['form.label.estado']}" />
+					<p:inputText id="txt_Estado" value="#{bean[dto][estado]}"
+						readonly="true"></p:inputText>
+				</div>
+				<div class="col-xs-12 col-sm-4">
+					<p:outputLabel styleClass="label-form" id="fechainacticacion"
+						value="#{txt_bandejaAlertas['form.label.fecha.inactivacion']}" />
+					<p:inputText id="fechaInactivacionn"
+						value="#{bean[dto][fechaInactivacion]}" readonly="true">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</p:inputText>
+				</div>
+				<div class="col-xs-12 col-sm-4">
+					<br />
+					<p:commandButton
+						value="#{txt_bandejaAlertas['tabla.boton.documento.soporte']}"
+						styleClass="btn-gradiente btn-rojo consulta"
+						onstart="PF('blockUI-Loading').show();"
+						oncomplete="PF('blockUI-Loading').hide();">
+						<p:ajax listener="#{beanBandejaAlertas.descargarSoporteAlerta}" />
+					</p:commandButton>
+				</div>
+			</div>
+
+		</p:outputPanel>
+		<br/>
+		<!-- Panel Detalle de Matriculas -->
+		<p:outputPanel id="detalleMatriculaIncluida"
+			styleClass="no-border text-center">
+			<br />
+			<p:outputLabel styleClass="label-form tamano-titulo"
+				id="labelMatriculaIncluida"
+				value="#{txt_bandejaAlertas['label.text.Matriculas.incluidas']}" />
+			<br />
+			<p:dataTable id="tablaMatriculaIncluida"
+				widgetVar="tablaMatriculaIncluida" styleClass="tablaCertificados"
+				reflow="true" emptyMessage="#{txt_bandejaAlertas['tabla.vacia']}"
+				paginator="true" rows="10" paginatorPosition="bottom"
+				paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+				currentPageReportTemplate="{currentPage} / {totalPages}"
+				var="matricula" stickyHeader="false" lazy="true"
+				value="#{bean[listarMatricula]}"
+				filteredValue="#{beanBandejaAlertas.il_filtroBandejaAlerta}">
+				<f:facet name="header">
+					<p:outputPanel id="filtro">
+						<p:spacer height="5" />
+						<p:inputText id="globalFilter"
+							onkeyup="PF('tablaBandejaAlerta').filter()" styleClass="filtro mask-AlphaNumEsp"
+							placeholder="#{txt_bandejaAlertas['tabla.placeholder.buscar']}"
+							maxlength="10" />
+					</p:outputPanel>
+				</f:facet>
+				<p:column
+					headerText="#{txt_bandejaAlertas['column.header.label.circulo.registral']}">
+					<h:outputText value="#{matricula[circuloRegistral]}" />
+				</p:column>
+				<p:column
+					headerText="#{txt_bandejaAlertas['column.header.label.numero.matricula.inmobiliaria']}">
+					<h:outputText value="#{matricula[numeroMatricula]}" />
+				</p:column>
+				<p:column
+					headerText="#{txt_bandejaAlertas['column.header.label.numero.predial']}">
+					<h:outputText value="#{matricula[numeroPredial]}" />
+				</p:column>
+				<p:column
+					headerText="#{txt_bandejaAlertas['column.header.label.ver.mapa']}">
+					<p:commandButton id="verMapa" class="btn-rojo btn-gradiente"
+						icon="fa fa-map-marker" iconPos="right"
+						value="#{txt_bandejaAlertas['tabla.boton.ver.mapa']}">
+						<p:ajax listener="#{beanBandejaAlertas.verMapa(matricula)}"
+							update="formBandejaAlertas:formModalVerMapa"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+		<p:separator />
+		<!-- Panel de Inactivacion de Alerta -->
+		<p:outputPanel id="detalleInactivacionAlerta"
+			styleClass="no-border text-center">
+			<br />
+			<p:outputLabel styleClass="label-form tamano-titulo"
+				id="labelInactivarAlerta"
+				value="#{txt_bandejaAlertas['label.text.inactivar.alerta']}" />
+			<br />
+			<div class="row">
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel id="labelMotivoDetalle" styleClass="label-form"
+						value="#{txt_bandejaAlertas['label.text.idMotivo']}" />
+					<p:inputText id="txtmotivoInactivacion"
+						value="#{bean[dto][dtoI][motivo]}" readonly="true" />
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel id="labeltipoOficina" styleClass="label-form"
+						value="#{txt_bandejaAlertas['label.text.tipo.oficina']}" />
+					<p:inputText id="txtoficinaOrigen"
+						value="#{bean[dto][dtoI][tipoOficinaI]}" readonly="true" />
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel styleClass="label-form"
+						id="labeltipoDocumentoDetalle"
+						value="#{txt_bandejaAlertas['label.text.tipo.documento.inactivacion']}" />
+					<p:inputText id="txttipoDocumento"
+						value="#{bean[dto][dtoI][documentoInactivacion]}" readonly="true" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel styleClass="label-form" id="labelfechaDocumento"
+						value="#{txt_bandejaAlertas['label.text.fecha']}" />
+					<p:inputText id="fecha" value="#{bean[dto][dtoI][fechaDocumentoI]}"
+						readonly="true">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</p:inputText>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:outputLabel styleClass="label-form" id="labelnumeroDocumento"
+						value="#{txt_bandejaAlertas['label.text.numermo.documento.inactivacion']}" />
+					<p:inputText id="numDocumento"
+						value="#{bean[dto][dtoI][numeroDocumentoI]}" readonly="true" />
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<br />
+					<p:commandButton
+						value="#{txt_bandejaAlertas['tabla.boton.documento.inactivar']}"
+						styleClass="btn-gradiente btn-rojo consulta"
+						onstart="PF('blockUI-Loading').show();"
+						oncomplete="PF('blockUI-Loading').hide();">
+						<p:ajax
+							listener="#{beanBandejaAlertas.descargarSoporteInactivarAlerta}" />
+					</p:commandButton>
+				</div>
+			</div>
+			<div class="row">
+
+				<div class="col-xs-12 ">
+					<p:outputLabel styleClass="label-form" id="labelTxtInactivacion"
+						value="#{txt_bandejaAlertas['label.textArea.textoInactivacion']}" />
+					<p:inputTextarea id="txtInactivacion"
+						value="#{bean[dto][dtoI][txtInactivacion]}" readonly="true"
+						rows="3" required="true" autoResize="true"
+						styleClass="text-input border-completo tamano"
+						requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+						editable="false" />
+				</div>
+
+			</div>
+		</p:outputPanel>
+		<p:separator />
+		<!-- Panel de Alerta Generada -->
+		<p:outputPanel id="alertasDetalleGeneradaTierras"
+			styleClass="no-border text-center">
+			<br />
+			<p:outputLabel styleClass="label-form tamano-titulo"
+				id="labelgeneradaAlerta"
+				value="#{txt_bandejaAlertas['label.text.alerta.generada']}" />
+			<br />
+			<p:dataTable id="tablaAlertasDetalleGenerdaTierras"
+				widgetVar="tablaAlertasDetalleGenerdaTierras"
+				styleClass="tablaCertificados" reflow="true"
+				emptyMessage="#{txt_bandejaAlertas['tabla.vacia']}" paginator="true"
+				rows="6" paginatorPosition="bottom"
+				paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+				currentPageReportTemplate="{currentPage} / {totalPages}"
+				var="alertaGenerada" stickyHeader="false" lazy="true"
+				value="#{bean[listarAlertaGenerada]}"
+				filteredValue="#{beanBandejaAlertas.il_filtroBandejaAlerta}">
+				<f:facet name="header">
+					<p:outputPanel id="filtro">
+						<p:spacer height="5" />
+						<p:inputText id="globalFilter"
+							onkeyup="PF('tablaBandejaAlerta').filter()" styleClass="filtro mask-AlphaNumEsp"
+							placeholder="#{txt_bandejaAlertas['tabla.placeholder.buscar']}"
+							maxlength="100" />
+					</p:outputPanel>
+				</f:facet>
+				<p:column
+					headerText="#{txt_bandejaAlertas['column.header.label.circulo.registral']}">
+					<h:outputText value="#{alertaGenerada[circuloRegistralM]}" />
+				</p:column>
+				<p:column
+					headerText="#{txt_bandejaAlertas['column.header.label.numero.matricula']}">
+					<h:outputText value="#{alertaGenerada[numeroMatriculaM]}" />
+				</p:column>
+				<p:column
+					headerText="#{txt_bandejaAlertas['column.header.label.turno']}">
+					<h:outputText value="#{alertaGenerada[turnoM]}" />
+				</p:column>
+				<p:column
+					headerText="#{txt_bandejaAlertas['column.header.label.texto.alerta']}">
+					<h:outputText value="#{alertaGenerada[textoAlerta]}" />
+				</p:column>
+
+				<p:column
+					headerText="#{txt_bandejaAlertas['column.header.label.usuario']}">
+					<h:outputText value="#{alertaGenerada[usuarioGenerador]}" />
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+		<!-- Panel de Antiguo Sistema -->
+		<p:panel id="pidAntiguoSistema" styleClass="no-border">
+			<div class="col-xs-12">
+				<p:outputPanel id="detalleSeccionAntiguoSistema"
+					styleClass="no-border text-center proceso-AS">
+					<p:outputLabel id="labelMoviento"
+						styleClass="label-form  tamano-titulo"
+						value="#{txt_bandejaAlertas['titulo.antiguo.sistema']}" />
+					<p:dataTable id="detalleAntiguoSistemaSeccionD"
+						var="antiguoSistema" widgetVar="paramsSeccionDAntiguoSistema"
+						reflow="true" rowIndexVar="index"
+						styleClass="tamanoTablaAS tablaAntiguoSistema"
+						value="#{bean[listarAntiguoSistema]}"
+						emptyMessage="#{txt_alertaTierras['Tabla.vacia.MatriculasIncluidas']}"
+						stickyHeader="false">
+						<p:column headerText="#{txt_alertaTierras['label.Id.Alerta']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[alertaAS]}" />
+						</p:column>
+						<p:column
+							headerText="#{txt_alertaTierras['label.Circulo.Registral']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[circuloRegistralAS]}" />
+						</p:column>
+						<p:column headerText="#{txt_alertaTierras['label.Libro']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[libro]}" />
+						</p:column>
+						<p:column headerText="#{txt_alertaTierras['label.Tomo']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[tomo]}" />
+						</p:column>
+						<p:column headerText="#{txt_alertaTierras['label.TipoPartida']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[tipoPartidaAS]}" />
+						</p:column>
+						<p:column headerText="#{txt_alertaTierras['label.TipoPredio']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[tipoPredioAS]}" />
+						</p:column>
+						<p:column headerText="#{txt_alertaTierras['label.Folio']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[numeroFolio]}" />
+						</p:column>
+						<p:column headerText="#{txt_alertaTierras['label.Anio']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[anio]}" />
+						</p:column>
+						<p:column headerText="#{txt_alertaTierras['label.NumeroPartida']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[numeroPartida]}" />
+						</p:column>
+						<p:column headerText="#{txt_alertaTierras['label.NombrePredio']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[predio]}" />
+						</p:column>
+						<p:column headerText="#{txt_alertaTierras['label.NumeroPredio']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[numeroPredio]}" />
+						</p:column>
+						<p:column headerText="#{txt_alertaTierras['label.Pais']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[pais]}" />
+						</p:column>
+						<p:column headerText="#{txt_alertaTierras['label.Departamento']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[departamento]}" />
+						</p:column>
+						<p:column headerText="#{txt_alertaTierras['label.Municipio']}"
+							styleClass="tablaAntiguoSistema documento-medio">
+							<h:outputText value="#{antiguoSistema[municipio]}" />
+						</p:column>
+					</p:dataTable>
+				</p:outputPanel>
+				<p:outputPanel>
+					<div class="row">
+						<br />
+						<div class="col-xs-12 col-md-4 col-md-offset-4">
+							<p:commandButton
+								value="#{txt_bandejaAlertas['tabla.boton.regresar']}"
+								styleClass="btn-gradiente btn-rojo consulta" type="submit"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								action="#{beanBandejaAlertas.redireccionBandeja()}">
+							</p:commandButton>
+						</div>
+					</div>
+				</p:outputPanel>
+			</div>
+		</p:panel>
+	</p:panel>
+
+	<!-- Modal Ver Mapa -->
+	<ui:decorate template="/pages/includes/modal.xhtml">
+		<ui:param name="modalId" value="verMapa" />
+		<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+		<ui:param name="tituloModal"
+			value="#{txt['titulo.modal.informacion']}" />
+		<ui:param name="formulario" value="formModalVerMapa" />
+		<ui:define name="body-modal">
+			<div class="row ui-g">
+				<div class="col-xs-12 text-center">
+					<div class="img-left">
+						<img src="data:image/png;base64, #{beanBandejaAlertas.is_mapa}"
+							alt="" class="imgMapa" />
+					</div>
+					<br />
+				</div>
+			</div>
+			<br />
+		</ui:define>
+		<ui:define name="accion-modal">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+					<p:commandButton id="boton-aceptar"
+						styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+						value="#{txt_alertaTierras['Modal.Boton.Entendido']}"
+						immediate="true" process="@this"
+						oncomplete="PF('verMapa').hide();">
+					</p:commandButton>
+				</div>
+			</div>
+		</ui:define>
+	</ui:decorate>
+</ui:composition>

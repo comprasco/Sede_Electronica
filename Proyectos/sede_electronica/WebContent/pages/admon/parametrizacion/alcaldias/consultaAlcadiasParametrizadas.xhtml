@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">|
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_alcaldia['titulo.consultar.alcaldia']}</title>
+	</ui:define>
+	<ui:define name="body">
+		
+		<div class="row">
+			<div class="col-xs-12 col-md-12 align-center contenedor-link-login" >
+				<h:outputText styleClass="tituloParametrizacion" value="#{txt_alcaldia['titulo.consultar.alcaldia']}" />
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 align-center">
+				<h:form id="formMostrar">
+					<p:dataTable var="alcaldia" value="#{BeanAlcaldia.ilap_alcaldias}"
+						filteredValue="#{BeanAlcaldia.ilap_filtroAlcaldias}"
+						styleClass="centrar" paginator="true" rows="10"
+						widgetVar="alcaldiasTable"
+						emptyMessage="#{txt_alcaldia['alcaldia.inexistentes']}"
+						paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+						currentPageReportTemplate="{currentPage} / {totalPages}">
+						<f:facet name="header">
+							<h:outputText styleClass="tituloParametrizacion">
+								#{txt_alcaldia['titulo.consultar.alcaldia']}
+							</h:outputText>
+						</f:facet>
+						<p:column headerText="#{txt_alcaldia['departamento']}"
+							sortBy="#{alcaldia.is_departamento}"
+							filterBy="#{alcaldia.is_departamento}" filterMatchMode="contains">
+							<h:outputText value="#{alcaldia.is_departamento}" />
+						</p:column>
+						<p:column headerText="#{txt_alcaldia['municipio']}"
+							filterBy="#{alcaldia.im_municipio.is_nombre}"
+							sortBy="#{alcaldia.im_municipio.is_nombre}"
+							filterMatchMode="contains">
+							<h:outputText value="#{alcaldia.im_municipio.is_nombre}" />
+						</p:column>
+						<p:column headerText="#{txt_alcaldia['nombre']}"
+							sortBy="#{alcaldia.is_nombreEntidad}"
+							filterBy="#{alcaldia.is_nombreEntidad}" filterMatchMode="contains">
+							<h:outputText value="#{alcaldia.is_nombreEntidad}" />
+						</p:column>
+						<p:column headerText="#{txt_alcaldia['tipo']}"
+							filterBy="#{alcaldia.is_tipoParametrizacion}"
+							filterMatchMode="contains">
+							<h:outputText value="#{alcaldia.is_tipoParametrizacion}" />
+						</p:column>
+						<p:column headerText="#{txt_alcaldia['accion']}"
+							filterMatchMode="contains">
+							<p:commandLink class="#{'fa fa-pencil'}" styleClass="colorLapiz"
+								id="editarBoton" ajax="false"
+								value="#{txt_alcaldia['modificar']}"
+								action="#{BeanAlcaldia.modificarAlcaldia(alcaldia.is_id)}">
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

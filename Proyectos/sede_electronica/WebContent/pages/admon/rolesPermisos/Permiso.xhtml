@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<div class="row">
+		<div class="col-xs-12">
+			<h:form id="formPermiso" rendered="#{beanPermiso.getCbAdministracionpermiso()}">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:dataTable headerText="Permisos" var="permiso"
+							id="dataTablePermiso"
+							value="#{beanPermiso.ilpb_listaPermisoBooleano}"
+							responsive="true" widgetVar="permisoTable"
+							styleClass="centrar-img" rowIndexVar="true" reflow="true"
+							paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+							currentPageReportTemplate="{currentPage} / {totalPages}"
+							emptyMessage="#{txt_rolesPermisos['TablaVacia.Permiso']}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							rowsPerPageTemplate="10">
+							<p:column headerText="#{txt_rolesPermisos['Pestana.Estado']}">
+								<p:inputSwitch id="estadoPermiso"
+									disabled="#{beanPermiso.verificarEditablePermiso(permiso.is_codigoMenu)}"
+									value="#{beanPermiso.impb_mapaPermisosBooleanosDto[permiso]}" />
+								<p:tooltip for="estadoPermiso"
+									value="#{beanRol.verificarEditableRol(rol.is_nombre) ? txt_rolesPermisos['Pestana.No.Editable'] : txt_rolesPermisos['Pestana.Editable']}"
+									position="bottom" />
+								<span class="help-block"> <p:message for="estadoPermiso" />
+								</span>
+							</p:column>
+							<p:column headerText="#{txt_rolesPermisos['Pestana.Nombre']}">
+								<h:outputText id="fadePermiso" value="#{permiso.is_nombreLargo}" />
+								<p:tooltip for="fadePermiso" value="#{permiso.is_descripcion}"
+									position="bottom" />
+							</p:column>
+							<p:column
+								headerText="#{txt_rolesPermisos['Pestana.FechaCreacion']}">
+								<h:outputText value="#{permiso.id_fechaCreacion}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column
+								headerText="#{txt_rolesPermisos['Pestana.EstadoDefecto']}">
+								<h:outputText
+									value="#{permiso.ib_activoPorDefecto ? 'Si' : 'No' }" />
+							</p:column>
+						</p:dataTable>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+								<p:commandButton
+									value="#{txt_rolesPermisos['Boton.Guardar.Upper']}"
+									class="btn-rojo btn-gradiente">
+									<f:ajax listener="#{beanPermiso.cambiarActivoPermisos}"
+										render="@form" execute="@form" />
+								</p:commandButton>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</div>
+	</div>
+</ui:composition>

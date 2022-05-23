@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="solicitudProrrogaJuridico" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a55b530e-a929-4714-a3a4-4eb9f8115e91">
+	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="ano" class="java.lang.String">
+		<fieldDescription><![CDATA[ano]]></fieldDescription>
+	</field>
+	<field name="archivo" class="java.util.List">
+		<fieldDescription><![CDATA[archivo]]></fieldDescription>
+	</field>
+	<field name="correo" class="java.lang.String">
+		<fieldDescription><![CDATA[correo]]></fieldDescription>
+	</field>
+	<field name="dia" class="java.lang.String">
+		<fieldDescription><![CDATA[dia]]></fieldDescription>
+	</field>
+	<field name="direccion" class="java.lang.String">
+		<fieldDescription><![CDATA[direccion]]></fieldDescription>
+	</field>
+	<field name="documento" class="java.lang.String">
+		<fieldDescription><![CDATA[documento]]></fieldDescription>
+	</field>
+	<field name="ls_nombreFormulario" class="java.lang.String">
+		<fieldDescription><![CDATA[ls_nombreFormulario]]></fieldDescription>
+	</field>
+	<field name="mes" class="java.lang.String">
+		<fieldDescription><![CDATA[mes]]></fieldDescription>
+	</field>
+	<field name="nit" class="java.lang.String">
+		<fieldDescription><![CDATA[nit]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[nombre]]></fieldDescription>
+	</field>
+	<field name="telefono" class="java.lang.String">
+		<fieldDescription><![CDATA[telefono]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image>
+				<reportElement x="3" y="16" width="150" height="43" uuid="7ffd04de-849e-4971-adaf-c252f7a8a099"/>
+				<imageExpression><![CDATA[$P{minjusticialogo}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="363" y="12" width="114" height="54" uuid="5a44ca27-2d07-40c4-8738-62fe23e65292"/>
+				<imageExpression><![CDATA[$P{logonuevopais}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="200" y="16" width="140" height="48" uuid="a794dfea-c58d-4cf7-bd2f-06b3fe0fe592"/>
+				<imageExpression><![CDATA[$P{snrlogo}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="197" splitType="Stretch">
+			<staticText>
+				<reportElement x="120" y="0" width="263" height="16" uuid="a33cf0a9-07c2-41b4-8a87-cbe038c21e0b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SOLICITUD DE PRORROGA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="3" y="161" width="182" height="14" uuid="4e8e788b-f57f-4015-9b45-b02b7a59c808"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[Calle 26 No.13-49 Interior 201]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="131" width="182" height="16" uuid="ff1789e4-63b6-47c0-ba75-c9066dd7727e"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Dirección Administrativa Y Financiera]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="101" width="289" height="16" uuid="32157e0e-eb75-4c99-9265-4712e3b70549"/>
+				<textElement textAlignment="Center">
+					<font fontName="Open Sans Light" isBold="false"/>
+				</textElement>
+				<text><![CDATA["Bogotá D.C, " + $F{dia} + "/" + $F{mes} + "/" + $F{ano}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="175" width="289" height="14" uuid="b9e98f45-6c9e-425c-a1a3-0b967da1448f"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA["Referencia: Solicitud de prórroga – NIR " + $F{nir}]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="117" width="87" height="14" uuid="4247334e-75b9-4ef0-9bf2-0ca1e8e0efe0"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[Señores]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="147" width="289" height="14" uuid="c51bdbd5-f7af-4aa1-8033-8e50d0679d08"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[SUPERINTENDENCIA DE NOTARIADO Y REGISTRO – SNR]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="153" splitType="Stretch">
+			<staticText>
+				<reportElement x="3" y="112" width="100" height="14" uuid="dd147067-0e07-4036-8d3c-3249d4661243"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Cordialmente,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="41" width="538" height="54" uuid="54af67f9-10be-402f-95c4-ec46edb26f64"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA["De acuerdo con su requerimiento expresado mediante el comunicado "+ $F{nir} + "(correo electrónico / SMS) recibido el día" + $F{dia} + "/" + $F{mes} + "/" + $F{ano} + ", en el que se me solicita adjuntar documentación de una cuenta bancaria diferente a la que se hizo llegar inicialmente dentro del trámite de solicitud de Devolución de dinero, me permito solicitar prórroga por un término igual al concedido inicialmente por su despacho, de conformidad con lo estipulado en el artículo 17 de la ley 1755 del 2015.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="13" width="100" height="14" uuid="14f23db0-b97b-4536-8218-9d9bbf3c39ad"/>
+				<textElement>
+					<font fontName="Open Sans Light" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Respetados señores:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="156" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="109" width="153" height="14" uuid="464a3ceb-b8eb-46d5-a2ba-db3f3cde99f6"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[Correo Electrónico: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="153" y="81" width="102" height="14" uuid="1d17ce27-fe0b-486e-a397-42a35eebe484"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{documento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="153" y="95" width="102" height="14" uuid="21808705-b08f-451f-8e4b-d8e8a772a5e3"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{direccion}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="48" width="473" height="1" uuid="7a5ffe50-eb1b-4120-94c2-700dd3c3545b"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="123" width="153" height="14" uuid="1a52345a-e9b5-433b-b75d-5ede462f94b9"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[Teléfono: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="153" y="67" width="102" height="14" uuid="1c80aa37-8cfc-479c-b440-ca27996d3547"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="67" width="153" height="14" uuid="8b0cd8ea-b2e8-4fea-ab13-9d2551b6be93"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[Razon social y firma Rep. legal: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="153" y="109" width="102" height="14" uuid="3885dc8f-6d31-4eae-a629-e1d3b5d197d8"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{correo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="81" width="153" height="14" uuid="9b839b7d-7791-41e0-be73-13d61c15fa51"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[NIT: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="95" width="153" height="14" uuid="787f2c0c-af5a-4404-bb72-9cfd1c70ca0a"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<text><![CDATA[Dirección: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="153" y="123" width="102" height="14" uuid="094c3147-d8e0-4834-9171-595d73f98b23"/>
+				<textElement>
+					<font fontName="Open Sans Light"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telefono}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="243" y="12" width="283" height="42" uuid="66b94b22-1b52-4a7b-bda1-392380bb340a"/>
+				<textElement textAlignment="Right">
+					<font fontName="Open Sans Light" size="8"/>
+				</textElement>
+				<text><![CDATA[Superintendencia de Notariado y Registro
+Calle 26 No. 13-49 Int. 201 – PBX (1)328-21- 21
+Bogotá D.C. - Colombia
+http://www.supernotariado.gov.co]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="14" width="85" height="40" uuid="f6351fbe-be50-43bf-aee8-74932cb166b3"/>
+				<imageExpression><![CDATA[$P{iso}]]></imageExpression>
+			</image>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,16 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<div class="row">
+		<div class="col-xs-12 resumen_transaccion_valor_pagado">
+			<h:outputText class="label-form"
+				value="#{txt_solicitud_consulta['resumen.valorTotal']} " />
+			<h:outputText class="colorVerde" value="#{valorTotal}">
+				<f:convertNumber type="currency" currencySymbol="$"
+					maxFractionDigits="0" />
+			</h:outputText>
+		</div>
+	</div>
+</ui:composition>

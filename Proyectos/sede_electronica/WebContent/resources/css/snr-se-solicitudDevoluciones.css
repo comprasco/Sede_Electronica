@@ -1,0 +1,67 @@
+.numero-borde {
+	width: 101%;
+	height: 37px;
+	border: 1px solid #EFEFEF;
+	color: #572228;
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: 3px;
+}
+
+.boton-iz {
+	padding-left: 18px !important;
+}
+
+.borde-no {
+	border: 0 !important;
+}
+
+.centrar-campos {
+	padding-top: 8px;
+}
+
+.tablaNirTurno {
+	text-align: center;
+	padding-left: 20% !important;
+	padding-right: 20% !important;
+}
+
+.tablas {
+	margin-right: -3%;
+	margin-left: -3%;
+	text-align: center;
+}
+
+.observacionesTabla {
+	padding-left: 3%;
+	padding-right: 3%;
+}
+
+.observacionesIzq {
+	text-align: left;
+	padding-left: 3%;
+}
+
+.textoInfo{
+	font-weight: normal !important; 
+}
+
+.textoNegrilla{
+	font-weight: bold !important; 
+}
+.columnaRadioButton{
+/* 	width:16px !important; */
+	text-align:center !important;
+}
+
+.columnaRadioButton > .ui-radiobutton > .ui-radiobutton-box{
+	border: solid 1px black;
+}
+.contenido-previsualizar{
+	width: 90%;
+	margin: auto;
+}
+
+.dialogMargen{
+	margin: auto;
+}

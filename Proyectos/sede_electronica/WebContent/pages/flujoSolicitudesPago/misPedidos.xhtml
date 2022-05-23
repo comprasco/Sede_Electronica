@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="title">
+		<title>#{txt_flujoSolicitudesPago['titulo.pedido']}</title>
+	</ui:define>
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+	</ui:define>
+	<ui:define name="body">
+		<f:metadata>
+			<f:viewParam name="is_resumen"
+				value="#{beanIntegracionTemporal.is_resumen}" />
+			<f:event type="preRenderView"
+				listener="#{beanIntegracionTemporal.valorParametro}" />
+		</f:metadata>
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_flujoSolicitudesPago['banner.pedido.titulo']}" />
+			<ui:param name="imagen" value="img-rolesPermisos" />
+			<ui:param name="subtitulo"
+				value="#{txt_flujoSolicitudesPago['banner.pedido.subtitulo']}" />
+		</ui:include>
+		<p:outputPanel>
+			<p:panel class="panelCarrito" styleClass="panel-content no-border"
+				visible="#{beanIntegracionTemporal.ii_numeroTransacciones == 0}">
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<h:outputText class="h3"
+							value="#{txt_flujoSolicitudesPago['texto.pedidos.vacio']}" />
+					</div>
+				</div>
+			</p:panel>
+			<p:panel
+				visible="#{beanIntegracionTemporal.ii_numeroTransacciones > 0}">
+				<div class="container-fluid-special">
+					<br /> <br />
+					<div class="row space-row">
+						<div class="col-xs-2 col-xs-offset-10 text-right">
+							<p:commandButton icon="icon-actualizar" update="tablaPedidos"
+								actionListener="#{beanIntegracion.administrarTransaccionesPagadas}"
+								action="#{beanIntegracionTemporal.consultarPendientesPago}"
+								styleClass="icon-circle icon-input btn-gradiente icono_boton" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="scroll-politicas">
+								<p:dataTable id="tablaPedidos" widgetVar="datosPedidos"
+									value="#{beanIntegracionTemporal.ilie_listaIntegracionEntradaDto}"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									styleClass="tabla-fija" reflow="true"
+									paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+									currentPageReportTemplate="{currentPage} / {totalPages}"
+									var="pedido">
+									<p:column
+										headerText="#{txt_flujoSolicitudesPago['titulo.pedido.tabla.pedido']}">
+										<h:outputText value="#{pedido.is_operacion}" />
+									</p:column>
+									<p:column styleClass="tamano-columna-adm"
+										headerText="#{txt_flujoSolicitudesPago['titulo.pedido.tabla.nir']}">
+										<h:outputText value="#{pedido.is_nir}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_flujoSolicitudesPago['titulo.pedido.tabla.referenciaPago']}">
+										<h:outputText value="#{pedido.is_referenciaPago}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_flujoSolicitudesPago['titulo.pedido.tabla.valor']}">
+										<h:outputText value="#{pedido.ibd_valorTotalServicio}">
+											<f:convertNumber type="currency" currencySymbol="$"
+												maxFractionDigits="0" />
+										</h:outputText>
+									</p:column>
+									<p:column styleClass="centrar5"
+										headerText="#{txt_flujoSolicitudesPago['titulo.pedido.tabla.cantidad']}">
+										<h:outputText value="#{pedido.ii_cantidad}" />
+									</p:column>
+									<p:column
+										headerText="#{txt_flujoSolicitudesPago['titulo.pedido.tabla.fechaSolicitud']}">
+										<h:outputText value="#{pedido.id_fechaCreacion}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</p:column>
+									<p:column
+										headerText="#{txt_flujoSolicitudesPago['titulo.pedido.tabla.detalle']}">
+										<p:commandButton class="btn-rojo btn-gradiente"
+											icon="fa fa-eye"
+											value="#{txt_flujoSolicitudesPago['boton.pedido.detalle']}"
+											action="#{beanIntegracionTemporal.redirigirSolicitud(pedido)}">
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>

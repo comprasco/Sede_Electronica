@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions targetNamespace="https://www.supernotariado.gov.co/services/bachue/ef/operacionesfinancieras/v2" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/consultarestadoliquidacion/v2" xmlns:WL5G3N2="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/consultartarifaservicio/v2" xmlns:WL5G3N3="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/generarliquidacion/v2" xmlns:WL5G3N4="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/notificarpago/v2" xmlns:WL5G3N5="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/obtenerpdfliquidacion/v2" xmlns:WL5G3N6="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/actualizardatossolicitante/v2" xmlns:WL5G3N7="https://www.supernotariado.gov.co/services/bachue/ef/operacionesfinancieras/v2" xmlns:WL5G3N8="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <WL5G3N0:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bachue="https://www.supernotariado.gov.co/services/bachue/ef/operacionesfinancieras/v2" xmlns:bachue1="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/consultarestadoliquidacion/v2" xmlns:bachue2="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/consultartarifaservicio/v2" xmlns:bachue3="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/generarliquidacion/v2" xmlns:bachue4="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/notificarpago/v2" xmlns:bachue5="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/obtenerpdfliquidacion/v2" xmlns:bachue6="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/actualizardatossolicitante/v2" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/consultarestadoliquidacion/v2" schemaLocation="http://52.170.212.47:7016/services/ef/operacionesfinancieras/v2/?SCHEMA%2FExpuestosFinancieras%2FOperacionesFinancieras%2FResources%2FSchemas%2FEF_OF_ConsultarEstadoLiquidacion"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/consultartarifaservicio/v2" schemaLocation="http://52.170.212.47:7016/services/ef/operacionesfinancieras/v2/?SCHEMA%2FExpuestosFinancieras%2FOperacionesFinancieras%2FResources%2FSchemas%2FEF_OF_ConsultarTarifaServicio"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/generarliquidacion/v2" schemaLocation="http://52.170.212.47:7016/services/ef/operacionesfinancieras/v2/?SCHEMA%2FExpuestosFinancieras%2FOperacionesFinancieras%2FResources%2FSchemas%2FEF_OF_GenerarLiquidacion"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/notificarpago/v2" schemaLocation="http://52.170.212.47:7016/services/ef/operacionesfinancieras/v2/?SCHEMA%2FExpuestosFinancieras%2FOperacionesFinancieras%2FResources%2FSchemas%2FEF_OF_NotificarPago"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/obtenerpdfliquidacion/v2" schemaLocation="http://52.170.212.47:7016/services/ef/operacionesfinancieras/v2/?SCHEMA%2FExpuestosFinancieras%2FOperacionesFinancieras%2FResources%2FSchemas%2FEF_OF_ObtenerPDFLiquidacion"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ef/operacionesfinancieras/actualizardatossolicitante/v2" schemaLocation="http://52.170.212.47:7016/services/ef/operacionesfinancieras/v2/?SCHEMA%2FExpuestosFinancieras%2FOperacionesFinancieras%2FResources%2FSchemas%2FEF_OF_ActualizarDatosSolicitante"/>
+    </schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="ConsultarEstadoLiquidacion_Request">
+    <WL5G3N0:part element="WL5G3N1:entradaConsultarEstadoLiquidacion" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarEstadoLiquidacion_Response">
+    <WL5G3N0:part element="WL5G3N1:salidaConsultarEstadoLiquidacion" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarTarifaServicio_Request">
+    <WL5G3N0:part element="WL5G3N2:entradaConsultarTarifaServicio" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarTarifaServicio_Response">
+    <WL5G3N0:part element="WL5G3N2:salidaConsultarTarifaServicio" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="GenerarLiquidacion_Request">
+    <WL5G3N0:part element="WL5G3N3:entradaGenerarLiquidacion" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="GenerarLiquidacion_Response">
+    <WL5G3N0:part element="WL5G3N3:salidaGenerarLiquidacion" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="NotificarPago_Request">
+    <WL5G3N0:part element="WL5G3N4:entradaNotificarPago" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="NotificarPago_Response">
+    <WL5G3N0:part element="WL5G3N4:salidaNotificarPago" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ObtenerPDFLiquidacion_Request">
+    <WL5G3N0:part element="WL5G3N5:entradaObtenerPDFLiquidacion" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ObtenerPDFLiquidacion_Response">
+    <WL5G3N0:part element="WL5G3N5:salidaObtenerPDFLiquidacion" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ActualizarDatosSolicitante_Request">
+    <WL5G3N0:part element="WL5G3N6:entradaActualizarDatosSolicitante" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ActualizarDatosSolicitante_Response">
+    <WL5G3N0:part element="WL5G3N6:salidaActualizarDatosSolicitante" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="SBB_EF_OperacionesFinancieras">
+    <WL5G3N0:operation name="ConsultarEstadoLiquidacion">
+      <WL5G3N0:input message="WL5G3N7:ConsultarEstadoLiquidacion_Request"/>
+      <WL5G3N0:output message="WL5G3N7:ConsultarEstadoLiquidacion_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarTarifaServicio">
+      <WL5G3N0:input message="WL5G3N7:ConsultarTarifaServicio_Request"/>
+      <WL5G3N0:output message="WL5G3N7:ConsultarTarifaServicio_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="GenerarLiquidacion">
+      <WL5G3N0:input message="WL5G3N7:GenerarLiquidacion_Request"/>
+      <WL5G3N0:output message="WL5G3N7:GenerarLiquidacion_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="NotificarPago">
+      <WL5G3N0:input message="WL5G3N7:NotificarPago_Request"/>
+      <WL5G3N0:output message="WL5G3N7:NotificarPago_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ObtenerPDFLiquidacion">
+      <WL5G3N0:input message="WL5G3N7:ObtenerPDFLiquidacion_Request"/>
+      <WL5G3N0:output message="WL5G3N7:ObtenerPDFLiquidacion_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ActualizarDatosSolicitante">
+      <WL5G3N0:input message="WL5G3N7:ActualizarDatosSolicitante_Request"/>
+      <WL5G3N0:output message="WL5G3N7:ActualizarDatosSolicitante_Response"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="SBB_EF_OperacionesFinancierasSOAP12Binding" type="WL5G3N7:SBB_EF_OperacionesFinancieras">
+    <WL5G3N8:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="ConsultarEstadoLiquidacion">
+      <WL5G3N8:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ef/operacionesfinancieras/v2/ConsultarEstadoLiquidacion" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N8:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N8:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarTarifaServicio">
+      <WL5G3N8:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ef/operacionesfinancieras/v2/ConsultarTarifaServicio" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N8:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N8:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="GenerarLiquidacion">
+      <WL5G3N8:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ef/operacionesfinancieras/v2/GenerarLiquidacion" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N8:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N8:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="NotificarPago">
+      <WL5G3N8:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ef/operacionesfinancieras/v2/NotificarPago" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N8:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N8:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ObtenerPDFLiquidacion">
+      <WL5G3N8:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ef/operacionesfinancieras/v2/ObtenerPDFLiquidacion" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N8:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N8:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ActualizarDatosSolicitante">
+      <WL5G3N8:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ef/operacionesfinancieras/v2/ActualizarDatosSolicitante" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N8:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N8:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="SBB_EF_OperacionesFinancierasSOAP12BindingQSService">
+    <WL5G3N0:documentation>OSB Service</WL5G3N0:documentation>
+    <WL5G3N0:port binding="WL5G3N7:SBB_EF_OperacionesFinancierasSOAP12Binding" name="SBB_EF_OperacionesFinancierasSOAP12BindingQSPort">
+      <WL5G3N8:address location="http://10.0.0.27:7016/services/ef/operacionesfinancieras/v2"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

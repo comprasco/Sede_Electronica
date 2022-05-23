@@ -1,0 +1,12 @@
+
+.centrarTextoClave{
+	padding-top: 6px;
+}
+
+body .ui-dialog.ui-widget-content.box-solid .ui-dialog-titlebar span.ui-icon:before, body .ui-dialog.box-solid .ui-dialog-titlebar span.ui-icon:before {
+    display: none;
+}
+
+.texto-izquierda{
+	text-align: left !important;
+}

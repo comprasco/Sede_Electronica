@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-administracion.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_usuariosAdmin['usuario.admin.titulo.crear']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_usuariosAdmin['usuario.admin.titulo.crear']}" />
+			<ui:param name="imagen" value="img-parametrizacion" />
+			<ui:param name="subtitulo"
+				value="#{txt_usuariosAdmin['usuario.admin.titulo.crear']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/usuarios/crearUsuarioAdministrador.jsf" />
+		</ui:include>
+		<div class="row">
+			<div class="col-xs-12 align-center consultarPad padBotton">
+				<h:outputText styleClass="titulo tituloText"
+					value="#{txt_usuariosAdmin['usuario.admin.titulo.crear']}" />
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row">
+				<div id="section">
+					<h:form id="formCreacionUsuario">
+						<div class="row">
+							<div class="col-xs-6">
+								<p:outputLabel id="labelNombreUsuario" styleClass="label-form"
+									for="nombreUsuario"
+									value="#{txt_usuariosAdmin['usuario.admin.nombreUsuario']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<div class="ui-inputgroup">
+									<p:outputLabel id="nombreUsuario" required="true"
+										readonly="#{facesContext.renderResponse}"
+										styleClass="tamano consultarUsuarioPad"
+										placeholder="#{BeanCreacionAdministradorInterno.iud_usuarioDto.is_usuario}"
+										value="#{BeanCreacionAdministradorInterno.iud_usuarioDto.is_usuario}"
+										onkeypress="return false;">
+										<p:keyFilter regEx="/[0-9a-z\s]/i" />
+									</p:outputLabel>
+									<p:tooltip for="nombreUsuario"
+										value="#{txt_usuariosAdmin['usuario.admin.tool.nombreUsuario']}"></p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="nombreUsuario" /></span>
+							</div>
+							<div class="col-xs-6">
+								<p:outputLabel id="rol" styleClass="label-form" for="rolUsuario"
+									value="#{txt_usuariosAdmin['usuario.admin.rol']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<div class="ui-inputgroup">
+									<p:selectOneMenu styleClass="tamano" id="rolUsuario"
+										required="true"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										value="#{BeanCreacionAdministradorInterno.iud_usuarioDto.is_rol}">
+										<f:selectItem
+											itemLabel="#{txt_certificados['wizardCertificado.datos.seleccionar']}"
+											itemValue="" />
+										<f:selectItems
+											value="#{beanUsuariosAdministradores.ilr_roles}" var="rol"
+											itemLabel="#{rol.is_nombreLargo}"
+											itemValue="#{rol.is_nombre}" />
+									</p:selectOneMenu>
+								</div>
+								<p:tooltip for="rolUsuario"
+									value="#{txt_usuariosAdmin['usuario.admin.tool.rolUsuario']}"></p:tooltip>
+							</div>
+							<span class="help-block"> <p:message for="rolUsuario" /></span>
+						</div>
+						<div class="row">
+							<div class="col-xs-6">
+								<p:outputLabel id="correo" for="correoUsuario"
+									value="#{txt_usuariosAdmin['usuario.admin.correo']}"
+									styleClass="label-form" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<div class="ui-inputgroup">
+									<p:inputText id="correoUsuario" styleClass="label-form tamano"
+										required="true"
+										value="#{BeanCreacionAdministradorInterno.iud_usuarioDto.is_correoElectronico}"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										maxlength="50"
+										placeholder="#{txt_usuariosAdmin['usuario.admin.placeholder.correo']}">
+										<f:validator validatorId="ValidarCorreoFormato" />
+										<p:ajax event="blur" render="nombreUsuario"
+											update="nombreUsuario"
+											listener="#{BeanCreacionAdministradorInterno.generarNombreUsuario}" />
+									</p:inputText>
+									<p:tooltip for="correoUsuario"
+										value="#{txt_usuariosAdmin['usuario.admin.tool.correoUsuario']}"></p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="correoUsuario" />
+								</span>
+							</div>
+							<div class="col-xs-6">
+								<p:outputLabel id="telefono" styleClass="label-form"
+									for="telefonoUsuario"
+									value="#{txt_usuariosAdmin['usuario.admin.telefono']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<div class="ui-inputgroup">
+									<p:inputText id="telefonoUsuario" autocomplete="off"
+										styleClass="text-input border-completo tamano"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true"
+										placeholder="#{txt_usuariosAdmin['usuario.admin.placeholder.telefono']}"
+										editable="false" maxlength="10"
+										value="#{BeanCreacionAdministradorInterno.iud_usuarioDto.is_celular}">
+										<p:keyFilter regEx="/[0-9-0-9]/i" />
+									</p:inputText>
+									<p:tooltip for="telefonoUsuario"
+										value="#{txt_usuariosAdmin['usuario.admin.tool.telefonoUsuario']}"></p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="telefonoUsuario" /></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-6 ">
+								<p:outputLabel id="estado" styleClass="label-form"
+									for="estadoUsuario"
+									value="#{txt_usuariosAdmin['usuario.admin.estado']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+
+								<div class="ui-inputgroup">
+									<p:selectOneMenu styleClass="tamano" id="estadoUsuario"
+										value="#{BeanCreacionAdministradorInterno.iud_usuarioDto.is_activo}">
+										<f:selectItems
+											value="#{BeanCreacionAdministradorInterno.ile_estados}"
+											var="estados" itemLabel="#{estados.getIs_valorString()}"
+											itemValue="#{estados.getIs_valorString()}" />
+									</p:selectOneMenu>
+									<p:tooltip for="estadoUsuario"
+										value="#{txt_usuariosAdmin['usuario.admin.tool.estadoUsuario']}"></p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="estadoUsuario" /></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel id="descripcion" styleClass="label-form"
+									for="descripcionUsuario"
+									value="#{txt_usuariosAdmin['usuario.admin.descripcion']}" />
+								<p:outputLabel styleClass="required-field">*</p:outputLabel>
+								<div class="ui-inputgroup">
+									<p:inputTextarea id="descripcionUsuario" autocomplete="off"
+										styleClass="text-input border-completo tamano"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										maxlength="500" rows="5" required="true"
+										placeholder="#{txt_usuariosAdmin['usuario.admin.placeholder.descripcion']}"
+										editable="false"
+										value="#{BeanCreacionAdministradorInterno.iud_usuarioDto.is_descripcion}">
+									</p:inputTextarea>
+									<p:tooltip for="descripcionUsuario"
+										value="#{txt_usuariosAdmin['usuario.admin.tool.descripcion']}"></p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="descripcionUsuario" />
+								</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-10 col-sm-4 col-xs-offset-2 align-center pad">
+								<p:commandButton id="volvers"
+									value="#{txt_usuariosAdmin['usuario.admin.volver']}"
+									styleClass="btn-gris" proccess="@this" immediate="true"
+									action="/pages/admon/usuarios/consultaUsuariosAdministradores.jsf?faces-redirect=true">
+								</p:commandButton>
+							</div>
+							<div class="col-xs-10 col-sm-4 align-center pad">
+								<p:commandButton id="crearModal"
+									value="#{txt_usuariosAdmin['usuario.admin.crear']}"
+									styleClass="btn-gradiente btn-rojo" type="submit"
+									process="@form" update="@form formCrearUsuario"
+									oncomplete="if (args &amp;&amp; !args.validationFailed) PF('modalCrearUsuario').show();">
+								</p:commandButton>
+							</div>
+						</div>
+					</h:form>
+				</div>
+			</div>
+		</div>
+		<!-- Modal Confirmar creacion usuario -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalCrearUsuario" />
+			<ui:param name="formulario" value="formCrearUsuario" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:define name="body-modal">
+				<div class="Row">
+					<div class="col-xs-12 align-center padBotton">
+						<p:outputLabel>#{txt_usuariosAdmin['usuario.admin.mensaje.confirmacion.creacion']}</p:outputLabel>
+					</div>
+				</div>
+				<div class="Row">
+					<div class="col-xs-12 align-center">
+						<p:dataTable var="usuarioNuevo"
+							value="#{BeanCreacionAdministradorInterno.iud_usuarioDto}">
+							<p:column
+								headerText="#{txt_usuariosAdmin['usuario.admin.nombreUsuario']}">
+								<h:outputText value="#{usuarioNuevo.is_usuario}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_usuariosAdmin['usuario.admin.correo']}">
+								<h:outputText value="#{usuarioNuevo.is_correoElectronico}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<div class="Row">
+					<div class="col-xs-12 align-center">
+						<p:dataTable var="usuarioNuevo"
+							value="#{BeanCreacionAdministradorInterno.iud_usuarioDto}">
+							<p:column headerText="#{txt_usuariosAdmin['usuario.admin.rol']}">
+								<h:outputText
+									value="#{beanUsuariosAdministradores.consultarNombreLargoRol(usuarioNuevo.is_rol)}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_usuariosAdmin['usuario.admin.estado']}">
+								<h:outputText value="#{usuarioNuevo.is_activo}" />
+							</p:column>
+							<p:column
+								headerText="#{txt_usuariosAdmin['usuario.admin.telefono']}">
+								<h:outputText value="#{usuarioNuevo.is_celular}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<div class="Row">
+					<div class="col-xs-12 descripcionFinal">
+						<p:outputLabel id="descripcionFinallabel" for="descripcionFinal"
+							styleClass="label-form"
+							value="#{txt_usuariosAdmin['usuario.admin.descripcion']} : " />
+						<h:inputTextarea id="descripcionFinal" disabled="true"
+							editable="false" rows="10" autoResize="false" cols="10"
+							value="#{BeanCreacionAdministradorInterno.iud_usuarioDto.is_descripcion}"
+							styleClass="cache-grupoCacheSeleccionado descripcionText" />
+					</div>
+				</div>
+				<div class="Row">
+					<div class="col-xs-12 align-center textAdmin">
+						<h:outputText
+							value="#{txt_usuariosAdmin['usuario.admin.modal.confirmacion']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-4 col-xs-offset-2 align-center pad">
+						<p:commandButton id="cancelarModal"
+							value="#{txt_usuariosAdmin['usuario.admin.cancelar']}"
+							styleClass="btn-gris"
+							oncomplete="PF('modalCrearUsuario').hide();" process="@this">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-sm-4 align-center pad">
+						<p:commandButton id="crear"
+							value="#{txt_usuariosAdmin['usuario.admin.aceptar']}"
+							styleClass="btn-gradiente btn-rojo"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();"
+							action="#{BeanCreacionAdministradorInterno.crearUsuario}">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal creacion exitosa -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalCreacionExitosa" />
+			<ui:param name="formulario" value="formCreacionExitosa" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:define name="body-modal">
+				<div class="Row">
+					<div class="col-xs-12 align-center padBotton">
+						<p:outputLabel>#{txt_usuariosAdmin['usuario.admin.creado.exitosa.confirmacion']} #{BeanCreacionAdministradorInterno.iud_usuarioDto.is_usuario}, #{txt_usuariosAdmin['usuario.admin.creado.envio.correo']}</p:outputLabel>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton id="aceptarExito"
+							value="#{txt_usuariosAdmin['boton.Entendido']}"
+							styleClass="btn-gradiente btn-rojo"
+							action="/pages/admon/usuarios/consultaUsuariosAdministradores.jsf">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

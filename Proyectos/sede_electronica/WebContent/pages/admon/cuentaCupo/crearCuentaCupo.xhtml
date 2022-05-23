@@ -1,0 +1,2561 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputScript library="js" name="archivo.js" />
+		<h:outputScript library="js" name="keyfilter.js" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-cuentaCupo.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_cuentaCupo['CuentaCupo']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_cuentaCupo['CuentaCupo.Titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_cuentaCupo['CuentaCupo.Subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/cuentaCupo/crearCuentaCupo/tutorialCuentaCupo.jsf" />
+		</ui:include>
+		<!-- Creacion cuenta cupo -->
+		<p:panel id="panelCrearCuentaCupo" styleClass="no-border dflex">
+			<!-- Tutorial cuenta cupo -->
+			<p:outputPanel id="tutorialCuentaCupo" styleClass="no-border"
+				rendered="#{beanCrearCuentaCupo.ii_tutorial == 0}">
+				<div class="col-xs-12">
+					<div class="col-xs-12 text-center">
+						<p:outputLabel id="labelFormularioCuentaCupo"
+							styleClass="label-form text-center tamano-titulo"
+							value="#{txt_cuentaCupo['label.BienvedidoSolicitudCreacionCuentaCupo']}" />
+						<br /> <br /> <br />
+					</div>
+					<div class="col-xs-11">
+						<p:outputLabel
+							value="#{txt_cuentaCupo['label.TutorialCuentaCupo']}" />
+						<br /> <br />
+					</div>
+					<div class="col-xs-12">
+						<div class="col-xs-12">
+							<div class="ui-inputgroup">
+								<p:outputLabel id="pre-requisitos1" styleClass="titulo"
+									value="#{txt_cuentaCupo['label.RequisitosUno']}" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="pre-requisitos1" position="right">
+									<div>
+										<p:outputLabel
+											value="#{txt_cuentaCupo['label.RequisitosDos']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="pre-requisitos1" />
+								</span>
+							</div>
+							<div class="ui-inputgroup">
+								<p:outputLabel id="pre-requisitos2" styleClass="titulo"
+									value="#{txt_cuentaCupo['label.RequisitosTres']}" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="pre-requisitos2" position="right">
+									<div>
+										<p:outputLabel
+											value="#{txt_cuentaCupo['label.RequisitosCuatro']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="pre-requisitos2" />
+								</span>
+							</div>
+							<div class="ui-inputgroup">
+								<p:outputLabel id="pre-requisitos3" styleClass="titulo"
+									value="#{txt_cuentaCupo['label.RequisitosCinco']}" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="pre-requisitos3" position="right">
+									<div>
+										<p:outputLabel
+											value="#{txt_cuentaCupo['label.RequisitosSeis']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="pre-requisitos3" />
+								</span>
+							</div>
+							<div class="ui-inputgroup">
+								<p:outputLabel id="pre-requisitos4" styleClass="titulo"
+									value="#{txt_cuentaCupo['label.RequisitosSiete']}" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="pre-requisitos4" position="right">
+									<div>
+										<ui:repeat var="documento"
+											value="#{beanCrearCuentaCupo.ilcd_listaCatalogoDto}">
+											<p:outputLabel value="#{documento.is_nombre}" />
+											<br />
+										</ui:repeat>
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="pre-requisitos4" />
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<br />
+						<p:outputLabel id="ayudaVisual" styleClass="titulo textoRojo"
+							value="#{txt_cuentaCupo['label.TutorialCuentaCupoNotaCuentaCupo']}" />
+					</div>
+					<div class="row ">
+						<div class="col-xs-12">
+							<br />
+							<p:separator />
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel styleClass="titulo tamano-titulo label-form"
+										value="#{txt_cuentaCupo['label.TutorialTituloPasoUno']}" />
+								</div>
+								<div class="col-xs-12">
+									<br />
+									<div class="col-xs-3 text-center">
+										<h:outputText id="camposObligatorios"
+											class="fa fa-list-alt fa-4x cursor-pointer"
+											title="#{txt_cuentaCupo['title.CamposObligatorios']}"></h:outputText>
+										<p:overlayPanel id="img1" for="camposObligatorios"
+											hideEffect="fade">
+											<p:imageSwitch effect="fade">
+												<p:graphicImage name="/img/cuenta-cupo/paso1.png"
+													width="500" />
+											</p:imageSwitch>
+										</p:overlayPanel>
+									</div>
+									<div class="col-xs-9 pad-text">
+										<p:outputLabel styleClass="titulo"
+											value="#{txt_cuentaCupo['label.TutorialFormularioCreacion']}" />
+									</div>
+								</div>
+							</div>
+							<br />
+							<p:separator />
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel styleClass="titulo tamano-titulo label-form"
+										value="#{txt_cuentaCupo['label.TutorialTituloPasoDos']}" />
+								</div>
+								<div class="col-xs-12">
+									<br />
+									<div class="col-xs-9 pad-text">
+										<p:outputLabel styleClass="titulo"
+											value="#{txt_cuentaCupo['label.TutorialTituloDescargaFirma']}" />
+									</div>
+									<div class="col-xs-3 text-center">
+										<h:outputText id="previsualizar"
+											class="fa fa-eye fa-4x cursor-pointer"
+											title="#{txt_cuentaCupo['title.PrevisualizarDocumentos']}"></h:outputText>
+										<p:overlayPanel id="img2" for="previsualizar"
+											hideEffect="fade">
+											<p:imageSwitch effect="fade">
+												<p:graphicImage name="/img/cuenta-cupo/paso2.png"
+													width="500" />
+											</p:imageSwitch>
+										</p:overlayPanel>
+									</div>
+								</div>
+								<div class="col-xs-12">
+									<br />
+									<div class="col-xs-9 pad-text">
+										<p:outputLabel styleClass="titulo"
+											value="#{txt_cuentaCupo['label.TutorialTituloDescargaFirmaUno']}" />
+									</div>
+									<div class="col-xs-3 text-center">
+										<h:outputText id="nuevaSolicitud"
+											class="fa fa-exclamation-circle fa-4x cursor-pointer"
+											title="#{txt_cuentaCupo['title.NotaImportante']}"></h:outputText>
+										<p:overlayPanel id="img3" for="nuevaSolicitud"
+											hideEffect="fade">
+											<p:imageSwitch effect="fade">
+												<p:graphicImage name="/img/cuenta-cupo/paso3.png"
+													width="500" />
+											</p:imageSwitch>
+										</p:overlayPanel>
+									</div>
+								</div>
+							</div>
+							<br />
+							<p:separator />
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel styleClass="titulo tamano-titulo label-form"
+										value="#{txt_cuentaCupo['label.TutorialTituloPasoTres']}" />
+									<div class="col-xs-12">
+										<br />
+										<div class="col-xs-3 text-center">
+											<h:outputText id="adjuntarFormulario"
+												class="fa fa-upload fa-4x cursor-pointer"
+												title="#{txt_cuentaCupo['title.AdjuntarFormulario']}"></h:outputText>
+											<p:overlayPanel id="img4" for="adjuntarFormulario"
+												hideEffect="fade">
+												<p:imageSwitch effect="fade">
+													<p:graphicImage name="/img/cuenta-cupo/paso4.png"
+														width="500" />
+												</p:imageSwitch>
+											</p:overlayPanel>
+										</div>
+										<div class="col-xs-9 pad-text">
+											<p:outputLabel styleClass="titulo"
+												value="#{txt_cuentaCupo['label.TutorialTituloPasoCargueDocumentos']}" />
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<br />
+										<div class="col-xs-3 text-center">
+											<h:outputText id="otrosDocumentos"
+												class="fa fa-file-pdf-o fa-4x cursor-pointer"
+												title="#{txt_cuentaCupo['title.AdjuntarDocumentos']}"></h:outputText>
+											<p:overlayPanel id="img5" for="otrosDocumentos"
+												hideEffect="fade">
+												<p:imageSwitch effect="fade">
+													<p:graphicImage name="/img/cuenta-cupo/paso4.png"
+														width="500" />
+												</p:imageSwitch>
+											</p:overlayPanel>
+										</div>
+										<div class="col-xs-9 pad-text">
+											<p:outputLabel styleClass="titulo"
+												value="#{txt_cuentaCupo['label.TutorialTituloPasoCargueDocumentosUno']}" />
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<br />
+										<div class="col-xs-3 text-center">
+											<h:outputText id="confirmarDocumentos"
+												class="fa fa-exclamation-triangle fa-4x cursor-pointer"
+												title="#{txt_cuentaCupo['title.ConfirmarDocumentosCargados']}"></h:outputText>
+											<p:overlayPanel id="img6" for="confirmarDocumentos"
+												hideEffect="fade">
+												<p:imageSwitch effect="fade">
+													<p:graphicImage name="/img/cuenta-cupo/paso5.png"
+														width="500" />
+												</p:imageSwitch>
+											</p:overlayPanel>
+										</div>
+										<div class="col-xs-9 pad-text">
+											<p:outputLabel styleClass="titulo"
+												value="#{txt_cuentaCupo['label.TutorialTituloPasoCargueDocumentosDos']}" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<br />
+							<p:separator />
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel styleClass="titulo tamano-titulo label-form"
+										value="#{txt_cuentaCupo['label.TutorialTituloPasoCuatro']}" />
+									<br />
+									<div class="col-xs-12">
+										<br />
+										<div class="col-xs-9 pad-text">
+											<p:outputLabel styleClass="titulo"
+												value="#{txt_cuentaCupo['label.TutorialTituloResumenSolicitud']}" />
+										</div>
+										<div class="col-xs-3 text-center">
+											<h:outputText id="envioSolicitud"
+												class="fa fa-wpforms fa-4x cursor-pointer"
+												title="#{txt_cuentaCupo['title.ResumenSolicitud']}"></h:outputText>
+											<p:overlayPanel id="img7" for="envioSolicitud"
+												hideEffect="fade">
+												<p:imageSwitch effect="fade">
+													<p:graphicImage name="/img/cuenta-cupo/paso6.png"
+														width="500" />
+												</p:imageSwitch>
+											</p:overlayPanel>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<br />
+										<div class="col-xs-9 pad-text">
+											<p:outputLabel styleClass="titulo"
+												value="#{txt_cuentaCupo['label.TutorialTituloResumenSolicitudUno']}" />
+										</div>
+										<div class="col-xs-3 text-center">
+											<h:outputText id="estadoSolcitud"
+												class="fa fa-info-circle fa-4x cursor-pointer"
+												title="#{txt_cuentaCupo['title.EstadoSolicitud']}"></h:outputText>
+											<p:overlayPanel id="img8" for="estadoSolcitud"
+												hideEffect="fade">
+												<p:imageSwitch effect="fade">
+													<p:graphicImage name="/img/cuenta-cupo/paso7.png"
+														width="500" />
+												</p:imageSwitch>
+											</p:overlayPanel>
+										</div>
+									</div>
+								</div>
+							</div>
+							<br /> <br />
+						</div>
+					</div>
+					<div class="row">
+						<p:separator />
+						<div class="col-xs-12 col-sm-4 col-sm-offset-1">
+							<p:commandButton icon="icon-flecha-gris" iconPos="right"
+								styleClass="icon-btn btn-gris " type="submit"
+								value="#{txt_seguimiento['boton.cancelar']}"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide(); Error();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-12 col-sm-4 col-sm-offset-2">
+							<p:commandButton id="btn-editar" icon="icon-flecha-blanca"
+								iconPos="right" type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+								value="#{txt_cuentaCupo['boton.IrFormulario']}"
+								update="panelCrearCuentaCupo"
+								action="#{beanCrearCuentaCupo.recuperarFormulario()}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide(); cargarKeyfilters();">
+							</p:commandButton>
+						</div>
+					</div>
+					<br />
+				</div>
+			</p:outputPanel>
+			<!-- Formulario solicitud creacion cuenta cupo -->
+			<p:outputPanel id="formularioCuentaCupo"
+				rendered="#{beanCrearCuentaCupo.ii_tutorial == 1}">
+				<!-- Script que ejecuta el Keyfilter-->
+				<script type="text/javascript">
+					$(document).ready(function() {
+						cargarKeyfilters();
+					});
+				</script>
+				<!-- Script que ejecuta el Keyfilter-->
+				<h:form id="formFormularioCuentaCupo">
+					<p:importEnum
+						type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumFormularioCuentaCupo"
+						var="CampoConfiguracion" />
+					<div>
+						<div class="col-xs-12">
+							<div class="col-xs-10 text-center">
+								<p:outputLabel id="labelTituloTutorialCuentaCupo"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_cuentaCupo['SuperintendenciaNotariadoRegistro']}" />
+								<br /> <br />
+								<p:outputLabel id="labelTutorialCuentaCupo"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_cuentaCupo['FormularioCuentaCupo']}" />
+								<br /> <br />
+								<p:outputLabel id="labelTituloTramitesLinea"
+									styleClass="label-form text-center tamano-titulo"
+									value="#{txt_cuentaCupo['FormularioModificacionCuentaCupo.tramitesLinea']}" />
+								<br /> <br />
+							</div>
+							<div class="col-xs-2 text-center">
+								<p:commandButton icon="icon-tutorial" type="submit"
+									styleClass="icon-circle icon-input btn-gradiente">
+									<p:ajax listener="#{beanCrearCuentaCupo.verTutorial()}"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();" />
+								</p:commandButton>
+								<br /> <br />
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="title col-xs-12">
+									<p:outputLabel id="labelFechaDiligenciamiento"
+										styleClass="label-form" for="fechaDiligenciamiento"
+										value="#{txt_cuentaCupo['label.FechaDiligenciamiento']}" />
+									<p:inputText id="fechaDiligenciamiento" styleClass="no-borde"
+										readonly="true"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										value="#{beanModificarCuentaCupo.obtenerFecha()}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<br />
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_cuentaCupo['FormularioCuentaCupo.SubtituloUno']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<div class="title">
+									<div>
+										<p:outputLabel id="labelTipoDocumentoRepresentante"
+											styleClass="label-form" for="tipoDocumentoRepresentante"
+											value="#{txt_cuentaCupo['label.TipoDocumentoRepresentante']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									</div>
+									<div>
+										<h:outputText id="ayudaTipoDocRepresentante"
+											class="fa fa-question-circle" />
+									</div>
+								</div>
+								<p:selectOneMenu id="tipoDocumentoRepresentante"
+									widgetVar="tipoDocumentoSelect"
+									requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+									required="true"
+									value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_tipoDocumentoRepresentanteLegal}">
+									<p:ajax event="blur"
+										listener="#{beanCrearCuentaCupo.guardarTransaccion(CampoConfiguracion.TIPO_DOCUMENTO_REPRESENTANTE_LEGAL.getIs_nombreCampo(),beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_tipoDocumentoRepresentanteLegal)}" />
+									<f:selectItem itemValue=""
+										itemLabel="#{txt['label.SeleccioneComboBox']}" />
+									<f:selectItems
+										value="#{beanCrearCuentaCupo.iltd_tiposDocumento}"
+										var="tipoDocumento" itemValue="#{tipoDocumento.getIs_id()}"
+										itemLabel="#{tipoDocumento.getIs_nombre()}" />
+								</p:selectOneMenu>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="ayudaTipoDocRepresentante" position="top">
+									<div>
+										<p:outputLabel
+											value="#{txt_cuentaCupo['ayuda.TipoDocumento']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="tipoDocumentoRepresentante" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<div class="title">
+									<div>
+										<p:outputLabel id="labelNumeroDocumentoRepresentante"
+											styleClass="label-form" for="numeroDocumentoRepresentante"
+											value="#{txt_cuentaCupo['label.FormularioCuentaCupoDocumentoRepresentante']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									</div>
+									<div>
+										<h:outputText id="ayudaNumeroDocRepresentante"
+											class="fa fa-question-circle" />
+									</div>
+								</div>
+								<div class="ui-inputgroup">
+									<p:inputText id="numeroDocumentoRepresentante"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										autocomplete="off"
+										styleClass="text-input border-completo mask-Numeric"
+										maxlength="20"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										placeholder="#{txt_persona['placeholder.NumeroDocumento']}"
+										required="true"
+										value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_numeroDocumentoRepresentanteLegal}">
+										<p:ajax event="blur"
+											update="formModalPrevisualizarPdf:documentoRepresentanteNumero"
+											listener="#{beanCrearCuentaCupo.guardarTransaccion(CampoConfiguracion.NUMERO_DOCUMENTO_REPRESENTANTE_LEGAL.getIs_nombreCampo(),beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_numeroDocumentoRepresentanteLegal)}" />
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										for="ayudaNumeroDocRepresentante" position="top">
+										<div>
+											<p:outputLabel
+												value="#{txt_cuentaCupo['ayuda.NumeroDocumento']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="numeroDocumentoRepresentante" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-12">
+								<p:outputLabel id="labelRepresentanteLegal"
+									styleClass="label-form" for="representanteLegal"
+									value="#{txt_persona['label.RepresentanteLegal']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="representanteLegal"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanCrearCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.getNombreRepresentanteLegal()}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelRepresentanteLegal"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_cuentaCupo['tooltip.RepresentanteLegal']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="representanteLegal" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelTipoDocumento" styleClass="label-form"
+									for="tipoDocumento"
+									value="#{txt_persona['label.TipoDocumento']}" />
+								<p:inputText id="tipoDocumento"
+									onkeypress="if (event.keyCode == 13){return false;}"
+									styleClass="text-input border-completo" readonly="true"
+									value="#{beanCrearCuentaCupo.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelTipoDocumento"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_cuentaCupo['tooltip.TipoDocumento']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="tipoDocumento" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelNumeroDocumento" styleClass="label-form"
+									for="numeroDocumento"
+									value="#{txt_cuentaCupo['label.NumeroDocumento']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="numeroDocumento"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanCrearCuentaCupo.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelNumeroDocumento"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_cuentaCupo['tooltip.NumeroDocumento']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="numeroDocumento" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<div class="title">
+									<div>
+										<p:outputLabel id="labelDigitoVerificacion"
+											styleClass="label-form" for="digitoVerificacion"
+											value="#{txt_cuentaCupo['label.FormularioDigitoVerificacion']}" />
+									</div>
+									<div>
+										<h:outputText id="ayudaDigitoVerificacion"
+											class="fa fa-question-circle" />
+									</div>
+								</div>
+								<div class="ui-inputgroup">
+									<p:inputText id="digitoVerificacion" autocomplete="off"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo mask-Numeric"
+										maxlength="5"
+										placeholder="#{txt_cuentaCupo['placeholder.DigitoVerificacion']}"
+										value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_digitoVerificacion}">
+										<p:ajax event="blur"
+											update="formModalPrevisualizarPdf:verificacionDigito"
+											listener="#{beanCrearCuentaCupo.guardarTransaccion(CampoConfiguracion.DIGITO_VERIFICACION.getIs_nombreCampo(),beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_digitoVerificacion)}" />
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										for="ayudaDigitoVerificacion" position="top">
+										<div>
+											<p:outputLabel
+												value="#{txt_cuentaCupo['ayuda.DigitoVerificacion']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="digitoVerificacion" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-8">
+								<p:outputLabel id="labelRazonSocial" styleClass="label-form"
+									for="razonSocial" value="#{txt_persona['label.RazonSocial']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="razonSocial" readonly="true"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo"
+										value="#{beanCrearCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.is_razonSocial}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelRazonSocial"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_cuentaCupo['tooltip.RazonSocial']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="razonSocial" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<p:outputLabel id="labelTipoOrganizJur" styleClass="label-form"
+									for="tipoOrganiz"
+									value="#{txt_cuentaCupo['label.TipoOrganizacion']}" />
+								<p:inputText id="tipoOrganiz" readonly="true"
+									onkeypress="if (event.keyCode == 13){return false;}"
+									styleClass="text-input border-completo"
+									value="#{beanCrearCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.ic_tipoCatalogoTipoOrganizacion.is_nombre}" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelTipoOrganizJur"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_cuentaCupo['tooltip.TipoOrganizacion']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="tipoOrganiz" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_cuentaCupo['FormularioCuentaCupo.SubtituloDos']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel id="labelDireccionCompleta"
+									styleClass="label-form"
+									for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+									value="#{txt_cuentaCupo['label.direccion']}" />
+								<div class="ui-inputgroup">
+									<p:inputText styleClass="text-input border-completo"
+										readonly="true"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										id="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+										value="#{beanCrearCuentaCupo.mostrarDireccionCompleta()}" />
+								</div>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelDireccionCompleta"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel value="#{txt_cuentaCupo['tooltip.Direccion']}" />
+									</div>
+								</p:tooltip>
+								<span id="spanDireccionJur" class="help-block"> <p:message
+										for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelCiudadDireccion" styleClass="label-form"
+									for="ciudad1"
+									value="#{txt_cuentaCupo['label.CiudadCuentaCupo']}" />
+								<p:inputText id="ciudad1"
+									onkeypress="if (event.keyCode == 13){return false;}"
+									styleClass="text-input border-completo" readonly="true"
+									value="#{beanCrearCuentaCupo.consultarCiudad()}">
+								</p:inputText>
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									styleClass="tooltipGeneral" for="labelCiudadDireccion"
+									position="top">
+									<div class="content-tooltip-general">
+										<p:outputLabel
+											value="#{txt_cuentaCupo['tooltip.CiudadCuentaCupo']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message for="ciudad1" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelTelefono" styleClass="label-form"
+									for="telefonoFijo" value="#{txt_persona['label.TelefonoFijo']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="telefonoFijo" readonly="true"
+										styleClass="text-input border-completo"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										value="#{beanCrearCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.is_telefono}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelTelefono" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_cuentaCupo['tooltip.TelefonoFijo']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="telefonoFijo" />
+								</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelCelular" styleClass="label-form"
+									for="celular" value="#{txt_persona['label.NumeroCelular']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="celular"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo" readonly="true"
+										value="#{beanCrearCuentaCupo.iu_usuarioDto.is_celular}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelCelular" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_cuentaCupo['tooltip.NumeroCelular']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="celular" />
+								</span>
+							</div>
+							<div class="col-xs-12 col-sm-6">
+								<p:outputLabel id="labelCorreo" styleClass="label-form"
+									for="correo" value="#{txt_persona['label.CorreoElectronico']}" />
+								<div class="ui-inputgroup">
+									<p:inputText id="correo" readonly="true"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo"
+										value="#{beanCrearCuentaCupo.iu_usuarioDto.is_correoElectronico}">
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelCorreo" position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_persona['tooltip.CorreoElectronico']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message for="correo" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_cuentaCupo['FormularioCuentaCupo.SubtituloTres']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-12">
+								<div class="title">
+									<p:outputLabel id="labelOcupacionProfesion"
+										styleClass="label-form" for="ocupacionProfesion"
+										value="#{txt_cuentaCupo['label.FormularioOcupacion']}" />
+									<h:outputText id="ayudaOcupacionProfesion"
+										class="fa fa-question-circle" />
+								</div>
+								<div class="ui-inputgroup">
+									<p:inputText id="ocupacionProfesion" autocomplete="off"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										styleClass="text-input border-completo mask-AlphaNumChars2"
+										placeholder="#{txt_cuentaCupo['placeholder.Ocupacion']}"
+										maxlength="50"
+										value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_ocupacionProfesion}">
+										<p:ajax event="blur"
+											update="formModalPrevisualizarPdf:profesionOcupacion"
+											listener="#{beanCrearCuentaCupo.guardarTransaccion(CampoConfiguracion.OCUPACION_PROFESION.getIs_nombreCampo(),beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_ocupacionProfesion)}" />
+									</p:inputText>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										for="ayudaOcupacionProfesion" position="top">
+										<div>
+											<p:outputLabel value="#{txt_cuentaCupo['ayuda.Ocupacion']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="ocupacionProfesion" />
+								</span>
+							</div>
+							<div class="col-xs-12">
+								<div class="title">
+									<p:outputLabel id="labelDescripcionActividadEconomica"
+										styleClass="label-form" for="descripcionActividadEconomica"
+										value="#{txt_cuentaCupo['label.DescripcionActividadEconomica']}" />
+									<h:outputText id="ayudaDescripcionActividadEconomica"
+										class="fa fa-question-circle" />
+								</div>
+								<div class="ui-inputgroup">
+									<p:selectOneMenu id="descripcionActividadEconomica"
+										styleClass="pais-nat"
+										widgetVar="descripcionActividadEconomicaSelect"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true"
+										value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_descripcionActividadEconomica}">
+										<p:ajax event="blur"
+											update="formModalPrevisualizarPdf:actividadEconomicaDescripcion"
+											listener="#{beanCrearCuentaCupo.guardarTransaccion(CampoConfiguracion.DESCRIPCION_ACTIVIDAD_ECONOMICA.getIs_nombreCampo(),beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_descripcionActividadEconomica)}" />
+										<f:selectItem itemValue=""
+											itemLabel="#{txt['label.SeleccioneComboBox']}" />
+										<f:selectItems
+											value="#{beanCrearCuentaCupo.ilae_actividadEconomicaDto}"
+											var="actividadEconomica"
+											itemValue="#{actividadEconomica.is_nombreActividadEconomica}"
+											itemLabel="#{actividadEconomica.is_nombreActividadEconomica}" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										for="ayudaDescripcionActividadEconomica" position="top">
+										<div>
+											<p:outputLabel
+												value="#{txt_cuentaCupo['label.InformeActividadEconomica']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="descripcionActividadEconomica" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_cuentaCupo['FormularioCuentaCupo.SubtituloTreCuatro']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 col-sm-4">
+								<div class="title">
+									<p:outputLabel id="labelMontoSolicitado"
+										styleClass="label-form" for="montoSolicitado"
+										value="#{txt_cuentaCupo['label.MontoSolicitar']}" />
+									<h:outputText id="ayudaMontoSolicitado"
+										class="fa fa-question-circle" />
+								</div>
+								<div class="ui-inputgroup">
+									<p:inputNumber id="montoSolicitado" maxValue="9999999999"
+										autocomplete="off" symbol="$ " decimalPlaces="0"
+										styleClass="input-number mask-Numeric" minValue="0"
+										placeholder="#{txt_cuentaCupo['placeholder.MontoSolicitar']}"
+										symbolPosition="p"
+										onkeypress="if (event.keyCode == 13){return false;}"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true"
+										value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_montoSolicitado}">
+										<p:ajax event="blur"
+											update="formModalPrevisualizarPdf:solicitadoMonto"
+											listener="#{beanCrearCuentaCupo.guardarTransaccion(CampoConfiguracion.MONTO_SOLICITADO.getIs_nombreCampo(),beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_montoSolicitado)}" />
+									</p:inputNumber>
+									<br />
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										for="ayudaMontoSolicitado" position="top">
+										<div>
+											<p:outputLabel
+												value="#{txt_cuentaCupo['ayuda.MontoSolicitar']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<span class="help-block"> <p:message
+										for="montoSolicitado" />
+								</span>
+							</div>
+							<div class="col-xs-8">
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="title">
+											<p:outputLabel id="labelFrecuenciaRecarga"
+												styleClass="label-form" for="frecuenciaRecarga"
+												value="#{txt_cuentaCupo['label.FrecuenciaRealizarRecarga']}" />
+											<h:outputText id="ayudaFrecuenciaRecarga"
+												class="fa fa-question-circle" />
+										</div>
+									</div>
+									<div class="col-xs-8 col-md-10">
+										<div class="ui-inputgroup">
+											<p:inputText id="frecuenciaRecarga" maxlength="2"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												required="true"
+												onkeypress="if (event.keyCode == 13){return false;}"
+												styleClass="text-input border-completo mask-Numeric"
+												placeholder="#{txt_cuentaCupo['placeholder.FrecuenciaRecargas']}"
+												value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_frecuenciaRecarga}">
+												<p:ajax event="blur"
+													update="formModalPrevisualizarPdf:recargaFrecuencia"
+													listener="#{beanCrearCuentaCupo.guardarTransaccion(CampoConfiguracion.FRECUENCIA_RECARGA.getIs_nombreCampo(),beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_frecuenciaRecarga)}" />
+											</p:inputText>
+										</div>
+										<br />
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											for="ayudaFrecuenciaRecarga" position="top">
+											<div>
+												<p:outputLabel
+													value="#{txt_cuentaCupo['ayuda.FrecuenciaRecarga']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<div class="col-xs-4 col-md-2">
+										<p:inputText id="ayudaDias" class="text-input border-completo"
+											onkeypress="if (event.keyCode == 13){return false;}"
+											readonly="true" value="#{txt_cuentaCupo['label.Dias']}" />
+										<span class="help-block"> <p:message
+												for="frecuenciaRecarga" />
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="title">
+									<p:outputLabel id="labelNecesidad" styleClass="label-form"
+										for="necesidad"
+										value="#{txt_cuentaCupo['label.SoporteSolicitudServicio']}" />
+									<h:outputText id="ayudaNecesidad" class="fa fa-question-circle" />
+								</div>
+								<div class="ui-inputgroup">
+									<p:inputTextarea id="necesidad" rows="6" cols="40"
+										styleClass="mask-AlphaNumChars2"
+										counter="mostrarContadorNecesidad" maxlength="1000"
+										placeholder="#{txt_cuentaCupo['placeholder.EspecifiqueSolicitudServicio']}"
+										counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+										autoResize="false"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true"
+										value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_necesidadSolicitud}">
+										<p:ajax event="blur"
+											update="formModalPrevisualizarPdf:necesidad"
+											listener="#{beanCrearCuentaCupo.guardarTransaccion(CampoConfiguracion.NECESIDAD_SOLICITUD.getIs_nombreCampo(),beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_necesidadSolicitud)}" />
+									</p:inputTextarea>
+									<br />
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										for="ayudaNecesidad" position="top">
+										<div>
+											<p:outputLabel
+												value="#{txt_cuentaCupo['ayuda.NecesidadSolicitaServicio']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<h:outputText id="mostrarContadorNecesidad" />
+								<span class="help-block"> <p:message for="necesidad" />
+								</span>
+							</div>
+						</div>
+						<br />
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_cuentaCupo['FormularioCuentaCupo.SubtituloTreCinco']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 text-justify">
+								<p:outputLabel
+									value="#{txt_cuentaCupo['label.DeclaracionJuramentada']}" />
+								<br /> <br />
+							</div>
+							<div class="col-xs-12 text-justify">
+								<p:outputLabel
+									value="#{txt_cuentaCupo['label.DeclaracionJuramentadaUno']}" />
+								<br /> <br />
+							</div>
+							<div class="col-xs-12 text-justify">
+								<div class="title">
+									<p:outputLabel id="labelDeclaracion" styleClass="label-form"
+										for="declaracion"
+										value="#{txt_cuentaCupo['label.DeclaracionJuramentadaDos']}" />
+									<h:outputText id="ayudaDeclaracion"
+										class="fa fa-question-circle" />
+								</div>
+								<div class="ui-inputgroup">
+									<p:inputTextarea id="declaracion" rows="6" cols="40"
+										styleClass="mask-AlphaNumChars2"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true" counter="mostrarContadorDeclaracion"
+										maxlength="1000"
+										placeholder="#{txt_administrador['placeholder.Observaciones.Bloqueo']}"
+										counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+										autoResize="false"
+										value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_declaracionJuramentada}">
+										<p:ajax event="blur"
+											update="formModalPrevisualizarPdf:declaracion"
+											listener="#{beanCrearCuentaCupo.guardarTransaccion(CampoConfiguracion.DECLARACION_JURAMENTADA.getIs_nombreCampo(),beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_declaracionJuramentada)}" />
+									</p:inputTextarea>
+									<br />
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										for="ayudaDeclaracion" position="top">
+										<div>
+											<p:outputLabel
+												value="#{txt_cuentaCupo['ayuda.DeclaracionJuramentadaTres']}" />
+										</div>
+									</p:tooltip>
+								</div>
+								<h:outputText id="mostrarContadorDeclaracion" />
+								<span class="help-block"> <p:message for="declaracion" />
+								</span>
+							</div>
+							<br />
+							<div class="col-xs-12 text-justify">
+								<br />
+								<p:outputLabel
+									value="#{txt_cuentaCupo['label.DeclaracionJuramentadaCuatro']}" />
+								<br />
+							</div>
+						</div>
+						<br />
+						<p:separator />
+						<div class="col-xs-11 text-center">
+							<p:outputLabel
+								value="#{txt_cuentaCupo['FormularioCuentaCupo.SubtituloTreSeis']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-12 text-justify">
+								<p:outputLabel
+									value="#{txt_cuentaCupo['label.DeclaracionJuramentadaCinco']}" />
+								<br /> <br />
+							</div>
+							<div class="col-xs-12 text-justify">
+								<p:outputLabel
+									value="#{txt_cuentaCupo['label.DeclaracionJuramentadaSeis']}" />
+								<br /> <br />
+							</div>
+						</div>
+						<br />
+						<div class="row">
+							<div class="col-xs-offset-1 col-sm-offset-1 col-xs-10 col-sm-7">
+								<br /> <br /> <br /> <br /> <br />
+								<p:separator styleClass="tamano-firma" />
+							</div>
+							<div
+								class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-3 text-center">
+								<h:outputText id="firma" class="fa fa-square-o fa-5x"
+									readonly="true">
+								</h:outputText>
+							</div>
+						</div>
+						<br />
+						<div class="col-xs-12 text-center">
+							<p:outputLabel styleClass="titulo tamano-subtitulo"
+								value="#{txt_cuentaCupo['label.DeclaracionJuramentadaSiete']}" />
+							<br /> <br />
+						</div>
+						<br />
+					</div>
+					<br />
+					<p:separator />
+					<br />
+					<div class="row">
+						<div class="col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-4">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_cuentaCupo['boton.Previsualizar']}">
+								<p:ajax listener="#{beanCrearCuentaCupo.previsualizarPdf}"
+									update="formModalPrevisualizarPdf" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_cuentaCupo['boton.CargarDocumentos']}">
+								<p:ajax listener="#{beanCrearCuentaCupo.validarGenerarNir()}"
+									onstart="cargarKeyfilters();"
+									oncomplete="if(args &amp;&amp; args.validationFailed) validarFormulario('#{txt_cuentaCupo['campos.obligatorios']}');"
+									update="panelCrearCuentaCupo"
+									process="formFormularioCuentaCupo" />
+							</p:commandButton>
+						</div>
+					</div>
+					<br />
+				</h:form>
+			</p:outputPanel>
+			<!-- Cargue de documentos cuenta cupo -->
+			<p:outputPanel id="cargueDocumentosCuentaCupo"
+				rendered="#{beanCrearCuentaCupo.ii_tutorial == 2}"
+				styleClass="panel-content no-border">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-9 text-center">
+							<p:outputLabel id="labelAdjuntarDocumentos"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_cuentaCupo['label.AdjuntarDocumentos']}" />
+						</div>
+						<div class="col-xs-3 text-center">
+							<p:commandButton icon="icon-tutorial" type="submit"
+								styleClass="icon-circle icon-input btn-gradiente">
+								<p:ajax listener="#{beanCrearCuentaCupo.verTutorial()}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+							<br /> <br /> <br />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12">
+					<p:outputLabel id="labelDescargarFormularioCC"
+						styleClass="text-center tamano-subtitulo"
+						value="#{txt_cuentaCupo['label.DescargarDocumento']}" />
+					<p:commandButton styleClass="boton-descarga fa fa-download"
+						onstart="PF('blockUI-Loading').show();"
+						oncomplete="PF('blockUI-Loading').hide();" title=" ">
+						<p:ajax listener="#{beanCrearCuentaCupo.desactivarPdf}" />
+					</p:commandButton>
+					<br /> <br />
+				</div>
+				<div class="col-xs-12">
+					<p:outputLabel styleClass="text-center tamano-subtitulo"
+						value="#{txt_cuentaCupo['label.CargaDocumentos']}" />
+					<br /> <br /> <br />
+				</div>
+				<p:outputPanel id="cargaDeDocumentos" class="adjuntar-documentos">
+					<div class="col-xs-12">
+						<p:dataTable var="cargaDocumentosCuentaCupo" styleClass="centrar"
+							widgetVar="paramsCargaDocumentosCuentaCupo" id="cargarDocumento"
+							reflow="true" rowIndexVar="index"
+							value="#{beanCrearCuentaCupo.ilcdf_listaDocumentoFormularioDto}"
+							emptyMessage="#{txt_administrador['tabla.vacia.PJ']}"
+							stickyHeader="false">
+							<p:column
+								headerText="#{txt_cuentaCupo['header.DocumentosSolicitados']}"
+								styleClass="centrar45 documento-medio">
+								<h:outputText
+									value="#{cargaDocumentosCuentaCupo.icd_catalogoDocumentoDto.is_nombre}" />
+							</p:column>
+							<p:column headerText="Adjuntar"
+								styleClass="centrar35 documento-medio">
+								<div class="ui-inputgroup">
+									<h:form>
+										<p:fileUpload
+											id="certificado${cargaDocumentosCuentaCupo.icd_catalogoDocumentoDto.is_nombre}"
+											styleClass="cargar-archivo" showButtons="false"
+											sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}"
+											allowTypes="/(\.|\/)(pdf|PDF)$/"
+											disabled="#{cargaDocumentosCuentaCupo.ib_desactivarBotonesCarga}"
+											fileUploadListener="#{beanCrearCuentaCupo.generarArchivoCargado}"
+											auto="true" label="#{txt_cuentaCupo['boton.CargarArchivo']}"
+											process="@this" update="cargaDeDocumentos"
+											invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+											invalidFileMessage="#{txt_cuentaCupo['Mensaje.archivo.formatoInvalido']}">
+											<f:attribute name="foo" value="${cargaDocumentosCuentaCupo}" />
+											<div class="col-xs-12 tamano-examinar">
+												<br />
+												<h:outputText id="textoSalidaArchivo"
+													styleClass="text-input"
+													value="#{cargaDocumentosCuentaCupo.ia_archivoDto.is_nombreArchivo}" />
+											</div>
+										</p:fileUpload>
+									</h:form>
+								</div>
+							</p:column>
+							<p:column headerText="#{txt_cuentaCupo['header.CargarArchivos']}"
+								styleClass="centrarEnviado">
+								<p:commandButton value="#{txt_cuentaCupo['boton.Subir']}"
+									disabled="#{cargaDocumentosCuentaCupo.ib_desactivarBotonesCarga}"
+									styleClass="btn-gradiente btn-rojo">
+									<p:ajax oncomplete="PF('confirmarCargueDocumento').show();"
+										update="panelCrearCuentaCupo"
+										process="formFormularioCuentaCupo" />
+									<f:setPropertyActionListener
+										value="#{cargaDocumentosCuentaCupo}"
+										target="#{beanCrearCuentaCupo.icdf_cargaDocumentosFormularioDto}" />
+								</p:commandButton>
+							</p:column>
+							<p:column headerText="#{txt_cuentaCupo['header.Estado']}"
+								styleClass="centrarEnviado documento-medio">
+								<p:outputPanel
+									rendered="#{cargaDocumentosCuentaCupo.ib_desactivarBotonesCarga}">
+									<p:graphicImage name="/iconos/check-verde.png" />
+									<br />
+									<h:outputText
+										value="#{txt_cuentaCupo['Mensaje.archivoSubido']}" />
+								</p:outputPanel>
+							</p:column>
+						</p:dataTable>
+						<br /> <br />
+					</div>
+					<br />
+					<p:outputPanel id="panelCheckPoliticas">
+						<h:form id="cargueDocumento">
+							<div class="row">
+								<div class="col-xs-12 center-component">
+									<div class="contenedor-link-politicas">
+										<p:selectBooleanCheckbox id="checkPoliticas" required="true"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											value="#{beanCrearCuentaCupo.ib_seleccionoPoliticas}">
+										</p:selectBooleanCheckbox>
+										<p:commandLink id="dialogPoliticas"
+											oncomplete="PF('dialog-politicas').show()">
+											<p:outputLabel
+												value="#{txt_persona['label.AceptoPoliticas']}"
+												styleClass="text-select-boolean" />
+											<p:outputLabel
+												value="#{txt_persona['label.AceptoPoliticasCuentaCupo.Link']}"
+												styleClass="label-form" />
+										</p:commandLink>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="checkPoliticas"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel value="#{txt_persona['tooltip.Politicas']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="checkPoliticas" />
+									</span>
+								</div>
+							</div>
+							<div>
+								<p:outputLabel styleClass="textoRojo"
+									value="#{txt['mensaje.CampoObligatorio']}"
+									rendered="#{beanCrearCuentaCupo.ib_validarPoliticas}" />
+							</div>
+							<br />
+							<div>
+								<p:outputLabel styleClass="bold"
+									value="#{txt_cuentaCupo['Mensaje.EliminarSolicitud']}" />
+							</div>
+							<br />
+							<br />
+							<div class="row">
+								<div class="col-xs-offset-1 col-sm-offset-2 col-xs-10 col-sm-4">
+									<p:commandButton icon="icon-flecha-gris" iconPos="right"
+										type="submit" styleClass="icon-btn btn-gris "
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();"
+										value="#{txt_cuentaCupo['boton.Eliminar']}">
+										<p:ajax
+											oncomplete="PF('eliminarTransaccionCuentaCupo').show();" />
+									</p:commandButton>
+								</div>
+								<div class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-4">
+									<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+										type="submit" onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('blockUI-Loading').hide();"
+										styleClass="btn-gradiente icon-btn btn-rojo "
+										value="#{txt_cuentaCupo['boton.EnviarSolicitud']}">
+										<p:ajax
+											process="cargueDocumento:checkPoliticas panelCheckPoliticas @form @all"
+											listener="#{beanCrearCuentaCupo.validarCamposEnviarSolicitud()}"
+											update="panelCheckPoliticas" />
+									</p:commandButton>
+								</div>
+							</div>
+						</h:form>
+					</p:outputPanel>
+				</p:outputPanel>
+			</p:outputPanel>
+			<!-- Resumen solicitud cuenta cupo -->
+			<p:outputPanel id="resumenSolicitudExitosa"
+				rendered="#{beanCrearCuentaCupo.ii_tutorial == 3}">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelResumenSolicitudExitosa"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_cuentaCupo['FormularioResumenSolicitudCuentaCupo']}" />
+							<br /> <br />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="solicitudExitosa" styleClass="tamano-subtitulo"
+						value="#{txt_cuentaCupo['Mensaje.RealizadoSolicitudCreacionCuentaCupo']}" />
+					<br />
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="Estados" styleClass="tamano-subtitulo"
+						value="#{txt_cuentaCupo['ayuda.estadosCuentaCupo']}" />
+					<br /> <br /> <br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelFechaSolicitudExitosa"
+									styleClass="label-form" for="fechaSolicitudExitosa"
+									value="#{txt_cuentaCupo['label.Fecha']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanCrearCuentaCupo.itf_transaccionFormularioDto.id_fechaCreacion}"
+									id="fechaSolicitudExitosa">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelNirSolicitudExitosa"
+									styleClass="label-form" for="nirSolicitudExitosa"
+									value="#{txt_cuentaCupo['label.Nir']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanCrearCuentaCupo.itf_transaccionFormularioDto.is_nir}"
+									id="nirSolicitudExitosa" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudExitosa"
+									styleClass="label-form" for="estadoSolicitudExitosa"
+									value="#{txt_cuentaCupo['label.Estado']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanCrearCuentaCupo.itf_transaccionFormularioDto.is_estadoTransaccion}"
+									id="estadoSolicitudExitosa" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudExitosa" />
+								</span>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<br /> <br />
+						<p:outputPanel id="entendido">
+							<p:commandButton type="submit"
+								styleClass="btn-gradiente icon-btn btn-rojo"
+								value="#{txt_cuentaCupo['boton.Aceptar']}"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</p:outputPanel>
+
+			<p:outputPanel id="resumenSolicitudPendiente"
+				rendered="#{beanCrearCuentaCupo.ii_tutorial == 4}">
+				<div class="row ui-g">
+					<div class="col-xs-12 col-sm-12 align-center">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelResumenSolicitudPendiente"
+								styleClass="label-form text-center tamano-titulo"
+								value="#{txt_cuentaCupo['FormularioResumenSolicitudCuentaCupo']}" />
+							<br /> <br />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="solicitudPendiente"
+						styleClass="tamano-subtitulo"
+						value="#{txt_cuentaCupo['Mensaje.SolicitudCreacionCuentaCupoRadicada']}" />
+					<br />
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="estadosModificar" styleClass="tamano-subtitulo"
+						value="#{txt_cuentaCupo['ayuda.estadosCuentaCupo']}" />
+					<br /> <br /> <br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelFechaSolicitudPendiente"
+									styleClass="label-form" for="fechaSolicitudPendiente"
+									value="#{txt_cuentaCupo['label.Fecha']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanCrearCuentaCupo.getItf_transaccionFormularioDto().getId_fechaCreacion()}"
+									id="fechaSolicitudPendiente">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelNirSolicitudPendiente"
+									styleClass="label-form" for="nirSolicitudPendiente"
+									value="#{txt_cuentaCupo['label.Nir']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanCrearCuentaCupo.itf_transaccionFormularioDto.is_nir}"
+									id="nirSolicitudPendiente" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudPendiente"
+									styleClass="label-form" for="estadoSolicitudPendiente"
+									value="#{txt_cuentaCupo['label.Estado']}" />
+							</p:column>
+							<p:column>
+								<h:outputText styleClass="text-input"
+									value="#{beanCrearCuentaCupo.itf_transaccionFormularioDto.is_estadoTransaccion}"
+									id="estadoSolicitudPendiente" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudPendiente" />
+								</span>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-4 col-xs-offset-4">
+						<br /> <br />
+						<p:outputPanel id="entendidoPendiente">
+							<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+								type="submit" onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_cuentaCupo['boton.Aceptar']}"
+								action="/pages/personas/inicio.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</p:outputPanel>
+			<!-- Resumen solicitud cuenta cupo -->
+		</p:panel>
+
+		<!--  modal Politicas -->
+		<ui:decorate template="/pages/includes/modalPoliticas.xhtml">
+			<ui:param name="bean" value="${beanCrearCuentaCupo}" />
+			<ui:param name="update" value="cargueDocumento:checkPoliticas"></ui:param>
+			<ui:param name="accionAceptar" value="validarPoliticas" />
+		</ui:decorate>
+		<!--  modal Politicas -->
+
+		<!-- Modal de transaccion Aprobada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="cuentaCupoAprobada" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.redireccion']}" />
+			<ui:param name="formulario" value="formModalCuentaCupoAprobada" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12">
+					<br />
+					<p:outputLabel id="solicitudAprobada"
+						value="#{txt_cuentaCupo['Mensaje.SolicitudAprobada']}" />
+					<br />
+				</div>
+				<div class="col-xs-12 text-center">
+					<br />
+					<p:outputLabel id="estadoSolicitudes"
+						value="#{txt_cuentaCupo['ayuda.estadosCuentaCupo']}" />
+					<br /> <br /> <br />
+				</div>
+				<div class="col-xs-12 info-solicitud">
+					<p:panelGrid>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelEstadoSolicitudAprobada"
+									styleClass="label-form" for="estadoSolicitudAprobada"
+									value="#{txt_cuentaCupo['label.Estado']}" />
+							</p:column>
+							<p:column styleClass="text-center">
+								<h:outputText styleClass="text-input"
+									value="#{beanCrearCuentaCupo.is_estadoCuentaCupo}"
+									id="estadoSolicitudAprobada" />
+								<span class="help-block"> <p:message
+										for="estadoSolicitudAprobada" />
+								</span>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="labelIdSolicitudAprobada"
+									styleClass="label-form" for="idSolicitudAprobada"
+									value="#{txt_cuentaCupo['label.IdCuentaCupo']}" />
+							</p:column>
+							<p:column styleClass="text-center">
+								<h:outputText styleClass="text-input"
+									value="#{beanCrearCuentaCupo.is_idCuentaCupo}"
+									id="idSolicitudAprobada" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</div>
+				<br />
+				<div class="col-xs-12">
+					<br />
+					<p:outputLabel id="solicitudRecarga"
+						value="#{txt_cuentaCupo['Mensaje.SolicitudAprobada1']}" />
+					<br /> <br />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-xs-offset-3">
+						<p:outputPanel id="entendidoAprobada">
+							<p:commandButton immediate="true" type="submit"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_cuentaCupo['boton.ConsultarSaldo']}"
+								action="/pages/admon/cuentaCupo/recargarCuentaCupo.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de transaccion Encontrada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="transaccionEncontradaCuentaCupo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalTransaccionEncontradaCuentaCupo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_cuentaCupo['wizard.modal.transaccion.retormar']}" />
+						<br /> <br />
+						<h:outputText
+							value="#{txt_cuentaCupo['wizard.modal.transaccion.retormar1']}" />
+						<br />
+						<h:outputText
+							value="#{txt_cuentaCupo['wizard.modal.transaccion.retormar2']}" />
+						<br /> <br />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-md-6">
+						<p:outputPanel id="botonDescartar">
+							<p:commandButton styleClass="btn-gris"
+								value="#{txt_cuentaCupo['boton.Cancelar']}">
+								<p:confirm header="#{txt_minuta['modal.confirmarQuitar']}"
+									message="#{txt_cuentaCupo['Mensaje.SeguroEliminar']}" />
+							</p:commandButton>
+						</p:outputPanel>
+						<p:confirmDialog styleClass="box-solid box-danger cerrarModal"
+							global="true" showEffect="fade" hideEffect="fade"
+							responsive="true">
+							<div class="row">
+								<div class="col-xs-5 col-xs-offset-1">
+									<p:commandButton immediate="true"
+										styleClass="ui-confirmdialog-no pull-right btn-gris"
+										value="#{txt_cuentaCupo['boton.Cancelar']}">
+										<p:ajax onstart="PF('blockUI-Loading').show();"
+											oncomplete="PF('blockUI-Loading').hide();PF('transaccionEncontradaCuentaCupo').hide();" />
+									</p:commandButton>
+								</div>
+								<div class="col-xs-5 col-xs-offset-0">
+									<p:commandButton
+										styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+										onstart="PF('blockUI-Loading').show();"
+										oncomplete="PF('transaccionEncontradaCuentaCupo').hide();PF('blockUI-Loading').hide();irArriba()"
+										value="#{txt_cuentaCupo['boton.Aceptar']}">
+										<f:ajax listener="#{beanCrearCuentaCupo.limpiarFormulario()}"
+											oncomplete="PF('transaccionEncontradaCuentaCupo').hide();" />
+									</p:commandButton>
+								</div>
+							</div>
+						</p:confirmDialog>
+					</div>
+					<div class="col-md-6">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_cuentaCupo['boton.Aceptar']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();irArriba()"
+							update="panelCrearCuentaCupo">
+							<p:ajax listener="#{beanCrearCuentaCupo.cargarFormulario()}"
+								oncomplete="PF('transaccionEncontradaCuentaCupo').hide(); cargarKeyfilters();" />
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de Gegenerar Nir Cuenta Cupo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="generarNirCuentaCupo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalGenerarNitCuentaCupo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_cuentaCupo['Mensaje.ModificarFormulario']}" />
+						<br /> <br />
+						<h:outputText
+							value="#{txt_cuentaCupo['Mensaje.ModificarFormulario1']}" />
+						<br /> <br />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="pull-right btn-gris"
+								value="#{txt_cuentaCupo['boton.Cancelar']}">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();PF('generarNirCuentaCupo').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+								value="#{txt_cuentaCupo['boton.Aceptar']}"
+								update="panelCrearCuentaCupo">
+								<p:ajax listener="#{beanCrearCuentaCupo.generarNir()}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('generarNirCuentaCupo').hide();PF('blockUI-Loading').hide();irArriba()" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de eliminar transaccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="eliminarTransaccionCuentaCupo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario"
+				value="formModalEliminarTransaccionCuentaCupo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_cuentaCupo['Mensaje.SeguroEliminar']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="pull-right btn-gris"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								value="#{txt_cuentaCupo['boton.Cancelar']}">
+								<p:ajax oncomplete="PF('eliminarTransaccionCuentaCupo').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton styleClass="btn-gradiente btn-rojo pull-left"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								value="#{txt_cuentaCupo['boton.Aceptar']}"
+								update="panelCrearCuentaCupo">
+								<f:ajax listener="#{beanCrearCuentaCupo.eliminarTransaccion()}"
+									oncomplete="PF('eliminarTransaccionCuentaCupo').hide();irArriba()" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de enviar solicitud -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="enviarSolicitudCuentaCupo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_cuentaCupo['Modal.Titulo.Confirmativo']}" />
+			<ui:param name="formulario"
+				value="formModalEnviarSolicitudCuentaCupo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_cuentaCupo['Mensaje.EnvioSolicitud']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_minuta['boton.cancelar.upper']}"
+								oncomplete="PF('enviarSolicitudCuentaCupo').hide();">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton
+								styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+								value="#{txt_minuta['boton.aceptar.upper']}"
+								oncomplete="PF('enviarSolicitudCuentaCupo').hide();irArriba()">
+								<p:ajax listener="#{beanCrearCuentaCupo.enviarSolicitud()}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									update="panelCrearCuentaCupo" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmacion al cargar Documentos -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarCargueDocumento" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalConfirmarCargueDocumento" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText value="#{txt_cuentaCupo['Mensaje.SubirArchivo']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:commandButton immediate="true"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt_cuentaCupo['boton.Cancelar']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton
+								disabled="#{cargaDocumentosCuentaCupo.ib_desactivarBotonesCarga}"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_cuentaCupo['boton.Aceptar']}"
+								oncomplete="PF('confirmarCargueDocumento').hide();">
+								<p:ajax
+									listener="#{beanCrearCuentaCupo.servicioCargarArchivos(beanCrearCuentaCupo.icdf_cargaDocumentosFormularioDto)}"
+									onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();"
+									update="panelCrearCuentaCupo" />
+								<f:attribute name="foo" value="${cargaDocumentosCuentaCupo}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de confirmarcion al descargar Formulario -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="confirmarFormularioDescargado" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario"
+				value="formModalconfirmarFormularioDescargado" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_cuentaCupo['Mensaje.DescargaDocumento']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4">
+							<p:commandButton immediate="true"
+								styleClass="btn-gradiente btn-rojo"
+								value="#{txt_cuentaCupo['Modal.Boton.Entendido']}"
+								oncomplete="PF('confirmarFormularioDescargado').hide();">
+								<p:ajax onstart="PF('blockUI-Loading').show();"
+									oncomplete="PF('blockUI-Loading').hide();" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal tutorial crear cuenta cupo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dialogTutorial" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formTutorialCuentaCupo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12">
+					<div class="col-xs-12 text-center">
+						<p:outputLabel id="labelFormularioCuentaCupoTutorial"
+							styleClass="label-form text-center tamano-titulo"
+							value="#{txt_cuentaCupo['label.BienvedidoSolicitudCreacionCuentaCupo']}" />
+						<br /> <br /> <br />
+					</div>
+					<div class="col-xs-11">
+						<p:outputLabel
+							value="#{txt_cuentaCupo['label.TutorialCuentaCupo']}" />
+						<br /> <br />
+					</div>
+					<div class="col-xs-12">
+						<div class="col-xs-12">
+							<div class="ui-inputgroup">
+								<p:outputLabel id="pre-requisitos1Tutorial" styleClass="titulo"
+									value="#{txt_cuentaCupo['label.RequisitosUno']}" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="pre-requisitos1Tutorial" position="right">
+									<div>
+										<p:outputLabel
+											value="#{txt_cuentaCupo['label.RequisitosDos']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="pre-requisitos1Tutorial" />
+								</span>
+							</div>
+							<div class="ui-inputgroup">
+								<p:outputLabel id="pre-requisitos2Tutorial" styleClass="titulo"
+									value="#{txt_cuentaCupo['label.RequisitosTres']}" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="pre-requisitos2Tutorial" position="right">
+									<div>
+										<p:outputLabel
+											value="#{txt_cuentaCupo['label.RequisitosCuatro']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="pre-requisitos2Tutorial" />
+								</span>
+							</div>
+							<div class="ui-inputgroup">
+								<p:outputLabel id="pre-requisitos3Tutorial" styleClass="titulo"
+									value="#{txt_cuentaCupo['label.RequisitosCinco']}" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="pre-requisitos3Tutorial" position="right">
+									<div>
+										<p:outputLabel
+											value="#{txt_cuentaCupo['label.RequisitosSeis']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="pre-requisitos3Tutorial" />
+								</span>
+							</div>
+							<div class="ui-inputgroup">
+								<p:outputLabel id="pre-requisitos4Tutorial" styleClass="titulo"
+									value="#{txt_cuentaCupo['label.RequisitosSiete']}" />
+								<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+									for="pre-requisitos4Tutorial" position="right">
+									<div>
+										<p:outputLabel
+											value="#{txt_cuentaCupo['label.RequisitosOcho']}" />
+									</div>
+								</p:tooltip>
+								<span class="help-block"> <p:message
+										for="pre-requisitos4Tutorial" />
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<br />
+						<p:outputLabel id="ayudaVisualTutorial"
+							styleClass="titulo textoRojo"
+							value="#{txt_cuentaCupo['label.TutorialCuentaCupoNotaCuentaCupo']}" />
+					</div>
+					<div class="row ">
+						<div class="col-xs-12">
+							<br />
+							<p:separator />
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel styleClass="titulo tamano-titulo label-form"
+										value="#{txt_cuentaCupo['label.TutorialTituloPasoUno']}" />
+								</div>
+								<div class="col-xs-12">
+									<br />
+									<div class="col-xs-3 text-center">
+										<h:outputText id="camposObligatoriosTutorial"
+											class="fa fa-list-alt fa-4x cursor-pointer"
+											title="#{txt_cuentaCupo['title.CamposObligatorios']}"></h:outputText>
+										<p:overlayPanel id="img1Tutorial"
+											for="camposObligatoriosTutorial" hideEffect="fade">
+											<p:imageSwitch effect="fade">
+												<p:graphicImage name="/img/cuenta-cupo/paso1.png"
+													width="500" />
+											</p:imageSwitch>
+										</p:overlayPanel>
+									</div>
+									<div class="col-xs-9 pad-text">
+										<p:outputLabel styleClass="titulo"
+											value="#{txt_cuentaCupo['label.TutorialFormularioCreacion']}" />
+									</div>
+								</div>
+							</div>
+							<br />
+							<p:separator />
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel styleClass="titulo tamano-titulo label-form"
+										value="#{txt_cuentaCupo['label.TutorialTituloPasoDos']}" />
+								</div>
+								<div class="col-xs-12">
+									<br />
+									<div class="col-xs-9 pad-text">
+										<p:outputLabel styleClass="titulo"
+											value="#{txt_cuentaCupo['label.TutorialTituloDescargaFirma']}" />
+									</div>
+									<div class="col-xs-3 text-center">
+										<h:outputText id="previsualizarTutorial"
+											class="fa fa-eye fa-4x cursor-pointer"
+											title="#{txt_cuentaCupo['title.PrevisualizarDocumentos']}"></h:outputText>
+										<p:overlayPanel id="img2Tutorial" for="previsualizarTutorial"
+											hideEffect="fade">
+											<p:imageSwitch effect="fade">
+												<p:graphicImage name="/img/cuenta-cupo/paso2.png"
+													width="500" />
+											</p:imageSwitch>
+										</p:overlayPanel>
+									</div>
+								</div>
+								<div class="col-xs-12">
+									<br />
+									<div class="col-xs-9 pad-text">
+										<p:outputLabel styleClass="titulo"
+											value="#{txt_cuentaCupo['label.TutorialTituloDescargaFirmaUno']}" />
+									</div>
+									<div class="col-xs-3 text-center">
+										<h:outputText id="nuevaSolicitudTutorial"
+											class="fa fa-exclamation-circle fa-4x cursor-pointer"
+											title="#{txt_cuentaCupo['title.NotaImportante']}"></h:outputText>
+										<p:overlayPanel id="img3Tutorial" for="nuevaSolicitudTutorial"
+											hideEffect="fade">
+											<p:imageSwitch effect="fade">
+												<p:graphicImage name="/img/cuenta-cupo/paso3.png"
+													width="500" />
+											</p:imageSwitch>
+										</p:overlayPanel>
+									</div>
+								</div>
+							</div>
+							<br />
+							<p:separator />
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel styleClass="titulo tamano-titulo label-form"
+										value="#{txt_cuentaCupo['label.TutorialTituloPasoTres']}" />
+									<div class="col-xs-12">
+										<br />
+										<div class="col-xs-3 text-center">
+											<h:outputText id="adjuntarFormularioTutorial"
+												class="fa fa-upload fa-4x cursor-pointer"
+												title="#{txt_cuentaCupo['title.AdjuntarFormulario']}"></h:outputText>
+											<p:overlayPanel id="img4Tutorial"
+												for="adjuntarFormularioTutorial" hideEffect="fade">
+												<p:imageSwitch effect="fade">
+													<p:graphicImage name="/img/cuenta-cupo/paso4.png"
+														width="500" />
+												</p:imageSwitch>
+											</p:overlayPanel>
+										</div>
+										<div class="col-xs-9 pad-text">
+											<p:outputLabel styleClass="titulo"
+												value="#{txt_cuentaCupo['label.TutorialTituloPasoCargueDocumentos']}" />
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<br />
+										<div class="col-xs-3 text-center">
+											<h:outputText id="otrosDocumentosTutorial"
+												class="fa fa-file-pdf-o fa-4x cursor-pointer"
+												title="#{txt_cuentaCupo['title.AdjuntarDocumentos']}"></h:outputText>
+											<p:overlayPanel id="img5Tutorial"
+												for="otrosDocumentosTutorial" hideEffect="fade">
+												<p:imageSwitch effect="fade">
+													<p:graphicImage name="/img/cuenta-cupo/paso4.png"
+														width="500" />
+												</p:imageSwitch>
+											</p:overlayPanel>
+										</div>
+										<div class="col-xs-9 pad-text">
+											<p:outputLabel styleClass="titulo"
+												value="#{txt_cuentaCupo['label.TutorialTituloPasoCargueDocumentosUno']}" />
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<br />
+										<div class="col-xs-3 text-center">
+											<h:outputText id="confirmarDocumentosTutorial"
+												class="fa fa-exclamation-triangle fa-4x cursor-pointer"
+												title="#{txt_cuentaCupo['title.ConfirmarDocumentosCargados']}"></h:outputText>
+											<p:overlayPanel id="img6Tutorial"
+												for="confirmarDocumentosTutorial" hideEffect="fade">
+												<p:imageSwitch effect="fade">
+													<p:graphicImage name="/img/cuenta-cupo/paso5.png"
+														width="500" />
+												</p:imageSwitch>
+											</p:overlayPanel>
+										</div>
+										<div class="col-xs-9 pad-text">
+											<p:outputLabel styleClass="titulo"
+												value="#{txt_cuentaCupo['label.TutorialTituloPasoCargueDocumentosDos']}" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<br />
+							<p:separator />
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel styleClass="titulo tamano-titulo label-form"
+										value="#{txt_cuentaCupo['label.TutorialTituloPasoCuatro']}" />
+									<br />
+									<div class="col-xs-12">
+										<br />
+										<div class="col-xs-9 pad-text">
+											<p:outputLabel styleClass="titulo"
+												value="#{txt_cuentaCupo['label.TutorialTituloResumenSolicitud']}" />
+										</div>
+										<div class="col-xs-3 text-center">
+											<h:outputText id="envioSolicitudTutorial"
+												class="fa fa-wpforms fa-4x cursor-pointer"
+												title="#{txt_cuentaCupo['title.ResumenSolicitud']}"></h:outputText>
+											<p:overlayPanel id="img7Tutorial"
+												for="envioSolicitudTutorial" hideEffect="fade">
+												<p:imageSwitch effect="fade">
+													<p:graphicImage name="/img/cuenta-cupo/paso6.png"
+														width="500" />
+												</p:imageSwitch>
+											</p:overlayPanel>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<br />
+										<div class="col-xs-9 pad-text">
+											<p:outputLabel styleClass="titulo"
+												value="#{txt_cuentaCupo['label.TutorialTituloResumenSolicitudUno']}" />
+										</div>
+										<div class="col-xs-3 text-center">
+											<h:outputText id="estadoSolcitudTutorial"
+												class="fa fa-info-circle fa-4x cursor-pointer"
+												title="#{txt_cuentaCupo['title.EstadoSolicitud']}"></h:outputText>
+											<p:overlayPanel id="img8Tutorial"
+												for="estadoSolcitudTutorial" hideEffect="fade">
+												<p:imageSwitch effect="fade">
+													<p:graphicImage name="/img/cuenta-cupo/paso7.png"
+														width="500" />
+												</p:imageSwitch>
+											</p:overlayPanel>
+										</div>
+									</div>
+								</div>
+							</div>
+							<br /> <br />
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt_cuentaCupo['Modal.Boton.Entendido']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();">
+							<p:ajax oncomplete="PF('dialogTutorial').hide();irArriba()" />
+						</p:commandButton>
+					</div>
+				</div>
+				<br />
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Modal de Previsualizar PDF -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="previsualizarPdf" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalPrevisualizarPdf" />
+			<ui:define name="body-modal">
+				<div class="text-center">
+					<div id="container_logos_pp">
+						<div class="col-xs-12">
+							<div class="col-xs-4 pad-top1">
+								<a id="ministerio-justicia"><img
+									src="#{resource['img/dinamicas/minjusticialogo.png']}"
+									class="imagenes" alt="" /></a>
+							</div>
+							<div class="col-xs-4 pad-top">
+								<a href="#" id="logo-snr-60"><img
+									src="#{resource['img/dinamicas/logo-snr-60-pdf.png']}"
+									class="imagenes" alt="" /></a>
+							</div>
+							<div class="col-xs-4">
+								<a href="#" id="logonuevopais"><img
+									src="#{resource['img/dinamicas/logonuevopais.png']}"
+									class="imagenes1" alt="" /></a> <br /> <br />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelSuperModificarCuentaCupo"
+								styleClass="text-center tamano-titulo"
+								value="#{txt_cuentaCupo['SuperintendenciaNotariadoRegistro']}" />
+						</div>
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelFormularioCreacionCuentaCupo"
+								styleClass="text-center tamano-titulo"
+								value="#{txt_cuentaCupo['FormularioCuentaCupo']}" />
+						</div>
+						<div class="col-xs-12 text-center">
+							<p:outputLabel id="labelTramitesCrearCuentaCupo"
+								styleClass="text-center tamano-titulo"
+								value="#{txt_cuentaCupo['FormularioModificacionCuentaCupo.tramitesLinea']}" />
+							<br /> <br />
+						</div>
+						<div class="row text-left pad-left">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel>*</p:outputLabel>
+									<p:outputLabel id="labelFechaDiligenciamiento"
+										for="fechaDiligenciamiento"
+										value="#{txt_cuentaCupo['label.FechaDiligenciamiento']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="fechaDiligenciamiento" readonly="true"
+										value="#{beanModificarCuentaCupo.obtenerFecha()}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="col-xs-12 text-center">
+							<p:outputLabel
+								value="#{txt_cuentaCupo['FormularioCuentaCupo.SubtituloUno']}"
+								styleClass="titulo tamano-subtitulo" />
+							<br /> <br />
+						</div>
+						<div class="row text-left pad-left">
+							<div class="col-xs-12 col-sm-4">
+								<div>
+									<p:outputLabel>*</p:outputLabel>
+									<p:outputLabel id="labelTipoDocumento" for="tipoDocumento"
+										value="#{txt_persona['label.TipoDocumento']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="tipoDocumento"
+										value="#{beanCrearCuentaCupo.iu_usuarioDto.ip_personaDto.itd_tipoDocumentoDto.is_nombre}">
+									</h:outputText>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<div>
+									<p:outputLabel>*</p:outputLabel>
+									<p:outputLabel id="labelNumeroDocumento" for="numeroDocumento"
+										value="#{txt_cuentaCupo['label.NumeroDocumento']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="numeroDocumento"
+										value="#{beanCrearCuentaCupo.iu_usuarioDto.ip_personaDto.is_numeroDocumento}">
+									</h:outputText>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<div>
+									<p:outputLabel>*</p:outputLabel>
+									<p:outputLabel id="labelDigitoVerificacion"
+										for="verificacionDigito"
+										value="#{txt_cuentaCupo['label.FormularioDigitoVerificacion']}" />
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+									<h:outputText id="verificacionDigito"
+										value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_digitoVerificacion}">
+									</h:outputText>
+								</div>
+							</div>
+						</div>
+						<br />
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div>
+								<p:outputLabel>*</p:outputLabel>
+								<p:outputLabel id="labelRazonSocial" for="razonSocial"
+									value="#{txt_persona['label.RazonSocial']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="razonSocial"
+									value="#{beanCrearCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.is_razonSocial}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="col-xs-12 col-sm-6">
+							<div>
+								<p:outputLabel>*</p:outputLabel>
+								<p:outputLabel id="labelRepresentanteLegal"
+									for="representanteLegal"
+									value="#{txt_persona['label.RepresentanteLegal']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="representanteLegal"
+									value="#{beanCrearCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.getNombreRepresentanteLegal()}">
+								</h:outputText>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div>
+								<p:outputLabel>*</p:outputLabel>
+								<p:outputLabel id="labelNumeroDocumentoRepresentante"
+									for="documentoRepresentanteNumero"
+									value="#{txt_cuentaCupo['label.FormularioCuentaCupoDocumentoRepresentante']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="documentoRepresentanteNumero"
+									value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_numeroDocumentoRepresentanteLegal}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="col-xs-12 col-sm-6">
+							<div>
+								<p:outputLabel>*</p:outputLabel>
+								<p:outputLabel id="labelDireccionCompleta"
+									for="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+									value="#{txt_persona['label.Direccion']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText
+									id="direccionResidencia${beanPersona.is_tipoUsuarioJuridica}"
+									value="#{beanCrearCuentaCupo.mostrarDireccionCompleta()}" />
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div>
+								<p:outputLabel>*</p:outputLabel>
+								<p:outputLabel id="labelTelefono" for="telefonoFijo"
+									value="#{txt_persona['label.TelefonoFijo']}" />
+								<p:outputLabel value="-" styleClass="espacio" />
+								<p:outputLabel>:</p:outputLabel>
+								<h:outputText id="telefonoFijo"
+									value="#{beanCrearCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.is_telefono}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="col-xs-12 col-sm-3">
+							<div>
+								<p:outputLabel>*</p:outputLabel>
+								<p:outputLabel id="labelCiudadDireccion" for="ciudad1"
+									value="#{txt_cuentaCupo['label.CiudadCuentaCupo']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="ciudad1"
+									value="#{beanCrearCuentaCupo.consultarCiudad()}">
+								</h:outputText>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-3">
+							<div>
+								<p:outputLabel>*</p:outputLabel>
+								<p:outputLabel id="labelCelular" for="celular"
+									value="#{txt_cuentaCupo['label.Celular']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="celular"
+									value="#{beanCrearCuentaCupo.iu_usuarioDto.is_celular}">
+								</h:outputText>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div>
+								<p:outputLabel>*</p:outputLabel>
+								<p:outputLabel id="labelCorreo" for="correo"
+									value="#{txt_persona['label.CorreoElectronico']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="correo"
+									value="#{beanCrearCuentaCupo.iu_usuarioDto.is_correoElectronico}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div>
+								<p:outputLabel>*</p:outputLabel>
+								<p:outputLabel id="labelOcupacionProfesion"
+									for="profesionOcupacion"
+									value="#{txt_cuentaCupo['label.FormularioOcupacion']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="profesionOcupacion"
+									value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_ocupacionProfesion}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div>
+								<p:outputLabel>*</p:outputLabel>
+								<p:outputLabel id="labelDescripcionActividadEconomica"
+									for="actividadEconomicaDescripcion"
+									value="#{txt_cuentaCupo['label.DescripcionActividadEconomica']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<p:inputTextarea id="actividadEconomicaDescripcion"
+									styleClass="declaracion-juramentada" readonly="true"
+									value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_descripcionActividadEconomica}" />
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div>
+								<p:outputLabel>*</p:outputLabel>
+								<p:outputLabel id="labelTipoOrganizJur" for="tipoOrganiz"
+									value="#{txt_persona['label.TipoOrganizacion']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="tipoOrganiz"
+									value="#{beanCrearCuentaCupo.iu_usuarioDto.ipj_personaJuridicaDto.ic_tipoCatalogoTipoOrganizacion.is_nombre}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="col-xs-12 text-center">
+						<p:outputLabel
+							value="#{txt_cuentaCupo['FormularioCuentaCupo.SubtituloTreCuatro']}"
+							styleClass="titulo tamano-subtitulo" />
+						<br /> <br />
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div class="monto-solicitado">
+								<div>
+									<p:outputLabel id="labelMontoSolicitado" for="solicitadoMonto"
+										value="#{txt_cuentaCupo['label.MontoSolicitar']}">
+									</p:outputLabel>
+									<p:outputLabel>:</p:outputLabel>
+									<p:outputLabel value="-" styleClass="espacio" />
+								</div>
+								<div>
+									<p:inputNumber id="solicitadoMonto" symbol="$ "
+										decimalPlaces="0" symbolPosition="p"
+										inputStyleClass="borde-no" readonly="true"
+										value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_montoSolicitado}">
+									</p:inputNumber>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div>
+								<p:outputLabel id="labelFrecuenciaRecarga"
+									for="recargaFrecuencia"
+									value="#{txt_cuentaCupo['label.FrecuenciaRealizarRecarga']}" />
+								<p:outputLabel>:</p:outputLabel>
+								<p:outputLabel value="-" styleClass="espacio" />
+								<h:outputText id="recargaFrecuencia"
+									value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_frecuenciaRecarga} ">
+								</h:outputText>
+								<h:outputText value="#{txt_cuentaCupo['label.dias']}">
+								</h:outputText>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div>
+								<p:outputLabel id="labelNecesidad" for="necesidad"
+									value="#{txt_cuentaCupo['label.SoporteSolicitudServicio']}:" />
+								<p:outputLabel value="-" styleClass="espacio" />
+								<p:inputTextarea id="necesidad" readonly="true"
+									styleClass="declaracion-juramentada"
+									value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_necesidadSolicitud}" />
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="col-xs-12 text-center">
+						<p:outputLabel
+							value="#{txt_cuentaCupo['FormularioCuentaCupo.SubtituloTreCinco']}"
+							styleClass="titulo tamano-subtitulo" />
+						<br /> <br />
+					</div>
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div class="declaracion-juramentada">
+								<h:outputText
+									value="#{txt_cuentaCupo['label.DeclaracionJuramentada']}" />
+							</div>
+							<br />
+						</div>
+					</div>
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div class="declaracion-juramentada">
+								<h:outputText
+									value="#{txt_cuentaCupo['label.DeclaracionJuramentadaUno']}" />
+							</div>
+						</div>
+						<br /> <br />
+					</div>
+					<br />
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div class="declaracion-juramentada">
+								<p:outputLabel id="labelDeclaracion" for="declaracion"
+									value="#{txt_cuentaCupo['label.DeclaracionJuramentadaDos']}:" />
+								<p:outputLabel value="-" styleClass="espacio" />
+								<p:inputTextarea id="declaracion" readonly="true"
+									styleClass="declaracion-juramentada"
+									value="#{beanCrearCuentaCupo.ifccc_crearCuentaCupoDTO.is_declaracionJuramentada}" />
+							</div>
+							<br />
+						</div>
+					</div>
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div class="declaracion-juramentada">
+								<h:outputText
+									value="#{txt_cuentaCupo['label.DeclaracionJuramentadaCuatro']}" />
+							</div>
+							<br />
+						</div>
+					</div>
+					<div class="col-xs-12 text-center">
+						<p:outputLabel
+							value="#{txt_cuentaCupo['FormularioCuentaCupo.SubtituloTreSeis']}"
+							styleClass="titulo tamano-subtitulo" />
+						<br /> <br />
+					</div>
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div class="declaracion-juramentada">
+								<h:outputText
+									value="#{txt_cuentaCupo['label.DeclaracionJuramentadaCinco']}" />
+							</div>
+							<br />
+						</div>
+					</div>
+					<div class="row text-left pad-left">
+						<div class="col-xs-12">
+							<div class="declaracion-juramentada">
+								<h:outputText
+									value="#{txt_cuentaCupo['label.DeclaracionJuramentadaSeis']}" />
+							</div>
+						</div>
+						<br /> <br />
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-xs-offset-1 col-sm-offset-1 col-xs-10 col-sm-7">
+							<br /> <br /> <br /> <br /> <br />
+							<p:separator styleClass="tamano-firma" />
+						</div>
+						<div
+							class="col-xs-offset-1 col-sm-offset-0 col-xs-10 col-sm-3 text-center">
+							<h:outputText id="firma" class="fa fa-square-o fa-5x"
+								readonly="true">
+							</h:outputText>
+						</div>
+					</div>
+					<br />
+					<div class="col-xs-11 text-center">
+						<p:outputLabel styleClass="titulo tamano-subtitulo"
+							value="#{txt_cuentaCupo['label.DeclaracionJuramentadaSiete']}" />
+						<br /> <br />
+					</div>
+				</div>
+				<br />
+				<br />
+				<div id="container_logos_footer" class="col-xs-12">
+					<div class="title">
+						<div class="img-left">
+							<a href="#" id="ministerio-justicia"><img
+								src="#{resource['img/dinamicas/iso.png']}" class="imagenes2"
+								alt="" /></a>
+						</div>
+						<div class="img-right">
+							<div>
+								<h:outputText value="#{txt_cuentaCupo['info.Superintendencia']}" />
+							</div>
+							<div>
+								<h:outputText value="#{txt_cuentaCupo['info.direccion']}" />
+							</div>
+							<div>
+								<h:outputText value="#{txt_cuentaCupo['info.ciudad']}" />
+							</div>
+							<div>
+								<h:outputText value="#{txt_cuentaCupo['info.correo']}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+			</ui:define>
+
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							value="#{txt_cuentaCupo['Modal.Boton.Entendido']}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();">
+							<p:ajax oncomplete="PF('previsualizarPdf').hide();" />
+						</p:commandButton>
+					</div>
+				</div>
+				<br />
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

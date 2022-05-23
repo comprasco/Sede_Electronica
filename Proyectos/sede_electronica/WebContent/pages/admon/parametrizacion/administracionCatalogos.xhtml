@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-administracion.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_catalogo['titulo']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_catalogo['titulo.banner']}" />
+			<ui:param name="imagen" value="img-parametrizacion" />
+			<ui:param name="subtitulo"
+				value="#{txt_catalogo['titulo.banner.sub']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/parametrizacion/administracionCatalogos.jsf" />
+		</ui:include>
+		<div class="row">
+			<div class="col-xs-12 align-center">
+				<h:form id="formMostrar">
+					<p:dataTable var="catalogo" styleClass="centrar"
+						id="mostrarCatalogos"
+						value="#{beanCatalogo.ilc_listaCatalogosDto}"
+						widgetVar="catalogosTable" reflow="true"
+						emptyMessage="#{txt_catalogo['tabla.vacia']}" paginator="true"
+						rows="10" paginatorPosition="bottom"
+						paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+						currentPageReportTemplate="{currentPage} / {totalPages}"
+						rowKey="#{catalogo.is_id}" stickyHeader="false"
+						filteredValue="#{beanCatalogo.ilc_listaFiltroCatalogo}">
+						<f:facet name="header">
+							<h:outputText value="#{txt_catalogo['tabla.filtro']}" />
+							<p:spacer height="5" />
+							<p:inputText id="globalFilter"
+								onkeyup="PF('catalogosTable').filter()" styleClass="tamanoTabla"
+								placeholder="#{txt_catalogo['tabla.filtro']}" />
+						</f:facet>
+						<p:column
+							headerText="#{txt_catalogo['tabla.encabezado.tipoCatalogo']}"
+							filterBy="#{catalogo.itc_tipoCatalogoDto.is_codigo}">
+							<f:facet name="filter">
+								<p:selectOneMenu styleClass="tamano"
+									onchange="PF('catalogosTable').filter()">
+									<f:selectItem itemLabel="#{txt_catalogo['select']}"
+										itemValue="#{null}" noSelectionOption="true" />
+									<f:selectItems value="#{beanCatalogo.iltc_listaTipoCatalogo}"
+										var="tipoCatalogo" itemLabel="#{tipoCatalogo.is_nombre}"
+										itemValue="#{tipoCatalogo.is_codigo}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<h:outputText value="#{catalogo.itc_tipoCatalogoDto.is_nombre}"></h:outputText>
+						</p:column>
+						<p:column headerText="#{txt_catalogo['tabla.encabezado.nombre']}"
+							filterBy="#{catalogo.is_nombre}" filterStyle="display: none">
+							<h:outputText value="#{catalogo.is_nombre}" id="nombreCatalogo" />
+							<p:tooltip for="nombreCatalogo"
+								value="#{catalogo.is_descripcion}" position="bottom" />
+						</p:column>
+						<p:column
+							headerText="#{txt_catalogo['tabla.encabezado.codigoValor']}"
+							filterBy="#{catalogo.is_codigoValor}" filterStyle="display: none">
+							<h:outputText id="nombreCodigoValor"
+								value="#{catalogo.is_codigoValor}"></h:outputText>
+							<p:tooltip for="nombreCodigoValor"
+								value="#{catalogo.is_codigoValor}" position="bottom" />
+						</p:column>
+						<p:column styleClass="tamano-columna-adm"
+							headerText="#{txt_catalogo['tabla.encabezado.activo']}">
+							<h:outputText
+								value="${(catalogo.is_activo.equals('S'))? 'Si' : 'No'}" />
+						</p:column>
+						<p:column styleClass="tamano-columna-adm"
+							headerText="#{txt_catalogo['tabla.encabezado.accion']}">
+							<p:commandLink styleClass="fa fa-pencil colorLapiz"
+								onclick="PF('dlgmodificar').show()" update=":formModificar">
+								<f:setPropertyActionListener value="#{catalogo}"
+									target="#{beanCatalogo.ic_catalogoDto}" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</div>
+		</div>
+		<!-- Modal de actualizar los catalogos globales -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgmodificar" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt_catalogo['modal.encabezado']}" />
+			<ui:param name="formulario" value="formModificar" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel styleClass="label-form" for="nombre"
+							value="#{txt_catalogo['tabla.encabezado.nombre']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<p:inputText id="nombre"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true" maxlength="50"
+							value="#{beanCatalogo.ic_catalogoDto.is_nombre}" />
+						<span class="help-block"> <p:message for="nombre" />
+						</span>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel styleClass="label-form" for="descripcion"
+							value="#{txt_catalogo['modal.encabezado.descripcion']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<p:inputText id="descripcion"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true" maxlength="150"
+							value="#{beanCatalogo.ic_catalogoDto.is_descripcion}" />
+						<span class="help-block"> <p:message for="descripcion" />
+						</span>
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<h:outputText styleClass="label-form" for="activo"
+							value="#{txt_catalogo['tabla.encabezado.activo']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<p:selectOneMenu id="activo"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							required="true" value="#{beanCatalogo.ic_catalogoDto.is_activo}">
+							<f:selectItem itemLabel="#{txt_catalogo['tabla.seleccione']}"
+								itemValue="" noSelectionOption="true" />
+							<f:selectItem itemLabel="#{txt_catalogo['tabla.si']}"
+								itemValue="#{txt_catalogo['tabla.s']}" />
+							<f:selectItem itemLabel="#{txt_catalogo['tabla.no']}"
+								itemValue="#{txt_catalogo['tabla.n']}" />
+						</p:selectOneMenu>
+						<span class="help-block"> <p:message for="activo" />
+						</span>
+					</div>
+				</div>
+				<br />
+				<p:separator />
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel styleClass="label-form" for="id"
+							value="#{txt_catalogo['modal.encabezado.id']}" />
+						<p:inputText id="id" disabled="true"
+							value="#{beanCatalogo.ic_catalogoDto.is_id}" />
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel styleClass="label-form" for="codigoValor"
+							value="#{txt_catalogo['tabla.encabezado.codigoValor']}" />
+						<p:inputText id="codigoValor" disabled="true"
+							value="#{beanCatalogo.ic_catalogoDto.is_codigoValor}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel styleClass="label-form" for="fechaCreacion"
+							value="#{txt_catalogo['modal.encabezado.fechaCreacion']}" />
+						<p:calendar id="fechaCreacion" disabled="true"
+							value="#{beanCatalogo.ic_catalogoDto.id_fechaCreacion}" />
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel styleClass="label-form" for="fechaModificacion"
+							value="#{txt_catalogo['modal.encabezado.fechaModificacion']}" />
+						<p:calendar id="fechaModificacion" disabled="true"
+							value="#{beanCatalogo.ic_catalogoDto.id_fechaModificacion}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel styleClass="label-form" for="idUsuarioCreacion"
+							value="#{txt_catalogo['modal.encabezado.idUsuarioCreacion']}" />
+						<p:inputText id="idUsuarioCreacion" disabled="true"
+							value="#{beanCatalogo.ic_catalogoDto.is_idUsuarioCreacion}" />
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel styleClass="label-form" for="idUsuarioModificacion"
+							value="#{txt_catalogo['modal.encabezado.idUsuarioModificacion']}" />
+						<p:inputText id="idUsuarioModificacion" disabled="true"
+							value="#{beanCatalogo.ic_catalogoDto.is_idUsuarioModificacion}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel styleClass="label-form" for="ipCreacion"
+							value="#{txt_catalogo['modal.encabezado.ipCreacion']}" />
+						<p:inputText id="ipCreacion" disabled="true"
+							value="#{beanCatalogo.ic_catalogoDto.is_ipCreacion}" />
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<p:outputLabel styleClass="label-form" for="ipModificacion"
+							value="#{txt_catalogo['modal.encabezado.ipModificacion']}" />
+						<p:inputText id="ipModificacion" disabled="true"
+							value="#{beanCatalogo.ic_catalogoDto.is_ipModificacion}" />
+					</div>
+				</div>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-md-6 space-row">
+						<p:commandButton styleClass="btn-gris"
+							value="#{txt['boton.volver']}"
+							onstart="PF('blockUI-Loading').show();"
+							onsuccess="PF('blockUI-Loading').hide(); PF('dlgmodificar').hide()">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<p:commandButton styleClass="btn-gradiente icon-btn btn-rojo"
+							value="#{txt_catalogo['boton.guardar']}"
+							onstart="PF('blockUI-Loading').show();" process="@form"
+							update="@form :formMostrar:mostrarCatalogos"
+							onsuccess="PF('blockUI-Loading').hide();"
+							oncomplete="if(args.validationFailed){PF('dlgmodificar').jq.effect('shake', {times: 3}, 100);}else{PF('dlgmodificar').hide();return true;}"
+							actionListener="#{beanCatalogo.actualizarCatalogo}">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

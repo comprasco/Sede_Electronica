@@ -1,0 +1,1693 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/includes/wizard.xhtml">
+	<ui:param name="siguienteLabel"
+		value="#{txt['wizard.boton.siguiente']}" />
+	<ui:param name="atrasLabel" value="#{txt['wizard.boton.atras']}" />
+	<ui:define name="title-wizard">
+		<title>#{txt_certificados['certificado.especial.titulo']}</title>
+	</ui:define>
+	<ui:define name="head-wizard">
+		<h:outputStylesheet library="css"
+			name="snr-se-solicitudCertificados.css" />
+		<h:outputStylesheet library="css" name="snr-se-ce.css" />
+	</ui:define>
+	<ui:define name="banner">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo" value="#{txt_certificados['banner']}" />
+			<ui:param name="imagen" value="img-solicitudCertificados" />
+			<ui:param name="subtitulo"
+				value="#{txt_certificados['banner.subtitulo.certificados']}" />
+			<ui:param name="urlVista"
+				value="/pages/solicitudes/solicitudesCertificados/certificadosEspeciales.jsf" />
+		</ui:include>
+	</ui:define>
+	<ui:param name="target" value="${beanCertificadoEspecial}" />
+	<ui:param name="metodo" value="validarSiguiente" />
+	<ui:define name="primerPaso">
+		<p:tab id="seleccion">
+			<f:facet name="title">
+				<span class="icono icono-llave" />
+				<p:outputLabel class="tituloWizard"
+					value="#{txt_certificados['wizard.tab.seleccion']}" />
+			</f:facet>
+			<p:panel id="panelTipoCertificados" styleClass="no-border"
+				visible="true">
+				<p:separator />
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel for="accordionPanel" styleClass="label-form"
+							value="#{txt_certificados['wizard.seleccion.tipoCertificado.titulo']}" />
+						<p:accordionPanel id="accordionPanel" dynamic="true">
+							<p:tab title="#{txt_certificados['tab.titulo.certEspeciales']}"
+								styleClass="tab-personalizado tab-gradiente">
+								<div class="row">
+									<div class="col-xs-12">
+										<p:selectOneButton id="tipoCertificadoSelect1"
+											layout="responsive" columns="1" styleClass="oneButton"
+											converter="selectOneMenuConverter"
+											value="#{beanCertificadoEspecial.itce_transaccionCertificadoEspecialDto.idc_detalleCatalogoDto}">
+											<p:ajax
+												listener="#{beanCertificadoEspecial.renderPorCertificado()}"
+												update="wizard:certEspecialAcordion wizard:descripcionTipoCertificado wizard:recomendacion wizard:descripcionRec"
+												onstart="PF('blockUI-Loading').show();"
+												oncomplete="PF('blockUI-Loading').hide();" />
+											<f:selectItems
+												value="#{beanCertificadoEspecial.ildc_listaTipoCatalogoCertificadosEspecialesDto}"
+												var="tipoCertificado"
+												itemLabel="#{tipoCertificado.ic_catalogoDto.is_nombre}"
+												itemValue="#{tipoCertificado}" />
+										</p:selectOneButton>
+									</div>
+								</div>
+							</p:tab>
+						</p:accordionPanel>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel for="descripcionTipoCertificado"
+									styleClass="label-form"
+									value="#{txt_certificados['wizard.seleccion.descripcion.titulo']}" />
+							</div>
+							<div class="col-xs-12 text-justify">
+								<h:outputText id="descripcionTipoCertificado"
+									value="#{beanCertificadoEspecial.itce_transaccionCertificadoEspecialDto.idc_detalleCatalogoDto.is_codigoDescripcion}"
+									escape="false" />
+								<p:separator />
+								<h:outputText
+									rendered="#{beanCertificadoEspecial.is_certificado}"
+									id="recomendacion"
+									value="#{txt_certificados['wizard.certificado.recomendacion']} " />
+								<h:outputText id="descripcionRec"
+									value="#{beanCertificadoEspecial.is_certificado}" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+		</p:tab>
+	</ui:define>
+	<ui:define name="segundoPaso">
+		<p:tab id="datos">
+			<f:facet name="title">
+				<span class="icono icono-buscar" />
+				<p:outputLabel class="tituloWizard"
+					value="#{txt_certificados['wizard.tab.datos']}" />
+			</f:facet>
+			<p:panel id="allPanel">
+				<div class="row">
+					<div class="col-xs-12 col-sm-5">
+						<p:outputLabel styleClass="label-form" for="tipoCertificado"
+							value="#{txt_certificados['wizardCertificado.datos.tipoCertificado']}" />
+						<div class="tipo-input-medium">
+							<p:outputLabel id="tipoCertificado"
+								value="#{beanCertificadoEspecial.itce_transaccionCertificadoEspecialDto.idc_detalleCatalogoDto.ic_catalogoDto.is_nombre}" />
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-5">
+						<p:outputLabel styleClass="label-form txtInfoCE" id="txtInfoCE"
+							value="#{txt_certificados['info.text.cerEspecial']}" />
+					</div>
+					<br />
+					<div class="col-xs-12 col-sm-2">
+						<div class="col-xs-12 col-md-6">
+							<p:commandButton id="infoFormMatricula" icon="icon-contrasena"
+								styleClass="icon-input btn-gradiente icono_boton"
+								onclick="PF('modalInfo').show()" />
+						</div>
+					</div>
+				</div>
+				<br />
+				<p:separator />
+				<p:panel styleClass="no-border" id="panelOpcion"
+					rendered="#{beanCertificadoEspecial.ii_renderizacionFormulario == 5}">
+					<div class="row">
+						<div class="col-xs-12 centrar-texto label-form">
+							<p:outputLabel
+								value="#{txt_certificados['info.text.eleccion.ingreso.uno']} #{beanCertificadoEspecial.itce_transaccionCertificadoEspecialDto.idc_detalleCatalogoDto.ic_catalogoDto.is_nombre}." />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 centrar-texto label-form">
+							<p:outputLabel
+								value="#{txt_certificados['info.text.eleccion.ingreso.dos']}" />
+						</div>
+					</div>
+					<br />
+					<p:separator />
+					<div class="row">
+						<div class="col-xs-12 col-md-offset-4">
+							<h:panelGrid columns="2" cellpadding="5">
+								<p:selectOneRadio id="infoAntSis"
+									value="#{beanCertificadoEspecial.ib_bloqueDatos}"
+									unselectable="true">
+									<f:selectItem
+										itemLabel="#{txt_certificados['wizardCertificado.datos.numeroMatricula']}"
+										itemValue="true" />
+									<f:selectItem
+										itemLabel="#{txt_certificados['header.titulo.antgSistema']}"
+										itemValue="false" />
+									<p:ajax process="@this"
+										listener="#{beanCertificadoEspecial.elegirTipoIngreso}"
+										update="allPanel" />
+								</p:selectOneRadio>
+							</h:panelGrid>
+						</div>
+					</div>
+				</p:panel>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:panel id="panelNumMatricula"
+							styleClass="panel-header no-paddin-imp"
+							rendered="#{beanCertificadoEspecial.ii_renderizacionFormulario != 5}">
+							<p:accordionPanel multiple="true" id="certEspecialAcordion">
+								<p:tab
+									title="#{txt_certificados['wizardCertificado.datos.numeroMatricula']}"
+									rendered="#{beanCertificadoEspecial.ii_datosMatricula == 1}">
+									<p:panel id="panelNumeroMatricula"
+										styleClass="no-border no-paddin-imp">
+										<div class="row">
+											<div class="col-xs-12 col-sm-12">
+												<div class="fondoErrores background-color">
+													<p:outputPanel id="panelDatalist">
+														<p:dataList
+															rendered="#{beanCertificadoEspecial.ib_mensajesValidacion}"
+															id="mssgErrorsNM"
+															emptyMessage="#{txt_certificados['tabla.formulario.vacia']}"
+															value="#{beanCertificadoEspecial.ils_errores}"
+															var="errores">
+															<p:outputLabel styleClass="color-rojo" value="#{errores}" />
+														</p:dataList>
+													</p:outputPanel>
+												</div>
+											</div>
+										</div>
+										<p:separator />
+										<div class="row">
+											<ui:decorate template="/pages/includes/numeroMatricula.xhtml">
+												<ui:param name="numCol" value="6" />
+												<ui:param name="bean" value="${beanCENumMatricula}" />
+												<ui:param name="oficinaRegistroSeleccionado"
+													value="icr_circuloRegistralEnvioSeleccionadoDto" />
+												<ui:param name="listaOficinaRegistro"
+													value="ilcr_listaCirculoRegistralDto" />
+												<ui:param name="numeroMatricula" value="is_numeroMatricula" />
+												<ui:param name="requerido"
+													value="#{beanCENumMatricula.campoObligatorio() eq false}" />
+												<ui:param name="panelAnterior"
+													value="wizard:certEspecialAcordion" />
+												<ui:param name="nupre" value="is_nupre" />
+											</ui:decorate>
+										</div>
+										<div class="row">
+											<div class="col-xs-12 col-sm-6 space-row">
+												<p:outputLabel id="lblCedCatastral" styleClass="label-form"
+													for="cedCatastral"
+													value="#{txt_certificados['table.label.cedCatastral']}" />
+												<p:outputLabel styleClass="required-field"
+													rendered="#{beanCENumMatricula.campoObligatorio() eq true}"
+													value="*" />
+												<div class="ui-inputgroup">
+													<p:inputText id="cedCatastral" autocomplete="off"
+														maxlength="30"
+														value="#{beanCENumMatricula.is_cedulaCatastral}"
+														placeholder="#{txt_certificados['table.placeHolder.cedCatastral']}">
+													</p:inputText>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="wizard:certEspecialAcordion:lblCedCatastral"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_certificados['table.placeHolder.cedCatastral']}" />
+														</div>
+													</p:tooltip>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="wizard:certEspecialAcordion:labelOficinaRegistro"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_certificados['table.tooltip.oficinaRegistroMatricula']}" />
+														</div>
+													</p:tooltip>
+												</div>
+											</div>
+											<br />
+											<div class="col-xs-12 col-sm-6">
+												<p:commandButton id="infoFormMatricula"
+													icon="icon-contrasena"
+													styleClass="icon-input btn-gradiente icono_boton" />
+												<pe:tooltip widgetVar="tooltipMsg" showEvent="mouseover"
+													myPosition="top, right" hideEvent="mouseout"
+													atPosition="bottom center" styleClass="tooltip-contrasena"
+													for="infoFormMatricula">
+													<div id="content-tooltip-msg">
+														<p:outputLabel
+															value="#{txt_certificados['table.tooltip.oficinaRegistroMatricula']}" />
+													</div>
+												</pe:tooltip>
+											</div>
+										</div>
+										<br />
+										<div class="row">
+											<div
+												class="col-xs-12 col-sm-4 col-sm-offset-4 center-component">
+												<p:commandButton
+													value="#{txt_certificados['button.accordion.validar']}"
+													styleClass="btn-rojo btn-gradiente">
+													<p:ajax
+														listener="#{beanCENumMatricula.validarFormulario()}"
+														process="wizard:certEspecialAcordion:panelNumeroMatricula"
+														update="wizard:certEspecialAcordion:panelDatalist" />
+												</p:commandButton>
+											</div>
+										</div>
+									</p:panel>
+								</p:tab>
+								<p:tab
+									title="#{txt_certificados['header.titulo.idPropietario']}"
+									id="propietarioTab"
+									rendered="#{beanCertificadoEspecial.ii_renderizacionFormulario == 2 || beanCertificadoEspecial.ii_renderizacionFormulario == 3 }">
+									<p:panel id="propietarioPanel"
+										styleClass="no-border no-paddin-imp">
+										<div class="row">
+											<div class="col-xs-12">
+												<div class="fondoErrores background-color">
+													<p:outputPanel id="fromularioPrueba2">
+														<p:dataList
+															rendered="#{beanCertificadoEspecial.ib_mensajesValidacion}"
+															id="mssgErrorsP"
+															emptyMessage="#{txt_certificados['tabla.formulario.vacia']}"
+															value="#{beanCertificadoEspecial.ils_errores}"
+															var="errores">
+															<p:outputLabel styleClass="color-rojo" value="#{errores}" />
+														</p:dataList>
+													</p:outputPanel>
+												</div>
+											</div>
+										</div>
+										<br />
+										<div class="row">
+											<div class="col-xs-12 col-md-4">
+												<p:outputLabel id="lblTipPersona" styleClass="label-form"
+													for="listTipPersona"
+													value="#{txt_certificados['table.label.idPropietario.tipPersona']}" />
+												<p:outputLabel rendered="true" styleClass="required-field"
+													value="*" />
+												<p:selectOneMenu id="listTipPersona"
+													converter="selectOneMenuConverter"
+													filterMatchMode="contains" widgetVar="tipPersonaSelect"
+													value="#{beanCEIdPropietario.ic_tipoPersonaSeleccionadoDto}">
+													<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+														itemValue="" />
+													<f:selectItems
+														value="#{beanCEIdPropietario.ilc_listaCatalogoTipoPersona}"
+														var="tipoPersona" itemValue="#{tipoPersona}"
+														itemLabel="#{tipoPersona.is_nombre}" />
+													<p:ajax event="change"
+														listener="#{beanCEIdPropietario.renderizar()}"
+														update="wizard:certEspecialAcordion:propietarioPanel"
+														onstart="PF('blockUI-Loading').show();"
+														onsuccess="PF('blockUI-Loading').hide();" />
+												</p:selectOneMenu>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral"
+													for="wizard:certEspecialAcordion:lblTipPersona"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_certificados['table.tooltip.tipoPersona']}" />
+													</div>
+												</p:tooltip>
+											</div>
+											<div class="col-xs-12 col-md-4">
+												<p:outputLabel id="lblTipoDocumento"
+													rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+													styleClass="label-form" for="listTipDocumento"
+													value="#{txt_certificados['table.label.idPropietario.tipDocumento']}" />
+												<p:outputLabel
+													rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+													styleClass="required-field">*
+												</p:outputLabel>
+												<p:outputLabel
+													rendered="#{beanCEIdPropietario.ib_renderizarPanelPJ}"
+													styleClass="label-form" id="lblTipoDocumentoPJ"
+													for="listTipDocumentoPJ"
+													value="#{txt_certificados['table.label.idPropietario.tipDocumento']}" />
+												<p:outputLabel
+													rendered="#{beanCEIdPropietario.ib_renderizarPanelPJ}"
+													styleClass="required-field">*
+												</p:outputLabel>
+												<p:selectOneMenu id="listTipDocumento"
+													rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+													converter="selectOneMenuConverter"
+													filterMatchMode="contains" widgetVar="tipDocumentoSelect"
+													value="#{beanCEIdPropietario.itd_tipoDocumentoSeleccionadoDto}">
+													<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+														itemValue="" />
+													<f:selectItems
+														value="#{beanCEIdPropietario.iltd_listaTipoDocumento}"
+														var="tipoDocumento" itemValue="#{tipoDocumento}"
+														itemLabel="#{tipoDocumento.is_nombre}" />
+												</p:selectOneMenu>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral"
+													for="wizard:certEspecialAcordion:lblTipoDocumento"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_certificados['table.tooltip.tipoDocumento']}" />
+													</div>
+												</p:tooltip>
+												<p:selectOneMenu id="listTipDocumentoPJ"
+													rendered="#{beanCEIdPropietario.ib_renderizarPanelPJ}"
+													converter="selectOneMenuConverter"
+													filterMatchMode="contains" widgetVar="tipDocumentoSelect"
+													value="#{beanCEIdPropietario.itd_tipoDocumentoSeleccionadoDto}">
+													<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+														itemValue="" />
+													<f:selectItems
+														value="#{beanCEIdPropietario.iltd_listaTipoDocumento}"
+														var="tipoDocumento" itemValue="#{tipoDocumento}"
+														itemLabel="#{tipoDocumento.is_nombre}" />
+												</p:selectOneMenu>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral"
+													for="wizard:certEspecialAcordion:lblTipoDocumentoPJ"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_certificados['table.tooltip.tipoDocumento']}" />
+													</div>
+												</p:tooltip>
+											</div>
+											<ui:fragment
+												rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+												styleClass="no-border">
+												<div id="numDocumento" class="col-xs-12 col-sm-4">
+													<p:outputLabel id="lblNumDocumento" styleClass="label-form"
+														for="numDocumento"
+														value="#{txt_certificados['table.label.idPropietario.numDocumento']}" />
+													<p:outputLabel rendered="true" styleClass="required-field">*
+												</p:outputLabel>
+													<div class="ui-inputgroup">
+														<p:inputText id="numDocumento" maxlength="20"
+															autocomplete="off"
+															value="#{beanCEIdPropietario.is_numDocumento}"
+															placeholder="#{txt_certificados['table.placeHolder.numDocumento']}">
+															<p:keyFilter regEx="/[0-9]/i" />
+														</p:inputText>
+														<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+															styleClass="tooltipGeneral"
+															for="wizard:certEspecialAcordion:lblNumDocumento"
+															position="top">
+															<div class="content-tooltip-general">
+																<p:outputLabel
+																	value="#{txt_certificados['table.placeHolder.numDocumento']}" />
+															</div>
+														</p:tooltip>
+													</div>
+												</div>
+											</ui:fragment>
+											<ui:fragment
+												rendered="#{beanCEIdPropietario.ib_renderizarPanelPJ}"
+												styleClass="no-border">
+												<div id="numDocumentoPj" class="col-xs-12 col-md-4">
+													<p:outputLabel id="lblNumDocumento2"
+														styleClass="label-form" for="numDocumento2"
+														value="#{txt_certificados['table.label.idPropietario.numDocumento']}" />
+													<p:outputLabel rendered="true" styleClass="required-field">*
+												</p:outputLabel>
+													<div class="ui-inputgroup">
+														<p:inputText id="numDocumento2" maxlength="20"
+															autocomplete="off"
+															value="#{beanCEIdPropietario.is_numDocumento}"
+															placeholder="#{txt_certificados['table.placeHolder.numDocumento']}">
+															<p:keyFilter regEx="/[0-9]/i" />
+														</p:inputText>
+														<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+															styleClass="tooltipGeneral"
+															for="wizard:certEspecialAcordion:lblNumDocumento2"
+															position="top">
+															<div class="content-tooltip-general">
+																<p:outputLabel
+																	value="#{txt_certificados['table.placeHolder.numDocumento']}" />
+															</div>
+														</p:tooltip>
+													</div>
+												</div>
+											</ui:fragment>
+										</div>
+										<br />
+										<div class="row">
+											<div class="col-xs-12">
+												<ui:fragment
+													rendered="#{beanCEIdPropietario.ib_renderizarPanelPJ}"
+													styleClass="no-border">
+													<div class="row">
+														<div class="col-xs-12">
+															<p:outputLabel id="lblRznSocial" styleClass="label-form"
+																for="rznSocial"
+																value="#{txt_certificados['table.label.idPropietario.rznSocial']}" />
+															<p:outputLabel rendered="true"
+																styleClass="required-field" value="*" />
+															<p:inputText id="rznSocial" maxlength="50"
+																autocomplete="off"
+																placeholder="#{txt_certificados['table.placeHolder.rznSocial']}"
+																value="#{beanCEIdPropietario.is_rznSocial}">
+																<p:keyFilter regEx="/[a-zA-Z0-9]/i" />
+															</p:inputText>
+															<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																styleClass="tooltipGeneral"
+																for="wizard:certEspecialAcordion:lblRznSocial"
+																position="top">
+																<div class="content-tooltip-general">
+																	<p:outputLabel
+																		value="#{txt_certificados['table.placeHolder.rznSocial']}" />
+																</div>
+															</p:tooltip>
+														</div>
+													</div>
+													<br />
+													<div class="row">
+														<div class="col-xs-12 col-md-4 col-md-offset-4">
+															<p:commandButton
+																value="#{txt_certificados['button.accordion.validar']}"
+																styleClass="btn-rojo btn-gradiente">
+																<p:ajax listener="#{beanCEIdPropietario.validar()}"
+																	update="wizard:certEspecialAcordion:fromularioPrueba2"
+																	process="wizard:certEspecialAcordion:propietarioPanel"
+																	onstart="PF('blockUI-Loading').show();"
+																	onsuccess="PF('blockUI-Loading').hide();" />
+															</p:commandButton>
+														</div>
+													</div>
+												</ui:fragment>
+											</div>
+											<br /> <br />
+											<div class="col-xs-12">
+												<ui:fragment
+													rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+													styleClass="no-border">
+													<div class="row">
+														<div class="col-xs-12 col-md-3">
+															<p:outputLabel id="lblPrimerNombre"
+																styleClass="label-form" for="prmNombre"
+																value="#{txt_certificados['table.label.idPropietario.prmNombre']}" />
+															<p:outputLabel rendered="true"
+																styleClass="required-field" value="*" />
+															<p:inputText id="prmNombre" maxlength="50"
+																autocomplete="off"
+																value="#{beanCEIdPropietario.is_prmNombre}"
+																placeholder="#{txt_certificados['table.placeHolder.prmNombre']}">
+																<p:keyFilter regEx="/[a-zA-Z]/i" />
+															</p:inputText>
+															<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																styleClass="tooltipGeneral"
+																for="wizard:certEspecialAcordion:lblPrimerNombre"
+																position="top">
+																<div class="content-tooltip-general">
+																	<p:outputLabel
+																		value="#{txt_certificados['table.placeHolder.prmNombre']}" />
+																</div>
+															</p:tooltip>
+														</div>
+														<div class="col-xs-12 col-sm-3">
+															<p:outputLabel id="lblSegNombre" styleClass="label-form"
+																for="segNombre"
+																value="#{txt_certificados['table.label.idPropietario.segNombre']}" />
+															<div class="ui-inputgroup">
+																<p:inputText id="segNombre" maxlength="50"
+																	autocomplete="off"
+																	value="#{beanCEIdPropietario.is_segundoNombre}"
+																	placeholder="#{txt_certificados['table.placeHolder.segNombre']}">
+																	<p:keyFilter regEx="/[a-zA-Z]/i" />
+																</p:inputText>
+																<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																	styleClass="tooltipGeneral"
+																	for="wizard:certEspecialAcordion:lblSegNombre"
+																	position="top">
+																	<div class="content-tooltip-general">
+																		<p:outputLabel
+																			value="#{txt_certificados['table.placeHolder.segNombre']}" />
+																	</div>
+																</p:tooltip>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-3">
+															<p:outputLabel id="lblPrimerApellido"
+																styleClass="label-form" for="prmApellido"
+																value="#{txt_certificados['table.label.idPropietario.prmApellido']}" />
+															<p:outputLabel rendered="true"
+																styleClass="required-field" value="*" />
+															<p:inputText id="prmApellido" maxlength="50"
+																autocomplete="off"
+																value="#{beanCEIdPropietario.is_prmApellido}"
+																placeholder="#{txt_certificados['table.placeHolder.prmApellido']}">
+																<p:keyFilter regEx="/[a-zA-Z]/i" />
+															</p:inputText>
+															<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																styleClass="tooltipGeneral"
+																for="wizard:certEspecialAcordion:lblPrimerApellido"
+																position="top">
+																<div class="content-tooltip-general">
+																	<p:outputLabel
+																		value="#{txt_certificados['table.placeHolder.prmApellido']}" />
+																</div>
+															</p:tooltip>
+														</div>
+														<div class="col-xs-12 col-sm-3">
+															<p:outputLabel id="lblSegApellido"
+																styleClass="label-form" for="segApellido"
+																value="#{txt_certificados['table.label.idPropietario.segApellido']}" />
+															<p:inputText id="segApellido" maxlength="50"
+																autocomplete="off"
+																value="#{beanCEIdPropietario.is_segApellido}"
+																placeholder="#{txt_certificados['table.placeHolder.segApellido']}">
+																<p:keyFilter regEx="/[a-zA-Z]/i" />
+															</p:inputText>
+															<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																styleClass="tooltipGeneral"
+																for="wizard:certEspecialAcordion:lblSegApellido"
+																position="top">
+																<div class="content-tooltip-general">
+																	<p:outputLabel
+																		value="#{txt_certificados['table.placeHolder.segApellido']}" />
+																</div>
+															</p:tooltip>
+														</div>
+													</div>
+													<br />
+													<div class="row">
+														<div class="col-xs-12 col-md-4">
+															<p:outputLabel id="lblGenero" styleClass="label-form"
+																for="listGenero"
+																value="#{txt_certificados['table.label.idPropietario.genero']}" />
+															<p:outputLabel rendered="true"
+																styleClass="required-field" value="*" />
+															<p:selectOneMenu id="listGenero"
+																converter="selectOneMenuConverter"
+																filterMatchMode="contains" widgetVar="generoSelect"
+																value="#{beanCEIdPropietario.ic_generoSeleccionadoDto}">
+																<f:selectItem
+																	itemLabel="#{txt['datos.lista.seleccionar']}"
+																	itemValue="" />
+																<f:selectItems
+																	value="#{beanCEIdPropietario.ilc_listaCatalogoGenero}"
+																	var="genero" itemValue="#{genero}"
+																	itemLabel="#{genero.is_nombre}" />
+															</p:selectOneMenu>
+															<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																styleClass="tooltipGeneral"
+																for="wizard:certEspecialAcordion:lblGenero"
+																position="top">
+																<div class="content-tooltip-general">
+																	<p:outputLabel
+																		value="#{txt_certificados['table.tooltip.genero']}" />
+																</div>
+															</p:tooltip>
+														</div>
+													</div>
+													<br />
+													<div class="row">
+														<div class="col-xs-12 col-md-4 col-md-offset-4">
+															<p:commandButton
+																value="#{txt_certificados['button.accordion.validar']}"
+																styleClass="btn-rojo btn-gradiente">
+																<p:ajax listener="#{beanCEIdPropietario.validar()}"
+																	update="wizard:certEspecialAcordion:fromularioPrueba2"
+																	process="wizard:certEspecialAcordion:propietarioPanel"
+																	onstart="PF('blockUI-Loading').show();"
+																	onsuccess="PF('blockUI-Loading').hide();" />
+															</p:commandButton>
+														</div>
+													</div>
+												</ui:fragment>
+											</div>
+										</div>
+									</p:panel>
+								</p:tab>
+								<p:tab
+									title="#{txt_certificados['header.titulo.dirPredio']} (#{txt_certificados['tab.header.opcional']})"
+									rendered="#{beanCertificadoEspecial.ii_renderizacionFormulario == 3}"
+									class="padding-overflow-none">
+									<p:panel id="direccionPanel"
+										styleClass="no-paddin-imp no-border">
+										<div class="row">
+											<div class="col-xs-12 col-sm-12">
+												<div class="fondoErrores background-color">
+													<p:outputPanel id="fromularioPrueba3">
+														<p:dataList
+															rendered="#{beanCertificadoEspecial.ib_mensajesValidacion}"
+															id="mssgErrorsD"
+															emptyMessage="#{txt_certificados['tabla.formulario.vacia']}"
+															value="#{beanCertificadoEspecial.ils_errores}"
+															var="errores">
+															<p:outputLabel styleClass="color-rojo" value="#{errores}" />
+														</p:dataList>
+													</p:outputPanel>
+												</div>
+											</div>
+										</div>
+										<br />
+										<ui:decorate template="/pages/includes/direccion.xhtml">
+											<ui:param name="bean" value="${beanCEDireccion}" />
+											<ui:param name="direccionDto"
+												value="${beanCEDireccion.id_direccionDto}" />
+											<ui:param name="mostrarPais" value="true" />
+											<ui:param name="formularioDireccion"
+												value="wizard:certEspecialAcordion" />
+											<ui:param name="requerido" value="false" />
+										</ui:decorate>
+										<br />
+										<div class="row">
+											<div class="col-xs-12 col-md-4 col-md-offset-4">
+												<p:commandButton
+													value="#{txt_certificados['button.accordion.validar']}"
+													styleClass="btn-rojo btn-gradiente">
+													<p:ajax listener="#{beanCEDireccion.validarDireccion()}"
+														update="wizard:certEspecialAcordion:fromularioPrueba3"
+														process="wizard:certEspecialAcordion:direccionPanel"
+														onstart="PF('blockUI-Loading').show();"
+														onsuccess="PF('blockUI-Loading').hide();" />
+												</p:commandButton>
+											</div>
+										</div>
+									</p:panel>
+								</p:tab>
+								<p:tab title="#{txt_certificados['header.titulo.antgSistema']}"
+									rendered="#{beanCertificadoEspecial.ii_antiguoSistema == 4}">
+									<p:panel id="panelAntiguoSistema"
+										styleClass="no-border padding-AntSis">
+										<p:outputPanel id="infAntiguoSistema"
+											rendered="#{beanCEAntiguoSistema.ib_info}">
+											<p:outputLabel
+												value="#{txt_certificados['info.text.antSistema']}"
+												id="infoAntiguoSistema" />
+											<br />
+											<div class="row">
+												<div class="col-xs-12 col-sm-4 col-sm-offset-4">
+													<h:panelGrid columns="2" cellpadding="5">
+														<p:selectOneRadio id="infoAntSis"
+															value="#{beanCEAntiguoSistema.is_informacion}"
+															unselectable="true">
+															<f:selectItem
+																itemLabel="#{txt_certificados['info.text.si']}"
+																itemValue="S" />
+															<f:selectItem
+																itemLabel="#{txt_certificados['info.text.no']}"
+																itemValue="N" />
+															<p:ajax
+																listener="#{beanCEAntiguoSistema.informacionAntSistema()}"
+																onstart="PF('blockUI-Loading').show();"
+																oncomplete="PF('blockUI-Loading').hide();"
+																update="panelAntiguoSistema" />
+														</p:selectOneRadio>
+													</h:panelGrid>
+												</div>
+											</div>
+										</p:outputPanel>
+										<p:outputPanel id="formularioAntSistema"
+											rendered="#{!beanCEAntiguoSistema.ib_info}"
+											styleClass="no-border">
+											<div class="row">
+												<div class="col-xs-12 col-sm-12">
+													<div class="fondoErrores background-color">
+														<p:outputPanel id="fromularioPrueba4">
+															<p:dataList
+																rendered="#{beanCertificadoEspecial.ib_mensajesValidacion}"
+																id="mssgErrorsAS"
+																emptyMessage="#{txt_certificados['tabla.formulario.vacia']}"
+																value="#{beanCertificadoEspecial.ils_errores}"
+																var="errores">
+																<p:outputLabel styleClass="color-rojo"
+																	value="#{errores}" />
+															</p:dataList>
+														</p:outputPanel>
+													</div>
+												</div>
+											</div>
+											<br />
+											<div class="row">
+												<div class="row">
+													<div class="col-xs-12 col-md-4">
+														<p:outputLabel styleClass="label-form"
+															id="labelOficinaRegistro1" for="oficinaRegistro1"
+															value="#{txt_certificados['table.label.antgSistema.circRegistral']}" />
+														<p:outputLabel rendered="true" styleClass="required-field">*
+												</p:outputLabel>
+														<p:selectOneMenu
+															value="#{beanCEAntiguoSistema.icr_circuloRegistralSeleccionadoDto}"
+															id="oficinaRegistro1" converter="selectOneMenuConverter"
+															filter="true" filterMatchMode="contains"
+															widgetVar="oficinaRegistro1">
+															<f:selectItem
+																itemLabel="#{txt['label.SeleccioneComboBox']}"
+																itemValue="" />
+															<f:selectItems
+																value="#{beanCEAntiguoSistema.ilcr_listaCirculoRegistralDto}"
+																var="circuloRegistral"
+																itemLabel="#{circuloRegistral.is_nombre} - (#{circuloRegistral.is_id})"
+																itemValue="#{circuloRegistral}" />
+														</p:selectOneMenu>
+														<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+															styleClass="tooltipGeneral"
+															for="wizard:certEspecialAcordion:labelOficinaRegistro1"
+															position="top">
+															<div class="content-tooltip-general">
+																<p:outputLabel
+																	value="#{txt_certificados['table.tooltip.oficinaRegistral']}" />
+															</div>
+														</p:tooltip>
+													</div>
+													<div class="col-xs-12 col-md-4">
+														<p:outputLabel id="lblTipoPredio2" styleClass="label-form"
+															for="listTipPredio"
+															value="#{txt_certificados['table.label.antgSistema.tipPredio']}" />
+														<p:outputLabel rendered="true" styleClass="required-field">*
+												</p:outputLabel>
+														<p:selectOneMenu
+															value="#{beanCEAntiguoSistema.ic_tipoPredioSeleccionado}"
+															id="listTipPredio" converter="selectOneMenuConverter"
+															filterMatchMode="contains" widgetVar="tipPredioSelect">
+															<f:selectItem
+																itemLabel="#{txt['label.SeleccioneComboBox']}"
+																itemValue="" />
+															<f:selectItems
+																value="#{beanCEAntiguoSistema.ilc_listaTipoPredio}"
+																var="tipoPredio" itemValue="#{tipoPredio}"
+																itemLabel="#{tipoPredio.is_nombre}" />
+														</p:selectOneMenu>
+														<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+															styleClass="tooltipGeneral"
+															for="wizard:certEspecialAcordion:lblTipoPredio2"
+															position="top">
+															<div class="content-tooltip-general">
+																<p:outputLabel
+																	value="#{txt_certificados['table.tooltip.tipoPredio']}" />
+															</div>
+														</p:tooltip>
+													</div>
+													<div class="col-xs-12 col-md-4">
+														<p:outputLabel id="lblNombrePredioAS"
+															styleClass="label-form" for="nombrePredioAS"
+															value="#{txt_certificados['table.label.dirPredio.nombPredio']}" />
+														<p:inputText id="nombrePredioAS" maxlength="50"
+															autocomplete="off"
+															value="#{beanCEAntiguoSistema.is_nombPredio}"
+															placeholder="#{txt_certificados['table.placeHolder.nombPredio']}">
+														</p:inputText>
+														<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+															styleClass="tooltipGeneral"
+															for="wizard:certEspecialAcordion:lblNombrePredioAS"
+															position="top">
+															<div class="content-tooltip-general">
+																<p:outputLabel
+																	value="#{txt_certificados['table.placeHolder.nombPredio']}" />
+															</div>
+														</p:tooltip>
+													</div>
+												</div>
+												<br />
+												<div class="row">
+													<div class="col-xs-12 col-md-6">
+														<p:outputLabel id="lblPais2" styleClass="label-form"
+															for="listPais2"
+															value="#{txt_certificados['table.label.antgSistema.pais']}" />
+														<p:outputLabel rendered="false"
+															styleClass="required-field">*
+												</p:outputLabel>
+														<p:selectOneMenu disabled="true" id="listPais2"
+															converter="selectOneMenuConverter" widgetVar="paisSelect"
+															value="#{beanCEAntiguoSistema.ip_paisDto}">
+															<f:selectItem
+																itemLabel="#{txt['label.SeleccioneComboBox']}"
+																itemValue="" />
+															<f:selectItems
+																value="#{beanCEAntiguoSistema.ilp_listaPaises}"
+																var="pais" itemLabel="#{pais.is_nombre}"
+																itemValue="#{pais}" />
+														</p:selectOneMenu>
+														<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+															styleClass="tooltipGeneral"
+															for="wizard:certEspecialAcordion:lblPais2" position="top">
+															<div class="content-tooltip-general">
+																<p:outputLabel
+																	value="#{txt_certificados['table.tooltip.pais']}" />
+															</div>
+														</p:tooltip>
+													</div>
+													<div class="col-xs-12 col-md-6">
+														<p:outputLabel id="lblDepartamento2"
+															styleClass="label-form" for="listDepartamento2"
+															value="#{txt_certificados['table.label.dirPredio.departamento']}" />
+														<p:outputLabel rendered="false"
+															styleClass="required-field">*</p:outputLabel>
+														<p:selectOneMenu id="listDepartamento2"
+															converter="selectOneMenuConverter"
+															widgetVar="departamentoSelect"
+															value="#{beanCEAntiguoSistema.id_departamentoSeleccionado}">
+															<p:ajax
+																listener="#{beanCEAntiguoSistema.cargarMunicipios()}"
+																onstart="PF('blockUI-Loading').show();"
+																oncomplete="PF('blockUI-Loading').hide();"
+																update="listMunicipio1" process="@this" />
+															<f:selectItem
+																itemLabel="#{txt['label.SeleccioneComboBox']}"
+																itemValue="" />
+															<f:selectItems
+																value="#{beanCEAntiguoSistema.ild_listaDepartamentosDto}"
+																var="departamento" itemLabel="#{departamento.is_nombre}"
+																itemValue="#{departamento}" />
+														</p:selectOneMenu>
+														<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+															styleClass="tooltipGeneral"
+															for="wizard:certEspecialAcordion:lblDepartamento2"
+															position="top">
+															<div class="content-tooltip-general">
+																<p:outputLabel
+																	value="#{txt_certificados['table.tooltip.departamento']}" />
+															</div>
+														</p:tooltip>
+													</div>
+												</div>
+												<br />
+												<div class="row">
+													<div class="col-xs-12 col-md-4">
+														<p:outputLabel id="lblMunicipio2" styleClass="label-form"
+															for="listMunicipio1"
+															value="#{txt_certificados['table.label.municipio']}" />
+														<p:outputLabel rendered="true" styleClass="required-field">*
+														</p:outputLabel>
+														<p:selectOneMenu id="listMunicipio1"
+															widgetVar="municipio1Select"
+															converter="selectOneMenuConverter"
+															value="#{beanCEAntiguoSistema.im_municipioSeleccionadoDto}">
+															<p:ajax event="change" />
+															<f:selectItem
+																itemLabel="#{txt['label.SeleccioneComboBox']}"
+																itemValue="" />
+															<f:selectItems
+																value="#{beanCEAntiguoSistema.ilm_listaMunicipiosDTO}"
+																var="municipio" itemValue="#{municipio}"
+																itemLabel="#{municipio.is_nombre}" />
+														</p:selectOneMenu>
+														<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+															styleClass="tooltipGeneral"
+															for="wizard:certEspecialAcordion:lblMunicipio2"
+															position="top">
+															<div class="content-tooltip-general">
+																<p:outputLabel
+																	value="#{txt_certificados['table.tooltip.municipio']}" />
+															</div>
+														</p:tooltip>
+													</div>
+													<div class="col-xs-12 col-md-4">
+														<p:outputLabel id="lblLibro" styleClass="label-form"
+															for="listLibro"
+															value="#{txt_certificados['table.label.antgSistema.libro']}" />
+														<p:outputLabel rendered="true" styleClass="required-field">*
+												</p:outputLabel>
+														<p:selectOneMenu id="listLibro"
+															converter="selectOneMenuConverter"
+															filterMatchMode="contains" filter="true"
+															value="#{beanCEAntiguoSistema.is_libro}"
+															widgetVar="libroSelect">
+															<f:selectItem
+																itemLabel="#{txt['label.SeleccioneComboBox']}"
+																itemValue="" />
+															<f:selectItems
+																value="#{beanCEAntiguoSistema.ilelas_listaLibroAS}"
+																var="libro" itemValue="#{libro}"
+																itemLabel="#{libro.is_nombre}" />
+														</p:selectOneMenu>
+														<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+															styleClass="tooltipGeneral"
+															for="wizard:certEspecialAcordion:lblLibro" position="top">
+															<div class="content-tooltip-general">
+																<p:outputLabel
+																	value="#{txt_certificados['table.tooltip.libro']}" />
+															</div>
+														</p:tooltip>
+													</div>
+													<div class="col-xs-12 col-md-4">
+														<p:outputLabel id="lblFolio" styleClass="label-form"
+															for="folio"
+															value="#{txt_certificados['table.label.antgSistema.folio']}" />
+														<p:outputLabel rendered="true" styleClass="required-field">*
+												</p:outputLabel>
+														<p:inputText id="folio" maxlength="50" autocomplete="off"
+															value="#{beanCEAntiguoSistema.is_folio}"
+															placeholder="#{txt_certificados['table.placeHolder.folio']}">
+															<p:keyFilter regEx="/[0-9]/i" />
+														</p:inputText>
+														<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+															styleClass="tooltipGeneral"
+															for="wizard:certEspecialAcordion:lblFolio" position="top">
+															<div class="content-tooltip-general">
+																<p:outputLabel
+																	value="#{txt_certificados['table.placeHolder.folio']}" />
+															</div>
+														</p:tooltip>
+													</div>
+												</div>
+												<br />
+												<ui:fragment
+													rendered="#{beanCEAntiguoSistema.is_informacion eq 'S'}">
+													<div class="row">
+														<div class="col-xs-12 col-md-4">
+															<p:outputLabel id="lblTomo" styleClass="label-form"
+																for="listtomo"
+																value="#{txt_certificados['table.label.antgSistema.tomo']}" />
+															<p:outputLabel styleClass="required-field">*</p:outputLabel>
+															<p:selectOneMenu id="listtomo"
+																value="#{beanCEAntiguoSistema.ii_tomo}"
+																filterMatchMode="contains" filter="true"
+																widgetVar="tomoSelect">
+																<f:selectItem
+																	itemLabel="#{txt['label.SeleccioneComboBox']}"
+																	itemValue="" />
+																<f:selectItems
+																	value="#{beanCEAntiguoSistema.ii_listaTomo}" var="tomo"
+																	itemValue="#{tomo}" itemLabel="#{tomo}" />
+															</p:selectOneMenu>
+															<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																styleClass="tooltipGeneral"
+																for="wizard:certEspecialAcordion:lblTomo" position="top">
+																<div class="content-tooltip-general">
+																	<p:outputLabel
+																		value="#{txt_certificados['table.tooltip.tomo']}" />
+																</div>
+															</p:tooltip>
+														</div>
+														<div class="col-xs-12 col-md-4">
+															<p:outputLabel id="lblNumPredio" styleClass="label-form"
+																for="numPredio"
+																value="#{txt_certificados['table.label.antgSistema.numPredio']}" />
+															<p:inputText value="#{beanCEAntiguoSistema.is_numPredio}"
+																id="numPredio" maxlength="50" autocomplete="off"
+																placeholder="#{txt_certificados['table.placeHolder.numeroPredio']}">
+																<p:keyFilter regEx="/[a-zA-Z0-9]/i" />
+															</p:inputText>
+															<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																styleClass="tooltipGeneral"
+																for="wizard:certEspecialAcordion:lblNumPredio"
+																position="top">
+																<div class="content-tooltip-general">
+																	<p:outputLabel
+																		value="#{txt_certificados['table.placeHolder.numeroPredio']}" />
+																</div>
+															</p:tooltip>
+														</div>
+														<div class="col-xs-12 col-md-4">
+															<p:outputLabel id="lblNumPartida" styleClass="label-form"
+																for="numPartida"
+																value="#{txt_certificados['table.label.antgSistema.numPartida']}" />
+															<p:outputLabel rendered="true"
+																styleClass="required-field">*
+												</p:outputLabel>
+															<p:inputText
+																value="#{beanCEAntiguoSistema.is_numPartida}"
+																id="numPartida" maxlength="10" autocomplete="off"
+																placeholder="#{txt_certificados['table.placeHolder.numPartida']}">
+																<p:keyFilter regEx="/[0-9]/i" />
+															</p:inputText>
+															<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																styleClass="tooltipGeneral"
+																for="wizard:certEspecialAcordion:lblNumPartida"
+																position="top">
+																<div class="content-tooltip-general">
+																	<p:outputLabel
+																		value="#{txt_certificados['table.placeHolder.numPartida']}" />
+																</div>
+															</p:tooltip>
+														</div>
+													</div>
+													<br />
+													<div class="row">
+														<div class="col-xs-12 col-md-6">
+															<p:outputLabel id="lblTipoPartida"
+																styleClass="label-form" for="listTipPartida"
+																value="#{txt_certificados['table.label.antgSistema.tipPartida']}" />
+															<p:outputLabel rendered="true"
+																styleClass="required-field">*
+												</p:outputLabel>
+															<p:selectOneMenu
+																value="#{beanCEAntiguoSistema.ic_tipoPartidaSeleccionado}"
+																id="listTipPartida" converter="selectOneMenuConverter"
+																filterMatchMode="contains" widgetVar="tipPartidaSelect">
+																<f:selectItem
+																	itemLabel="#{txt['label.SeleccioneComboBox']}"
+																	itemValue="" />
+																<f:selectItems
+																	value="#{beanCEAntiguoSistema.ilc_listaTipoPartida}"
+																	var="tipoPartida" itemValue="#{tipoPartida}"
+																	itemLabel="#{tipoPartida.is_nombre}" />
+															</p:selectOneMenu>
+															<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																styleClass="tooltipGeneral"
+																for="wizard:certEspecialAcordion:lblTipoPartida"
+																position="top">
+																<div class="content-tooltip-general">
+																	<p:outputLabel
+																		value="#{txt_certificados['table.tooltip.tipoPartida']}" />
+																</div>
+															</p:tooltip>
+														</div>
+														<div class="col-xs-12 col-md-6">
+															<p:outputLabel id="lblAnio" styleClass="label-form"
+																for="listAnios"
+																value="#{txt_certificados['table.label.antgSistema.anio']}" />
+															<p:outputLabel rendered="true"
+																styleClass="required-field">*
+												</p:outputLabel>
+															<p:selectOneMenu id="listAnios"
+																value="#{beanCEAntiguoSistema.ii_anio}"
+																filterMatchMode="contains" filter="true"
+																widgetVar="anioSelect">
+																<f:selectItem
+																	itemLabel="#{txt['label.SeleccioneComboBox']}"
+																	itemValue="" />
+																<f:selectItems
+																	value="#{beanCEAntiguoSistema.ii_listaAnios}"
+																	var="anio" itemValue="#{anio}" itemLabel="#{anio}" />
+															</p:selectOneMenu>
+															<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+																styleClass="tooltipGeneral"
+																for="wizard:certEspecialAcordion:lblAnio" position="top">
+																<div class="content-tooltip-general">
+																	<p:outputLabel
+																		value="#{txt_certificados['table.tooltip.anio']}" />
+																</div>
+															</p:tooltip>
+														</div>
+													</div>
+													<br />
+												</ui:fragment>
+												<div class="row">
+													<div class="col-xs-12 col-md-4">
+														<p:outputLabel id="lblNumMatriculaAs"
+															styleClass="label-form" for="numMatriculaAs"
+															value="#{txt_certificados['wizardCertificado.datos.numeroMatricula']}" />
+														<p:inputText
+															value="#{beanCEAntiguoSistema.is_numeroMatricula}"
+															id="numMatriculaAs" maxlength="10" autocomplete="off"
+															placeholder="#{txt_certificados['wizardCertificado.datos.placeholder.numeroMatricula']}">
+															<p:keyFilter regEx="/[0-9]/i" />
+														</p:inputText>
+														<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+															styleClass="tooltipGeneral"
+															for="wizard:certEspecialAcordion:lblNumMatriculaAs"
+															position="top">
+															<div class="content-tooltip-general">
+																<p:outputLabel
+																	value="#{txt_certificados['wizardCertificado.datos.placeholder.numeroMatricula']}" />
+															</div>
+														</p:tooltip>
+													</div>
+												</div>
+												<div class="row"></div>
+												<br />
+												<div class="row">
+													<div class="col-xs-12 col-md-4 col-md-offset-4">
+														<p:commandButton
+															value="#{txt_certificados['button.accordion.validar']}"
+															styleClass="btn-rojo btn-gradiente">
+															<p:ajax listener="#{beanCEAntiguoSistema.validar()}"
+																update="wizard:certEspecialAcordion:fromularioPrueba4"
+																process="wizard:certEspecialAcordion:panelAntiguoSistema"
+																onstart="PF('blockUI-Loading').show();"
+																onsuccess="PF('blockUI-Loading').hide();" />
+														</p:commandButton>
+													</div>
+												</div>
+											</div>
+										</p:outputPanel>
+									</p:panel>
+								</p:tab>
+							</p:accordionPanel>
+						</p:panel>
+					</div>
+				</div>
+			</p:panel>
+		</p:tab>
+	</ui:define>
+	<ui:define name="tercerPaso">
+		<p:tab id="resumen">
+			<f:facet name="title">
+				<span class="icono icono-resumen" />
+				<p:outputLabel class="tituloWizard"
+					value="#{txt_certificados['wizard.tab.resumen']}" />
+			</f:facet>
+			<p:panel id="panelResumen">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel styleClass="label-form" for="tipoCertificado2"
+							value="#{txt_certificados['wizardCertificado.datos.tipoCertificado']}" />
+						<div class="tipo-input-medium">
+							<p:outputLabel id="tipoCertificado2"
+								value="#{beanCertificadoEspecial.itce_transaccionCertificadoEspecialDto.idc_detalleCatalogoDto.ic_catalogoDto.is_nombre}" />
+						</div>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:panel id="panelNumMatricula1" styleClass="panel-header">
+							<p:panel rendered="#{beanCENumMatricula.ib_matriculaErrores}">
+								<h2 class="matricula">
+									#{txt_certificados['wizardCertificado.datos.numeroMatricula']}</h2>
+								<hr />
+								<p:panelGrid columns="2" styleClass="resumen">
+									<p:outputLabel for="reOrip"
+										value="#{txt_certificados['wizardCertificado.datos.oficinaRegistro']}" />
+									<h:outputText id="reOrip"
+										value="#{beanCENumMatricula.icr_circuloRegistralEnvioSeleccionadoDto.is_nombre}" />
+
+									<p:outputLabel rendered="#{beanCENumMatricula.ib_matricula}"
+										value="#{txt_certificados['wizardCertificado.datos.numeroMatricula']}" />
+									<h:outputText rendered="#{beanCENumMatricula.ib_matricula}"
+										value="#{beanCENumMatricula.icenm_numeroMatriculaDTO.ism_salidaMatriculaDTO.im_matriculaDto.is_codigoMatricula}" />
+
+									<p:outputLabel
+										rendered="#{!beanCENumMatricula.getIb_cedCatastral()}"
+										value="#{txt_certificados['table.label.cedCatastral']}" />
+									<h:outputText
+										rendered="#{!beanCENumMatricula.getIb_cedCatastral()}"
+										value="#{beanCENumMatricula.icenm_numeroMatriculaDTO.is_cedulaCatastral}" />
+										
+									<p:outputLabel rendered="#{!beanNupre.getIb_ocultarNupre()}"
+										value="#{txt_certificados['table.label.numNupre']}" />
+									<h:outputText rendered="#{!beanNupre.getIb_ocultarNupre()}"
+										value="" />
+								</p:panelGrid>
+							</p:panel>
+							<br />
+							<p:panel rendered="#{beanCEIdPropietario.ib_propietarioErrores}">
+								<h2 class="matricula">#{txt_certificados['header.titulo.idPropietario']}</h2>
+								<hr />
+								<p:panelGrid columns="2" styleClass="resumen">
+									<p:outputLabel
+										value="#{txt_certificados['table.label.idPropietario.tipPersona']}" />
+									<h:outputText
+										value="#{beanCEIdPropietario.iceip_propietarioDto.ic_tipoPersonaDto.is_nombre}" />
+									<p:outputLabel
+										rendered="#{beanCEIdPropietario.ib_renderizarPanelPJ}"
+										value="#{txt_certificados['table.label.idPropietario.rznSocial']}" />
+									<h:outputText
+										rendered="#{beanCEIdPropietario.ib_renderizarPanelPJ}"
+										value="#{beanCEIdPropietario.iceip_propietarioDto.is_razonSocial}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.idPropietario.tipDocumento']}" />
+									<h:outputText
+										value="#{beanCEIdPropietario.iceip_propietarioDto.itd_tipoDocumentoDto.is_nombre}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.idPropietario.numDocumento']}" />
+									<h:outputText
+										value="#{beanCEIdPropietario.iceip_propietarioDto.is_numeroDocumento}" />
+									<p:outputLabel
+										rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+										value="#{txt_certificados['table.label.idPropietario.prmNombre']}" />
+									<h:outputText
+										rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+										value="#{beanCEIdPropietario.iceip_propietarioDto.is_primerNombre}" />
+									<p:outputLabel
+										rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+										value="#{txt_certificados['table.label.idPropietario.segNombre']}" />
+									<h:outputText
+										rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+										value="#{beanCEIdPropietario.iceip_propietarioDto.is_segundoNombre}" />
+									<p:outputLabel
+										rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+										value="#{txt_certificados['table.label.idPropietario.prmApellido']}" />
+									<h:outputText
+										rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+										value="#{beanCEIdPropietario.iceip_propietarioDto.is_primerApellido}" />
+									<p:outputLabel
+										rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+										value="#{txt_certificados['table.label.idPropietario.segApellido']}" />
+									<h:outputText
+										rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+										value="#{beanCEIdPropietario.iceip_propietarioDto.is_segundoApellido}" />
+									<p:outputLabel
+										rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+										value="#{txt_certificados['table.label.idPropietario.genero']}" />
+									<h:outputText
+										rendered="#{beanCEIdPropietario.ib_renderizarPanel}"
+										value="#{beanCEIdPropietario.iceip_propietarioDto.ic_generoDto.is_nombre}" />
+								</p:panelGrid>
+							</p:panel>
+							<br />
+							<p:panel rendered="#{beanCEDireccion.ib_direccion}">
+								<h2 class="matricula">#{txt_certificados['header.titulo.dirPredio']}</h2>
+								<hr />
+								<p:panelGrid columns="2" styleClass="resumen">
+									<p:outputLabel
+										value="#{txt_certificados['table.label.antgSistema.tipPredio']}" />
+									<h:outputText
+										value="#{beanCEDireccion.iced_ceDireccionDto.ic_tipoPredioDto.is_nombre}" />
+									<p:outputLabel rendered="#{beanCEDireccion.ib_informacion}"
+										value="#{txt_certificados['table.label.dirPredio.departamento']}" />
+									<h:outputText rendered="#{beanCEDireccion.ib_informacion}"
+										value="#{beanCEDireccion.iced_ceDireccionDto.id_departamentoDto.is_nombre}" />
+									<p:outputLabel rendered="#{beanCEDireccion.ib_informacion}"
+										value="#{txt_certificados['table.label.municipio']}" />
+									<h:outputText rendered="#{beanCEDireccion.ib_informacion}"
+										value="#{beanCEDireccion.iced_ceDireccionDto.im_municipioDto.is_nombre}" />
+									<p:outputLabel rendered="#{beanCEDireccion.ib_informacion}"
+										value="#{txt_certificados['table.label.dirPredio.vereda']}" />
+									<h:outputText rendered="#{beanCEDireccion.ib_informacion}"
+										value="#{beanCEDireccion.iced_ceDireccionDto.iv_veredaDto.is_nombre}" />
+									<p:outputLabel rendered="#{beanCEDireccion.ib_informacion}"
+										value="#{txt_certificados['table.label.dirPredio.nombPredio']}" />
+									<h:outputText rendered="#{beanCEDireccion.ib_informacion}"
+										value="#{beanCEDireccion.iced_ceDireccionDto.is_nombrePredio}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.dirPredio.tipoEje']}" />
+									<h:outputText
+										value="#{beanCEDireccion.iced_ceDireccionDto.ite_tipoEjeDto.is_nombre}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.dirPredio.ejePpal']}" />
+									<h:outputText
+										value="#{beanCEDireccion.iced_ceDireccionDto.is_ejePrincipal}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.dirPredio.eje1']}" />
+									<h:outputText
+										value="#{beanCEDireccion.iced_ceDireccionDto.ite_eje1Dto.is_nombre}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.dirPredio.ejeSecundario']}" />
+									<h:outputText
+										value="#{beanCEDireccion.iced_ceDireccionDto.is_ejeSecundario}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.dirPredio.complemntoDireccion']}" />
+									<h:outputText
+										value="#{beanCEDireccion.iced_ceDireccionDto.is_complementoDireccion}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.dirPredio.direccionCompleta']}" />
+									<h:outputText
+										value="#{beanCEDireccion.iced_ceDireccionDto.is_direccionCompleta}" />
+								</p:panelGrid>
+							</p:panel>
+							<br />
+							<p:panel rendered="#{beanCEAntiguoSistema.ib_antigoSistema}">
+								<h2 class="matricula">#{txt_certificados['header.titulo.antgSistema']}</h2>
+								<hr />
+								<p:panelGrid columns="2" styleClass="resumen">
+									<p:outputLabel
+										value="#{txt_certificados['table.label.antgSistema.circRegistral']}" />
+									<h:outputText
+										value="#{beanCEAntiguoSistema.iceas_antiguoSistemaDTO.icr_circuloRegistralMatricula.is_nombre}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.antgSistema.tipPredio']}" />
+									<h:outputText
+										value="#{beanCEAntiguoSistema.iceas_antiguoSistemaDTO.ic_tipoPredio.is_nombre}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.dirPredio.nombPredio']}" />
+									<h:outputText
+										value="#{beanCEAntiguoSistema.iceas_antiguoSistemaDTO.is_nombrePredio}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.municipio']}" />
+									<h:outputText
+										value="#{beanCEAntiguoSistema.iceas_antiguoSistemaDTO.im_municipio.is_nombre}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.antgSistema.libro']}" />
+									<h:outputText value="#{beanCEAntiguoSistema.is_libro}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.antgSistema.folio']}" />
+									<h:outputText
+										value="#{beanCEAntiguoSistema.iceas_antiguoSistemaDTO.is_folio}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.antgSistema.tomo']}" />
+									<h:outputText
+										value="#{beanCEAntiguoSistema.iceas_antiguoSistemaDTO.ii_tomo}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.antgSistema.numPredio']}" />
+									<h:outputText
+										value="#{beanCEAntiguoSistema.iceas_antiguoSistemaDTO.is_numPredio}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.antgSistema.numPartida']}" />
+									<h:outputText
+										value="#{beanCEAntiguoSistema.iceas_antiguoSistemaDTO.is_numeroPartida}" />
+									<p:outputLabel
+										value="#{txt_certificados['table.label.antgSistema.tipPartida']}" />
+									<h:outputText
+										value="#{beanCEAntiguoSistema.iceas_antiguoSistemaDTO.ic_tipoPartida.is_nombre}" />
+									<h:outputText
+										value="#{txt_certificados['table.label.antgSistema.anio']}" />
+									<h:outputText
+										value="#{beanCEAntiguoSistema.iceas_antiguoSistemaDTO.is_anio}" />
+								</p:panelGrid>
+							</p:panel>
+							<div class="row ">
+								<p:outputLabel id="msjoripcorreo"
+									value="#{txt_certificados['info.text.requerido.oripcorreo']}" />
+								<div class="col-xs-12">
+									<p:panel id="envio" styleClass="envioCorreo">
+										<h:selectOneRadio id="console" class="buttonRadio"
+											value="#{beanCertificadoEspecial.ib_enviar}"
+											unselectable="false">
+											<f:selectItem itemLabel="#{txt_certificados['label.orip']}"
+												itemValue="true" />
+											<f:selectItem itemLabel="#{txt_certificados['label.correo']}"
+												itemValue="false" />
+											<p:ajax update="envio btnSolicitar"
+												listener="#{beanCertificadoEspecial.validarCorreoEnvio()}" />
+										</h:selectOneRadio>
+										<p:outputPanel id="panelOrip"
+											rendered="#{beanCertificadoEspecial.ib_enviar}">
+											<div class="row">
+												<div class="col-xs-12 col-sm-4">
+													<p:outputLabel styleClass="label-form"
+														id="labelOficinaRegistroEnvio" for="oficinaRegistroEnvio"
+														value="#{txt_certificados['table.label.antgSistema.circRegistral']}" />
+													<p:outputLabel rendered="true" styleClass="required-field">*
+												</p:outputLabel>
+													<p:selectOneMenu id="oficinaRegistroEnvio" filter="true"
+														styleClass="pais-nat" widgetVar="oficinaRegistroEnvio"
+														filterMatchMode="contains"
+														converter="selectOneMenuConverter"
+														filterPlaceholder="#{txt_certificados['wizardCertificado.datos.placeholder.oficinaRegistro']}"
+														value="#{beanCertificadoEspecial.icr_circuloRegistralEnvioSeleccionadoDto}">
+														<f:selectItem
+															itemLabel="#{txt_certificados['wizardCertificado.datos.seleccionar']}"
+															itemValue="" />
+														<f:selectItems
+															value="#{beanCertificadoEspecial.ilcr_listaCirculoRegistralDto}"
+															var="circuloRegistral"
+															itemLabel="#{circuloRegistral.is_nombre} - (#{circuloRegistral.is_id})"
+															itemValue="#{circuloRegistral}" />
+													</p:selectOneMenu>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral"
+														for="labelOficinaRegistroEnvio" position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_certificados['table.tooltip.oficinaRegistral']}" />
+														</div>
+													</p:tooltip>
+													<span class="help-block"> <p:message
+															for="labelOficinaRegistroEnvio" />
+													</span>
+												</div>
+												<div class="col-xs-12 col-sm-4">
+													<p:outputLabel styleClass="label-form"
+														id="lblDepartamentoEnvio" for="listaDepartamentoEnvio"
+														value="#{txt_registrar_alerta['consultar.alerta.label.departamento']}" />
+													<p:outputLabel rendered="true" styleClass="required-field">*
+												</p:outputLabel>
+													<p:selectOneMenu id="listaDepartamentoEnvio"
+														styleClass="pais-nat" converter="selectOneMenuConverter"
+														filterMatchMode="contains"
+														value="#{beanCertificadoEspecial.id_departamentoEnvio}"
+														widgetVar="listaDepartamentoEnvio">
+														<p:ajax
+															listener="#{beanCertificadoEspecial.cargarMunicipiosEnvio()}"
+															update="listaMunicipioEnvio" process="@this" />
+														<f:selectItem
+															itemLabel="#{txt['datos.lista.seleccionar']}"
+															itemValue="" />
+														<f:selectItems
+															value="#{beanCertificadoEspecial.ild_listaDepartamentosEnvioDTO}"
+															var="departamento" itemValue="#{departamento}"
+															itemLabel="#{departamento.is_nombre}" />
+													</p:selectOneMenu>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral" for="lblDepartamentoEnvio"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_registrar_alerta['tooltips.label.consultar.departamento']}" />
+														</div>
+													</p:tooltip>
+												</div>
+												<div class="col-xs-12 col-sm-4">
+													<p:outputLabel styleClass="label-form"
+														id="lblMunicipioEnvio" for="listaMunicipioEnvio"
+														value="#{txt_registrar_alerta['consultar.alerta.label.municipio']}" />
+													<p:outputLabel rendered="true" styleClass="required-field">*
+												</p:outputLabel>
+													<p:selectOneMenu id="listaMunicipioEnvio"
+														styleClass="pais-nat" converter="selectOneMenuConverter"
+														filterMatchMode="contains"
+														value="#{beanCertificadoEspecial.im_municipioEnvio}"
+														widgetVar="listaMunicipioEnvio">
+														<f:selectItem
+															itemLabel="#{txt['datos.lista.seleccionar']}"
+															itemValue="" />
+														<f:selectItems
+															value="#{beanCertificadoEspecial.ilm_listaMunicipiosEnvioDTO}"
+															var="municipio" itemLabel="#{municipio.is_nombre}"
+															itemValue="#{municipio}" />
+														<p:ajax update="envio btnSolicitar"
+															listener="#{beanCertificadoEspecial.validarCorreoEnvio()}" />
+													</p:selectOneMenu>
+													<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+														styleClass="tooltipGeneral" for="lblMunicipioEnvio"
+														position="top">
+														<div class="content-tooltip-general">
+															<p:outputLabel
+																value="#{txt_registrar_alerta['tooltips.label.consultar.municipio']}" />
+
+
+														</div>
+													</p:tooltip>
+
+												</div>
+											</div>
+										</p:outputPanel>
+
+										<p:outputPanel id="panelCorreo"
+											rendered="#{!beanCertificadoEspecial.ib_enviar}">
+
+											<p:outputLabel id="labelModoEnvioCertificado"
+												styleClass="label-form" for="modoEnvioCertificado"
+												value="#{txt_certificados['wizardCertificado.datos.modoEnvio']}" />
+											<p:outputLabel styleClass="required-field">*</p:outputLabel>
+											<div class="ui-inputgroup">
+												<p:inputText readonly="true" id="modoEnvioCertificado"
+													autocomplete="off"
+													placeholder="#{txt['placeholder.FormatoCorreo']}"
+													maxlength="50"
+													value="#{beanCertificadoEspecial.is_correoEnvio}">
+													<f:validator validatorId="ValidarCorreoFormato" />
+													<p:ajax event="change"
+														onstart="mostrarLimpiar('wizard:modoEnvioCertificado', 'spanCorreoEnvio');" />
+												</p:inputText>
+												<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+													styleClass="tooltipGeneral" for="labelModoEnvioCertificado"
+													position="top">
+													<div class="content-tooltip-general">
+														<p:outputLabel
+															value="#{txt_certificados['wizardCertificado.datos.titulo']}" />
+													</div>
+												</p:tooltip>
+												<span id="spanCorreoEnvio"
+													class="ui-inputgroup-addon ocultar"> <p:commandLink>
+														<p:graphicImage styleClass="img-x-size"
+															name="/img/x-roja.png" />
+														<p:ajax event="click"
+															onstart="limpiarCampo('wizard:modoEnvioCertificado', 'spanCorreoEnvio');" />
+													</p:commandLink>
+												</span>
+											</div>
+											<span class="help-block" id="prueba"> <p:message
+													for="modoEnvioCertificado" />
+											</span>
+										</p:outputPanel>
+									</p:panel>
+								</div>
+							</div>
+							<div class="row ">
+								<div class="col-xs-12 resumen_transaccion_valor_pagado">
+									<p:outputLabel id="lblValorTarifa" styleClass="label-form"
+										for="valorTarifa"
+										value="#{txt_certificados['wizardCertificado.resumen.valorTarifa']}" />
+									<p:outputLabel id="valorTarifa" class="colorVerde"
+										value="$#{beanCertificadoEspecial.itce_transaccionCertificadoEspecialDto.ibd_valorTotal}" />
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-6 col-xs-offset-3">
+									<p:commandButton id="btnSolicitar"
+										disabled="#{beanCertificadoEspecial.ib_solicitar}"
+										value="#{txt_certificados['wizardCertificados.resumen.solicitar']}"
+										styleClass="btn-rojo btn-gradiente"
+										onclick="PF('modalSolicitud').show()" />
+								</div>
+							</div>
+						</p:panel>
+					</div>
+				</div>
+			</p:panel>
+		</p:tab>
+	</ui:define>
+
+	<!-- Modal Solicitud  -->
+	<ui:define name="modalWizardExterno">
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalSolicitud" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal" value="#{txt['titulo.modal.seleccion']}" />
+			<ui:param name="formulario" value="formModalCertificadoCE" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['modal.texto.transaccion.uno']}" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['modal.texto.transaccion.dos']}" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['modal.texto.transaccion.tres']}" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['modal.texto.transaccion.cuatro']}" />
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['modal.texto.transaccion.cinco']}" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton
+							value="#{txt_certificados['button.adjuntarDocumento']}"
+							class="btn-rojo btn-gradiente"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('modalSolicitud).hide();"
+							action="#{beanCertificadoEspecial.redireccionDocumento}" />
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton
+							value="#{txt_certificados['wizard.seleccion.modal.aceptar']}"
+							class="btn-rojo btn-gradiente"
+							action="#{beanCertificadoEspecial.guardarTransaccionCertificado}"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('modalSolicitud).hide(); PF('blockUI-Loading').hide();"
+							update="#{update}">
+						</p:commandButton>
+					</div>
+
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Solicitud generada -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgEstadoCE" />
+			<ui:param name="formulario" value="dlgEstado" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<p:outputLabel value="#{txt_certificados['modal.texto.estado.a']}" />
+					</div>
+				</div>
+
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+						<p:button id="btn-cancel-confirmacion" icon="icon-flecha-gris"
+							iconPos="right"
+							styleClass="icon-btn pull-right btn-rojo btn-gradiente"
+							value="#{txt_certificados['boton.entendido']}"
+							onclick="PF('dlgEstadoCE').hide();return false" />
+					</div>
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal Aclaratoria -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="modalInfo" />
+			<ui:param name="formulario" value="formModalCertificadoCE2" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="heigth" value="60" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_certificados['info.text.descripcion.certEspecial']}" />
+						<p:separator></p:separator>
+						<div class="row">
+							<div class="col-xs-4 col-sm-12">
+								<p:graphicImage styleClass="imgMapa"
+									value="#{resource['img/especiales/nrMatricula.png']}"
+									alt="#{txt_certificados['modal.texto.imagen.nrMatricula']}"
+									title="#{txt_certificados['modal.texto.imagen.nrMatricula']}" />
+							</div>
+						</div>
+						<p:separator></p:separator>
+						<div class="row">
+							<div class="col-xs-4 col-sm-12">
+								<p:graphicImage styleClass="imgMapa"
+									value="#{resource['img/especiales/cedCatastral.png']}"
+									alt="#{txt_certificados['modal.texto.imagen.cedCatastral']}"
+									title="#{txt_certificados['modal.texto.imagen.cedCatastral']}" />
+							</div>
+						</div>
+						<p:separator></p:separator>
+						<div class="row">
+							<div class="col-xs-4 col-sm-12">
+								<p:graphicImage styleClass="imgMapa"
+									value="#{resource['img/especiales/antSistema.png']}"
+									alt="#{txt_certificados['modal.texto.imagen.antSistema']}"
+									title="#{txt_certificados['modal.texto.imagen.antSistema']}" />
+							</div>
+						</div>
+						<p:separator></p:separator>
+						<div class="row">
+							<div class="col-xs-4 col-sm-12">
+								<p:graphicImage styleClass="imgMapa"
+									value="#{resource['img/especiales/ofcRegistro.png']}"
+									alt="#{txt_certificados['modal.texto.imagen.antSistema']}"
+									title="#{txt_certificados['modal.texto.imagen.antSistema']}" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+			<p:separator></p:separator>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div
+						class="col-xs-8 col-sm-6 col-sm-offset-3 col-xs-offset-2 center-component">
+						<p:commandButton value="#{txt_certificados['boton.entendido']}"
+							class="btn-rojo btn-gradiente"
+							oncomplete="PF('#{modalId}').hide()">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

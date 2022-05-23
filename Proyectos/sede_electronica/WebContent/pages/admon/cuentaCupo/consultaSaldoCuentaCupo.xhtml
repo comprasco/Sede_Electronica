@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-cuentaCupo.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_cuentaCupo['CuentaCupo']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_cuentaCupo['CuentaCupo.Titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_cuentaCupo['CuentaCupo.Subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/cuentaCupo/consultarCuentaCupo.jsf" />
+		</ui:include>
+		<p:panel id="panelSaldoCuentaCupo">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel id="labelMoviento"
+						styleClass="label-form text-center tamano-titulo"
+						value="#{txt_cuentaCupo['label.consultar.saldo']}" />
+				</div>
+			</div>
+			<br />
+			<h:form id="formTabla">
+				<p:dataTable id="tablaSaldoCuentaCupo"
+					widgetVar="tablaSaldoCuentaCupo"
+					value="#{beanSaldoCuentaCupo.iscc_saldoCuentacupoDto}"
+					emptyMessage="#{txt_cuentaCupo['tabla.texto.vacia']}" rows="10"
+					var="cuentaCupo" stickyHeader="false" lazy="true"
+					styleClass="text-center">
+					<p:column id="saldoActual"
+						headerText="#{txt_cuentaCupo['texto.fecha.ultima.recarga']}">
+						<h:outputText
+							value="#{beanSaldoCuentaCupo.iscc_saldoCuentacupoDto.id_ultimaRecargaFecha}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column id="valorUltimaRecarga"
+						headerText="#{txt_cuentaCupo['texto.valor.recarga']}">
+						<h:outputText
+							value="$ #{beanSaldoCuentaCupo.iscc_saldoCuentacupoDto.ibd_ultimaRecargaValor}">
+						</h:outputText>
+					</p:column>
+					<p:column id="fechaUltimaRecarga"
+						headerText="#{txt_cuentaCupo['texto.saldo.actual']}">
+						<h:outputText
+							value="$ #{beanSaldoCuentaCupo.iscc_saldoCuentacupoDto.ibd_saldoActual}" />
+					</p:column>
+				</p:dataTable>
+				<div class="row">
+					<div class="col-xs-4"></div>
+					<div class="col-xs-4">
+						<br />
+						<p:commandButton styleClass="btn-gradiente btn-rojo"
+							update="panelSaldoCuentaCupo"
+							action="/pages/admon/cuentaCupo/consultaCuentaCupoM.jsf?faces-redirect=true"
+							value="#{txt_cuentaCupo['boton.volver']}">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-4"></div>
+				</div>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>

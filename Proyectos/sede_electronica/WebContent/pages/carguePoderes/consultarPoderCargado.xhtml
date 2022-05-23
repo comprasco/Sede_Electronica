@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputScript library="js" name="archivo.js" />
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-solicitudConsultas.css" />
+		<h:outputStylesheet library="css" name="snr-se-administracion.css" />
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();
+			});
+		</script>
+		<!-- Script que ejecuta el Keyfilter-->
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_repositorioPoderes['RepositorioPoderes']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_repositorioPoderes['RepositorioPoderes.Titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_repositorioPoderes['RepositorioPoderes.Subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/carguePoderes/consultarPoderCargado.jsf" />
+		</ui:include>
+		<!-- Consulta poder -->
+		<h:form id="consultaPoder">
+			<p:outputPanel>
+				<div class="row space-row">
+					<div class="col-xs-12 tituloPanel gradiente text-center space-row">
+						<h:outputText value="#{txt_repositorioPoderes['titulo.consulta']}" />
+					</div>
+				</div>
+			</p:outputPanel>
+			<p:panel styleClass="no-border">
+				<div class="row">
+					<div class="col-sm-4">
+						<p:outputLabel id="labelTipoDocPoderdante" for="tipoDocPoderdante"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['tipo.doc.poderdante']}" />
+
+						<p:selectOneMenu id="tipoDocPoderdante"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanConsultarPoder.is_tipoDocPoderdante}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}" />
+							<f:selectItems var="tipoDoc"
+								value="#{beanConsultarPoder.iltd_listaTipoDocumentos}"
+								itemLabel="#{tipoDoc.is_nombre}"
+								itemValue="#{tipoDoc.is_id}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelTipoDocPoderdante"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['tipo.doc.poderdante']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message
+								for="tipoDocPoderdante" />
+						</span>
+					</div>
+					<div class="col-sm-4">
+						<p:outputLabel id="labelNumDocPoderdante" for="numDocPoderdante"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['num.doc.poderdante']}" />
+
+						<div class="ui-inputgroup">
+							<p:inputText id="numDocPoderdante"
+								styleClass="text-input border-completo mask-Numeric"
+								maxlength="20"
+								placeholder="#{txt_repositorioPoderes['num.doc.poderdante']}"
+								value="#{beanConsultarPoder.is_numDocPoderdante}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('consultaPoder:numDocPoderdante', 'spanNumDocPoderdante');" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelNumDocPoderdante"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['num.doc.poderdante']}" />
+								</div>
+							</p:tooltip>
+							<span id="spanNumDocPoderdante"
+								class="ui-inputgroup-addon ocultar"> <p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('consultaPoder:numDocPoderdante', 'spanNumDocPoderdante');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message for="numDocPoderdante" />
+						</span>
+					</div>
+					<div class="col-sm-4">
+						<p:outputLabel id="labelNomPoderdante" for="nomPoderdante"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['nom.poderdante']}" />
+
+						<div class="ui-inputgroup">
+							<p:inputText id="nomPoderdante"
+								styleClass="text-input border-completo mask-AlphaNumEsp"
+								placeholder="#{txt_repositorioPoderes['nom.poderdante']}"
+								maxlength="100"
+								value="#{beanConsultarPoder.is_nombrePoderdante}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('consultaPoder:nomPoderdante', 'spanNomPoderdante');" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelNomPoderdante"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['nom.poderdante']}" />
+								</div>
+							</p:tooltip>
+							<span id="spanNomPoderdante" class="ui-inputgroup-addon ocultar">
+								<p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('consultaPoder:nomPoderdante', 'spanNomPoderdante');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message for="nomPoderdante" />
+						</span>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-4">
+						<p:outputLabel id="labelTipoDocApoderado" for="tipoDocApoderado"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['tipo.doc.apoderado']}" />
+
+						<p:selectOneMenu id="tipoDocApoderado"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanConsultarPoder.is_tipoDocApoderado}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemvalue="" />
+							<f:selectItems var="tipoDoc"
+								value="#{beanConsultarPoder.iltd_listaTipoDocumentosApoderado}"
+								itemLabel="#{tipoDoc.is_nombre}"
+								itemValue="#{tipoDoc.is_id}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelTipoDocApoderado"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['tipo.doc.apoderado']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="tipoDocApoderado" />
+						</span>
+					</div>
+					<div class="col-sm-4">
+						<p:outputLabel id="labelNumDocApoderado" for="numDocApoderado"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['num.doc.apoderado']}" />
+
+						<div class="ui-inputgroup">
+							<p:inputText id="numDocApoderado"
+								styleClass="text-input border-completo mask-Numeric"
+								maxlength="20"
+								placeholder="#{txt_repositorioPoderes['num.doc.apoderado']}"
+								value="#{beanConsultarPoder.is_numDocApoderado}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('consultaPoder:numDocApoderado', 'spanNumDocApoderado');" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelNumDocApoderado"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['num.doc.apoderado']}" />
+								</div>
+							</p:tooltip>
+							<span id="spanNumDocApoderado"
+								class="ui-inputgroup-addon ocultar"> <p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('consultaPoder:numDocApoderado', 'spanNumDocApoderado');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message for="numDocApoderado" />
+						</span>
+					</div>
+					<div class="col-sm-4">
+						<p:outputLabel id="labelNomApoderado" for="nomApoderado"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['nom.apoderado']}" />
+
+						<div class="ui-inputgroup">
+							<p:inputText id="nomApoderado"
+								styleClass="text-input border-completo mask-AlphaNumEsp"
+								maxlength="100"
+								placeholder="#{txt_repositorioPoderes['nom.apoderado']}"
+								value="#{beanConsultarPoder.is_nombreApoderado}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('consultaPoder:nomApoderado', 'spanNomApoderado');" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelNomApoderado"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['nom.apoderado']}" />
+								</div>
+							</p:tooltip>
+							<span id="spanNomApoderado" class="ui-inputgroup-addon ocultar">
+								<p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('consultaPoder:nomApoderado', 'spanNomApoderado');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message for="nomApoderado" />
+						</span>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-4">
+						<p:outputLabel id="labelDepartamento" for="departamento"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['departamento']}" />
+
+						<p:selectOneMenu id="departamento"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							converter="selectOneMenuConverter"
+							value="#{beanConsultarPoder.id_departamentoPredioDto}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemvalue="" />
+							<f:selectItems
+								value="#{beanConsultarPoder.ild_listaDepartamentoPredio}"
+								var="departamento" itemLabel="#{departamento.is_nombre}"
+								itemValue="#{departamento}" />
+							<p:ajax process="@this" update="ciudad"
+								listener="#{beanConsultarPoder.cargarMunicipiosPorDepartamentoPredio}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelDepartamento"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_repositorioPoderes['departamento']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="departamento" />
+						</span>
+					</div>
+					<div class="col-sm-4">
+						<p:outputLabel id="labelCiudad" for="ciudad"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['ciudad']}" />
+
+						<p:selectOneMenu id="ciudad"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							converter="selectOneMenuConverter"
+							disabled="#{beanConsultarPoder.ilm_listaMunicipioPredioDto eq null}"
+							value="#{beanConsultarPoder.im_municipioPredioDto}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemvalue="" />
+							<f:selectItems var="municipio" itemLabel="#{municipio.is_nombre}"
+								itemValue="#{municipio}"
+								value="#{beanConsultarPoder.ilm_listaMunicipioPredioDto}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelCiudad" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_repositorioPoderes['ciudad']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="ciudad" />
+						</span>
+					</div>
+					<div class="col-sm-4">
+						<p:outputLabel id="labelTipoEntidad" for="tipoEntidad"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['tipo.entidad']}" />
+
+						<p:selectOneMenu id="tipoEntidad" styleClass="tamano"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanConsultarPoder.is_tipoEntidad}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemvalue="" />
+							<f:selectItems
+								value="#{beanConsultarPoder.illee_listaTipoEntidadDto}"
+								var="tipoEntidad" itemValue="#{tipoEntidad.is_codigo}"
+								itemLabel="#{tipoEntidad.is_nombre}" />
+							<p:ajax onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								listener="#{beanConsultarPoder.consultarEntidadesEspeciales}"
+								update="entidad" process="@this" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelTipoEntidad" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_repositorioPoderes['tipo.entidad']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="tipoEntidad" />
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4">
+						<p:outputLabel id="labelEntidad" for="entidad"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['entidad']}" />
+
+						<p:selectOneMenu id="entidad" styleClass="tamano"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanConsultarPoder.is_entidad}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}"
+								itemvalue="" />
+							<f:selectItems
+								value="#{beanConsultarPoder.illee_listaEntidadDto}"
+								var="tipoEntidad" itemValue="#{tipoEntidad.is_codigo}"
+								itemLabel="#{tipoEntidad.is_nombre}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelEntidad" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_repositorioPoderes['entidad']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="entidad" />
+						</span>
+					</div>
+					<div class="col-sm-4">
+						<p:outputLabel id="labelEstado" for="estado"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['estado']}" />
+
+						<p:selectOneMenu id="estado"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanConsultarPoder.is_estado}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}" />
+							<f:selectItems var="estadoPoder"
+								value="#{beanConsultarPoder.ileep_listaEnumEstadoPoder}"
+								itemLabel="#{estadoPoder.is_nombreVisible}"
+								itemValue="#{estadoPoder.is_codigo}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelEstado" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_repositorioPoderes['estado']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="estado" />
+						</span>
+					</div>
+					<p:importEnum
+						type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTipoPoder"
+						var="enumTipoPoder" />
+					<div class="col-sm-4">
+						<p:outputLabel id="labelTipoPoder" for="tipoPoder"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['tipo.poder']}" />
+						<p:selectOneMenu id="tipoPoder"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanConsultarPoder.is_tipoPoder}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}" />
+							<f:selectItems value="#{beanConsultarPoder.consultarTipoPoder()}"
+								var="tipoPoder" itemValue="#{tipoPoder.is_nombre}"
+								itemLabel="#{tipoPoder.is_nombre}" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelTipoPoder" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_repositorioPoderes['tipo.poder']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="tipoPoder" />
+						</span>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-4">
+						<p:outputLabel id="labelCirculoRegistral" for="circuloRegistral"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['circulo.registral']}" />
+
+						<p:selectOneMenu id="circuloRegistral" filter="true"
+							filterMatchMode="contains" converter="selectOneMenuConverter"
+							filterPlaceholder="#{txt_certificados['wizardCertificado.datos.placeholder.oficinaRegistro']}"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							value="#{beanConsultarPoder.icr_circuloRegistral}">
+							<f:selectItem itemLabel="#{txt['datos.lista.seleccionar']}" />
+							<f:selectItems
+								value="#{beanConsultarPoder.ilcr_listaCirculoRegistralDto}"
+								var="circuloRegistral"
+								itemLabel="#{circuloRegistral.is_nombre} - (#{circuloRegistral.is_id})"
+								itemValue="#{circuloRegistral}" />
+							<p:ajax update="numeroOficinaRegistro" />
+						</p:selectOneMenu>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelCirculoRegistral"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['circulo.registral']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="circuloRegistral" />
+						</span>
+					</div>
+					<div class="col-sm-4">
+						<p:outputLabel id="labelNumeroOficinaRegistro"
+							for="numeroOficinaRegistro" styleClass="label-form tresPuntos"
+							value="#{txt_certificados['wizardCertificado.datos.numeroOficinaRegistro']}" />
+						<div class="ui-inputgroup">
+							<p:inputText id="numeroOficinaRegistro" readonly="true"
+								styleClass="block"
+								value="#{beanConsultarPoder.icr_circuloRegistral.is_id}" />
+						</div>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelNumeroOficinaRegistro"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_certificados['wizardCertificado.datos.numeroOficinaRegistro']}" />
+							</div>
+						</p:tooltip>
+					</div>
+					<div class="col-sm-4">
+						<p:outputLabel id="labelMatricula" for="matricula"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['matricula']}" />
+
+						<div class="ui-inputgroup">
+							<p:inputText id="matricula"
+								styleClass="text-input border-completo mask-Numeric"
+								placeholder="#{txt_repositorioPoderes['matricula']}"
+								maxlength="30" value="#{beanConsultarPoder.is_numeroMatricula}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('consultaPoder:matricula', 'spanMatricula');" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelMatricula" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_repositorioPoderes['matricula']}" />
+								</div>
+							</p:tooltip>
+							<span id="spanMatricula" class="ui-inputgroup-addon ocultar">
+								<p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('consultaPoder:matricula', 'spanMatricula');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message for="matricula" />
+						</span>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<p:outputLabel id="labelDireccion" for="direccion"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['direccion.predio']}" />
+
+						<div class="ui-inputgroup">
+							<p:inputText id="direccion" readonly="true"
+								styleClass="text-input border-completo mask-AlphaNumChars2"
+								placeholder="#{txt_repositorioPoderes['direccion.predio']}"
+								value="#{beanConsultarPoder.id_direccionDto.is_direccionCompleta}">
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelDireccion" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_repositorioPoderes['direccion.predio']}" />
+								</div>
+							</p:tooltip>
+							<p:commandButton icon="icon-direccion"
+								styleClass="icon-input btn-gradiente icono_boton"
+								onsuccess="PF('dialog-direccion').show();" process="@this" />
+						</div>
+						<span class="help-block"> <p:message for="direccion" />
+						</span>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-4">
+						<p:outputLabel id="labelDocumento" for="documento"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['documento']}" />
+
+						<div class="ui-inputgroup">
+							<p:inputText id="documento" maxlength="30"
+								styleClass="text-input border-completo mask-Numeric"
+								placeholder="#{txt_repositorioPoderes['documento']}"
+								value="#{beanConsultarPoder.is_idDocumento}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('consultaPoder:documento', 'spanDocumento');" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelDocumento" position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_repositorioPoderes['documento']}" />
+								</div>
+							</p:tooltip>
+							<span id="spanDocumento" class="ui-inputgroup-addon ocultar">
+								<p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('consultaPoder:documento', 'spanDocumento');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message for="documento" />
+						</span>
+					</div>
+					<div class="col-sm-4">
+						<p:outputLabel id="labelFechaInicial" for="fechaInicial"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['fecha.inicial']}" />
+
+						<p:calendar id="fechaInicial" readonlyInput="true"
+							binding="#{fechaInicial}" pattern="dd/MM/yyyy" maxlength="10"
+							locale="es" yearRange="1900:2200" navigator="true"
+							placeholder="#{txt['placeholder.FormatoFecha']}"
+							styleClass="text-input-calendar"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							showOn="button" value="#{beanConsultarPoder.id_fechaInicial}">
+							<p:ajax event="dateSelect" update="fechaFinal"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();" />
+						</p:calendar>
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelFechaInicial"
+							position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel
+									value="#{txt_repositorioPoderes['fecha.inicial']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="fechaInicial" />
+						</span>
+					</div>
+					<div class="col-sm-4">
+						<p:outputLabel id="labelFechaFinal" for="fechaFinal"
+							styleClass="label-form tresPuntos"
+							value="#{txt_repositorioPoderes['fecha.final']}" />
+						<p:calendar id="fechaFinal" readonlyInput="true"
+							pattern="dd/MM/yyyy" maxlength="10" locale="es"
+							yearRange="1900:2200" navigator="true" mindate="" maxdate=""
+							placeholder="#{txt['placeholder.FormatoFecha']}" disabled=""
+							styleClass="text-input-calendar"
+							requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+							showOn="button" value="#{beanConsultarPoder.id_fechaFinal}" />
+						<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+							styleClass="tooltipGeneral" for="labelFechaFinal" position="top">
+							<div class="content-tooltip-general">
+								<p:outputLabel value="#{txt_repositorioPoderes['fecha.final']}" />
+							</div>
+						</p:tooltip>
+						<span class="help-block"> <p:message for="fechaFinal" />
+						</span>
+					</div>
+				</div>
+				<p:separator />
+				<div class="row">
+					<div class="col-sm-4 col-sm-offset-2">
+						<p:commandButton value="#{txt_repositorioPoderes['btn.limpiar']}"
+							styleClass="btn-gris" update="@all"
+							onstart="PF('blockUI-Loading').show();"
+							oncomplete="PF('blockUI-Loading').hide();"
+							actionListener="#{beanConsultarPoder.limpiarDatos}">
+						</p:commandButton>
+					</div>
+					<div class="col-sm-4">
+						<p:commandButton id="consultarPoder" icon="icon-flecha-blanca" iconPos="right"
+							styleClass="btn-gradiente icon-btn btn-rojo "
+							value="#{txt_repositorioPoderes['btn.buscar']}" update="@form"
+							onstart="PF('blockUI-Loading').show();" 
+							oncomplete="PF('blockUI-Loading').hide();"
+							actionListener="#{beanConsultarPoder.consultarPoderes}" />
+					</div>
+				</div>
+				<p:defaultCommand target="consultarPoder" />
+			</p:panel>
+			<p:panel styleClass="no-border">
+				<div class="row panel-seguimiento">
+					<p:importEnum
+						type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumTiposMIME"
+						var="enumTiposMIME" />
+					<p:dataTable var="poderes" styleClass="table-center"
+						id="listaPoderes" value="#{beanConsultarPoder.ilp_listaPoderDto}"
+						reflow="true"
+						emptyMessage="#{txt_repositorioPoderes['mensaje.vacio']}"
+						paginator="true" rows="10" paginatorPosition="bottom"
+						paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+						currentPageReportTemplate="{currentPage} / {totalPages}"
+						stickyHeader="false">
+						<p:column
+							headerText="#{txt_repositorioPoderes['tabla.id.documento']}">
+							<h:outputText value="#{poderes.is_did}" />
+						</p:column>
+						<p:column
+							headerText="#{txt_repositorioPoderes['tabla.entidad.origen']}">
+							<h:outputText value="#{poderes.is_idNotariaOrigen}" />
+						</p:column>
+						<p:column
+							headerText="#{txt_repositorioPoderes['tabla.tipo.poder']}">
+							<h:outputText value="#{poderes.ic_tipoPoder.is_nombre}" />
+						</p:column>
+						<p:column headerText="#{txt_repositorioPoderes['tabla.estado']}">
+							<h:outputText value="#{poderes.is_estadoPoder}" />
+						</p:column>
+						<p:column
+							headerText="#{txt_repositorioPoderes['tabla.fecha.cargue']}">
+							<h:outputText value="#{poderes.getId_fechaCargueTexto()}" />
+						</p:column>
+						<p:column
+							headerText="#{txt_repositorioPoderes['tabla.fecha.vencimiento']}">
+							<h:outputText value="#{poderes.getId_fechaVencimientoTexto()}" />
+						</p:column>
+						<p:column styleClass="centrar"
+							headerText="#{txt_repositorioPoderes['tabla.ver']}">
+							<p:commandLink id="archivoPoder" styleClass="icon-Pdf-alinear"
+								actionListener="#{beanConsultarPoder.descargarPoder(poderes.is_did,poderes.ia_archivoPoder.is_nombreArchivo)}"
+								onstart="PF('blockUI-Loading').show();"
+								onsuccess="PF('blockUI-Loading').hide();">
+								<p:graphicImage name="/iconos/pdf.png" />
+							</p:commandLink>
+						</p:column>
+						<p:importEnum
+						type="co.gov.supernotariado.bachue.sedeelectronica.common.enums.EnumEstadoPoder"
+						var="enumEstadoPoder" />
+						<p:column styleClass="centrar"
+							headerText="#{txt_repositorioPoderes['tabla.usar.poder']}">
+							<p:link outcome="usarPoder" disabled="#{poderes.is_estadoPoder eq enumEstadoPoder.INACTIVO.getIs_codigo()}"
+								styleClass="btn-gradiente icono_boton icon-input">
+								<span class="icon-mas"></span>
+								<f:param name="poder" value="#{poderes.is_did}" />
+								<f:param name="docname"
+									value="#{poderes.ia_archivoPoder.is_nombreArchivo}" />
+							</p:link>
+						</p:column>
+						<p:column styleClass="centrar"
+							headerText="#{txt_repositorioPoderes['tabla.notificacion']}">
+							<p:link outcome="creacionNotificacionPoder"
+								styleClass="btn-gradiente icono_boton icon-input">
+								<span class="icon-mas"></span>
+								<f:param name="idPoder" value="#{poderes.is_dDocName}" />
+								<f:param name="idVersion"
+									value="#{poderes.is_did}" />
+							</p:link>
+						</p:column>
+						<p:column styleClass="centrar"
+							headerText="#{txt_repositorioPoderes['tabla.detalle']}">
+							<p:link outcome="detallePoderCargado"
+								styleClass="btn-gradiente icono_boton icon-input">
+								<span class="icon-mas"></span>
+								<f:param name="detalle" value="#{poderes.is_did}" />
+								<f:param name="docname"
+									value="#{poderes.ia_archivoPoder.is_nombreArchivo}" />
+							</p:link>
+						</p:column>
+						<p:column styleClass="centrar"
+							headerText="#{txt_repositorioPoderes['tabla.solicitud.cargue.poder']}">
+							<p:link outcome="creacionSolicitudInternaPoder"
+								styleClass="btn-gradiente icono_boton icon-input">
+								<span class="icon-mas"></span>
+								<f:param name="tipo" value="SPCP" />
+							</p:link>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</p:panel>
+		</h:form>
+		<!--  Modal direccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dialog-direccion" />
+			<ui:param name="tituloModal"
+				value="#{txt_persona['Modal.direccion.header']}" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:param name="formulario" value="formDireccionCrear" />
+			<ui:define name="body-modal">
+				<p:panel id="panelDir" styleClass="panel-dir">
+					<ui:decorate template="/pages/includes/direccion.xhtml">
+						<ui:param name="bean" value="${beanConsultarPoder}" />
+						<ui:param name="direccionDto"
+							value="${beanConsultarPoder.id_direccionDto}" />
+						<ui:param name="mostrarPais" value="true" />
+						<ui:param name="formularioDireccion" value="formDireccionCrear" />
+						<ui:param name="requerido" value="true" />
+					</ui:decorate>
+				</p:panel>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div
+						class="col-xs-5 col-sm-4 col-md-5 col-xs-offset-1 col-sm-offset-2 col-md-offset-1">
+						<p:commandButton id="btn-volver"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_persona['boton.volver']}"
+							oncomplete="PF('dialog-direccion').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-sm-4 col-md-5 col-xs-offset-0">
+						<p:commandButton id="btn-acepto"
+							styleClass="icon-btn btn-rojo pull-left btn-gradiente"
+							value="#{txt_persona['boton.guardar']}"
+							update="consultaPoder formDireccionCrear"
+							oncomplete="if(args.validationFailed){PF('#{modalId}').jq.effect('shake', {times: 3}, 100);}else{PF('#{modalId}').hide();return true;}"
+							process="@form" ignoreAutoUpdate="true">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!--  Modal direccion -->
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,702 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<h:outputStylesheet library="css" name="snr-se-bloqueoDesbloqueo.css" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_administrador['MantenimientoUsuarios']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_administrador['titulo.Bloqueo.Desbloqueo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_administrador['subtitulo.Bloqueo.Desbloqueo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/mantenimiento/bloqueoDesbloqueoUsuario.jsf" />
+		</ui:include>
+		<div class="row">
+			<div class="col-xs-12">
+				<h:form id="formMantenimientoUsuarios">
+					<p:growl id="growl-msg" showDetail="true" life="3000"
+						sticky="false" severity="info, fatal, warn">
+						<p:autoUpdate />
+					</p:growl>
+					<p:panel id="panelMantemimientoUsuarios"
+						styleClass="panel-content no-border">
+						<p:outputPanel id="panelFormUsuarioExt">
+							<div class="row spaceRow">
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelTipoDocumento" styleClass="label-form"
+										for="tipoDocumento"
+										value="#{txt_administrador['label.TipoDocumento']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:selectOneMenu id="tipoDocumento"
+										widgetVar="tipoDocumentoSelect"
+										value="#{beanUsuarioBloqueo.is_tipoDocumento}">
+										<f:selectItem itemValue=""
+											itemLabel="#{txt['label.SeleccioneComboBox']}" />
+										<f:selectItems
+											value="#{beanPersona.cargarCatalogoTipoDocumento('NONE')}" />
+										<p:ajax update="formMantenimientoUsuarios:numeroDocumento"
+											event="change" oncomplete="asignarMaxCaracteres();" />
+									</p:selectOneMenu>
+									<p:tooltip styleClass="tooltipGeneral" for="labelTipoDocumento"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_administrador['tooltip.TipoDocumento']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="tipoDocumento" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelNumeroDocumento"
+										styleClass="label-form" for="numeroDocumento"
+										value="#{txt_administrador['label.NumeroDocumento']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<div class="ui-inputgroup">
+										<p:inputText id="numeroDocumento" autocomplete="off"
+											styleClass="text-input border-completo #{beanUsuarioBloqueo.validarRegex()}"
+											maxlength="10"
+											placeholder="#{txt_administrador['placeholder.NumeroDocumento']}"
+											value="#{beanUsuarioBloqueo.is_numeroDocumento}">
+											<p:ajax event="change"
+												onstart="mostrarLimpiar('formMantenimientoUsuarios:numeroDocumento', 'spanNumeroDocumento');" />
+										</p:inputText>
+										<span id="spanNumeroDocumento"
+											class="ui-inputgroup-addon ocultar"> <p:commandLink>
+												<p:graphicImage styleClass="img-x-size"
+													name="/img/x-roja.png" />
+												<p:ajax event="click"
+													onstart="limpiarCampo('formMantenimientoUsuarios:numeroDocumento', 'spanNumeroDocumento');" />
+											</p:commandLink>
+										</span>
+										<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+											for="labelNumeroDocumento" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_administrador['tooltip.NumeroDocumento']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="numeroDocumento" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-sm-4">
+									<p:outputLabel id="labelNombreUsuario" styleClass="label-form"
+										for="username" value="#{txt_administrador['label.Usuario']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<div class="ui-inputgroup">
+										<p:inputText id="username" autocomplete="off"
+											styleClass="text-input border-completo" maxlength="20"
+											placeholder="#{txt_administrador['placeholder.Usuario']}"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											required="true" name="username"
+											value="#{beanUsuarioBloqueo.is_usuarioBloqueo}">
+											<p:keyFilter regEx="/[A-Z0-9\s\.\-\_\@]/i" />
+											<p:ajax event="change"
+												onstart="mostrarLimpiar('formMantenimientoUsuarios:username', 'spanUserName');" />
+										</p:inputText>
+										<span id="spanUserName" class="ui-inputgroup-addon ocultar">
+											<p:commandLink>
+												<p:graphicImage styleClass="img-x-size"
+													name="/img/x-roja.png" />
+												<p:ajax event="click"
+													onstart="limpiarCampo('formMantenimientoUsuarios:username', 'spanUserName');" />
+											</p:commandLink>
+										</span>
+										<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+											for="labelNombreUsuario" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_administrador['tooltip.Usuario']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message for="username" />
+									</span>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div
+									class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+									<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+										type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+										value="#{txt_administrador['boton.Buscar']}" ajax="false"
+										actionListener="#{beanUsuarioBloqueo.consultarUsuarioBloqueo()}"
+										update="consultaUsuarioNatural, consultaUsuarioJuridico" />
+								</div>
+							</div>
+							<br />
+							<!-- Consulta usuario juridico -->
+							<p:panel id="consultaUsuarioJuridico"
+								rendered="#{beanUsuarioBloqueo.ib_mostrarPJ}">
+								<br />
+								<div class="row">
+									<div class="col-xs-12 col-sm-11 text-center">
+										<h:outputText styleClass="titulo bold" id="aprobacionPJ"
+											value="#{txt_administrador['label.Usuario.Persona.Juridica']}"></h:outputText>
+									</div>
+								</div>
+								<br />
+								<div class="col-xs-12">
+									<div class="col-xs-6">
+										<h:panelGrid columns="2" layout="grid">
+											<div class="container-fluid-special">
+												<div class="row">
+													<div class="col-xs-12">
+														<p:outputLabel id="labelDocumentoTipoPJ"
+															styleClass="label-form" for="documentoTipoPJ"
+															value="#{txt_administrador['label.TipoDocumento']}" />
+													</div>
+												</div>
+												<div class="ui-inputgroup">
+													<h:outputText styleClass="text-input detalle-usuario"
+														value="#{beanUsuarioBloqueo.iud_usuarioConsultado.getIp_personaDto().getItd_tipoDocumentoDto().getIs_nombre()}"
+														id="documentoTipoPJ" />
+												</div>
+												<span class="help-block"> <p:message
+														for="documentoTipoPJ" />
+												</span>
+											</div>
+											<div class="container-fluid-special">
+												<div class="row">
+													<div class="col-xs-12">
+														<p:outputLabel id="labelDocumentoNumeroPJ"
+															styleClass="label-form" for="documentoNumeroPJ"
+															value="#{txt_administrador['label.NumeroDocumento']}" />
+													</div>
+												</div>
+												<div class="ui-inputgroup">
+													<h:outputText styleClass="text-input detalle-usuario"
+														value="#{beanUsuarioBloqueo.iud_usuarioConsultado.getIp_personaDto().getIs_numeroDocumento()}"
+														id="documentoNumeroPJ" />
+												</div>
+												<span class="help-block"> <p:message
+														for="documentoNumeroPJ" />
+												</span>
+											</div>
+										</h:panelGrid>
+									</div>
+									<div class="col-xs-6">
+										<h:panelGrid columns="2" layout="grid">
+											<div class="container-fluid-special">
+												<div class="row">
+													<div class="col-xs-12">
+														<p:outputLabel id="labelUsuarioNombrePJ"
+															styleClass="label-form" for="nombreUsuarioPJ"
+															value="#{txt_administrador['label.Usuario']}" />
+													</div>
+												</div>
+												<div class="ui-inputgroup">
+													<h:outputText styleClass="text-input detalle-usuario"
+														value="#{beanUsuarioBloqueo.iud_usuarioConsultado.getIs_usuario()}"
+														id="nombreUsuarioPJ" />
+												</div>
+												<span class="help-block"> <p:message
+														for="nombreUsuarioPJ" />
+												</span>
+											</div>
+											<div class="container-fluid-special">
+												<div class="row">
+													<div class="col-xs-12">
+														<p:outputLabel id="labelBloqueoDesbloqueoPJ"
+															styleClass="label-form"
+															value="#{txt_administrador['label.Bloquear.Desbloquear']}" />
+													</div>
+												</div>
+												<br />
+												<ui:fragment>
+													<div class="row">
+														<div class="col-xs-12">
+															<h:outputText id="spanNoPJ"
+																value="#{txt_administrador['boton.Desbloqueo.Upper']}"
+																class="#{!beanUsuarioBloqueo.ib_bloqueoDesbloqueo ?  'textoRojo' : 'textoGris' }" />
+															<p:inputSwitch
+																value="#{beanUsuarioBloqueo.ib_bloqueoDesbloqueo}">
+																<f:ajax
+																	render="formMantenimientoUsuarios:spanNoPJ formMantenimientoUsuarios:spanSiPJ" />
+															</p:inputSwitch>
+															<h:outputText id="spanSiPJ"
+																value="#{txt_administrador['boton.Bloqueo.Upper']}"
+																class="#{beanUsuarioBloqueo.ib_bloqueoDesbloqueo ?  'textoRojo' : 'textoGris' }" />
+														</div>
+													</div>
+												</ui:fragment>
+												<br />
+											</div>
+										</h:panelGrid>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<p:dataTable var="asociacionPJ" styleClass="centrar"
+											widgetVar="paramsTablePJ" id="asociacionesDataTablePJ"
+											reflow="true"
+											paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+											currentPageReportTemplate="{currentPage} / {totalPages}"
+											paginator="true" rows="10" paginatorPosition="bottom"
+											rowsPerPageTemplate="10"
+											value="#{beanUsuarioBloqueo.ilia_listaAsosiacionDto}"
+											emptyMessage="#{txt_administrador['tabla.vacia.PJ']}"
+											stickyHeader="false">
+											<f:facet name="header">
+												<p:outputPanel styleClass="header">
+													<h:outputText
+														value="#{txt_administrador['tabla.titulo.Asociados']}"
+														styleClass="centrar" />
+												</p:outputPanel>
+											</f:facet>
+											<p:column
+												headerText="#{txt_administrador['tabla.Encabezado.Tipo.Documento']}"
+												styleClass="centrar20">
+												<h:outputText
+													value="#{asociacionPJ.getIu_usuarioDto().getIp_personaDto().getItd_tipoDocumentoDto().getIs_id()}" />
+											</p:column>
+											<p:column
+												headerText="#{txt_administrador['tabla.Encabezado.Numero.Documento']}"
+												styleClass="centrar25">
+												<h:outputText
+													value="#{asociacionPJ.getIu_usuarioDto().getIp_personaDto().getIs_numeroDocumento()}" />
+											</p:column>
+											<p:column
+												headerText="#{txt_administrador['tabla.Encabezado.Nombre']}"
+												styleClass="centrar55">
+												<h:outputText
+													value="#{asociacionPJ.getIu_usuarioDto().getIp_personaDto().getIpn_personaNaturalDto().getIs_primerNombre()}" />
+											</p:column>
+										</p:dataTable>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel id="labelObservacionesUsuarioPJ"
+											styleClass="label-form" for="observacionesUsuarioPJ"
+											value="#{txt_administrador['label.Observaciones']}" />
+										<p:outputLabel styleClass="required-field"> *</p:outputLabel>
+										<div class="ui-inputgroup">
+											<p:inputTextarea id="observacionesUsuarioPJ" rows="6"
+												required="true" cols="40" counter="mostrarContadorPJ"
+												maxlength="1000"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_administrador['placeholder.Observaciones.Bloqueo']}"
+												counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+												autoResize="false"
+												value="#{beanUsuarioBloqueo.iubd_usuarioBloqueo.is_observacionBloqueo}">
+											</p:inputTextarea>
+											<br />
+											<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+												for="labelObservacionesUsuarioPJ" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_administrador['tooltip.Observaciones']}" />
+												</div>
+											</p:tooltip>
+											<span id="spanObservacionesUsuarioPJ"
+												class="ui-inputgroup-addon ocultar"> <p:commandLink>
+													<p:graphicImage styleClass="img-x-size"
+														name="/img/x-roja.png" />
+													<p:ajax event="click"
+														onstart="limpiarCampo('formMantenimientoUsuarios:observacionesUsuarioPJ', 'spanObservacionesUsuarioPJ');" />
+												</p:commandLink>
+											</span>
+										</div>
+										<h:outputText id="mostrarContadorPJ" />
+										<span class="help-block"> <p:message
+												for="observacionesUsuarioPJ" />
+										</span>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel id="labelCargarSoportePJ"
+											styleClass="label-form"
+											value="#{txt_administrador['label.Adjuntar.Soporte']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<div class="ui-inputgroup">
+											<p:fileUpload styleClass="cargaArchivo"
+												fileUploadListener="#{beanUsuarioBloqueo.cargarSoporteBloqueo}"
+												mode="advanced" auto="false" allowTypes="/(\.|\/)(pdf)$/"
+												invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+												invalidFileMessage="#{txt_certificados['wizardMasivos.archivo.error.extension']}"
+												fileLimitMessage="#{txt_certificados['wizardMasivos.archivo.error.archivo']}"
+												label="#{txt_persona['label.ExaminarArchivo']}"
+												uploadLabel="#{txt_persona['label.Cargar']}"
+												cancelLabel="#{txt_persona['label.Cancelar']}"
+												sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}" fileLimit="1"
+												update=":formMantenimientoUsuarios:textoSalidaArchivoPJ"
+												required="true" skinSimple="true">
+												<div class="col-xs-12 text-left">
+													<br />
+													<h:outputText id="textoSalidaArchivoPJ"
+														styleClass="text-input"
+														value="#{beanUsuarioBloqueo.is_soporteBloqueo}" />
+												</div>
+											</p:fileUpload>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelCargarSoportePJ"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_administrador['tooltip.archivo']}" />
+												</div>
+											</p:tooltip>
+										</div>
+									</div>
+									<br />
+								</div>
+								<br />
+								<div class="container-fluid-btn">
+									<div class="row">
+										<div class="col-xs-4 col-xs-offset-2">
+											<p:commandButton id="btn-atrasPJ" icon="icon-flecha-gris"
+												iconPos="right" styleClass="icon-btn pull-right btn-gris"
+												value="#{txt_minuta['boton.volver.upper']}" immediate="true"
+												action="/pages/admon/mantenimiento/bloqueoDesbloqueoUsuario.jsf?faces-redirect=true"
+												process="@this" />
+										</div>
+										<div class="col-xs-4 col-xs-offset-0">
+											<p:commandButton id="btnValidarCrearPJ"
+												icon="icon-flecha-blanca" iconPos="right"
+												value="#{txt_minuta['boton.guardar.upper']}"
+												styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+												type="submit" process="@form" ignoreAutoUpdate="true"
+												oncomplete="PF('dlgConfirmativo').show();" />
+										</div>
+									</div>
+								</div>
+							</p:panel>
+							<!-- Consulta usuario juridico -->
+							<!-- Consulta usuario natural -->
+							<p:panel id="consultaUsuarioNatural"
+								rendered="#{beanUsuarioBloqueo.ib_mostrarPN}">
+								<br />
+								<div class="row">
+									<div class="col-xs-12 col-sm-11 text-center">
+										<h:outputText styleClass="titulo bold" id="aprobacionPN"
+											value="#{txt_administrador['label.Usuario.Persona.Natural']}"></h:outputText>
+									</div>
+								</div>
+								<br />
+								<div class="col-xs-12">
+									<div class="col-xs-6">
+										<h:panelGrid columns="2" layout="grid">
+											<div class="container-fluid-special">
+												<div class="row">
+													<div class="col-xs-12">
+														<p:outputLabel id="labelDocumentoTipoPN"
+															styleClass="label-form" for="documentoTipoPN"
+															value="#{txt_administrador['label.TipoDocumento']}" />
+													</div>
+												</div>
+												<div class="ui-inputgroup">
+													<h:outputText styleClass="text-input detalle-usuario"
+														value="#{beanUsuarioBloqueo.iud_usuarioConsultado.getIp_personaDto().getItd_tipoDocumentoDto().getIs_nombre()}"
+														id="documentoTipoPN" />
+												</div>
+												<span class="help-block"> <p:message
+														for="documentoTipoPN" />
+												</span>
+											</div>
+											<div class="container-fluid-special">
+												<div class="row">
+													<div class="col-xs-12">
+														<p:outputLabel id="labelDocumentoNumeroPN"
+															styleClass="label-form" for="documentoNumeroPN"
+															value="#{txt_administrador['label.NumeroDocumento']}" />
+													</div>
+												</div>
+												<div class="ui-inputgroup">
+													<h:outputText styleClass="text-input detalle-usuario"
+														value="#{beanUsuarioBloqueo.iud_usuarioConsultado.getIp_personaDto().getIs_numeroDocumento()}"
+														id="documentoNumeroPN" />
+												</div>
+												<span class="help-block"> <p:message
+														for="documentoNumeroPN" />
+												</span>
+											</div>
+										</h:panelGrid>
+									</div>
+									<div class="col-xs-6">
+										<h:panelGrid columns="2" layout="grid">
+											<div class="container-fluid-special">
+												<div class="row">
+													<div class="col-xs-12">
+														<p:outputLabel id="labelUsuarioNombrePN"
+															styleClass="label-form" for="nombreUsuarioPN"
+															value="#{txt_administrador['label.Usuario']}" />
+													</div>
+												</div>
+												<div class="ui-inputgroup">
+													<h:outputText styleClass="text-input detalle-usuario"
+														value="#{beanUsuarioBloqueo.iud_usuarioConsultado.getIs_usuario()}"
+														id="nombreUsuarioPN" />
+												</div>
+												<span class="help-block"> <p:message
+														for="nombreUsuarioPN" />
+												</span>
+											</div>
+											<div class="container-fluid-special">
+												<div class="row">
+													<div class="col-xs-12">
+														<p:outputLabel id="labelBloqueoDesbloqueo"
+															styleClass="label-form"
+															value="#{txt_administrador['label.Bloquear.Desbloquear']}" />
+													</div>
+												</div>
+												<br />
+												<ui:fragment>
+													<div class="row">
+														<div class="col-xs-12">
+															<h:outputText id="spanNoPN"
+																value="#{txt_administrador['boton.Desbloqueo.Upper']}"
+																class="#{!beanUsuarioBloqueo.ib_bloqueoDesbloqueo ?  'textoRojo' : 'textoGris' }" />
+															<p:inputSwitch
+																value="#{beanUsuarioBloqueo.ib_bloqueoDesbloqueo}">
+																<f:ajax
+																	render="formMantenimientoUsuarios:spanNoPN formMantenimientoUsuarios:spanSiPN" />
+															</p:inputSwitch>
+															<h:outputText id="spanSiPN"
+																value="#{txt_administrador['boton.Bloqueo.Upper']}"
+																class="#{beanUsuarioBloqueo.ib_bloqueoDesbloqueo ?  'textoRojo' : 'textoGris' }" />
+														</div>
+													</div>
+												</ui:fragment>
+												<br />
+											</div>
+										</h:panelGrid>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<p:dataTable var="asociacionPN" styleClass="centrar"
+											widgetVar="paramsTablePN" id="asociacionesDataTablePN"
+											reflow="true"
+											paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+											currentPageReportTemplate="{currentPage} / {totalPages}"
+											paginator="true" rows="10" paginatorPosition="bottom"
+											rowsPerPageTemplate="10"
+											value="#{beanUsuarioBloqueo.ilia_listaAsosiacionDto}"
+											emptyMessage="#{txt_administrador['tabla.vacia.PN']}"
+											stickyHeader="false">
+											<f:facet name="header">
+												<p:outputPanel styleClass="header">
+													<h:outputText
+														value="#{txt_administrador['tabla.titulo.Asociaciones']}"
+														styleClass="centrar" />
+												</p:outputPanel>
+											</f:facet>
+											<p:column
+												headerText="#{txt_administrador['tabla.Encabezado.Razon.Social']}"
+												styleClass="centrar55">
+												<h:outputText value="#{asociacionPN.getRazonSocial()}" />
+											</p:column>
+											<p:column
+												headerText="#{txt_administrador['tabla.Encabezado.Tipo.Documento']}"
+												styleClass="centrar20">
+												<h:outputText value="#{asociacionPN.getTipoDocumento()}" />
+											</p:column>
+											<p:column
+												headerText="#{txt_administrador['tabla.Encabezado.Numero.Documento']}"
+												styleClass="centrar25">
+												<h:outputText value="#{asociacionPN.getNumeroDocumento()}" />
+											</p:column>
+										</p:dataTable>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel id="labelObservacionesUsuarioPN"
+											styleClass="label-form" for="observacionesUsuarioPN"
+											value="#{txt_administrador['label.Observaciones']}" />
+										<p:outputLabel styleClass="required-field"> *</p:outputLabel>
+										<div class="ui-inputgroup">
+											<p:inputTextarea id="observacionesUsuarioPN" rows="6"
+												required="true" cols="40" counter="mostrarContadorPN"
+												maxlength="1000"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												placeholder="#{txt_administrador['placeholder.Observaciones.Bloqueo']}"
+												counterTemplate="{0} #{txt_administrador['label.Caracteres']} "
+												autoResize="false"
+												value="#{beanUsuarioBloqueo.iubd_usuarioBloqueo.is_observacionBloqueo}">
+											</p:inputTextarea>
+											<br />
+											<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+												for="labelObservacionesUsuarioPN" position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_administrador['tooltip.Observaciones']}" />
+												</div>
+											</p:tooltip>
+											<span id="spanObservacionesUsuarioPN"
+												class="ui-inputgroup-addon ocultar"> <p:commandLink>
+													<p:graphicImage styleClass="img-x-size"
+														name="/img/x-roja.png" />
+													<p:ajax event="click"
+														onstart="limpiarCampo('formMantenimientoUsuarios:observacionesUsuarioPN', 'spanObservacionesUsuarioPN');" />
+												</p:commandLink>
+											</span>
+										</div>
+										<h:outputText id="mostrarContadorPN" />
+										<span class="help-block"> <p:message
+												for="observacionesUsuarioPN" />
+										</span>
+									</div>
+								</div>
+								<br />
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel id="labelCargarSoportePN"
+											styleClass="label-form"
+											value="#{txt_administrador['label.Adjuntar.Soporte']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<div class="ui-inputgroup">
+											<p:fileUpload styleClass="cargaArchivo"
+												fileUploadListener="#{beanUsuarioBloqueo.cargarSoporteBloqueo}"
+												mode="advanced" auto="false" allowTypes="/(\.|\/)(pdf)$/"
+												invalidSizeMessage="#{beanArchivo.validarTamanoArchivoPDFError()}"
+												invalidFileMessage="#{txt_certificados['wizardMasivos.archivo.error.extension']}"
+												fileLimitMessage="#{txt_certificados['wizardMasivos.archivo.error.archivo']}"
+												label="#{txt_persona['label.ExaminarArchivo']}"
+												uploadLabel="#{txt_persona['label.Cargar']}"
+												cancelLabel="#{txt_persona['label.Cancelar']}"
+												sizeLimit="#{beanArchivo.validarTamanoArchivoPDF()}" fileLimit="1"
+												update=":formMantenimientoUsuarios:textoSalidaArchivoPN"
+												required="true" skinSimple="true">
+												<div class="col-xs-12 text-left">
+													<br />
+													<h:outputText id="textoSalidaArchivoPN"
+														styleClass="text-input"
+														value="#{beanUsuarioBloqueo.is_soporteBloqueo}" />
+												</div>
+											</p:fileUpload>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="labelCargarSoportePN"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel
+														value="#{txt_administrador['tooltip.archivo']}" />
+												</div>
+											</p:tooltip>
+										</div>
+									</div>
+									<br />
+								</div>
+								<br />
+								<div class="container-fluid-btn">
+									<div class="row">
+										<div class="col-xs-4 col-xs-offset-2">
+											<p:commandButton id="btn-atrasPN" icon="icon-flecha-gris"
+												iconPos="right" styleClass="icon-btn pull-right btn-gris"
+												value="#{txt_minuta['boton.volver.upper']}" immediate="true"
+												action="/pages/admon/mantenimiento/bloqueoDesbloqueoUsuario.jsf?faces-redirect=true"
+												process="@this" />
+										</div>
+										<div class="col-xs-4 col-xs-offset-0">
+											<p:commandButton id="btnValidarCrearPN"
+												icon="icon-flecha-blanca" iconPos="right"
+												value="#{txt_minuta['boton.guardar.upper']}"
+												styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+												type="submit" process="@form" ignoreAutoUpdate="true"
+												update="consultaUsuarioNatural, consultaUsuarioJuridico"
+												oncomplete="if(args.validationFailed){PF('dlgConfirmativo').jq.effect('shake', {times: 3}, 100);}else{PF('dlgConfirmativo').show();}" />
+										</div>
+									</div>
+								</div>
+							</p:panel>
+							<!-- Consulta usuario natural -->
+						</p:outputPanel>
+					</p:panel>
+				</h:form>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row">
+				<div id="section"></div>
+			</div>
+		</div>
+		<div class="container-fluid-special">
+			<ui:decorate template="/pages/includes/modal.xhtml">
+				<ui:param name="modalId" value="dlgOperacion" />
+				<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+				<ui:param name="tituloModal"
+					value="#{txt['titulo.modal.confirmacion']}" />
+				<ui:param name="formulario" value="formOperacion" />
+				<ui:define name="body-modal">
+					<p:panelGrid id="validacionGrid" columns="1" cellpadding="3"
+						layout="grid" styleClass="no-border container-fluid-scroll-empty">
+						<div class="row">
+							<h:outputText id="msgOperacion"
+								value="#{beanUsuarioBloqueo.is_msgOperacion}" />
+						</div>
+					</p:panelGrid>
+					<br />
+				</ui:define>
+				<ui:define name="accion-modal">
+					<div class="row">
+						<div
+							class="col-xs-12 col-sm-12 col-md-12 col-lg-12 center-component">
+							<p:commandButton id="btn-aceptar" icon="icon-flecha-blanca"
+								iconPos="right"
+								styleClass="icon-btn btn-rojo-dialog btn-gradiente"
+								value="#{txt_persona['Modal.BotonAceptar.Upper']}" type="submit"
+								action="/pages/admon/mantenimiento/bloqueoDesbloqueoUsuario.jsf?faces-redirect=true"
+								process="@form" />
+						</div>
+					</div>
+				</ui:define>
+			</ui:decorate>
+		</div>
+		<!-- Modal confirmativo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgConfirmativo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formConfirmar" />
+			<ui:define name="body-modal">
+				<h:outputText
+					value="#{txt_administrador['modal.Mensaje.Confirmacion']}" />
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-5 col-sm-offset-1 space-row">
+						<p:commandButton styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_asociacionPNAPJ['btn.cancelar']}"
+							oncomplete="PF('dlgConfirmativo').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-12 col-sm-5">
+						<p:commandButton
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_asociacionPNAPJ['btn.aceptar']}"
+							action="#{beanUsuarioBloqueo.validarSoporteAdjunto()}"
+							oncomplete="PF('dlgConfirmativo').hide();"
+							update="formMantenimientoUsuarios :formMantenimientoUsuarios, :formMantenimientoUsuarios:textoSalidaArchivoPN, :formMantenimientoUsuarios:textoSalidaArchivoPJ">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal confirmativo -->
+	</ui:define>
+</ui:composition>

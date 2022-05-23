@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions name="BiometriaController" targetNamespace="http://ws.servicios.corebachue.bachue.supernotariado.gov.co/" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="http://ws.servicios.corebachue.bachue.supernotariado.gov.co/" xmlns:WL5G3N2="http://schemas.xmlsoap.org/wsdl/soap/">
+  <WL5G3N0:types>
+    <xsd:schema xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ws.servicios.corebachue.bachue.supernotariado.gov.co/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:import namespace="http://ws.servicios.corebachue.bachue.supernotariado.gov.co/" schemaLocation="http://bachue.datatools.com.co:18216/services/ci/dispositivos/v1?SCHEMA%2FConsumidosInternamente%2FDispositivos%2FResources%2FSchemas%2FLegacy%2FBiometriaController"/>
+    </xsd:schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="obtenerConstantes">
+    <WL5G3N0:part element="WL5G3N1:obtenerConstantes" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="obtenerConstantesResponse">
+    <WL5G3N0:part element="WL5G3N1:obtenerConstantesResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="borrarHuellas">
+    <WL5G3N0:part element="WL5G3N1:borrarHuellas" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="borrarHuellasResponse">
+    <WL5G3N0:part element="WL5G3N1:borrarHuellasResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="enrolarUsuario">
+    <WL5G3N0:part element="WL5G3N1:enrolarUsuario" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="enrolarUsuarioResponse">
+    <WL5G3N0:part element="WL5G3N1:enrolarUsuarioResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="registrarEvento">
+    <WL5G3N0:part element="WL5G3N1:registrarEvento" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="registrarEventoResponse">
+    <WL5G3N0:part element="WL5G3N1:registrarEventoResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="consultarSesion">
+    <WL5G3N0:part element="WL5G3N1:consultarSesion" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="consultarSesionResponse">
+    <WL5G3N0:part element="WL5G3N1:consultarSesionResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="obtenerTipoSegundoFactor">
+    <WL5G3N0:part element="WL5G3N1:obtenerTipoSegundoFactor" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="obtenerTipoSegundoFactorResponse">
+    <WL5G3N0:part element="WL5G3N1:obtenerTipoSegundoFactorResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="crearUsuario">
+    <WL5G3N0:part element="WL5G3N1:crearUsuario" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="crearUsuarioResponse">
+    <WL5G3N0:part element="WL5G3N1:crearUsuarioResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="actualizarClave">
+    <WL5G3N0:part element="WL5G3N1:actualizarClave" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="actualizarClaveResponse">
+    <WL5G3N0:part element="WL5G3N1:actualizarClaveResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="obtenerUsuario">
+    <WL5G3N0:part element="WL5G3N1:obtenerUsuario" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="obtenerUsuarioResponse">
+    <WL5G3N0:part element="WL5G3N1:obtenerUsuarioResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="verificarUsuario">
+    <WL5G3N0:part element="WL5G3N1:verificarUsuario" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="verificarUsuarioResponse">
+    <WL5G3N0:part element="WL5G3N1:verificarUsuarioResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="consultarEstadisticas">
+    <WL5G3N0:part element="WL5G3N1:consultarEstadisticas" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="consultarEstadisticasResponse">
+    <WL5G3N0:part element="WL5G3N1:consultarEstadisticasResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="verificarClave">
+    <WL5G3N0:part element="WL5G3N1:verificarClave" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="verificarClaveResponse">
+    <WL5G3N0:part element="WL5G3N1:verificarClaveResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="agregarFirma">
+    <WL5G3N0:part element="WL5G3N1:agregarFirma" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="agregarFirmaResponse">
+    <WL5G3N0:part element="WL5G3N1:agregarFirmaResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="obtenerFirma">
+    <WL5G3N0:part element="WL5G3N1:obtenerFirma" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="obtenerFirmaResponse">
+    <WL5G3N0:part element="WL5G3N1:obtenerFirmaResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="eliminarFirma">
+    <WL5G3N0:part element="WL5G3N1:eliminarFirma" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="eliminarFirmaResponse">
+    <WL5G3N0:part element="WL5G3N1:eliminarFirmaResponse" name="parameters"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="BiometriaWS">
+    <WL5G3N0:operation name="obtenerConstantes">
+      <WL5G3N0:input message="WL5G3N1:obtenerConstantes"/>
+      <WL5G3N0:output message="WL5G3N1:obtenerConstantesResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="borrarHuellas">
+      <WL5G3N0:input message="WL5G3N1:borrarHuellas"/>
+      <WL5G3N0:output message="WL5G3N1:borrarHuellasResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="enrolarUsuario">
+      <WL5G3N0:input message="WL5G3N1:enrolarUsuario"/>
+      <WL5G3N0:output message="WL5G3N1:enrolarUsuarioResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="registrarEvento">
+      <WL5G3N0:input message="WL5G3N1:registrarEvento"/>
+      <WL5G3N0:output message="WL5G3N1:registrarEventoResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="consultarSesion">
+      <WL5G3N0:input message="WL5G3N1:consultarSesion"/>
+      <WL5G3N0:output message="WL5G3N1:consultarSesionResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="obtenerTipoSegundoFactor">
+      <WL5G3N0:input message="WL5G3N1:obtenerTipoSegundoFactor"/>
+      <WL5G3N0:output message="WL5G3N1:obtenerTipoSegundoFactorResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="crearUsuario">
+      <WL5G3N0:input message="WL5G3N1:crearUsuario"/>
+      <WL5G3N0:output message="WL5G3N1:crearUsuarioResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="actualizarClave">
+      <WL5G3N0:input message="WL5G3N1:actualizarClave"/>
+      <WL5G3N0:output message="WL5G3N1:actualizarClaveResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="obtenerUsuario">
+      <WL5G3N0:input message="WL5G3N1:obtenerUsuario"/>
+      <WL5G3N0:output message="WL5G3N1:obtenerUsuarioResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="verificarUsuario">
+      <WL5G3N0:input message="WL5G3N1:verificarUsuario"/>
+      <WL5G3N0:output message="WL5G3N1:verificarUsuarioResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="consultarEstadisticas">
+      <WL5G3N0:input message="WL5G3N1:consultarEstadisticas"/>
+      <WL5G3N0:output message="WL5G3N1:consultarEstadisticasResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="verificarClave">
+      <WL5G3N0:input message="WL5G3N1:verificarClave"/>
+      <WL5G3N0:output message="WL5G3N1:verificarClaveResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="agregarFirma">
+      <WL5G3N0:input message="WL5G3N1:agregarFirma"/>
+      <WL5G3N0:output message="WL5G3N1:agregarFirmaResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="obtenerFirma">
+      <WL5G3N0:input message="WL5G3N1:obtenerFirma"/>
+      <WL5G3N0:output message="WL5G3N1:obtenerFirmaResponse"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="eliminarFirma">
+      <WL5G3N0:input message="WL5G3N1:eliminarFirma"/>
+      <WL5G3N0:output message="WL5G3N1:eliminarFirmaResponse"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="BiometriaWSPortBinding" type="WL5G3N1:BiometriaWS">
+    <WL5G3N2:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="obtenerConstantes">
+      <WL5G3N2:operation soapAction="obtenerConstantes"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="borrarHuellas">
+      <WL5G3N2:operation soapAction="borrarHuellas"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="enrolarUsuario">
+      <WL5G3N2:operation soapAction="enrolarUsuario"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="registrarEvento">
+      <WL5G3N2:operation soapAction="registrarEvento"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="consultarSesion">
+      <WL5G3N2:operation soapAction="consultarSesion"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="obtenerTipoSegundoFactor">
+      <WL5G3N2:operation soapAction="obtenerTipoSegundoFactor"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="crearUsuario">
+      <WL5G3N2:operation soapAction="crearUsuario"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="actualizarClave">
+      <WL5G3N2:operation soapAction="actualizarClave"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="obtenerUsuario">
+      <WL5G3N2:operation soapAction="obtenerUsuario"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="verificarUsuario">
+      <WL5G3N2:operation soapAction="verificarUsuario"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="consultarEstadisticas">
+      <WL5G3N2:operation soapAction="consultarEstadisticas"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="verificarClave">
+      <WL5G3N2:operation soapAction="verificarClave"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="agregarFirma">
+      <WL5G3N2:operation soapAction="agregarFirma"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="obtenerFirma">
+      <WL5G3N2:operation soapAction="obtenerFirma"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="eliminarFirma">
+      <WL5G3N2:operation soapAction="eliminarFirma"/>
+      <WL5G3N0:input>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N2:body use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="BiometriaController">
+    <WL5G3N0:documentation>OSB Service</WL5G3N0:documentation>
+    <WL5G3N0:port binding="WL5G3N1:BiometriaWSPortBinding" name="BiometriaWSPort">
+      <WL5G3N2:address location="http://bachue.datatools.com.co:18216/services/ci/dispositivos/v1"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

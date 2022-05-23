@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions targetNamespace="https://www.supernotariado.gov.co/services/bachue/ee/entregaproducto/v1" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="https://www.supernotariado.gov.co/schemas/bachue/ee/entregaproducto/verificarproducto/v1" xmlns:WL5G3N2="https://www.supernotariado.gov.co/schemas/bachue/ee/entregaproducto/obtenerproducto/v1" xmlns:WL5G3N3="https://www.supernotariado.gov.co/schemas/bachue/ee/entregaproducto/obtenerturnosrefpago/v1" xmlns:WL5G3N4="https://www.supernotariado.gov.co/schemas/bachue/ee/entregaproducto/obtenerrecibocaja/v1" xmlns:WL5G3N5="https://www.supernotariado.gov.co/services/bachue/ee/entregaproducto/v1" xmlns:WL5G3N6="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <WL5G3N0:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bachue="https://www.supernotariado.gov.co/services/bachue/ee/entregaproducto/v1" xmlns:bachue1="https://www.supernotariado.gov.co/schemas/bachue/ee/entregaproducto/verificarproducto/v1" xmlns:bachue2="https://www.supernotariado.gov.co/schemas/bachue/ee/entregaproducto/obtenerproducto/v1" xmlns:bachue3="https://www.supernotariado.gov.co/schemas/bachue/ee/entregaproducto/obtenerturnosrefpago/v1" xmlns:bachue4="https://www.supernotariado.gov.co/schemas/bachue/ee/entregaproducto/obtenerrecibocaja/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/entregaproducto/verificarproducto/v1" schemaLocation="http://52.170.212.47:7016/services/ee/entregaproducto/v1/?SCHEMA%2FExpuestosExternamente%2FEntregaProducto%2FResources%2FSchemas%2FEE_EP_VerificarProducto"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/entregaproducto/obtenerproducto/v1" schemaLocation="http://52.170.212.47:7016/services/ee/entregaproducto/v1/?SCHEMA%2FExpuestosExternamente%2FEntregaProducto%2FResources%2FSchemas%2FEE_EP_ObtenerProducto"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/entregaproducto/obtenerturnosrefpago/v1" schemaLocation="http://52.170.212.47:7016/services/ee/entregaproducto/v1/?SCHEMA%2FExpuestosExternamente%2FEntregaProducto%2FResources%2FSchemas%2FEE_EP_ObtenerTurnosRefPago"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/ee/entregaproducto/obtenerrecibocaja/v1" schemaLocation="http://52.170.212.47:7016/services/ee/entregaproducto/v1/?SCHEMA%2FExpuestosExternamente%2FEntregaProducto%2FResources%2FSchemas%2FEE_EP_ObtenerReciboCaja"/>
+    </schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="VerificarProducto_Request">
+    <WL5G3N0:part element="WL5G3N1:entradaVerificarProducto" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="VerificarProducto_Response">
+    <WL5G3N0:part element="WL5G3N1:salidaVerificarProducto" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ObtenerProducto_Request">
+    <WL5G3N0:part element="WL5G3N2:entradaObtenerProducto" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ObtenerProducto_Response">
+    <WL5G3N0:part element="WL5G3N2:salidaObtenerProducto" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ObtenerTurnosRefPago_Request">
+    <WL5G3N0:part element="WL5G3N3:entradaObtenerTurnosRefPago" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ObtenerTurnosRefPago_Response">
+    <WL5G3N0:part element="WL5G3N3:salidaObtenerTurnosRefPago" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ObtenerReciboCaja_Request">
+    <WL5G3N0:part element="WL5G3N4:entradaObtenerReciboCaja" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ObtenerReciboCaja_Response">
+    <WL5G3N0:part element="WL5G3N4:salidaObtenerReciboCaja" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="SBB_EE_EntregaProducto">
+    <WL5G3N0:operation name="VerificarProducto">
+      <WL5G3N0:input message="WL5G3N5:VerificarProducto_Request"/>
+      <WL5G3N0:output message="WL5G3N5:VerificarProducto_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ObtenerProducto">
+      <WL5G3N0:input message="WL5G3N5:ObtenerProducto_Request"/>
+      <WL5G3N0:output message="WL5G3N5:ObtenerProducto_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ObtenerTurnosRefPago">
+      <WL5G3N0:input message="WL5G3N5:ObtenerTurnosRefPago_Request"/>
+      <WL5G3N0:output message="WL5G3N5:ObtenerTurnosRefPago_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ObtenerReciboCaja">
+      <WL5G3N0:input message="WL5G3N5:ObtenerReciboCaja_Request"/>
+      <WL5G3N0:output message="WL5G3N5:ObtenerReciboCaja_Response"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="SBB_EE_EntregaProductoSOAP12Binding" type="WL5G3N5:SBB_EE_EntregaProducto">
+    <WL5G3N6:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="VerificarProducto">
+      <WL5G3N6:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/entregaproducto/v1/VerificarProducto" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N6:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N6:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ObtenerProducto">
+      <WL5G3N6:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/entregaproducto/v1/ObtenerProducto" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N6:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N6:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ObtenerTurnosRefPago">
+      <WL5G3N6:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/entregaproducto/v1/ObtenerTurnosRefPago" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N6:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N6:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ObtenerReciboCaja">
+      <WL5G3N6:operation soapAction="https://www.supernotariado.gov.co/services/bachue/ee/entregaproducto/v1/ObtenerReciboCaja" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N6:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N6:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="SBB_EE_EntregaProductoSOAP12BindingQSService">
+    <WL5G3N0:documentation>OSB Service</WL5G3N0:documentation>
+    <WL5G3N0:port binding="WL5G3N5:SBB_EE_EntregaProductoSOAP12Binding" name="SBB_EE_EntregaProductoSOAP12BindingQSPort">
+      <WL5G3N6:address location="http://10.0.0.27:7016/services/ee/entregaproducto/v1"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

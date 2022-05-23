@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions targetNamespace="https://www.supernotariado.gov.co/services/bachue/cb/gestioncuentacupos/v1" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/inscribirusuario/v1" xmlns:WL5G3N10="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarSaldosNotaCredito/v1" xmlns:WL5G3N11="https://www.supernotariado.gov.co/services/bachue/cb/gestioncuentacupos/v1" xmlns:WL5G3N12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:WL5G3N2="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/cancelarusuario/v1" xmlns:WL5G3N3="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarusuario/v1" xmlns:WL5G3N4="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarusuarios/v1" xmlns:WL5G3N5="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarsaldo/v1" xmlns:WL5G3N6="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarmovimientos/v1" xmlns:WL5G3N7="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/pagarcuentacupo/v1" xmlns:WL5G3N8="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultaridcuentacupo/v1" xmlns:WL5G3N9="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/actualizarentidad/v1">
+  <WL5G3N0:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bachue="https://www.supernotariado.gov.co/services/bachue/cb/gestioncuentacupos/v1" xmlns:bachue1="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/inscribirusuario/v1" xmlns:bachue10="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarSaldosNotaCredito/v1" xmlns:bachue2="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/cancelarusuario/v1" xmlns:bachue3="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarusuario/v1" xmlns:bachue4="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarusuarios/v1" xmlns:bachue5="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarsaldo/v1" xmlns:bachue6="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarmovimientos/v1" xmlns:bachue7="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/pagarcuentacupo/v1" xmlns:bachue8="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultaridcuentacupo/v1" xmlns:bachue9="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/actualizarentidad/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/inscribirusuario/v1" schemaLocation="http://23.96.125.163:16117/services/ee/gestioncuentacupos/v1?SCHEMA%2FExpuestosExternamente%2FGestionCuentaCupos%2FResources%2FSchemas%2FLegacy%2FCB_GCC_InscribirUsuario"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/cancelarusuario/v1" schemaLocation="http://23.96.125.163:16117/services/ee/gestioncuentacupos/v1?SCHEMA%2FExpuestosExternamente%2FGestionCuentaCupos%2FResources%2FSchemas%2FLegacy%2FCB_GCC_CancelarUsuario"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarusuario/v1" schemaLocation="http://23.96.125.163:16117/services/ee/gestioncuentacupos/v1?SCHEMA%2FExpuestosExternamente%2FGestionCuentaCupos%2FResources%2FSchemas%2FLegacy%2FCB_GCC_ConsultarUsuario"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarusuarios/v1" schemaLocation="http://23.96.125.163:16117/services/ee/gestioncuentacupos/v1?SCHEMA%2FExpuestosExternamente%2FGestionCuentaCupos%2FResources%2FSchemas%2FLegacy%2FCB_GCC_ConsultarUsuarios"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarsaldo/v1" schemaLocation="http://23.96.125.163:16117/services/ee/gestioncuentacupos/v1?SCHEMA%2FExpuestosExternamente%2FGestionCuentaCupos%2FResources%2FSchemas%2FLegacy%2FCB_GCC_ConsultarSaldo"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarmovimientos/v1" schemaLocation="http://23.96.125.163:16117/services/ee/gestioncuentacupos/v1?SCHEMA%2FExpuestosExternamente%2FGestionCuentaCupos%2FResources%2FSchemas%2FLegacy%2FCB_GCC_ConsultarMovimientos"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/pagarcuentacupo/v1" schemaLocation="http://23.96.125.163:16117/services/ee/gestioncuentacupos/v1?SCHEMA%2FExpuestosExternamente%2FGestionCuentaCupos%2FResources%2FSchemas%2FLegacy%2FCB_GCC_PagarCuentaCupo"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultaridcuentacupo/v1" schemaLocation="http://23.96.125.163:16117/services/ee/gestioncuentacupos/v1?SCHEMA%2FExpuestosExternamente%2FGestionCuentaCupos%2FResources%2FSchemas%2FLegacy%2FCB_GCC_ConsultarIDCuentaCupo"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/actualizarentidad/v1" schemaLocation="http://23.96.125.163:16117/services/ee/gestioncuentacupos/v1?SCHEMA%2FExpuestosExternamente%2FGestionCuentaCupos%2FResources%2FSchemas%2FLegacy%2FCB_GCC_ActualizarEntidad"/>
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarSaldosNotaCredito/v1" schemaLocation="http://23.96.125.163:16117/services/ee/gestioncuentacupos/v1?SCHEMA%2FExpuestosExternamente%2FGestionCuentaCupos%2FResources%2FSchemas%2FLegacy%2FCB_GCC_consultarSaldosNotaCredito"/>
+    </schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="InscribirUsuario_Request">
+    <WL5G3N0:part element="WL5G3N1:entradaInscribirUsuario" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="InscribirUsuario_Response">
+    <WL5G3N0:part element="WL5G3N1:salidaInscribirUsuario" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="CancelarUsuario_Request">
+    <WL5G3N0:part element="WL5G3N2:entradaCancelarUsuario" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="CancelarUsuario_Response">
+    <WL5G3N0:part element="WL5G3N2:salidaCancelarUsuario" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarUsuario_Request">
+    <WL5G3N0:part element="WL5G3N3:entradaConsultarUsuario" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarUsuario_Response">
+    <WL5G3N0:part element="WL5G3N3:salidaConsultarUsuario" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarUsuarios_Request">
+    <WL5G3N0:part element="WL5G3N4:entradaConsultarUsuarios" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarUsuarios_Response">
+    <WL5G3N0:part element="WL5G3N4:salidaConsultarUsuarios" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarSaldo_Request">
+    <WL5G3N0:part element="WL5G3N5:entradaConsultarSaldo" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarSaldo_Response">
+    <WL5G3N0:part element="WL5G3N5:salidaConsultarSaldo" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarMovimientos_Request">
+    <WL5G3N0:part element="WL5G3N6:entradaConsultarMovimientos" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarMovimientos_Response">
+    <WL5G3N0:part element="WL5G3N6:salidaConsultarMovimientos" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="PagarCuentaCupo_Request">
+    <WL5G3N0:part element="WL5G3N7:entradaPagarCuentaCupo" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="PagarCuentaCupo_Response">
+    <WL5G3N0:part element="WL5G3N7:salidaPagarCuentaCupo" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarIDCuentaCupo_Request">
+    <WL5G3N0:part element="WL5G3N8:entradaConsultarIDCuentaCupo" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ConsultarIDCuentaCupo_Response">
+    <WL5G3N0:part element="WL5G3N8:salidaConsultarIDCuentaCupo" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ActualizarEntidad_Request">
+    <WL5G3N0:part element="WL5G3N9:entradaActualizarEntidad" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ActualizarEntidad_Response">
+    <WL5G3N0:part element="WL5G3N9:salidaActualizarEntidad" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="consultarSaldosNotaCredito_Request">
+    <WL5G3N0:part element="WL5G3N10:entradaConsultarSaldosNotaCredito" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="consultarSaldosNotaCredito_Response">
+    <WL5G3N0:part element="WL5G3N10:salidaConsultarSaldosNotaCredito" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="SBB_CB_GestionCuentaCupos">
+    <WL5G3N0:operation name="InscribirUsuario">
+      <WL5G3N0:input message="WL5G3N11:InscribirUsuario_Request"/>
+      <WL5G3N0:output message="WL5G3N11:InscribirUsuario_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="CancelarUsuario">
+      <WL5G3N0:input message="WL5G3N11:CancelarUsuario_Request"/>
+      <WL5G3N0:output message="WL5G3N11:CancelarUsuario_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarUsuario">
+      <WL5G3N0:input message="WL5G3N11:ConsultarUsuario_Request"/>
+      <WL5G3N0:output message="WL5G3N11:ConsultarUsuario_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarUsuarios">
+      <WL5G3N0:input message="WL5G3N11:ConsultarUsuarios_Request"/>
+      <WL5G3N0:output message="WL5G3N11:ConsultarUsuarios_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarSaldo">
+      <WL5G3N0:input message="WL5G3N11:ConsultarSaldo_Request"/>
+      <WL5G3N0:output message="WL5G3N11:ConsultarSaldo_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarMovimientos">
+      <WL5G3N0:input message="WL5G3N11:ConsultarMovimientos_Request"/>
+      <WL5G3N0:output message="WL5G3N11:ConsultarMovimientos_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="PagarCuentaCupo">
+      <WL5G3N0:input message="WL5G3N11:PagarCuentaCupo_Request"/>
+      <WL5G3N0:output message="WL5G3N11:PagarCuentaCupo_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarIDCuentaCupo">
+      <WL5G3N0:input message="WL5G3N11:ConsultarIDCuentaCupo_Request"/>
+      <WL5G3N0:output message="WL5G3N11:ConsultarIDCuentaCupo_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ActualizarEntidad">
+      <WL5G3N0:input message="WL5G3N11:ActualizarEntidad_Request"/>
+      <WL5G3N0:output message="WL5G3N11:ActualizarEntidad_Response"/>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="consultarSaldosNotaCredito">
+      <WL5G3N0:input message="WL5G3N11:consultarSaldosNotaCredito_Request"/>
+      <WL5G3N0:output message="WL5G3N11:consultarSaldosNotaCredito_Response"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="SBB_CB_GestionCuentaCuposSOAP12Binding" type="WL5G3N11:SBB_CB_GestionCuentaCupos">
+    <WL5G3N12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="InscribirUsuario">
+      <WL5G3N12:operation soapAction="https://www.supernotariado.gov.co/services/bachue/cb/gestioncuentacupos/v1/InscribirUsuario" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N12:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N12:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="CancelarUsuario">
+      <WL5G3N12:operation soapAction="https://www.supernotariado.gov.co/services/bachue/cb/gestioncuentacupos/v1/CancelarUsuario" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N12:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N12:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarUsuario">
+      <WL5G3N12:operation soapAction="https://www.supernotariado.gov.co/services/bachue/cb/gestioncuentacupos/v1/ConsultarUsuario" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N12:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N12:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarUsuarios">
+      <WL5G3N12:operation soapAction="https://www.supernotariado.gov.co/services/bachue/cb/gestioncuentacupos/v1/ConsultarUsuarios" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N12:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N12:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarSaldo">
+      <WL5G3N12:operation soapAction="https://www.supernotariado.gov.co/services/bachue/cb/gestioncuentacupos/v1/ConsultarSaldo" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N12:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N12:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarMovimientos">
+      <WL5G3N12:operation soapAction="https://www.supernotariado.gov.co/services/bachue/cb/gestioncuentacupos/v1/ConsultarMovimientos" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N12:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N12:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="PagarCuentaCupo">
+      <WL5G3N12:operation soapAction="https://www.supernotariado.gov.co/services/bachue/cb/gestioncuentacupos/v1/PagarCuentaCupo" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N12:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N12:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ConsultarIDCuentaCupo">
+      <WL5G3N12:operation soapAction="https://www.supernotariado.gov.co/services/bachue/cb/gestioncuentacupos/v1/ConsultarIDCuentaCupo" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N12:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N12:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="ActualizarEntidad">
+      <WL5G3N12:operation soapAction="https://www.supernotariado.gov.co/services/bachue/cb/gestioncuentacupos/v1/ActualizarEntidad" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N12:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N12:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+    <WL5G3N0:operation name="consultarSaldosNotaCredito">
+      <WL5G3N12:operation soapAction="https://www.supernotariado.gov.co/schemas/bachue/cb/gestioncuentacupos/consultarSaldosNotaCredito/v1" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N12:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N12:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="SBB_CB_GestionCuentaCuposSOAP12BindingQSService">
+    <WL5G3N0:documentation>OSB Service</WL5G3N0:documentation>
+    <WL5G3N0:port binding="WL5G3N11:SBB_CB_GestionCuentaCuposSOAP12Binding" name="SBB_CB_GestionCuentaCuposSOAP12BindingQSPort">
+      <WL5G3N12:address location="http://10.0.0.38:16117/services/ee/gestioncuentacupos/v1"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

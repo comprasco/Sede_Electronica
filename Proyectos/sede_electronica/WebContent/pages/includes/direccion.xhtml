@@ -1,0 +1,595 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<!-- Script que ejecuta el Keyfilter-->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			cargarKeyfilters();
+		});
+	</script>
+	<!-- Script que ejecuta el Keyfilter-->
+	<ui:fragment rendered="#{mostrarPais}">
+		<div class="row text-left">
+			<div class="col-xs-12 col-md-5">
+				<p:outputLabel id="labelTipoPredio"
+					styleClass="label-form tresPuntos" for="tipoPredio"
+					value="#{txt_direccion['label.tipoPredio']}" />
+				<p:outputLabel rendered="#{requerido}" styleClass="required-field">*</p:outputLabel>
+				<p:selectOneMenu id="tipoPredio"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+					required="#{requerido}" value="#{direccionDto.ietp_enumTipoPredio}">
+					<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+						itemValue="" />
+					<f:selectItems value="#{bean.iletp_enumTipoPredio}" var="enumTP"
+						itemLabel="#{enumTP.is_valorString}" itemValue="#{enumTP}" />
+					<p:ajax process="@this"
+						update="direccionCompleta tipoEje tipoEjeSecundario"
+						listener="#{bean.cargarDatosTipoEje}" />
+				</p:selectOneMenu>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelTipoPredio" position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_direccion['tooltip.tipoPredio']}" />
+					</div>
+				</p:tooltip>
+				<span class="help-block"> <p:message for="tipoPredio" />
+				</span>
+			</div>
+			<div class="col-xs-12 col-md-7">
+				<p:outputLabel id="labelTipoDireccion"
+					styleClass="label-form tresPuntos" for="tipoDireccion"
+					value="#{txt_direccion['label.tipoDireccion']}" />
+				<p:selectOneMenu id="tipoDireccion"
+					value="#{direccionDto.ietd_enumTipoDireccion}">
+					<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+						itemValue="" />
+					<f:selectItems value="#{bean.iletd_enumTipoDireccion}" var="enumTD"
+						itemLabel="#{enumTD.is_valorString}" itemValue="#{enumTD}" />
+					<p:ajax process="@this" update="direccionCompleta" />
+				</p:selectOneMenu>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelTipoDireccion" position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_direccion['tooltip.tipoDireccion']}" />
+					</div>
+				</p:tooltip>
+				<span class="help-block"> <p:message for="tipoDireccion" />
+				</span>
+			</div>
+		</div>
+		<div class="row text-left">
+			<div class="col-xs-12">
+				<p:outputLabel id="labelDireccionCompleta"
+					styleClass="label-form tresPuntos" for="direccionCompleta"
+					value="#{txt_direccion['label.direccionCompleta']}" />
+				<p:outputLabel rendered="#{requerido}" styleClass="required-field">*</p:outputLabel>
+				<div class="ui-inputgroup">
+					<p:inputTextarea id="direccionCompleta" autoResize="true" rows="1"
+						styleClass="text-input border-completo" readonly="true"
+						value="#{direccionDto.is_direccionCompleta}">
+					</p:inputTextarea>
+					<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+						styleClass="tooltipGeneral" for="labelDireccionCompleta"
+						position="top">
+						<div class="content-tooltip-general">
+							<p:outputLabel
+								value="#{txt_direccion['tooltip.direccionCompleta']}" />
+						</div>
+					</p:tooltip>
+				</div>
+				<span class="help-block"> <p:message for="direccionCompleta" />
+				</span>
+			</div>
+		</div>
+		<div class="row text-left">
+			<div class="col-xs-12 col-md-4">
+				<p:outputLabel id="labelPais" styleClass="label-form tresPuntos"
+					for="pais" value="#{txt_direccion['label.pais']}" />
+				<p:outputLabel rendered="#{requerido}" styleClass="required-field">*</p:outputLabel>
+				<p:selectOneMenu id="pais" converter="selectOneMenuConverter"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+					styleClass="pais-nat" required="#{requerido}"
+					value="#{direccionDto.ip_paisDto}">
+					<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+						itemValue="" />
+					<f:selectItems value="#{bean.ilp_listaPaisDto}" var="pais"
+						itemLabel="#{pais.is_nombre}" itemValue="#{pais}" />
+					<p:ajax process="@this" update="@form"
+						listener="#{bean.cargarDepartamentos}"
+						onstart="PF('blockUI-Loading').show();"
+						onsuccess="PF('blockUI-Loading').hide();" />
+				</p:selectOneMenu>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelPais" position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_direccion['tooltip.pais']}" />
+					</div>
+				</p:tooltip>
+				<span class="help-block"> <p:message for="pais" />
+				</span>
+			</div>
+			<div class="col-xs-12 col-md-4">
+				<p:outputLabel id="labelDepartamento"
+					styleClass="label-form tresPuntos" for="departamento"
+					value="#{txt_direccion['label.departamento']}" />
+				<p:outputLabel
+					rendered="#{requerido and not empty bean.ild_listaDepartamentoDto}"
+					styleClass="required-field">*</p:outputLabel>
+				<p:selectOneMenu id="departamento"
+					converter="selectOneMenuConverter"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+					required="#{requerido and not empty bean.ild_listaDepartamentoDto}"
+					disabled="#{empty bean.ild_listaDepartamentoDto}"
+					value="#{direccionDto.id_departamentoDto}">
+					<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+						itemValue="" />
+					<f:selectItems value="#{bean.ild_listaDepartamentoDto}"
+						var="departamento" itemLabel="#{departamento.is_nombre}"
+						itemValue="#{departamento}" />
+					<p:ajax process="@this" update="@form"
+						listener="#{bean.cargarMunicipiosPorDepartamento}" />
+				</p:selectOneMenu>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelDepartamento" position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_direccion['tooltip.departamento']}" />
+					</div>
+				</p:tooltip>
+				<span class="help-block"> <p:message for="departamento" />
+				</span>
+			</div>
+			<div class="col-xs-12 col-md-4">
+				<p:outputLabel id="labelMunicipio"
+					styleClass="label-form tresPuntos" for="municipio"
+					value="#{txt_direccion['label.municipio']}" />
+				<p:outputLabel
+					rendered="#{requerido and not empty bean.ilm_listaMunicipioDto}"
+					styleClass="required-field">*</p:outputLabel>
+				<p:selectOneMenu id="municipio" converter="selectOneMenuConverter"
+					value="#{direccionDto.im_municipioDto}"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+					required="#{requerido and not empty bean.ilm_listaMunicipioDto}"
+					disabled="#{empty bean.ilm_listaMunicipioDto}">
+					<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+						itemValue="" />
+					<f:selectItems value="#{bean.ilm_listaMunicipioDto}"
+						var="municipio" itemLabel="#{municipio.is_nombre}"
+						itemValue="#{municipio}" />
+					<p:ajax process="@this" update="direccionCompleta" />
+				</p:selectOneMenu>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelMunicipio" position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_direccion['tooltip.municipio']}" />
+					</div>
+				</p:tooltip>
+				<span class="help-block"> <p:message for="municipio" />
+				</span>
+			</div>
+		</div>
+	</ui:fragment>
+	<div class="row text-left">
+		<div class="col-xs-12 col-md-4">
+			<p:outputLabel id="labelTipoEje" styleClass="label-form tresPuntos"
+				for="tipoEje" value="#{txt_direccion['label.ejePrincipal']}" />
+			<p:outputLabel rendered="#{requerido}" styleClass="required-field">*</p:outputLabel>
+			<p:selectOneMenu id="tipoEje" converter="selectOneMenuConverter"
+				requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+				required="#{requerido}" value="#{direccionDto.ite_tipoEjeDto}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems value="#{bean.ilted_listaTipoEje}" var="tipoEje"
+					itemLabel="#{tipoEje.is_nombre}" itemValue="#{tipoEje}" />
+				<p:ajax process="@this" update="direccionCompleta" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelTipoEje	" position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel value="#{txt_direccion['tooltip.ejePrincipal']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message for="tipoEje" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<p:outputLabel id="labelDatoEjePrincipal"
+				styleClass="label-form tresPuntos" for="datoEjePrincipal"
+				value="#{txt_direccion['label.ejePrincipal.numero']}" />
+			<p:outputLabel rendered="#{requerido}" styleClass="required-field">*</p:outputLabel>
+			<div class="ui-inputgroup">
+				<p:inputText id="datoEjePrincipal" styleClass="mask-AlphaNum"
+					maxlength="30" required="#{requerido}"
+					requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+					placeholder="#{txt_direccion['placeholder.numero']}"
+					value="#{direccionDto.is_datoEjePrincipal}">
+					<p:ajax event="change" process="@this" update="direccionCompleta"
+						onstart="mostrarLimpiar('#{formularioDireccion}:datoEjePrincipal', 'spanDatoEjePrincipal');" />
+				</p:inputText>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelDatoEjePrincipal"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel
+							value="#{txt_direccion['tooltip.ejePrincipal.numero']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanDatoEjePrincipal" class="ui-inputgroup-addon ocultar">
+					<p:commandLink>
+						<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+						<p:ajax event="click"
+							onstart="limpiarCampo('#{formularioDireccion}:datoEjePrincipal', 'spanDatoEjePrincipal');" />
+					</p:commandLink>
+				</span>
+			</div>
+			<span class="help-block"> <p:message for="datoEjePrincipal" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<p:outputLabel id="labelLetraEjePrincipal"
+				styleClass="label-form tresPuntos" for="letraEjePrincipal"
+				value="#{txt_direccion['label.ejePrincipal.letra']}" />
+			<p:selectOneMenu id="letraEjePrincipal"
+				value="#{direccionDto.is_letraEjePrincipal}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems var="letraEje" value="#{bean.ille_listaLetraEjeDto}"
+					itemLabel="#{letraEje.is_letra}" itemValue="#{letraEje.is_id}" />
+				<p:ajax process="@this" update="direccionCompleta" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelLetraEjePrincipal"
+				position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel
+						value="#{txt_direccion['tooltip.ejePrincipal.letra']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message for="letraEjePrincipal" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<p:outputLabel id="labelComplementoEjePrincipal"
+				styleClass="label-form tresPuntos" for="complementoEjePrincipal"
+				value="#{txt_direccion['label.ejePrincipal.complemento']}" />
+			<p:selectOneMenu id="complementoEjePrincipal"
+				value="#{direccionDto.is_complementoEjePrincipal}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems var="complemento"
+					itemLabel="#{complemento.is_nombre}"
+					itemValue="#{complemento.is_nombre}"
+					value="#{bean.ilted_listaComplemento}" />
+				<p:ajax process="@this" update="direccionCompleta" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelComplementoEjePrincipal"
+				position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel
+						value="#{txt_direccion['tooltip.ejePrincipal.complemento']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message
+					for="complementoEjePrincipal" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<p:outputLabel id="labelCoordenadaEjePrincipal"
+				styleClass="label-form tresPuntos" for="coordenadaEjePrincipal"
+				value="#{txt_direccion['label.ejePrincipal.coordenada']}" />
+			<p:selectOneMenu id="coordenadaEjePrincipal"
+				value="#{direccionDto.is_coordenadaEjePrincipal}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems var="coordenada"
+					value="#{bean.ilc_listaCoordenadaDto}"
+					itemLabel="#{coordenada.is_nombre}" itemValue="#{coordenada.is_id}" />
+				<p:ajax process="@this" update="direccionCompleta" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelCoordenadaEjePrincipal"
+				position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel
+						value="#{txt_direccion['tooltip.ejePrincipal.coordenada']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message
+					for="coordenadaEjePrincipal" />
+			</span>
+		</div>
+	</div>
+	<div class="row text-left">
+		<div class="col-xs-12 col-md-4">
+			<p:outputLabel id="labelTipoEjeSecundario"
+				styleClass="label-form tresPuntos" for="tipoEjeSecundario"
+				value="#{txt_direccion['label.ejeSecundario']}" />
+			<p:selectOneMenu id="tipoEjeSecundario"
+				converter="selectOneMenuConverter"
+				value="#{direccionDto.ite_tipoEjeUnoDto}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems value="#{bean.ilted_listaTipoEje}" var="tipoEje"
+					itemLabel="#{tipoEje.is_nombre}" itemValue="#{tipoEje}" />
+				<p:ajax process="@this" update="direccionCompleta" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelTipoEjeSecundario"
+				position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel value="#{txt_direccion['tooltip.ejeSecundario']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message for="tipoEjeSecundario" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<p:outputLabel id="labelDatoEjeSecundario"
+				styleClass="label-form tresPuntos" for="datoEjeSecundario"
+				value="#{txt_direccion['label.ejeSecundario.numero1']}" />
+			<div class="ui-inputgroup">
+				<p:inputText id="datoEjeSecundario" styleClass="mask-AlphaNum"
+					maxlength="20" placeholder="#{txt_direccion['placeholder.numero']}"
+					value="#{direccionDto.is_datoEjeSecundario}">
+					<p:ajax event="change" process="@this" update="direccionCompleta"
+						onstart="mostrarLimpiar('#{formularioDireccion}:datoEjeSecundario', 'spanDatoEjeSecundario');" />
+				</p:inputText>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelDatoEjeSecundario"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel
+							value="#{txt_direccion['tooltip.ejeSecundario.numero1']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanDatoEjeSecundario" class="ui-inputgroup-addon ocultar">
+					<p:commandLink>
+						<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+						<p:ajax event="click"
+							onstart="limpiarCampo('#{formularioDireccion}:datoEjeSecundario', 'spanDatoEjeSecundario');" />
+					</p:commandLink>
+				</span>
+			</div>
+			<span class="help-block"> <p:message for="datoEjeSecundario" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<p:outputLabel id="labelLetraEjeSecundario1"
+				styleClass="label-form tresPuntos" for="letraEjeSecundario1"
+				value="#{txt_direccion['label.ejeSecundario.letra1']}" />
+			<p:selectOneMenu id="letraEjeSecundario1"
+				value="#{direccionDto.is_letraEjeSecundario}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems var="letraEje" value="#{bean.ille_listaLetraEjeDto}"
+					itemLabel="#{letraEje.is_letra}" itemValue="#{letraEje.is_id}" />
+				<p:ajax process="@this" update="direccionCompleta" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelLetraEjeSecundario1"
+				position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel
+						value="#{txt_direccion['tooltip.ejeSecundario.letra1']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message for="letraEjeSecundario1" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<p:outputLabel id="labelComplementoEjeSecundario1"
+				styleClass="label-form tresPuntos" for="complementoEjeSecundario1"
+				value="#{txt_direccion['label.ejeSecundario.complemento1']}" />
+			<p:selectOneMenu id="complementoEjeSecundario1"
+				value="#{direccionDto.is_complementoEjeSecundario}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems var="complemento"
+					itemLabel="#{complemento.is_nombre}"
+					itemValue="#{complemento.is_nombre}"
+					value="#{bean.ilted_listaComplemento}" />
+				<p:ajax process="@this" update="direccionCompleta" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelComplementoEjeSecundario1"
+				position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel
+						value="#{txt_direccion['tooltip.ejeSecundario.complemento1']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message
+					for="complementoEjeSecundario1" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<p:outputLabel id="labelCoordenadaEjeSecundario1"
+				styleClass="label-form tresPuntos" for="coordenadaEjeSecundario1"
+				value="#{txt_direccion['label.ejeSecundario.coordenada1']}" />
+			<p:selectOneMenu id="coordenadaEjeSecundario1"
+				value="#{direccionDto.is_coordenadaEjeSecundario}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems var="coordenada"
+					value="#{bean.ilc_listaCoordenadaDto}"
+					itemLabel="#{coordenada.is_nombre}" itemValue="#{coordenada.is_id}" />
+				<p:ajax process="@this" update="direccionCompleta" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelCoordenadaEjeSecundario1"
+				position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel
+						value="#{txt_direccion['tooltip.ejeSecundario.coordenada1']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message
+					for="coordenadaEjeSecundario1" />
+			</span>
+		</div>
+	</div>
+	<div class="row text-left">
+		<div class="col-xs-12 col-md-2 col-md-offset-4">
+			<p:outputLabel id="labelDatoEjeSecundario2"
+				styleClass="label-form tresPuntos" for="datoEjeSecundario2"
+				value="#{txt_direccion['label.ejeSecundario.numero2']}" />
+			<div class="ui-inputgroup">
+				<p:inputText id="datoEjeSecundario2" styleClass="mask-AlphaNum"
+					maxlength="30" placeholder="#{txt_direccion['placeholder.numero']}"
+					value="#{direccionDto.is_datoEjeSecundario1}">
+					<p:ajax event="change" process="@this" update="direccionCompleta"
+						onstart="mostrarLimpiar('#{formularioDireccion}:datoEjeSecundario2', 'spanDatoEjeSecundario2');" />
+				</p:inputText>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelDatoEjeSecundario2"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel
+							value="#{txt_direccion['tooltip.ejeSecundario.numero2']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanDatoEjeSecundario2"
+					class="ui-inputgroup-addon ocultar"> <p:commandLink>
+						<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+						<p:ajax event="click"
+							onstart="limpiarCampo('#{formularioDireccion}:datoEjeSecundario2', 'spanDatoEjeSecundario2');" />
+					</p:commandLink>
+				</span>
+			</div>
+			<span class="help-block"> <p:message for="datoEjeSecundario2" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<p:outputLabel id="labelLetraEjeSecundario2"
+				styleClass="label-form tresPuntos" for="letraEjeSecundario2"
+				value="#{txt_direccion['label.ejeSecundario.letra2']}" />
+			<p:selectOneMenu id="letraEjeSecundario2"
+				value="#{direccionDto.is_letraEjeSecundario1}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems var="letraEje" value="#{bean.ille_listaLetraEjeDto}"
+					itemLabel="#{letraEje.is_letra}" itemValue="#{letraEje.is_id}" />
+				<p:ajax process="@this" update="direccionCompleta" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelLetraEjeSecundario2"
+				position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel
+						value="#{txt_direccion['tooltip.ejeSecundario.letra2']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message for="letraEjeSecundario1" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<p:outputLabel id="labelComplementoEjeSecundario2"
+				styleClass="label-form tresPuntos" for="complementoEjeSecundario2"
+				value="#{txt_direccion['label.ejeSecundario.complemento2']}" />
+			<p:selectOneMenu id="complementoEjeSecundario2"
+				value="#{direccionDto.is_complementoEjeSecundario1}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems var="complemento"
+					itemLabel="#{complemento.is_nombre}"
+					itemValue="#{complemento.is_nombre}"
+					value="#{bean.ilted_listaComplemento}" />
+				<p:ajax process="@this" update="direccionCompleta" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelComplementoEjeSecundario2"
+				position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel
+						value="#{txt_direccion['tooltip.ejeSecundario.complemento2']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message
+					for="complementoEjeSecundario2" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<p:outputLabel id="labelCoordenadaEjeSecundario2"
+				styleClass="label-form tresPuntos" for="coordenadaEjeSecundario2"
+				value="#{txt_direccion['label.ejeSecundario.coordenada2']}" />
+			<p:selectOneMenu id="coordenadaEjeSecundario2"
+				value="#{direccionDto.is_coordenadaEjeSecundario1}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems var="coordenada"
+					value="#{bean.ilc_listaCoordenadaDto}"
+					itemLabel="#{coordenada.is_nombre}" itemValue="#{coordenada.is_id}" />
+				<p:ajax process="@this" update="direccionCompleta" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelCoordenadaEjeSecundario2"
+				position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel
+						value="#{txt_direccion['tooltip.ejeSecundario.coordenada2']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message
+					for="coordenadaEjeSecundario2" />
+			</span>
+		</div>
+	</div>
+	<div class="row text-left">
+		<div class="col-xs-12 col-md-6">
+			<p:outputLabel id="labelIdComplemento"
+				styleClass="label-form tresPuntos" for="idComplemento"
+				value="#{txt_direccion['label.complemento']}" />
+			<p:selectOneMenu id="idComplemento"
+				value="#{direccionDto.is_idComplementoDireccion}">
+				<f:selectItem itemLabel="#{txt['label.SeleccioneComboBox']}"
+					itemValue="" />
+				<f:selectItems var="complemento"
+					itemLabel="#{complemento.is_nombre}"
+					itemValue="#{complemento.is_nombre}"
+					value="#{bean.ilted_listaComplemento}" />
+				<p:ajax process="@this" update="direccionCompleta" />
+			</p:selectOneMenu>
+			<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+				styleClass="tooltipGeneral" for="labelIdComplemento" position="top">
+				<div class="content-tooltip-general">
+					<p:outputLabel value="#{txt_direccion['tooltip.complemento']}" />
+				</div>
+			</p:tooltip>
+			<span class="help-block"> <p:message for="idComplemento" />
+			</span>
+		</div>
+		<div class="col-xs-12 col-md-6">
+			<p:outputLabel id="labelComplementoDireccion"
+				styleClass="label-form tresPuntos" for="complementoDireccion"
+				value="#{txt_direccion['label.descripcion']}" />
+			<div class="ui-inputgroup">
+				<p:inputText id="complementoDireccion"
+					styleClass="text-input border-completo mask-AlphaNumEsp"
+					placeholder="#{txt_direccion['placeholder.descripcion']}"
+					value="#{direccionDto.is_complementoDireccion}">
+					<p:ajax event="change" process="@this" update="direccionCompleta"
+						onstart="mostrarLimpiar('#{formularioDireccion}:complementoDireccion', 'spanComplementoDireccion');" />
+				</p:inputText>
+				<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+					styleClass="tooltipGeneral" for="labelComplementoDireccion"
+					position="top">
+					<div class="content-tooltip-general">
+						<p:outputLabel value="#{txt_direccion['tooltip.descripcion']}" />
+					</div>
+				</p:tooltip>
+				<span id="spanComplementoDireccion"
+					class="ui-inputgroup-addon ocultar"> <p:commandLink>
+						<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+						<p:ajax event="click"
+							onstart="limpiarCampo('#{formularioDireccion}:complementoDireccion', 'spanComplementoDireccion');" />
+					</p:commandLink>
+				</span>
+			</div>
+			<span class="help-block"> <p:message
+					for="complementoDireccion" />
+			</span>
+		</div>
+	</div>
+</ui:composition>

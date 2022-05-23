@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-simple.xhtml">
+	<ui:define name="title">
+		<h:outputStylesheet library="css" name="snr-se-cargarArchivo.css" />
+		<title>#{txt_persona['NuevoUsuario']} -
+			#{txt['SedeElectronicaSNR']}</title>
+		<ui:insert name="headP" />
+		<h:outputScript library="js" name="keyfilter.js" />
+	</ui:define>
+	<ui:define name="body">
+		<p:outputPanel id="panelBanner">
+			<ui:include src="/pages/includes/banner.xhtml">
+				<ui:param name="titulo" value="#{txt_persona['NuevoUsuario']}" />
+				<ui:param name="imagen" value="img-inicioSesion" />
+				<ui:param name="subtitulo"
+					value="#{beanPersona.ipc_personaCompletaDto.ipd_personaDto.ic_catalogoDto.is_codigoValor eq 'J' ? txt_persona['PersonaJuridica.Upper'] : txt_persona['PersonaNatural.Upper']}" />
+				<ui:param name="urlVista" value="/pages/personas/crearPersona.jsf" />
+			</ui:include>
+		</p:outputPanel>
+		<div class="container-fluid">
+			<div class="row">
+				<div id="section">
+					<h:form id="formCrearPersona">
+						<p:panel id="panelPersonas" styleClass="panel-content no-border">
+							<div class="row">
+								<div class="col-xs-12 col-sm-offset-2 col-sm-4">
+									<p:outputLabel id="labelTipoPersona" styleClass="label-form"
+										for="tipoPersona" value="#{txt_persona['label.TipoPersona']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:selectOneMenu id="tipoPersona" widgetVar="tipoPersonaSelect"
+										converter="selectOneMenuConverter"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										required="true"
+										value="#{beanPersona.ipc_personaCompletaDto.ipd_personaDto.ic_catalogoDto}">
+										<f:selectItems value="#{beanPersona.ilc_listaCatalogoDto}"
+											var="tipoPersona"
+											itemLabel="#{tipoPersona.is_nombre.toUpperCase()}"
+											itemValue="#{tipoPersona}" />
+										<p:ajax event="change"
+											listener="#{beanPersona.actualizarListaTipoDocumentos}"
+											update="@form panelBanner"
+											onstart="PF('blockUI-Loading').show();"
+											onsuccess="cargarKeyfilters()"
+											oncomplete="PF('blockUI-Loading').hide();" />
+									</p:selectOneMenu>
+									<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+										styleClass="tooltipGeneral" for="labelTipoPersona"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel value="#{txt_persona['tooltip.TipoPersona']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="tipoPersona" />
+									</span>
+								</div>
+								<p:outputPanel id="panelTipoDocumento">
+									<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+										<p:outputLabel id="labelTipoDocumento" styleClass="label-form"
+											for="tipoDocumento"
+											value="#{txt_persona['label.TipoDocumento']}" />
+										<p:outputLabel styleClass="required-field">*</p:outputLabel>
+										<p:selectOneMenu id="tipoDocumento"
+											widgetVar="tipoDocumentoSelect"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											required="true"
+											value="#{beanPersona.ipc_personaCompletaDto.ipd_personaDto.itd_tipoDocumentoDto.is_id}">
+											<f:selectItems value="#{beanPersona.iltd_tiposDocumento}"
+												var="tipoDocumento" itemValue="#{tipoDocumento.getIs_id()}"
+												itemLabel="#{tipoDocumento.getIs_nombre()}" />
+											<p:ajax event="change"
+												listener="#{beanPersona.cambiarTipoDocumento()}"
+												onstart="PF('blockUI-Loading').show();"
+												update="@form panelPersonaNatural"
+												onsuccess="cargarKeyfilters()"
+												oncomplete="PF('blockUI-Loading').hide();" />
+										</p:selectOneMenu>
+										<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+											styleClass="tooltipGeneral" for="labelTipoDocumento"
+											position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_persona['tooltip.TipoDocumento']}" />
+											</div>
+										</p:tooltip>
+										<span class="help-block"> <p:message
+												for="tipoDocumento" />
+										</span>
+									</div>
+								</p:outputPanel>
+							</div>
+							<p:separator styleClass="separador" />
+							<p:outputPanel id="panelPersonaJuridica"
+								rendered="#{beanPersona.ipc_personaCompletaDto.ipd_personaDto.ic_catalogoDto.is_id eq beanPersona.is_tipoUsuarioJuridica}">
+								<ui:include
+									src="/pages/personas/crearPersona/crearPersonaJuridica.xhtml">
+								</ui:include>
+							</p:outputPanel>
+							<p:outputPanel id="panelPersonaNatural"
+								rendered="#{beanPersona.ipc_personaCompletaDto.ipd_personaDto.ic_catalogoDto.is_id eq beanPersona.is_tipoUsuarioNatural}">
+								<ui:include
+									src="/pages/personas/crearPersona/crearPersonaNatural.xhtml">
+								</ui:include>
+							</p:outputPanel>
+							<br />
+							<br />
+							<div class="row">
+								<div class="col-xs-12 center-component">
+									<p:outputPanel id="panelCheckPoliticas">
+										<div class="contenedor-link-politicas">
+											<p:selectBooleanCheckbox id="checkPoliticas"
+												requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+												value="#{beanPersona.ipc_personaCompletaDto.ib_seleccionoPoliticas}">
+												<f:validator validatorId="ValidarRequeridoCheckBox" />
+											</p:selectBooleanCheckbox>
+											<p:commandLink id="dialogPoliticas"
+												oncomplete="PF('dialog-politicas').show()">
+												<p:outputLabel
+													value="#{txt_persona['label.AceptoPoliticas']}"
+													styleClass="text-select-boolean" />
+												<p:outputLabel
+													value="#{txt_persona['label.AceptoPoliticas.Link']}"
+													styleClass="label-form" />
+											</p:commandLink>
+											<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+												styleClass="tooltipGeneral" for="checkPoliticas"
+												position="top">
+												<div class="content-tooltip-general">
+													<p:outputLabel value="#{txt_persona['tooltip.Politicas']}" />
+												</div>
+											</p:tooltip>
+										</div>
+										<span class="help-block"> <p:message
+												for="checkPoliticas" />
+										</span>
+									</p:outputPanel>
+								</div>
+							</div>
+							<br />
+						</p:panel>
+						<div class="container-fluid-btn">
+							<div class="row">
+								<div
+									class="col-xs-5 col-sm-4 col-md-3 col-xs-offset-1 col-sm-offset-2 col-md-offset-3">
+									<p:commandButton id="btn-atras"
+										styleClass="icon-btn pull-right btn-gris sinPadding"
+										value="#{txt_persona['boton.VolverInicio.Upper']}"
+										immediate="true" required="true"
+										action="/pages/personas/inicioSesion/ciudadanos.jsf?faces-redirect=true"
+										process="@this" />
+								</div>
+								<div class="col-xs-5 col-sm-4 col-md-3 col-xs-offset-0">
+									<p:commandButton id="btn-crear"
+										styleClass="btn-gradiente icon-btn btn-rojo pull-left sinPadding"
+										type="submit"
+										value="#{txt_persona['boton.CrearUsuario.Upper']}"
+										action="#{beanPersona.validarGeneral()}" update="@form" />
+
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12text-left">
+							<br />
+							<h:outputText id="textoSalidaArchivo" styleClass="text-input"
+								value="#{beanPersona.is_mensaje}" />
+						</div>
+					</h:form>
+				</div>
+			</div>
+		</div>
+		<!--  modal Politicas -->
+		<ui:decorate template="/pages/includes/modalPoliticas.xhtml">
+			<ui:param name="bean" value="${beanPersona}" />
+			<ui:param name="update" value=":formCrearPersona:checkPoliticas"></ui:param>
+			<ui:param name="accionAceptar" value="validarPoliticas" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+		</ui:decorate>
+		<!--  modal Politicas -->
+		<!--  Modal direccion -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dialog-direccion" />
+			<ui:param name="tituloModal"
+				value="#{txt_persona['Modal.direccion.header']}" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-grande" />
+			<ui:param name="formulario" value="formDireccionCrear" />
+			<ui:define name="body-modal">
+				<p:panel id="panelDir" styleClass="panel-dir">
+					<ui:decorate template="/pages/includes/direccion.xhtml">
+						<ui:param name="bean" value="${beanPersona}" />
+						<ui:param name="direccionDto"
+							value="${beanPersona.id_direccionDto}" />
+						<ui:param name="mostrarPais" value="true" />
+						<ui:param name="formularioDireccion" value="formDireccionCrear" />
+						<ui:param name="requerido" value="true" />
+					</ui:decorate>
+				</p:panel>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div
+						class="col-xs-5 col-sm-4 col-md-5 col-xs-offset-1 col-sm-offset-2 col-md-offset-1">
+						<p:commandButton id="btn-volver-formularioCrear"
+							styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_persona['boton.volver']}"
+							oncomplete="PF('dialog-direccion').hide();">
+							<p:ajax listener="#{beanPersona.limpiarModalDireccion()}"
+								update="formCrearPersona:direccionResidencia${beanPersona.ipc_personaCompletaDto.ipd_personaDto.ic_catalogoDto.is_id} formDireccionCrear" />
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-sm-4 col-md-5 col-xs-offset-0">
+						<p:commandButton id="btn-acepto#{vista}"
+							styleClass="icon-btn btn-rojo pull-left btn-gradiente"
+							value="#{txt_persona['boton.guardar']}"
+							update="formCrearPersona:direccionResidencia${beanPersona.ipc_personaCompletaDto.ipd_personaDto.ic_catalogoDto.is_id} formDireccionCrear"
+							oncomplete="if(args.validationFailed){PF('#{modalId}').jq.effect('shake', {times: 3}, 100);}else{PF('#{modalId}').hide();return true;}"
+							process="@form" ignoreAutoUpdate="true">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!--  Modal direccion -->
+		<!-- Modal error contrasena formato-->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgErrorFormato" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.informacion']}" />
+			<ui:param name="formulario" value="formModalErrorFormato" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-12">
+								<h:outputText
+									value="#{txt_persona['Mensaje.Validar.ContrasenaFormato']}" />
+							</div>
+							<div class="col-xs-12">
+								<br />
+								<p:outputLabel
+									value="#{beanValidacionContrasena.is_msgValidacion}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton id="aceptarErrorFormato"
+							styleClass="icon-btn btn-rojo-dialog btn-gradiente"
+							value="#{txt_persona['Modal.Boton.Entendido']}"
+							onclick="PF('dlgErrorFormato').hide();return false" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- 		Modal error contrasena iguales -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgErrorClave" />
+			<ui:param name="tituloModal" value="#{txt_persona['Modal.Header']}" />
+			<ui:param name="formulario" value="formModalErrorClave" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:panelGrid id="errorClave" columns="1" cellpadding="5"
+							layout="grid" styleClass="btn-rojo pull-left btn-gradiente">
+							<div class="row">
+								<div class="col-xs-12">
+									<h:outputText
+										value="#{txt_persona['Mensaje.Validar.ContrasenaIguales']}" />
+								</div>
+							</div>
+						</p:panelGrid>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton id="aceptarErrorClave"
+							styleClass="icon-btn btn-rojo-dialog btn-gradiente"
+							value="#{txt_persona['Modal.Boton.Entendido']}"
+							onclick="PF('dlgErrorClave').hide();return false" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- 		Modal formato correo error -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgErrorFormatoCorreo" />
+			<ui:param name="tituloModal" value="#{txt_persona['Modal.Header']}" />
+			<ui:param name="formulario" value="formModalErrorFormatoCorreo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:panelGrid id="errorFormatoCorreo" columns="1" cellpadding="5"
+							layout="grid" styleClass="btn-rojo pull-left btn-gradiente">
+							<div class="row">
+								<div class="col-xs-12">
+									<h:outputText
+										value="#{txt_persona['Mensaje.Validar.CorreosIguales']}" />
+								</div>
+							</div>
+						</p:panelGrid>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton id="aceptarErrorFormatoCorreo"
+							styleClass="icon-btn btn-rojo-dialog btn-gradiente"
+							value="#{txt_persona['Modal.Boton.Entendido']}"
+							onclick="PF('dlgErrorFormatoCorreo').hide();return false" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal validar usuario -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgUsuarioValido" />
+			<ui:param name="tituloModal" value="#{txt_persona['Modal.Header']}" />
+			<ui:param name="formulario" value="formModalUsuarioValido" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-12">
+								<h:outputText
+									value="#{txt_persona['Mensaje.Validar.Usuario.Correcto']}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton id="aceptarUsuarioValido"
+							styleClass="icon-btn btn-rojo-dialog btn-gradiente"
+							value="#{txt_persona['Modal.Boton.Entendido']}"
+							onclick="PF('dlgUsuarioValido').hide();return false" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal usuario ya registrado-->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgUsuarioNoValido" />
+			<ui:param name="tituloModal" value="#{txt_persona['Modal.Header']}" />
+			<ui:param name="formulario" value="formModalUsuarioNoValido" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-12">
+								<h:outputText
+									value="#{txt_persona['Mensaje.Validar.Ya.Registrado']}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton id="aceptarUsuarioNoValido"
+							styleClass="icon-btn btn-rojo-dialog btn-gradiente"
+							value="#{txt_persona['Modal.Boton.Entendido']}"
+							onclick="PF('dlgUsuarioNoValido').hide();return false" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal  numero de documento ya registrado-->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgDocumentoNoValido" />
+			<ui:param name="tituloModal" value="#{txt_persona['Modal.Header']}" />
+			<ui:param name="formulario" value="formModalDocumentoNoValido" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-12">
+								<h:outputText
+									value="#{txt_persona['Mensaje.Validar.Documento.Ya.Registrado']}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+			</ui:define>
+			<hr />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton id="aceptarDocumentoNoValido"
+							styleClass="icon-btn btn-rojo-dialog btn-gradiente"
+							value="#{txt_persona['Modal.Boton.Entendido']}"
+							onclick="PF('dlgDocumentoNoValido').hide();return false" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Se usa como modal de errores en la creacion de una persona -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgExcepcionBase" />
+			<ui:param name="tituloModal" value="#{txt_persona['Modal.Header']}" />
+			<ui:param name="formulario" value="formModalBase" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:define name="body-modal">
+				<div class="row space-row">
+					<div class="col-xs-12">
+						<ui:insert name="dialogAccion">
+							<h:outputText id="msgValidacion"
+								value="#{beanPersona.is_creacionUsuario}" escape="false" />
+						</ui:insert>
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6 col-sm-offset-3">
+						<p:commandButton id="btn-aceptar"
+							styleClass="icon-btn btn-rojo-dialog btn-gradiente"
+							value="#{txt['boton.entendido']}" type="submit"
+							action="/pages/personas/inicioSesion/ciudadanos.jsf?faces-redirect=true"
+							process="@this" />
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+
+		<!-- Se usa como modal de errores en la creacion de una persona -->
+		<!-- Captcha -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgSeguridad" />
+			<ui:param name="formulario" value="formCaptcha" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:define name="body-modal">
+				<p:panel id="seguridadGrid" styleClass="no-border">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel
+								value="#{txt_persona['label.ModalCaptcha.Titulo']}"
+								styleClass="text-captcha-title" />
+							<p:outputLabel
+								value="#{txt_persona['label.ModalCaptcha.TextoUno']}"
+								styleClass="text-captcha" />
+						</div>
+						<br />
+						<div id="captchaContent" class="col-xs-12 text-center-zila">
+							<p:captcha id="captchaPersona" label="Captcha" language="es"
+								validatorMessage="#{txt_persona['validar.Captcha']}"
+								required="true"
+								requiredMessage="#{txt_persona['validar.Captcha']}"
+								/>
+						</div>
+					</div>
+					<span class="help-block"> <p:message for="captchaPersona" />
+					</span>
+				</p:panel>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<p:button id="btn-cancel" styleClass="icon-btn btn-gris"
+							value="#{txt['boton.Cancelar.Upper']}"
+							onclick="PF('dlgSeguridad').hide();return false" />
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<p:commandButton id="btn-finalizar"
+							styleClass="icon-btn btn-rojo btn-gradiente"
+							value="#{txt['boton.Aceptar']}"
+							oncomplete="if(args.validationFailed){PF('dlgSeguridad').jq.effect('shake', {times: 3}, 100);}else{PF('dlgConfirmacion').show(); PF('dlgSeguridad').hide();return true;}"
+							process="@form :formCrearPersona" update="formCaptcha"
+							ignoreAutoUpdate="true">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Captcha -->
+		<!-- Modal de confirmación de usario-->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgConfirmacion" />
+			<ui:param name="formulario" value="formConfirmacion" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-pequeno" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<p:outputLabel
+							value="#{txt_persona['label.ModalConfirmacion.Titulo']}"
+							styleClass="text-captcha-title" />
+					</div>
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="row">
+						<div class="col-xs-5 col-xs-offset-1">
+							<p:button id="btn-cancel-confirmacion"
+								styleClass="ui-confirmdialog-no pull-right btn-gris"
+								value="#{txt['boton.Cancelar.Upper']}"
+								onclick="PF('dlgConfirmacion').hide();return false" />
+						</div>
+						<div class="col-xs-5 col-xs-offset-0">
+							<p:commandButton id="btn-confirmarcion"
+								styleClass="ui-confirmdialog-yes btn-gradiente btn-rojo pull-left"
+								value="#{txt['boton.Aceptar.Upper']}"
+								process="@form :formCrearPersona" type="submit"
+								oncomplete="PF('dlgConfirmacion').show();return false"
+								actionListener="#{beanPersona.crearPersona()}"
+								onstart="PF('blockUI-Loading').show();" update="@form"
+								onsuccess="PF('blockUI-Loading').hide();">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal de confirmación de usario-->
+		<!-- Script que ejecuta el Keyfilter-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				cargarKeyfilters();
+			});
+		</script>
+		<!-- Script que ejecuta el Keyfilter-->
+	</ui:define>
+</ui:composition>

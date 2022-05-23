@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-dataTable.css" />
+		<h:outputStylesheet library="css"
+			name="snr-se-asociacionNaturalAJuridica.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_asociacionPNAEE['AsociacionNaturalAEspecial']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="imagen" value="img-rolesPermisos" />
+			<ui:param name="titulo"
+				value="#{txt_asociacionPNAEE['AsociacionNaturalAEspecial.Titulo']}" />
+			<ui:param name="subtitulo"
+				value="#{txt_asociacionPNAEE['AsociacionNaturalAEspecial.Subtitulo']}" />
+			<ui:param name="urlVista" value="/pages/admon/asociarUsuariosAEE.jsf" />
+		</ui:include>
+		<div class="row">
+			<div class="col-xs-12">
+				<h:form id="formAsociarUsuarios">
+					<p:panel id="panelAsociacionPNAPJ">
+						<br />
+						<p:outputPanel id="panelAsociacion">
+							<div class="row spaceRow">
+								<div class="col-xs-12 col-md-5 col-xs-offset-1 col-md-offset-1">
+									<p:outputLabel id="labelTipoDocumento" styleClass="label-form"
+										for="tipoDocumento"
+										value="#{txt_asociacionPNAEE['label.TipoDocumentoUsuario']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<p:selectOneMenu id="tipoDocumento" required="true"
+										widgetVar="tipoDocumentoSelect"
+										requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+										value="#{beanAsociacionNaturalAEE.is_tipoDocumento}">
+										<f:selectItem itemValue=""
+											itemLabel="#{txt['label.SeleccioneComboBox']}" />
+										<f:selectItems var="tipoDocumento"
+											itemValue="#{tipoDocumento.getIs_id()}"
+											itemLabel="#{tipoDocumento.is_nombre}"
+											value="#{beanAsociacionNaturalAEE.cargarListaTipoDocumento()}" />
+										<p:ajax event="change" oncomplete="asignarMaxCaracteres();" />
+									</p:selectOneMenu>
+									<p:tooltip styleClass="tooltipGeneral" for="labelTipoDocumento"
+										position="top">
+										<div class="content-tooltip-general">
+											<p:outputLabel
+												value="#{txt_asociacionPNAEE['tooltip.TipoDocumentoUsuario']}" />
+										</div>
+									</p:tooltip>
+									<span class="help-block"> <p:message for="tipoDocumento" />
+									</span>
+								</div>
+								<div class="col-xs-12 col-md-5 col-xs-offset-0 col-md-offset-0">
+									<p:outputLabel id="labelNumeroDocumento"
+										styleClass="label-form" for="numeroDocumento"
+										value="#{txt_asociacionPNAEE['label.NumeroDocumentoUsuario']}" />
+									<p:outputLabel styleClass="required-field">*</p:outputLabel>
+									<div class="ui-inputgroup">
+										<p:inputText id="numeroDocumento" required="true"
+											autocomplete="off"
+											requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+											styleClass="text-input border-completo" maxlength="10"
+											placeholder="#{txt_asociacionPNAEE['placeholder.NumeroDocumento']}"
+											value="#{beanAsociacionNaturalAEE.is_numeroDocumento}">
+											<p:keyFilter regEx="/[0-9\s]/i" />
+											<p:ajax event="change"
+												onstart="mostrarLimpiar('formAsociarUsuarios:numeroDocumento', 'spanNumeroDocumento');" />
+										</p:inputText>
+										<span id="spanNumeroDocumento"
+											class="ui-inputgroup-addon ocultar"> <p:commandLink>
+												<p:graphicImage styleClass="img-x-size"
+													name="/img/x-roja.png" />
+												<p:ajax event="click"
+													onstart="limpiarCampo('formAsociarUsuarios:numeroDocumento', 'spanNumeroDocumento');" />
+											</p:commandLink>
+										</span>
+										<p:tooltip showEvent="mouseover" styleClass="tooltipGeneral"
+											for="labelNumeroDocumento" position="top">
+											<div class="content-tooltip-general">
+												<p:outputLabel
+													value="#{txt_asociacionPNAEE['tooltip.NumeroDocumentoUsuario']}" />
+											</div>
+										</p:tooltip>
+									</div>
+									<span class="help-block"> <p:message
+											for="numeroDocumento" />
+									</span> <br />
+								</div>
+								<br />
+								<div class="row">
+									<div
+										class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+										<p:commandButton icon="icon-flecha-blanca" iconPos="right"
+											type="submit" styleClass="btn-gradiente icon-btn btn-rojo "
+											value="#{txt_asociacionPNAEE['boton.Buscar.Upper']}">
+											<p:ajax
+												listener="#{beanAsociacionNaturalAEE.consultarPersonaAsociacion}"
+												update="panelAsociacionPNAPJ" 
+												process="@form"/>
+										</p:commandButton>
+									</div>
+								</div>
+							</div>
+							<br />
+						</p:outputPanel>
+						<p:outputPanel id="consultaUsuario"
+							rendered="#{beanAsociacionNaturalAEE.ib_mostrarUsuario}">
+							<br />
+							<div class="row">
+								<div class="col-xs-12 col-sm-11 text-center">
+									<h:outputText styleClass="titulo bold" id="aprobacionPJ"
+										value="#{txt_asociacionPNAPJ['titulo.usuario.consultado']}"></h:outputText>
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-xs-12">
+									<p:dataTable var="asociacion" styleClass="centrar"
+										widgetVar="paramsTable" id="asociacionesDataTable"
+										reflow="true"
+										paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+										currentPageReportTemplate="{currentPage} / {totalPages}"
+										paginator="true" rows="10" paginatorPosition="bottom"
+										rowsPerPageTemplate="10"
+										value="#{beanAsociacionNaturalAEE.ilu_listaUsuarioDTO}"
+										emptyMessage="#{txt_asociacionPNAEE['Tabla.Vacia.usuario.natural']}"
+										stickyHeader="false">
+										<p:column
+											headerText="#{txt_asociacionPNAEE['Tabla.usuario.natural.tipo.documento']}"
+											styleClass="centrar10">
+											<h:outputText
+												value="#{asociacion.getIp_personaDto().getItd_tipoDocumentoDto().getIs_id()}" />
+										</p:column>
+										<p:column
+											headerText="#{txt_asociacionPNAEE['Tabla.usuario.natural.numero.documento']}"
+											styleClass="centrar30">
+											<h:outputText
+												value="#{asociacion.getIp_personaDto().getIs_numeroDocumento()}" />
+										</p:column>
+										<p:column
+											headerText="#{txt_asociacionPNAEE['Tabla.usuario.natural.nombre']}"
+											styleClass="centrar40">
+											<h:outputText
+												value="#{asociacion.getIp_personaDto().getIpn_personaNaturalDto().getIs_primerNombre()}" />
+											<h:outputText
+												value=" #{asociacion.getIp_personaDto().getIpn_personaNaturalDto().getIs_segundoNombre()}" />
+											<h:outputText
+												value=" #{asociacion.getIp_personaDto().getIpn_personaNaturalDto().getIs_primerApellido()}" />
+											<h:outputText
+												value=" #{asociacion.getIp_personaDto().getIpn_personaNaturalDto().getIs_segundoApellido()}" />
+										</p:column>
+										<p:column headerText="" styleClass="centrar20">
+											<div
+												class="col-xs-10 col-md-5 col-xs-offset-1 col-md-offset-1">
+												<p:commandButton id="btnAsociacionPersonaNatural"
+													actionListener="#" value="Asociar"
+													oncomplete="PF('dlgConfirmativo').show();" />
+											</div>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+							<br />
+						</p:outputPanel>
+						<br />
+					</p:panel>
+					<br />
+					<div class="container-fluid-btn">
+						<div class="row">
+							<div
+								class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+								<p:commandButton id="btn-atras" icon="icon-flecha-gris"
+									iconPos="right" styleClass="icon-btn pull-right btn-gris"
+									value="#{txt_minuta['boton.volver.upper']}" immediate="true"
+									action="/pages/admon/asociacionNaturalAEntidadEspecial.jsf?faces-redirect=true"
+									process="@this" />
+							</div>
+						</div>
+					</div>
+					<br />
+				</h:form>
+			</div>
+		</div>
+		<!-- Modal confirmativo -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgConfirmativo" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModaldlgConfirmativo" />
+			<ui:define name="body-modal">
+				<div class="row">
+					<div class="col-xs-12">
+						<h:outputText
+							value="#{txt_asociacionPNAPJ['modal.asociar.nuevo.usuario']}" />
+					</div>
+				</div>
+			</ui:define>
+			<br />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_asociacionPNAEE['btn.cancelar']}"
+							oncomplete="PF('dlgConfirmativo').hide();">
+						</p:commandButton>
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton
+							styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+							value="#{txt_asociacionPNAEE['btn.aceptar']}"
+							oncomplete="PF('dlgConfirmativo').hide(); PF('dlgFormulario').show();">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+		<!-- Modal form asociar -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="dlgFormulario" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.confirmacion']}" />
+			<ui:param name="formulario" value="formModalformdlgFormulario" />
+			<ui:define name="body-modal">
+				<div class="row spaceRow">
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel id="labelCorreoCorporativo" styleClass="label-form"
+							for="correoCorporativo"
+							value="#{txt_asociacionPNAEE['label.correo.corporativo']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:inputText id="correoCorporativo" autocomplete="off"
+								styleClass="text-input border-completo"
+								placeholder="#{txt['placeholder.FormatoCorreo']}"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								maxlength="50" required="true"
+								value="#{beanAsociacionNaturalAEE.iauee_asociacionUsuarioEntidadEspecialDto.is_correoElectronico}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('formAsociarUsuarioConsultado:correoCorporativo', 'spanCorreoCorporativo');" />
+								<f:validator validatorId="ValidarCorreoFormato" />
+							</p:inputText>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelCorreoCorporativo"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel
+										value="#{txt_persona['tooltip.CorreoElectronico']}" />
+								</div>
+							</p:tooltip>
+							<span id="spanCorreoCorporativo"
+								class="ui-inputgroup-addon ocultar"> <p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('formAsociarUsuarioConsultado:correoCorporativo', 'spanCorreoCorporativo');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message
+								for="correoCorporativo" />
+						</span>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<p:outputLabel id="labelCelularCorporativo"
+							styleClass="label-form" for="celularCorporativo"
+							value="#{txt_asociacionPNAEE['label.Celular.corporativo']}" />
+						<p:outputLabel styleClass="required-field">*</p:outputLabel>
+						<div class="ui-inputgroup">
+							<p:inputMask id="celularCorporativo" autocomplete="off"
+								placeholder="#{txt_persona['placeholder.NumeroCelular']}"
+								styleClass="text-input border-completo"
+								requiredMessage="#{txt['mensaje.CampoObligatorio']}"
+								mask="999 999 99 99" required="true"
+								value="#{beanAsociacionNaturalAEE.iauee_asociacionUsuarioEntidadEspecialDto.is_celular}">
+								<p:ajax event="change"
+									onstart="mostrarLimpiar('formAsociarUsuarioConsultado:celularCorporativo', 'spanNumeroCelularCor');" />
+							</p:inputMask>
+							<p:tooltip showEvent="mouseover" hideEvent="mouseout"
+								styleClass="tooltipGeneral" for="labelCelularCorporativo"
+								position="top">
+								<div class="content-tooltip-general">
+									<p:outputLabel value="#{txt_persona['tooltip.NumeroCelular']}" />
+								</div>
+							</p:tooltip>
+							<span id="spanNumeroCelularCor"
+								class="ui-inputgroup-addon ocultar"> <p:commandLink>
+									<p:graphicImage styleClass="img-x-size" name="/img/x-roja.png" />
+									<p:ajax event="click"
+										onstart="limpiarCampo('formAsociarUsuarioConsultado:celularCorporativo', 'spanNumeroCelularCor');" />
+								</p:commandLink>
+							</span>
+						</div>
+						<span class="help-block"> <p:message
+								for="celularCorporativo" />
+						</span>
+					</div>
+					<br />
+				</div>
+			</ui:define>
+			<br />
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton id="btn-atras" icon="icon-flecha-gris"
+							iconPos="right" styleClass="icon-btn pull-right btn-gris"
+							value="#{txt_minuta['boton.volver.upper']}" immediate="true"
+							oncomplete="PF('dlgFormulario').hide();"
+							action="/pages/admon/asociacionNaturalAEntidadEspecial.jsf?faces-redirect=true"
+							process="@this" />
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:commandButton id="btnAsociar" iconPos="right"
+							value="#{txt_asociacionPNAPJ['btn.asociar']}"
+							styleClass="btn-gradiente icon-btn btn-rojo"
+							oncomplete="PF('dlgFormulario').hide();" ajax="false"
+							action="#{beanAsociacionNaturalAEE.asociarUsuarioPersonaNatural}"
+							process="@this">
+						</p:commandButton>
+					</div>
+				</div>
+			</ui:define>
+			<br />
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WL5G3N0:definitions targetNamespace="https://www.supernotariado.gov.co/services/bachue/co/actualizacionmetadatospoderes/v1" xmlns:WL5G3N0="http://schemas.xmlsoap.org/wsdl/" xmlns:WL5G3N1="https://www.supernotariado.gov.co/schemas/bachue/co/actualizacionmetadatospoderes/actualizarmetadatospoder/v1" xmlns:WL5G3N2="https://www.supernotariado.gov.co/services/bachue/co/actualizacionmetadatospoderes/v1" xmlns:WL5G3N3="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <WL5G3N0:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bachue="https://www.supernotariado.gov.co/services/bachue/co/actualizacionmetadatospoderes/v1" xmlns:bachue1="https://www.supernotariado.gov.co/schemas/bachue/co/actualizacionmetadatospoderes/actualizarmetadatospoder/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <import namespace="https://www.supernotariado.gov.co/schemas/bachue/co/actualizacionmetadatospoderes/actualizarmetadatospoder/v1" schemaLocation="http://23.96.125.163:16117/services/ee/actualizacionMetadatosPoderes/v1?SCHEMA%2FExpuestosExternamente%2FActualizaci%C3%B3nMetadatosPoderes%2FResources%2FSchemas%2FLegacy%2FCO_CP_ActualizarMetadatosPoder"/>
+    </schema>
+  </WL5G3N0:types>
+  <WL5G3N0:message name="ActualizarMetadatosPoder_Request">
+    <WL5G3N0:part element="WL5G3N1:entradaActualizarMetadatosPoder" name="entrada"/>
+  </WL5G3N0:message>
+  <WL5G3N0:message name="ActualizarMetadatosPoder_Response">
+    <WL5G3N0:part element="WL5G3N1:salidaActualizarMetadatosPoder" name="salida"/>
+  </WL5G3N0:message>
+  <WL5G3N0:portType name="SAN_EE_ActualizacionMetadatosPoderes">
+    <WL5G3N0:operation name="ActualizarMetadatosPoder">
+      <WL5G3N0:input message="WL5G3N2:ActualizarMetadatosPoder_Request"/>
+      <WL5G3N0:output message="WL5G3N2:ActualizarMetadatosPoder_Response"/>
+    </WL5G3N0:operation>
+  </WL5G3N0:portType>
+  <WL5G3N0:binding name="SAN_EE_ActualizacionMetadatosPoderesSOAP12Binding" type="WL5G3N2:SAN_EE_ActualizacionMetadatosPoderes">
+    <WL5G3N3:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <WL5G3N0:operation name="ActualizarMetadatosPoder">
+      <WL5G3N3:operation soapAction="https://www.supernotariado.gov.co/services/bachue/co/actualizacionmetadatospoderes/v1/ActualizarMetadatosPoder" style="document"/>
+      <WL5G3N0:input>
+        <WL5G3N3:body parts="entrada" use="literal"/>
+      </WL5G3N0:input>
+      <WL5G3N0:output>
+        <WL5G3N3:body parts="salida" use="literal"/>
+      </WL5G3N0:output>
+    </WL5G3N0:operation>
+  </WL5G3N0:binding>
+  <WL5G3N0:service name="SAN_EE_ActualizacionMetadatosPoderes">
+    <WL5G3N0:documentation>OSB Service</WL5G3N0:documentation>
+    <WL5G3N0:port binding="WL5G3N2:SAN_EE_ActualizacionMetadatosPoderesSOAP12Binding" name="SAN_EE_ActualizacionMetadatosPoderesPort">
+      <WL5G3N3:address location="http://10.0.0.38:16117/services/ee/actualizacionMetadatosPoderes/v1"/>
+    </WL5G3N0:port>
+  </WL5G3N0:service>
+</WL5G3N0:definitions>

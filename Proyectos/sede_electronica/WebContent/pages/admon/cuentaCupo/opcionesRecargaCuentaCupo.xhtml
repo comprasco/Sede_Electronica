@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-cuentaCupo.css" />
+	</ui:define>
+
+	<ui:define name="title">
+		<title>#{txt_cuentaCupo['CuentaCupo']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+
+	<ui:define name="body">
+
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_cuentaCupo['CuentaCupo.Titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_cuentaCupo['CuentaCupo.Subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/cuentaCupo/opcionesRecargaCuentaCupo.jsf" />
+		</ui:include>
+		<br />
+		<br />
+		<div class="row">
+			<br /> <br />
+			<div
+				class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+				<p:commandButton id="recargarCuentaCupo" icon="icon-flecha-blanca"
+					iconPos="right"
+					styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+					action="/pages/admon/cuentaCupo/recargarCuentaCupo.jsf?faces-redirect=true"
+					value="#{txt_cuentaCupo['opciones.recargar']}" />
+			</div>
+		</div>
+		<br />
+		<div class="row">
+			<br /> <br />
+			<div
+				class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+				<p:commandButton id="pagoCuentaCupo" icon="icon-flecha-blanca"
+					iconPos="right"
+					styleClass="btn-gradiente icon-btn btn-rojo pull-left"
+					action="/pages/admon/cuentaCupo/pagoCuentaCupo.jsf?faces-redirect=true"
+					value="#{txt_cuentaCupo['opciones.pago']}" />
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

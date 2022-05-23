@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-base.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-cuentaCupo.css" />
+		<h:outputScript library="js" name="archivo.js" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_cuentaCupo['CuentaCupo']} -
+			#{txt['SedeElectronicaSNR']}</title>
+	</ui:define>
+	<ui:define name="body">
+		<ui:include src="/pages/includes/banner.xhtml">
+			<ui:param name="titulo"
+				value="#{txt_cuentaCupo['CuentaCupo.Titulo']}" />
+			<ui:param name="imagen" value="img-mantenimiento" />
+			<ui:param name="subtitulo"
+				value="#{txt_cuentaCupo['CuentaCupo.Subtitulo']}" />
+			<ui:param name="urlVista"
+				value="/pages/admon/cuentaCupo/consultaCuentaCupoM.jsf" />
+		</ui:include>
+		<p:panel
+			rendered="#{beanConsultasMovimientosSaldosCuentaCupo.ib_opciones}">
+			<div class="row">
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<p:outputLabel id="labelConsultasCuentaCupo"
+							styleClass="label-form text-center tamano-titulo"
+							value="#{txt_cuentaCupo['titulo.consultasCuentaCupo']}" />
+					</div>
+				</div>
+				<br />
+				<div class="col-xs-6">
+					<p:commandButton styleClass="btn-gradiente btn-rojo"
+						value="#{txt_cuentaCupo['boton.consultarMovientos']}"
+						action="/pages/admon/cuentaCupo/consultarCuentaCupo.jsf?faces-redirect=true">
+					</p:commandButton>
+				</div>
+				<div class="col-xs-6">
+					<p:commandButton styleClass="btn-gradiente btn-rojo"
+						value="#{txt_cuentaCupo['boton.consultarSaldo']}"
+						action="/pages/admon/cuentaCupo/consultaSaldoCuentaCupo.jsf?faces-redirect=true">
+					</p:commandButton>
+				</div>
+				<br /> <br />
+			</div>
+		</p:panel>
+
+		<!-- Modal cuenta cupo no existe -->
+		<ui:decorate template="/pages/includes/modal.xhtml">
+			<ui:param name="modalId" value="cuentaCupoNoExiste" />
+			<ui:param name="clasesEstilo" value="cerrarModal modal-mediano" />
+			<ui:param name="tituloModal"
+				value="#{txt['titulo.modal.redireccion']}" />
+			<ui:param name="formulario" value="formModalCuentaCupoNoExiste" />
+			<ui:define name="body-modal">
+				<div class="col-xs-12">
+					<br />
+					<p:outputLabel id="solicitudNoExiste"
+						value="#{txt_cuentaCupo['Mensaje.NoCuentaCupo']}" />
+					<br />
+				</div>
+			</ui:define>
+			<ui:define name="accion-modal">
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+						<p:commandButton immediate="true"
+							styleClass="ui-confirmdialog-no pull-right btn-gris"
+							value="#{txt_cuentaCupo['boton.volver']}"
+							action="/pages/personas/inicio.jsf?faces-redirect=true" />
+					</div>
+					<div class="col-xs-5 col-xs-offset-0">
+						<p:outputPanel id="entendidoNoExiste">
+							<p:commandButton type="submit"
+								onstart="PF('blockUI-Loading').show();"
+								oncomplete="PF('blockUI-Loading').hide();"
+								styleClass="btn-gradiente icon-btn btn-rojo "
+								value="#{txt_cuentaCupo['boton.Redirigir']}"
+								action="/pages/admon/cuentaCupo/crearCuentaCupo.jsf?faces-redirect=true">
+							</p:commandButton>
+						</p:outputPanel>
+					</div>
+				</div>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+</ui:composition>

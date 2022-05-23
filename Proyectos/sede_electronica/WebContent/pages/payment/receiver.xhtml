@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/WEB-INF/templates/template-simple.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="snr-se-adminCache.css" />
+	</ui:define>
+	<ui:define name="title">
+		<title>#{txt_pasarela['pasarela.redireccion']}</title>
+	</ui:define>
+	<ui:define name="preRender">
+		<f:event listener="#{beanReceiverPasarela.redireccionarResumen()}"
+			type="postAddToView"></f:event>
+	</ui:define>
+	
+</ui:composition>
